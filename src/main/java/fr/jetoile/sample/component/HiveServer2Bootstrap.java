@@ -4,6 +4,7 @@ import com.github.sakserv.minicluster.config.ConfigVars;
 import com.github.sakserv.minicluster.impl.HiveLocalMetaStore;
 import com.github.sakserv.minicluster.impl.HiveLocalServer2;
 import com.github.sakserv.minicluster.util.FileUtils;
+import com.github.sakserv.minicluster.util.WindowsLibsUtils;
 import fr.jetoile.sample.BootstrapException;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
@@ -42,7 +43,7 @@ public enum HiveServer2Bootstrap implements Bootstrap {
             } catch (BootstrapException e) {
                 LOGGER.error("unable to load configuration", e);
             }
-            init();
+//            init();
             build();
         }
     }
@@ -65,17 +66,17 @@ public enum HiveServer2Bootstrap implements Bootstrap {
     }
 
 
-    private void init() {
-        Path path2 = Paths.get(scratchDirectory);
-        Path path3 = Paths.get(warehouseDirectory);
-        try {
-            Files.createDirectories(path2);
-            Files.createDirectories(path3);
-        } catch (IOException e) {
-            LOGGER.error("unable to create mandatory directory", e);
-        }
-
-    }
+//    private void init() {
+//        Path path2 = Paths.get(scratchDirectory);
+//        Path path3 = Paths.get(warehouseDirectory);
+//        try {
+//            Files.createDirectories(path2);
+//            Files.createDirectories(path3);
+//        } catch (IOException e) {
+//            LOGGER.error("unable to create mandatory directory", e);
+//        }
+//
+//    }
 
     private void cleanup() {
             FileUtils.deleteFolder(derbyDirectory);
@@ -99,7 +100,20 @@ public enum HiveServer2Bootstrap implements Bootstrap {
     }
 
     private HiveConf buildHiveConf() {
+        // Handle Windows
+        WindowsLibsUtils.setHadoopHome();
+
         HiveConf hiveConf = new HiveConf();
+//        hiveConf.set(HiveConf.ConfVars.HIVE_TXN_MANAGER.varname, "org.apache.hadoop.hive.ql.lockmgr.DbTxnManager");
+//        hiveConf.set(HiveConf.ConfVars.HIVE_COMPACTOR_INITIATOR_ON.varname, "true");
+//        hiveConf.set(HiveConf.ConfVars.HIVE_COMPACTOR_WORKER_THREADS.varname, "5");
+//        hiveConf.set("hive.root.logger", "DEBUG,console");
+//        hiveConf.setIntVar(HiveConf.ConfVars.METASTORETHRIFTCONNECTIONRETRIES, 3);
+//        hiveConf.set(HiveConf.ConfVars.PREEXECHOOKS.varname, "");
+//        hiveConf.set(HiveConf.ConfVars.POSTEXECHOOKS.varname, "");
+//        System.setProperty(HiveConf.ConfVars.PREEXECHOOKS.varname, " ");
+//        System.setProperty(HiveConf.ConfVars.POSTEXECHOOKS.varname, " ");
+
         return hiveConf;
     }
 
@@ -123,4 +137,11 @@ public enum HiveServer2Bootstrap implements Bootstrap {
         cleanup();
         return this;
     }
+
+    @Override
+    public org.apache.hadoop.conf.Configuration getConfiguration() {
+        return hiveLocalServer2.getHiveConf();
+    }
+
+
 }
