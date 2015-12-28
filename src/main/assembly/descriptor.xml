@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<assembly xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2 http://maven.apache.org/xsd/assembly-1.1.2.xsd">
+
+    <id>reader</id>
+
+    <includeBaseDirectory>false</includeBaseDirectory>
+
+    <formats>
+        <format>tar.gz</format>
+    </formats>
+
+
+    <fileSets>
+        <fileSet>
+            <directory>${project.build.directory}/appassembler-jsw/jsw/${project.name}</directory>
+            <outputDirectory>/</outputDirectory>
+            <excludes>
+                <exclude>bin/${project.name}</exclude>
+                <exclude>bin/wrapper-linux-x86-32</exclude>
+                <exclude>bin/wrapper-linux-x86-64</exclude>
+            </excludes>
+            <fileMode>640</fileMode>
+            <directoryMode>750</directoryMode>
+        </fileSet>
+
+        <fileSet>
+            <directory>src/main/assembly</directory>
+            <outputDirectory>/logs</outputDirectory>
+            <excludes>
+                <exclude>*</exclude>
+            </excludes>
+        </fileSet>
+    </fileSets>
+
+    <files>
+        <file>
+            <source>${project.build.directory}/appassembler-jsw/jsw/${project.name}/bin/${project.name}</source>
+            <outputDirectory>bin</outputDirectory>
+            <fileMode>750</fileMode>
+        </file>
+        <file>
+            <source>${project.build.directory}/appassembler-jsw/jsw/${project.name}/bin/wrapper-linux-x86-64
+            </source>
+            <outputDirectory>bin</outputDirectory>
+            <fileMode>750</fileMode>
+        </file>
+    </files>
+
+</assembly>
