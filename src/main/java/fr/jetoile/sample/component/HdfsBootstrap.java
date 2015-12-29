@@ -2,7 +2,7 @@ package fr.jetoile.sample.component;
 
 import com.github.sakserv.minicluster.config.ConfigVars;
 import com.github.sakserv.minicluster.impl.HdfsLocalCluster;
-import fr.jetoile.sample.BootstrapException;
+import fr.jetoile.sample.exception.BootstrapException;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;

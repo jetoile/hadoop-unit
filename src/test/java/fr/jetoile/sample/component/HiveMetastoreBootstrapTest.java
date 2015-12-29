@@ -2,7 +2,7 @@ package fr.jetoile.sample.component;
 
 
 import com.github.sakserv.minicluster.config.ConfigVars;
-import fr.jetoile.sample.BootstrapException;
+import fr.jetoile.sample.exception.BootstrapException;
 import fr.jetoile.sample.Utils;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;

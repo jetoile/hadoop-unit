@@ -1,22 +1,16 @@
 package fr.jetoile.sample.component;
 
 import com.github.sakserv.minicluster.config.ConfigVars;
-import com.github.sakserv.minicluster.impl.HiveLocalMetaStore;
 import com.github.sakserv.minicluster.impl.HiveLocalServer2;
 import com.github.sakserv.minicluster.util.FileUtils;
 import com.github.sakserv.minicluster.util.WindowsLibsUtils;
-import fr.jetoile.sample.BootstrapException;
+import fr.jetoile.sample.exception.BootstrapException;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.hadoop.hive.conf.HiveConf;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 public enum HiveServer2Bootstrap implements Bootstrap {
     INSTANCE;
@@ -43,7 +37,6 @@ public enum HiveServer2Bootstrap implements Bootstrap {
             } catch (BootstrapException e) {
                 LOGGER.error("unable to load configuration", e);
             }
-//            init();
             build();
         }
     }
@@ -65,18 +58,6 @@ public enum HiveServer2Bootstrap implements Bootstrap {
 
     }
 
-
-//    private void init() {
-//        Path path2 = Paths.get(scratchDirectory);
-//        Path path3 = Paths.get(warehouseDirectory);
-//        try {
-//            Files.createDirectories(path2);
-//            Files.createDirectories(path3);
-//        } catch (IOException e) {
-//            LOGGER.error("unable to create mandatory directory", e);
-//        }
-//
-//    }
 
     private void cleanup() {
             FileUtils.deleteFolder(derbyDirectory);

@@ -1,14 +1,11 @@
 package fr.jetoile.sample.component;
 
 import com.github.sakserv.minicluster.config.ConfigVars;
-import com.github.sakserv.minicluster.impl.HdfsLocalCluster;
 import com.github.sakserv.minicluster.impl.KafkaLocalBroker;
-import fr.jetoile.sample.BootstrapException;
+import fr.jetoile.sample.exception.BootstrapException;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
-import org.apache.hadoop.fs.FileSystem;
-import org.apache.hadoop.hdfs.HdfsConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -3,7 +3,7 @@ package fr.jetoile.sample.component;
 import com.github.sakserv.minicluster.config.ConfigVars;
 import com.github.sakserv.minicluster.impl.HbaseLocalCluster;
 import com.github.sakserv.minicluster.util.FileUtils;
-import fr.jetoile.sample.BootstrapException;
+import fr.jetoile.sample.exception.BootstrapException;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
@@ -23,7 +23,6 @@ public enum HBaseBootstrap implements Bootstrap {
     private int nbRegionServer;
     private String rootDirectory;
     private int zookeeperPort;
-    private String zookeeperHost;
     private String zookeeperZnodeParent;
     private boolean enableWalReplication;
     private String zookeeperConnectionString;

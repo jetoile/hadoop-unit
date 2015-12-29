@@ -2,17 +2,12 @@ package fr.jetoile.sample.component;
 
 
 import com.github.sakserv.minicluster.config.ConfigVars;
-import fr.jetoile.sample.BootstrapException;
+import fr.jetoile.sample.exception.BootstrapException;
 import fr.jetoile.sample.kafka.consumer.KafkaTestConsumer;
 import fr.jetoile.sample.kafka.producer.KafkaTestProducer;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
-import org.apache.hadoop.hbase.HColumnDescriptor;
-import org.apache.hadoop.hbase.HTableDescriptor;
-import org.apache.hadoop.hbase.TableName;
-import org.apache.hadoop.hbase.client.*;
-import org.apache.hadoop.hbase.util.Bytes;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
