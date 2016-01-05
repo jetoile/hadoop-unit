@@ -64,6 +64,9 @@ public class SolrEmbeddedServer {
 
         if (StringUtils.isBlank(solrHomeDirectory)) {
             solrHomeDirectory = getURL(path).getPath();
+            if (System.getProperty("os.name").startsWith("Windows")) {
+                solrHomeDirectory = solrHomeDirectory.substring(1);
+            }
         }
 
         solrHomeDirectory = URLDecoder.decode(solrHomeDirectory, "utf-8");

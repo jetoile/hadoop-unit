@@ -35,12 +35,15 @@ public enum SolrBootstrap implements Bootstrap {
             }
             build();
         }
-        build();
     }
 
     private void build() {
         try {
-            solrLocalCluster = new SolrEmbeddedServer(getClass().getClassLoader().getResource(solrDirectory).getFile(), solrCollection);
+            String path = getClass().getClassLoader().getResource(solrDirectory).getFile();
+            if (System.getProperty("os.name").startsWith("Windows")) {
+                path = path.substring(1);
+            }
+            solrLocalCluster = new SolrEmbeddedServer(path, solrCollection);
         } catch (ParserConfigurationException | IOException | SAXException e) {
             LOGGER.error("unable to bootstrap solr", e);
         }
