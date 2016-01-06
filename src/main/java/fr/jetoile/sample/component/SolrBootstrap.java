@@ -17,13 +17,15 @@ public enum SolrBootstrap implements Bootstrap {
     INSTANCE;
 
     public static final String SOLR_DIR_KEY = "solr.dir";
-    public static final String SOLR_COLLECTION_KEY = "solr.collection";
+    public static final String SOLR_COLLECTION_INTERNAL_NAME = "solr.collection.internal.name";
+    public static final String SOLR_COLLECTION_NAME = "solr.collection.name";
     final private Logger LOGGER = LoggerFactory.getLogger(SolrBootstrap.class);
 
     private Configuration configuration;
     private SolrEmbeddedServer solrLocalCluster;
     private String solrDirectory;
-    private String solrCollection;
+    private String solrCollectionInternalName;
+    private String solrCollectionName;
 
 
     SolrBootstrap() {
@@ -43,7 +45,8 @@ public enum SolrBootstrap implements Bootstrap {
             if (System.getProperty("os.name").startsWith("Windows")) {
                 path = path.substring(1);
             }
-            solrLocalCluster = new SolrEmbeddedServer(path, solrCollection);
+            solrLocalCluster = new SolrEmbeddedServer(path, solrCollectionInternalName);
+//            solrLocalCluster = new SolrEmbeddedServer(path, solrCollectionName);
         } catch (ParserConfigurationException | IOException | SAXException e) {
             LOGGER.error("unable to bootstrap solr", e);
         }
@@ -56,7 +59,8 @@ public enum SolrBootstrap implements Bootstrap {
             throw new BootstrapException("bad config", e);
         }
         solrDirectory = configuration.getString(SOLR_DIR_KEY);
-        solrCollection = configuration.getString(SOLR_COLLECTION_KEY);
+        solrCollectionInternalName = configuration.getString(SOLR_COLLECTION_INTERNAL_NAME);
+        solrCollectionName = configuration.getString(SOLR_COLLECTION_NAME);
 
     }
 
