@@ -165,6 +165,8 @@ public enum SolrCloudBootstrap implements Bootstrap {
             state = State.STOPPING;
             LOGGER.info("{} is stopping", this.getClass().getName());
             try {
+                System.clearProperty("zkHost");
+
                 this.solrServer.stop();
             } catch (Exception e) {
                 LOGGER.error("unable to stop SolrCloudBootstrap", e);
