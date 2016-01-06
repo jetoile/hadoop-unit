@@ -1,17 +1,19 @@
 package fr.jetoile.sample.component;
 
 import fr.jetoile.sample.exception.BootstrapException;
-import fr.jetoile.sample.component.solr.SolrEmbeddedServer;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.solr.client.solrj.embedded.EmbeddedSolrServer;
+import org.apache.solr.core.CoreContainer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
+import java.io.File;
 import java.io.IOException;
+import java.net.URLDecoder;
 
 public enum SolrBootstrap implements Bootstrap {
     INSTANCE;
@@ -22,14 +24,13 @@ public enum SolrBootstrap implements Bootstrap {
     final private Logger LOGGER = LoggerFactory.getLogger(SolrBootstrap.class);
 
     private Configuration configuration;
-    private SolrEmbeddedServer solrLocalCluster;
+    private EmbeddedSolrServer solrServer;
     private String solrDirectory;
     private String solrCollectionInternalName;
-    private String solrCollectionName;
 
 
     SolrBootstrap() {
-        if (solrLocalCluster == null) {
+        if (solrServer == null) {
             try {
                 loadConfig();
             } catch (BootstrapException e) {
@@ -40,16 +41,7 @@ public enum SolrBootstrap implements Bootstrap {
     }
 
     private void build() {
-        try {
-            String path = getClass().getClassLoader().getResource(solrDirectory).getFile();
-            if (System.getProperty("os.name").startsWith("Windows")) {
-                path = path.substring(1);
-            }
-            solrLocalCluster = new SolrEmbeddedServer(path, solrCollectionInternalName);
-//            solrLocalCluster = new SolrEmbeddedServer(path, solrCollectionName);
-        } catch (ParserConfigurationException | IOException | SAXException e) {
-            LOGGER.error("unable to bootstrap solr", e);
-        }
+
     }
 
     private void loadConfig() throws BootstrapException {
@@ -60,18 +52,29 @@ public enum SolrBootstrap implements Bootstrap {
         }
         solrDirectory = configuration.getString(SOLR_DIR_KEY);
         solrCollectionInternalName = configuration.getString(SOLR_COLLECTION_INTERNAL_NAME);
-        solrCollectionName = configuration.getString(SOLR_COLLECTION_NAME);
 
     }
 
     @Override
     public Bootstrap start() {
+        try {
+            String path = getClass().getClassLoader().getResource(solrDirectory).getFile();
+            if (System.getProperty("os.name").startsWith("Windows")) {
+                path = path.substring(1);
+            }
+
+            this.solrServer = createPathConfiguredSolrServer(path);
+        } catch (ParserConfigurationException | IOException | SAXException | BootstrapException e) {
+            LOGGER.error("unable to bootstrap solr", e);
+        }
         return this;
     }
 
     @Override
     public Bootstrap stop() {
-        solrLocalCluster.shutdownSolrServer();
+        if (this.solrServer != null && solrServer.getCoreContainer() != null) {
+            solrServer.getCoreContainer().shutdown();
+        }
         return this;
     }
 
@@ -81,11 +84,29 @@ public enum SolrBootstrap implements Bootstrap {
     }
 
     public EmbeddedSolrServer getClient() {
-        try {
-            return solrLocalCluster.getSolrClient();
-        } catch (BootstrapException e) {
-            LOGGER.error("unable to get Solr Client", e);
+        return solrServer;
+    }
+
+
+    private final EmbeddedSolrServer createPathConfiguredSolrServer(String path) throws ParserConfigurationException,
+            IOException, SAXException, BootstrapException {
+
+        String solrHomeDirectory = path;
+        if (System.getProperty("os.name").startsWith("Windows")) {
+            solrHomeDirectory = solrHomeDirectory.substring(1);
         }
-        return null;
+
+        solrHomeDirectory = URLDecoder.decode(solrHomeDirectory, "utf-8");
+        return new EmbeddedSolrServer(createCoreContainer(solrHomeDirectory), solrCollectionInternalName);
+    }
+
+    private CoreContainer createCoreContainer(String solrHomeDirectory) throws BootstrapException {
+        File solrXmlFile = new File(solrHomeDirectory + "/solr.xml");
+        return createCoreContainer(solrHomeDirectory, solrXmlFile);
+    }
+
+
+    private CoreContainer createCoreContainer(String solrHomeDirectory, File solrXmlFile) {
+        return CoreContainer.createAndLoad(solrHomeDirectory, solrXmlFile);
     }
 }

@@ -10,3 +10,4 @@ target
 *.log
 *.log.gz
 rebel.xml
+metastore_db
