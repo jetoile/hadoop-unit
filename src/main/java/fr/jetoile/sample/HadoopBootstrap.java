@@ -23,6 +23,16 @@ public class HadoopBootstrap {
     private List<Component> componentsToStart = new ArrayList<>();
     private List<Component> componentsToStop = new ArrayList<>();
 
+    public HadoopBootstrap(Component... components) throws BootstrapException {
+
+        Arrays.asList(components).stream().forEach(c -> {
+                componentsToStart.add(c);
+        });
+
+        componentsToStop = Lists.newArrayList(this.componentsToStart);
+        Collections.reverse(componentsToStop);
+    }
+
     public HadoopBootstrap() throws BootstrapException {
         try {
             configuration = new PropertiesConfiguration("hadoop.properties");
