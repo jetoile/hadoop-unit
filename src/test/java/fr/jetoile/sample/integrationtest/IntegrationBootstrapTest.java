@@ -1,55 +1,126 @@
-package fr.jetoile.sample.component;
+package fr.jetoile.sample.integrationtest;
 
 
 import com.github.sakserv.minicluster.config.ConfigVars;
-import com.github.sakserv.minicluster.util.WindowsLibsUtils;
+import fr.jetoile.sample.Utils;
+import fr.jetoile.sample.component.SolrCloudBootstrap;
 import fr.jetoile.sample.exception.BootstrapException;
+import fr.jetoile.sample.kafka.consumer.KafkaTestConsumer;
+import fr.jetoile.sample.kafka.producer.KafkaTestProducer;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.apache.hadoop.hbase.HColumnDescriptor;
+import org.apache.hadoop.hbase.HTableDescriptor;
+import org.apache.hadoop.hbase.TableName;
+import org.apache.hadoop.hbase.client.*;
+import org.apache.hadoop.hbase.util.Bytes;
+import org.apache.hadoop.hive.conf.HiveConf;
+import org.apache.hadoop.hive.metastore.HiveMetaStoreClient;
+import org.apache.hadoop.hive.metastore.TableType;
+import org.apache.hadoop.hive.metastore.api.*;
+import org.apache.hadoop.hive.ql.io.orc.OrcSerde;
+import org.apache.hadoop.hive.serde.serdeConstants;
+import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.solr.client.solrj.impl.CloudSolrClient;
+import org.apache.solr.common.SolrDocument;
+import org.apache.solr.common.SolrInputDocument;
+import org.apache.thrift.TException;
+import org.apache.zookeeper.KeeperException;
+import org.junit.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
+import java.io.IOException;
 import java.sql.*;
+import java.sql.Connection;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
+import static junit.framework.TestCase.assertNotNull;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 
 @Ignore
-public class HiveServer2BootstrapTest {
+public class IntegrationBootstrapTest {
 
-    static private Logger LOGGER = LoggerFactory.getLogger(HiveServer2Bootstrap.class);
-
-    static private Bootstrap zookeeper;
-    static private Bootstrap hiveMetastore;
-    static private Bootstrap hiveServer2;
     static private Configuration configuration;
 
-    @BeforeClass
-    public static void setup() throws Exception {
-        WindowsLibsUtils.setHadoopHome();
+    static private Logger LOGGER = LoggerFactory.getLogger(IntegrationBootstrapTest.class);
 
+
+    @BeforeClass
+    public static void setup() throws BootstrapException {
         try {
             configuration = new PropertiesConfiguration("default.properties");
         } catch (ConfigurationException e) {
             throw new BootstrapException("bad config", e);
         }
-
-        zookeeper = ZookeeperBootstrap.INSTANCE.start();
-        hiveMetastore = HiveMetastoreBootstrap.INSTANCE.start();
-        hiveServer2 = HiveServer2Bootstrap.INSTANCE.start();
     }
 
-    @AfterClass
-    public static void tearDown() throws Exception {
-        hiveServer2.stop();
-        hiveMetastore.stop();
-        zookeeper.stop();
 
+    @AfterClass
+    public static void tearDown() throws BootstrapException {
+    }
+
+    @Test
+    public void solrCloudShouldStart() throws IOException, SolrServerException, KeeperException, InterruptedException {
+
+        String collectionName = configuration.getString(SolrCloudBootstrap.SOLR_COLLECTION_NAME);
+
+        String zkHostString = configuration.getString(ConfigVars.ZOOKEEPER_HOST_KEY) + ":" + configuration.getInt(ConfigVars.ZOOKEEPER_PORT_KEY);
+        CloudSolrClient client = new CloudSolrClient(zkHostString);
+
+        for (int i = 0; i < 1000; ++i) {
+            SolrInputDocument doc = new SolrInputDocument();
+            doc.addField("cat", "book");
+            doc.addField("id", "book-" + i);
+            doc.addField("name", "The Legend of the Hobbit part " + i);
+            client.add(collectionName, doc);
+            if (i % 100 == 0) client.commit(collectionName);  // periodically flush
+        }
+        client.commit("collection1");
+
+        SolrDocument collection1 = client.getById(collectionName, "book-1");
+
+        assertNotNull(collection1);
+
+        assertThat(collection1.getFieldValue("name")).isEqualTo("The Legend of the Hobbit part 1");
+
+
+        client.close();
+    }
+
+    @Test
+    public void kafkaShouldStart() throws Exception {
+
+        // Producer
+        KafkaTestProducer kafkaTestProducer = new KafkaTestProducer.Builder()
+                .setKafkaHostname(configuration.getString(ConfigVars.KAFKA_HOSTNAME_KEY))
+                .setKafkaPort(configuration.getInt(ConfigVars.KAFKA_PORT_KEY))
+                .setTopic(configuration.getString(ConfigVars.KAFKA_TEST_TOPIC_KEY))
+                .setMessageCount(configuration.getInt(ConfigVars.KAFKA_TEST_MESSAGE_COUNT_KEY))
+                .build();
+        kafkaTestProducer.produceMessages();
+
+
+        // Consumer
+        List<String> seeds = new ArrayList<String>();
+        seeds.add(configuration.getString(ConfigVars.KAFKA_HOSTNAME_KEY));
+        KafkaTestConsumer kafkaTestConsumer = new KafkaTestConsumer();
+        kafkaTestConsumer.consumeMessages(
+                configuration.getInt(ConfigVars.KAFKA_TEST_MESSAGE_COUNT_KEY),
+                configuration.getString(ConfigVars.KAFKA_TEST_TOPIC_KEY),
+                0,
+                seeds,
+                configuration.getInt(ConfigVars.KAFKA_PORT_KEY));
+
+        // Assert num of messages produced = num of message consumed
+        Assert.assertEquals(configuration.getLong(ConfigVars.KAFKA_TEST_MESSAGE_COUNT_KEY),
+                kafkaTestConsumer.getNumRead());
     }
 
     @Test
@@ -124,4 +195,5 @@ public class HiveServer2BootstrapTest {
         LOGGER.info("HIVE: Running Drop Table Statement: {}", dropDdl);
         stmt.execute(dropDdl);
     }
+
 }

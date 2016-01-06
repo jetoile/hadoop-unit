@@ -16,6 +16,7 @@ import org.apache.hadoop.hive.serde.serdeConstants;
 import org.apache.thrift.TException;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.File;
@@ -26,6 +27,7 @@ import java.util.Map;
 
 import static org.fest.assertions.Assertions.assertThat;
 
+@Ignore
 public class HiveMetastoreBootstrapTest {
 
     private static Bootstrap hiveMetastore;

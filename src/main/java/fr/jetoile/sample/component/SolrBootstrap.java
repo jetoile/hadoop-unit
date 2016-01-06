@@ -20,8 +20,9 @@ public enum SolrBootstrap implements Bootstrap {
 
     public static final String SOLR_DIR_KEY = "solr.dir";
     public static final String SOLR_COLLECTION_INTERNAL_NAME = "solr.collection.internal.name";
-    public static final String SOLR_COLLECTION_NAME = "solr.collection.name";
     final private Logger LOGGER = LoggerFactory.getLogger(SolrBootstrap.class);
+
+    private State state = State.STOPPED;
 
     private Configuration configuration;
     private EmbeddedSolrServer solrServer;
@@ -36,12 +37,7 @@ public enum SolrBootstrap implements Bootstrap {
             } catch (BootstrapException e) {
                 LOGGER.error("unable to load configuration", e);
             }
-            build();
         }
-    }
-
-    private void build() {
-
     }
 
     private void loadConfig() throws BootstrapException {
@@ -57,23 +53,36 @@ public enum SolrBootstrap implements Bootstrap {
 
     @Override
     public Bootstrap start() {
-        try {
-            String path = getClass().getClassLoader().getResource(solrDirectory).getFile();
-            if (System.getProperty("os.name").startsWith("Windows")) {
-                path = path.substring(1);
-            }
+        if (state == State.STOPPED) {
+            state = State.STARTING;
+            LOGGER.info("{} is starting", this.getClass().getName());
 
-            this.solrServer = createPathConfiguredSolrServer(path);
-        } catch (ParserConfigurationException | IOException | SAXException | BootstrapException e) {
-            LOGGER.error("unable to bootstrap solr", e);
+            try {
+                String path = getClass().getClassLoader().getResource(solrDirectory).getFile();
+                if (System.getProperty("os.name").startsWith("Windows")) {
+                    path = path.substring(1);
+                }
+
+                this.solrServer = createPathConfiguredSolrServer(path);
+            } catch (ParserConfigurationException | IOException | SAXException | BootstrapException e) {
+                LOGGER.error("unable to bootstrap solr", e);
+            }
+            state = State.STARTED;
+            LOGGER.info("{} is started", this.getClass().getName());
         }
         return this;
     }
 
     @Override
     public Bootstrap stop() {
-        if (this.solrServer != null && solrServer.getCoreContainer() != null) {
-            solrServer.getCoreContainer().shutdown();
+        if (state == State.STARTED) {
+            state = State.STOPPING;
+            LOGGER.info("{} is stopping", this.getClass().getName());
+            if (this.solrServer != null && solrServer.getCoreContainer() != null) {
+                solrServer.getCoreContainer().shutdown();
+            }
+            state = State.STOPPED;
+            LOGGER.info("{} is stopped", this.getClass().getName());
         }
         return this;
     }

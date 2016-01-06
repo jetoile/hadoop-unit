@@ -21,6 +21,8 @@ public enum ZookeeperBootstrap implements Bootstrap {
 
     private ZookeeperLocalCluster zookeeperLocalCluster;
 
+    private State state = State.STOPPED;
+
     private Configuration configuration;
 
     private int port;
@@ -34,8 +36,7 @@ public enum ZookeeperBootstrap implements Bootstrap {
             } catch (BootstrapException e) {
                 LOGGER.error("unable to load configuration", e);
             }
-            init();
-            build();
+
         }
     }
 
@@ -72,20 +73,34 @@ public enum ZookeeperBootstrap implements Bootstrap {
 
     @Override
     public Bootstrap start() {
-        try {
-            zookeeperLocalCluster.start();
-        } catch (Exception e) {
-            LOGGER.error("unable to start zookeeper", e);
+        if (state == State.STOPPED) {
+            state = State.STARTING;
+            LOGGER.info("{} is starting", this.getClass().getName());
+            init();
+            build();
+            try {
+                zookeeperLocalCluster.start();
+            } catch (Exception e) {
+                LOGGER.error("unable to start zookeeper", e);
+            }
+            state = State.STARTED;
+            LOGGER.info("{} is started", this.getClass().getName());
         }
         return this;
     }
 
     @Override
     public Bootstrap stop() {
-        try {
-            zookeeperLocalCluster.stop(true);
-        } catch (Exception e) {
-            LOGGER.error("unable to stop zookeeper", e);
+        if (state == State.STARTED) {
+            state = State.STOPPING;
+            LOGGER.info("{} is stopping", this.getClass().getName());
+            try {
+                zookeeperLocalCluster.stop(true);
+            } catch (Exception e) {
+                LOGGER.error("unable to stop zookeeper", e);
+            }
+            state = State.STOPPED;
+            LOGGER.info("{} is stopped", this.getClass().getName());
         }
         return this;
     }

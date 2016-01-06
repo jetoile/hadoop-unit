@@ -16,19 +16,19 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.nio.file.Paths;
 
 public enum SolrCloudBootstrap implements Bootstrap {
     INSTANCE;
 
     public static final String SOLR_DIR_KEY = "solr.dir";
-    public static final String SOLR_COLLECTION_INTERNAL_NAME = "solr.collection.internal.name";
     public static final String SOLR_COLLECTION_NAME = "solr.collection.name";
     public static final String SOLR_PORT = "solr.cloud.port";
     final private Logger LOGGER = LoggerFactory.getLogger(SolrCloudBootstrap.class);
 
     public static final int TIMEOUT = 10000;
+
+    private State state = State.STOPPED;
 
     private Configuration configuration;
     private JettySolrRunner solrServer;
@@ -45,7 +45,6 @@ public enum SolrCloudBootstrap implements Bootstrap {
             } catch (BootstrapException e) {
                 LOGGER.error("unable to load configuration", e);
             }
-            build();
         }
     }
 
@@ -78,13 +77,18 @@ public enum SolrCloudBootstrap implements Bootstrap {
 
     @Override
     public Bootstrap start() {
-        populateZkWithCollectionInfo();
+        if (state == State.STOPPED) {
+            state = State.STARTING;
+            LOGGER.info("{} is starting", this.getClass().getName());
 
-        try {
-            solrServer.start();
-        } catch (Exception e) {
-            LOGGER.error("unable to start SolrCloudServer", e);
-        }
+            build();
+            populateZkWithCollectionInfo();
+
+            try {
+                solrServer.start();
+            } catch (Exception e) {
+                LOGGER.error("unable to start SolrCloudServer", e);
+            }
 
 //        final ModifiableSolrParams params = new ModifiableSolrParams();
 //        params.set(CoreAdminParams.ACTION, CollectionParams.CollectionAction.CREATE.name());
@@ -96,10 +100,13 @@ public enum SolrCloudBootstrap implements Bootstrap {
 //        final QueryRequest request = new QueryRequest(params);
 //        request.setPath("/admin/collections");
 //        getClient().request(request);
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            state = State.STARTED;
+            LOGGER.info("{} is started", this.getClass().getName());
         }
         return this;
     }
@@ -154,10 +161,16 @@ public enum SolrCloudBootstrap implements Bootstrap {
 
     @Override
     public Bootstrap stop() {
-        try {
-            this.solrServer.stop();
-        } catch (Exception e) {
-            LOGGER.error("unable to stop SolrCloudBootstrap", e);
+        if (state == State.STARTED) {
+            state = State.STOPPING;
+            LOGGER.info("{} is stopping", this.getClass().getName());
+            try {
+                this.solrServer.stop();
+            } catch (Exception e) {
+                LOGGER.error("unable to stop SolrCloudBootstrap", e);
+            }
+            state = State.STOPPED;
+            LOGGER.info("{} is stopped", this.getClass().getName());
         }
         return this;
     }

@@ -19,6 +19,8 @@ public enum HiveServer2Bootstrap implements Bootstrap {
 
     private HiveLocalServer2 hiveLocalServer2;
 
+    private State state = State.STOPPED;
+
     private Configuration configuration;
     private String host;
     private int port;
@@ -37,7 +39,6 @@ public enum HiveServer2Bootstrap implements Bootstrap {
             } catch (BootstrapException e) {
                 LOGGER.error("unable to load configuration", e);
             }
-            build();
         }
     }
 
@@ -60,8 +61,8 @@ public enum HiveServer2Bootstrap implements Bootstrap {
 
 
     private void cleanup() {
-            FileUtils.deleteFolder(derbyDirectory);
-            FileUtils.deleteFolder(derbyDirectory.substring(derbyDirectory.lastIndexOf("/")+1));
+        FileUtils.deleteFolder(derbyDirectory);
+        FileUtils.deleteFolder(derbyDirectory.substring(derbyDirectory.lastIndexOf("/") + 1));
 
     }
 
@@ -100,22 +101,36 @@ public enum HiveServer2Bootstrap implements Bootstrap {
 
     @Override
     public Bootstrap start() {
-        try {
-            hiveLocalServer2.start();
-        } catch (Exception e) {
-            LOGGER.error("unable to start hiveserver2", e);
+        if (state == State.STOPPED) {
+            state = State.STARTING;
+            LOGGER.info("{} is starting", this.getClass().getName());
+
+            build();
+            try {
+                hiveLocalServer2.start();
+            } catch (Exception e) {
+                LOGGER.error("unable to start hiveserver2", e);
+            }
+            state = State.STARTED;
+            LOGGER.info("{} is started", this.getClass().getName());
         }
         return this;
     }
 
     @Override
     public Bootstrap stop() {
-        try {
-            hiveLocalServer2.stop(true);
-        } catch (Exception e) {
-            LOGGER.error("unable to stop hiveserver2", e);
+        if (state == State.STARTED) {
+            state = State.STOPPING;
+            LOGGER.info("{} is stopping", this.getClass().getName());
+            try {
+                hiveLocalServer2.stop(true);
+            } catch (Exception e) {
+                LOGGER.error("unable to stop hiveserver2", e);
+            }
+            cleanup();
+            state = State.STOPPED;
+            LOGGER.info("{} is stopped", this.getClass().getName());
         }
-        cleanup();
         return this;
     }
 

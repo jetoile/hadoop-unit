@@ -18,6 +18,8 @@ public enum HdfsBootstrap implements Bootstrap {
 
     private HdfsLocalCluster hdfsLocalCluster;
 
+    private State state = State.STOPPED;
+
     private Configuration configuration;
     private int port;
     private boolean enableRunningUserAsProxy;
@@ -35,8 +37,6 @@ public enum HdfsBootstrap implements Bootstrap {
             } catch (BootstrapException e) {
                 LOGGER.error("unable to load configuration", e);
             }
-            init();
-            build();
         }
     }
 
@@ -75,20 +75,35 @@ public enum HdfsBootstrap implements Bootstrap {
 
     @Override
     public Bootstrap start() {
-        try {
-            hdfsLocalCluster.start();
-        } catch (Exception e) {
-            LOGGER.error("unable to start hdfs", e);
+        if (state == State.STOPPED) {
+            state = State.STARTING;
+            LOGGER.info("{} is starting", this.getClass().getName());
+            init();
+            build();
+            try {
+                hdfsLocalCluster.start();
+            } catch (Exception e) {
+                LOGGER.error("unable to start hdfs", e);
+            }
+            state = State.STARTED;
+            LOGGER.info("{} is started", this.getClass().getName());
         }
+
         return this;
     }
 
     @Override
     public Bootstrap stop() {
-        try {
-            hdfsLocalCluster.stop(true);
-        } catch (Exception e) {
-            LOGGER.error("unable to stop hdfs", e);
+        if (state == State.STARTED) {
+            state = State.STOPPING;
+            LOGGER.info("{} is stopping", this.getClass().getName());
+            try {
+                hdfsLocalCluster.stop(true);
+            } catch (Exception e) {
+                LOGGER.error("unable to stop hdfs", e);
+            }
+            state = State.STOPPED;
+            LOGGER.info("{} is stopped", this.getClass().getName());
         }
         return this;
 

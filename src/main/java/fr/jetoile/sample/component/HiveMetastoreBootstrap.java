@@ -19,6 +19,8 @@ public enum HiveMetastoreBootstrap implements Bootstrap {
 
     private HiveLocalMetaStore hiveLocalMetaStore;
 
+    private State state = State.STOPPED;
+
     private Configuration configuration;
     private String host;
     private int port;
@@ -33,7 +35,6 @@ public enum HiveMetastoreBootstrap implements Bootstrap {
             } catch (BootstrapException e) {
                 LOGGER.error("unable to load configuration", e);
             }
-            build();
         }
     }
 
@@ -53,8 +54,8 @@ public enum HiveMetastoreBootstrap implements Bootstrap {
 
 
     private void cleanup() {
-            FileUtils.deleteFolder(derbyDirectory);
-            FileUtils.deleteFolder(derbyDirectory.substring(derbyDirectory.lastIndexOf("/")+1));
+        FileUtils.deleteFolder(derbyDirectory);
+        FileUtils.deleteFolder(derbyDirectory.substring(derbyDirectory.lastIndexOf("/") + 1));
 
     }
 
@@ -89,22 +90,36 @@ public enum HiveMetastoreBootstrap implements Bootstrap {
 
     @Override
     public Bootstrap start() {
-        try {
-            hiveLocalMetaStore.start();
-        } catch (Exception e) {
-            LOGGER.error("unable to start hivemetastore", e);
+        if (state == State.STOPPED) {
+            state = State.STARTING;
+            LOGGER.info("{} is starting", this.getClass().getName());
+            build();
+
+            try {
+                hiveLocalMetaStore.start();
+            } catch (Exception e) {
+                LOGGER.error("unable to start hivemetastore", e);
+            }
+            state = State.STARTED;
+            LOGGER.info("{} is started", this.getClass().getName());
         }
         return this;
     }
 
     @Override
     public Bootstrap stop() {
-        try {
-            hiveLocalMetaStore.stop(true);
-        } catch (Exception e) {
-            LOGGER.error("unable to stop hivemetastore", e);
+        if (state == State.STARTED) {
+            state = State.STOPPING;
+            LOGGER.info("{} is stopping", this.getClass().getName());
+            try {
+                hiveLocalMetaStore.stop(true);
+            } catch (Exception e) {
+                LOGGER.error("unable to stop hivemetastore", e);
+            }
+            cleanup();
+            state = State.STOPPED;
+            LOGGER.info("{} is stopped", this.getClass().getName());
         }
-        cleanup();
         return this;
     }
 

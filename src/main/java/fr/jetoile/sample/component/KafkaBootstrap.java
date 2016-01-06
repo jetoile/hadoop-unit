@@ -18,6 +18,8 @@ public enum KafkaBootstrap implements Bootstrap {
 
     private KafkaLocalBroker kafkaLocalCluster;
 
+    private State state = State.STOPPED;
+
     private Configuration configuration;
     private String zookeeperConnectionString;
     private String host;
@@ -33,8 +35,7 @@ public enum KafkaBootstrap implements Bootstrap {
             } catch (BootstrapException e) {
                 LOGGER.error("unable to load configuration", e);
             }
-            init();
-            build();
+
         }
     }
 
@@ -69,21 +70,37 @@ public enum KafkaBootstrap implements Bootstrap {
 
     @Override
     public Bootstrap start() {
-        try {
-            kafkaLocalCluster.start();
-        } catch (Exception e) {
-            LOGGER.error("unable to start kafka", e);
+        if (state == State.STOPPED) {
+            state = State.STARTING;
+            LOGGER.info("{} is starting", this.getClass().getName());
+
+            init();
+            build();
+            try {
+                kafkaLocalCluster.start();
+            } catch (Exception e) {
+                LOGGER.error("unable to start kafka", e);
+            }
+            state = State.STARTED;
+            LOGGER.info("{} is started", this.getClass().getName());
         }
         return this;
     }
 
     @Override
     public Bootstrap stop() {
-        try {
-            kafkaLocalCluster.stop(true);
-        } catch (Exception e) {
-            LOGGER.error("unable to stop kafka", e);
+        if (state == State.STARTED) {
+            state = State.STOPPING;
+            LOGGER.info("{} is stopping", this.getClass().getName());
+            try {
+                kafkaLocalCluster.stop(true);
+            } catch (Exception e) {
+                LOGGER.error("unable to stop kafka", e);
+            }
+            state = State.STOPPED;
+            LOGGER.info("{} is stopped", this.getClass().getName());
         }
+
         return this;
 
     }

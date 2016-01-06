@@ -17,6 +17,8 @@ public enum HBaseBootstrap implements Bootstrap {
 
     private HbaseLocalCluster hbaseLocalCluster;
 
+    private State state = State.STOPPED;
+
     private Configuration configuration;
     private int port;
     private int infoPort;
@@ -35,8 +37,6 @@ public enum HBaseBootstrap implements Bootstrap {
             } catch (BootstrapException e) {
                 LOGGER.error("unable to load configuration", e);
             }
-            init();
-            build();
         }
     }
 
@@ -84,22 +84,36 @@ public enum HBaseBootstrap implements Bootstrap {
 
     @Override
     public Bootstrap start() {
-        try {
-            hbaseLocalCluster.start();
-        } catch (Exception e) {
-            LOGGER.error("unable to start hbase", e);
+        if (state == State.STOPPED) {
+            state = State.STARTING;
+            LOGGER.info("{} is starting", this.getClass().getName());
+            init();
+            build();
+            try {
+                hbaseLocalCluster.start();
+            } catch (Exception e) {
+                LOGGER.error("unable to start hbase", e);
+            }
+            state = State.STARTED;
+            LOGGER.info("{} is started", this.getClass().getName());
         }
         return this;
     }
 
     @Override
     public Bootstrap stop() {
-        try {
-            hbaseLocalCluster.stop(true);
-        } catch (Exception e) {
-            LOGGER.error("unable to stop hbase", e);
+        if (state == State.STARTED) {
+            state = State.STOPPING;
+            LOGGER.info("{} is stopping", this.getClass().getName());
+            try {
+                hbaseLocalCluster.stop(true);
+            } catch (Exception e) {
+                LOGGER.error("unable to stop hbase", e);
+            }
+            cleanup();
+            state = State.STOPPED;
+            LOGGER.info("{} is stopped", this.getClass().getName());
         }
-        cleanup();
         return this;
 
     }
