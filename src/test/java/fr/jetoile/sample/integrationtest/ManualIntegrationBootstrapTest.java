@@ -2,8 +2,6 @@ package fr.jetoile.sample.integrationtest;
 
 
 import com.github.sakserv.minicluster.config.ConfigVars;
-import fr.jetoile.sample.Component;
-import fr.jetoile.sample.HadoopBootstrap;
 import fr.jetoile.sample.Utils;
 import fr.jetoile.sample.component.SolrCloudBootstrap;
 import fr.jetoile.sample.exception.BootstrapException;
@@ -46,13 +44,12 @@ import static junit.framework.TestCase.assertNotNull;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 
-public class IntegrationBootstrapTest2 {
+@Ignore
+public class ManualIntegrationBootstrapTest {
 
     static private Configuration configuration;
 
-    static private HadoopBootstrap hadoopBootstrap;
-
-    static private Logger LOGGER = LoggerFactory.getLogger(IntegrationBootstrapTest2.class);
+    static private Logger LOGGER = LoggerFactory.getLogger(ManualIntegrationBootstrapTest.class);
 
 
     @BeforeClass
@@ -62,15 +59,11 @@ public class IntegrationBootstrapTest2 {
         } catch (ConfigurationException e) {
             throw new BootstrapException("bad config", e);
         }
-
-        hadoopBootstrap = new HadoopBootstrap(Component.ZOOKEEPER, Component.HDFS, Component.KAFKA, Component.HIVEMETA, Component.HIVESERVER2, Component.HBASE, Component.SOLRCLOUD);
-        hadoopBootstrap.startAll();
     }
 
 
     @AfterClass
     public static void tearDown() throws BootstrapException {
-        hadoopBootstrap.stopAll();
     }
 
     @Test
@@ -204,6 +197,7 @@ public class IntegrationBootstrapTest2 {
     }
 
 
+
     @Test
     public void hdfsShouldStart() throws Exception {
 
@@ -237,7 +231,6 @@ public class IntegrationBootstrapTest2 {
         assertThat("{\"Path\":\"/user/guest\"}").isEqualTo(line);
 
     }
-
 
     @Test
     public void hBaseShouldStart() throws Exception {
@@ -301,4 +294,6 @@ public class IntegrationBootstrapTest2 {
         result = table.get(get);
         return result;
     }
+
+
 }

@@ -2,8 +2,9 @@ package fr.jetoile.sample.integrationtest;
 
 
 import com.github.sakserv.minicluster.config.ConfigVars;
+import fr.jetoile.sample.Component;
+import fr.jetoile.sample.HadoopBootstrap;
 import fr.jetoile.sample.Utils;
-import fr.jetoile.sample.component.HdfsBootstrap;
 import fr.jetoile.sample.component.SolrCloudBootstrap;
 import fr.jetoile.sample.exception.BootstrapException;
 import fr.jetoile.sample.kafka.consumer.KafkaTestConsumer;
@@ -21,24 +22,16 @@ import org.apache.hadoop.hbase.HTableDescriptor;
 import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.*;
 import org.apache.hadoop.hbase.util.Bytes;
-import org.apache.hadoop.hive.conf.HiveConf;
-import org.apache.hadoop.hive.metastore.HiveMetaStoreClient;
-import org.apache.hadoop.hive.metastore.TableType;
-import org.apache.hadoop.hive.metastore.api.*;
-import org.apache.hadoop.hive.ql.io.orc.OrcSerde;
-import org.apache.hadoop.hive.serde.serdeConstants;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.CloudSolrClient;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrInputDocument;
-import org.apache.thrift.TException;
 import org.apache.zookeeper.KeeperException;
 import org.junit.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URI;
@@ -47,18 +40,17 @@ import java.net.URLConnection;
 import java.sql.*;
 import java.sql.Connection;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static junit.framework.TestCase.assertNotNull;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 
-@Ignore
 public class IntegrationBootstrapTest {
 
     static private Configuration configuration;
+
+    static private HadoopBootstrap hadoopBootstrap;
 
     static private Logger LOGGER = LoggerFactory.getLogger(IntegrationBootstrapTest.class);
 
@@ -70,11 +62,15 @@ public class IntegrationBootstrapTest {
         } catch (ConfigurationException e) {
             throw new BootstrapException("bad config", e);
         }
+
+        hadoopBootstrap = new HadoopBootstrap(Component.ZOOKEEPER, Component.HDFS, Component.KAFKA, Component.HIVEMETA, Component.HIVESERVER2, Component.HBASE, Component.SOLRCLOUD);
+        hadoopBootstrap.startAll();
     }
 
 
     @AfterClass
     public static void tearDown() throws BootstrapException {
+        hadoopBootstrap.stopAll();
     }
 
     @Test
@@ -208,7 +204,6 @@ public class IntegrationBootstrapTest {
     }
 
 
-
     @Test
     public void hdfsShouldStart() throws Exception {
 
@@ -242,6 +237,7 @@ public class IntegrationBootstrapTest {
         assertThat("{\"Path\":\"/user/guest\"}").isEqualTo(line);
 
     }
+
 
     @Test
     public void hBaseShouldStart() throws Exception {
@@ -305,6 +301,4 @@ public class IntegrationBootstrapTest {
         result = table.get(get);
         return result;
     }
-
-
 }
