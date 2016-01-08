@@ -32,6 +32,7 @@
 
         <solr.version>5.2.1</solr.version>
         <hadoop-mini-clusters.version>0.1.3</hadoop-mini-clusters.version>
+        <phoenix-server.version>4.6.0-HBase-1.1</phoenix-server.version>
     </properties>
 
 
@@ -54,6 +55,82 @@
             <!--<artifactId>curator-framework</artifactId>-->
             <!--<version>3.0.0</version>-->
         <!--</dependency>-->
+
+        <dependency>
+            <groupId>org.apache.phoenix</groupId>
+            <artifactId>phoenix-server</artifactId>
+            <version>${phoenix-server.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.hbase</groupId>
+                    <artifactId>hbase-annotations</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.hbase</groupId>
+                    <artifactId>hbase-common</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.hbase</groupId>
+                    <artifactId>hbase-common</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.hbase</groupId>
+                    <artifactId>hbase-protocol</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.hbase</groupId>
+                    <artifactId>hbase-server</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.hbase</groupId>
+                    <artifactId>hbase-hadoop-compat</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.hadoop</groupId>
+                    <artifactId>hadoop-core</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.hadoop</groupId>
+                    <artifactId>hadoop-common</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.hadoop</groupId>
+                    <artifactId>hadoop-auth</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.hadoop</groupId>
+                    <artifactId>hadoop-hdfs</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.hadoop</groupId>
+                    <artifactId>hadoop-annotations</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.hadoop</groupId>
+                    <artifactId>hadoop-mapreduce-client-core</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.hadoop</groupId>
+                    <artifactId>hadoop-yarn-common</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.codehaus.jackson</groupId>
+                    <artifactId>jackson-core-asl</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.codehaus.jackson</groupId>
+                    <artifactId>jackson-mapper-asl</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.codehaus.jackson</groupId>
+                    <artifactId>jackson-jaxrs</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.codehaus.jackson</groupId>
+                    <artifactId>jackson-xc</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
 
         <dependency>
             <groupId>org.apache.solr</groupId>
@@ -204,6 +281,90 @@
             <version>10.10.2.0</version>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>com.jetoile.sample.phoenix</groupId>
+            <artifactId>phoenix-client</artifactId>
+            <version>1.0</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!--<dependency>-->
+            <!--<groupId>org.apache.phoenix</groupId>-->
+            <!--<artifactId>phoenix-server-client</artifactId>-->
+            <!--<version>${phoenix-server.version}</version>-->
+            <!--<scope>test</scope>-->
+            <!--<exclusions>-->
+                <!--<exclusion>-->
+                    <!--<groupId>org.apache.hbase</groupId>-->
+                    <!--<artifactId>hbase-annotations</artifactId>-->
+                <!--</exclusion>-->
+                <!--<exclusion>-->
+                    <!--<groupId>org.apache.hbase</groupId>-->
+                    <!--<artifactId>hbase-common</artifactId>-->
+                <!--</exclusion>-->
+                <!--<exclusion>-->
+                    <!--<groupId>org.apache.hbase</groupId>-->
+                    <!--<artifactId>hbase-common</artifactId>-->
+                <!--</exclusion>-->
+                <!--<exclusion>-->
+                    <!--<groupId>org.apache.hbase</groupId>-->
+                    <!--<artifactId>hbase-protocol</artifactId>-->
+                <!--</exclusion>-->
+                <!--<exclusion>-->
+                    <!--<groupId>org.apache.hbase</groupId>-->
+                    <!--<artifactId>hbase-server</artifactId>-->
+                <!--</exclusion>-->
+                <!--<exclusion>-->
+                    <!--<groupId>org.apache.hbase</groupId>-->
+                    <!--<artifactId>hbase-hadoop-compat</artifactId>-->
+                <!--</exclusion>-->
+                <!--<exclusion>-->
+                    <!--<groupId>org.apache.hadoop</groupId>-->
+                    <!--<artifactId>hadoop-core</artifactId>-->
+                <!--</exclusion>-->
+                <!--<exclusion>-->
+                    <!--<groupId>org.apache.hadoop</groupId>-->
+                    <!--<artifactId>hadoop-common</artifactId>-->
+                <!--</exclusion>-->
+                <!--<exclusion>-->
+                    <!--<groupId>org.apache.hadoop</groupId>-->
+                    <!--<artifactId>hadoop-auth</artifactId>-->
+                <!--</exclusion>-->
+                <!--<exclusion>-->
+                    <!--<groupId>org.apache.hadoop</groupId>-->
+                    <!--<artifactId>hadoop-hdfs</artifactId>-->
+                <!--</exclusion>-->
+                <!--<exclusion>-->
+                    <!--<groupId>org.apache.hadoop</groupId>-->
+                    <!--<artifactId>hadoop-annotations</artifactId>-->
+                <!--</exclusion>-->
+                <!--<exclusion>-->
+                    <!--<groupId>org.apache.hadoop</groupId>-->
+                    <!--<artifactId>hadoop-mapreduce-client-core</artifactId>-->
+                <!--</exclusion>-->
+                <!--<exclusion>-->
+                    <!--<groupId>org.apache.hadoop</groupId>-->
+                    <!--<artifactId>hadoop-yarn-common</artifactId>-->
+                <!--</exclusion>-->
+                <!--<exclusion>-->
+                    <!--<groupId>org.codehaus.jackson</groupId>-->
+                    <!--<artifactId>jackson-core-asl</artifactId>-->
+                <!--</exclusion>-->
+                <!--<exclusion>-->
+                    <!--<groupId>org.codehaus.jackson</groupId>-->
+                    <!--<artifactId>jackson-mapper-asl</artifactId>-->
+                <!--</exclusion>-->
+                <!--<exclusion>-->
+                    <!--<groupId>org.codehaus.jackson</groupId>-->
+                    <!--<artifactId>jackson-jaxrs</artifactId>-->
+                <!--</exclusion>-->
+                <!--<exclusion>-->
+                    <!--<groupId>org.codehaus.jackson</groupId>-->
+                    <!--<artifactId>jackson-xc</artifactId>-->
+                <!--</exclusion>-->
+            <!--</exclusions>-->
+        <!--</dependency>-->
     </dependencies>
 
     <build>
