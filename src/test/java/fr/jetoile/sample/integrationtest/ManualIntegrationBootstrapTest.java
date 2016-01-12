@@ -3,6 +3,7 @@ package fr.jetoile.sample.integrationtest;
 
 import com.github.sakserv.minicluster.config.ConfigVars;
 import fr.jetoile.sample.Utils;
+import fr.jetoile.sample.component.OozieBootstrap;
 import fr.jetoile.sample.component.SolrCloudBootstrap;
 import fr.jetoile.sample.exception.BootstrapException;
 import fr.jetoile.sample.kafka.consumer.KafkaTestConsumer;
@@ -20,6 +21,9 @@ import org.apache.hadoop.hbase.HTableDescriptor;
 import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.*;
 import org.apache.hadoop.hbase.util.Bytes;
+import org.apache.hadoop.security.UserGroupInformation;
+import org.apache.oozie.client.OozieClient;
+import org.apache.oozie.client.WorkflowJob;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.CloudSolrClient;
 import org.apache.solr.common.SolrDocument;
@@ -29,9 +33,7 @@ import org.junit.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
@@ -39,6 +41,7 @@ import java.sql.*;
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 import static junit.framework.TestCase.assertNotNull;
 import static org.fest.assertions.Assertions.assertThat;
@@ -260,6 +263,51 @@ public class ManualIntegrationBootstrapTest {
             Result result = getRow(tableName, colFamName, String.valueOf(i), colQualiferName, hbaseConfiguration);
             assertEquals("row_" + i, new String(result.value()));
         }
+
+    }
+
+
+    @Test
+    public void oozieShouldStart() throws Exception {
+
+        LOGGER.info("OOZIE: Test Submit Workflow Start");
+
+        org.apache.hadoop.conf.Configuration conf = new org.apache.hadoop.conf.Configuration();
+        conf.set("fs.default.name", "hdfs://127.0.0.1:" + configuration.getInt(ConfigVars.HDFS_NAMENODE_PORT_KEY));
+
+        URI uri = URI.create ("hdfs://127.0.0.1:" + configuration.getInt(ConfigVars.HDFS_NAMENODE_PORT_KEY));
+
+        FileSystem hdfsFs = FileSystem.get (uri, conf);
+
+        OozieClient oozieClient = new OozieClient("http://" + configuration.getString(OozieBootstrap.OOZIE_HOST) + ":" + configuration.getInt(OozieBootstrap.OOZIE_PORT) + "/oozie");
+
+        Path appPath = new Path(hdfsFs.getHomeDirectory(), "testApp");
+        hdfsFs.mkdirs(new Path(appPath, "lib"));
+        Path workflow = new Path(appPath, "workflow.xml");
+
+        //write workflow.xml
+        String wfApp = "<workflow-app xmlns='uri:oozie:workflow:0.1' name='test-wf'>" +
+                "    <start to='end'/>" +
+                "    <end name='end'/>" +
+                "</workflow-app>";
+
+        Writer writer = new OutputStreamWriter(hdfsFs.create(workflow));
+        writer.write(wfApp);
+        writer.close();
+
+        //write job.properties
+        Properties oozieConf = oozieClient.createConfiguration();
+        oozieConf.setProperty(OozieClient.APP_PATH, workflow.toString());
+        oozieConf.setProperty(OozieClient.USER_NAME, UserGroupInformation.getCurrentUser().getUserName());
+
+        //submit and check
+        final String jobId = oozieClient.submit(oozieConf);
+        WorkflowJob wf = oozieClient.getJobInfo(jobId);
+        Assert.assertNotNull(wf);
+        assertEquals(WorkflowJob.Status.PREP, wf.getStatus());
+
+        LOGGER.info("OOZIE: Workflow: {}", wf.toString());
+        hdfsFs.close();
 
     }
 
