@@ -13,6 +13,7 @@ public enum Component {
     HIVESERVER2("hiveserver2"),
     KAFKA("kafka"),
     HBASE("hbase"),
+    OOZIE("oozie"),
     SOLRCLOUD("solrcloud"),
     SOLR("solr");
 

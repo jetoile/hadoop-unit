@@ -82,6 +82,9 @@ public class HadoopBootstrap {
             case HBASE:
                 HBaseBootstrap.INSTANCE.start();
                 break;
+            case OOZIE:
+                OozieBootstrap.INSTANCE.start();
+                break;
             case SOLRCLOUD:
                 SolrCloudBootstrap.INSTANCE.start();
                 break;
@@ -110,6 +113,9 @@ public class HadoopBootstrap {
                 break;
             case HBASE:
                 HBaseBootstrap.INSTANCE.stop();
+                break;
+            case OOZIE:
+                OozieBootstrap.INSTANCE.stop();
                 break;
             case SOLRCLOUD:
                 SolrCloudBootstrap.INSTANCE.stop();
