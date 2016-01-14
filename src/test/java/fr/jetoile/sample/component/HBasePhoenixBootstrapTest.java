@@ -28,6 +28,7 @@ public class HBasePhoenixBootstrapTest {
 
     static private Bootstrap zookeeper;
     static private Bootstrap hbase;
+    static private Bootstrap hdfs;
     static private Configuration configuration;
 
 
@@ -38,25 +39,22 @@ public class HBasePhoenixBootstrapTest {
         } catch (ConfigurationException e) {
             throw new BootstrapException("bad config", e);
         }
-//
+
 //        zookeeper = ZookeeperBootstrap.INSTANCE.start();
+//        hdfs = HdfsBootstrap.INSTANCE.start();
 //        hbase = HBaseBootstrap.INSTANCE.start();
     }
-//
-//    @AfterClass
-//    public static void tearDown() throws Exception {
+
+    @AfterClass
+    public static void tearDown() throws Exception {
 //        hbase.stop();
+//        hdfs.stop();
 //        zookeeper.stop();
-//    }
+    }
 
 
     @Test
     public void hBaseShouldStart() throws Exception {
-
-        HBaseTestingUtility testingUtility = new HBaseTestingUtility();
-        testingUtility.getConfiguration().setStrings(
-                CoprocessorHost.USER_REGION_COPROCESSOR_CONF_KEY,
-                HutReadEndpoint.class.getName());
 
         String zkConfig = configuration.getString(ConfigVars.ZOOKEEPER_HOST_KEY) + ":" + configuration.getInt(ConfigVars.ZOOKEEPER_PORT_KEY);
 //        System.setProperty("hbase.zookeeper.property.clientPort", configuration.getString(ConfigVars.ZOOKEEPER_PORT_KEY));
@@ -68,7 +66,7 @@ public class HBasePhoenixBootstrapTest {
         hbaseConfiguration.set("zookeeper.znode.parent", configuration.getString(ConfigVars.HBASE_ZNODE_PARENT_KEY));
         final HBaseAdmin admin = new HBaseAdmin(hbaseConfiguration);
 
-//        admin.enableTable("SYSTEM.CATALOG");
+       admin.enableTable("SYSTEM.CATALOG");
 //        admin.disableTable("SYSTEM.CATALOG");
 
         Statement stmt = null;

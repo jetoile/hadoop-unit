@@ -24,6 +24,7 @@ public class HBaseBootstrapTest {
 
     static private Bootstrap zookeeper;
     static private Bootstrap hbase;
+    static private Bootstrap hdfs;
     static private Configuration configuration;
 
 
@@ -36,12 +37,14 @@ public class HBaseBootstrapTest {
         }
 
         zookeeper = ZookeeperBootstrap.INSTANCE.start();
+        hdfs = HdfsBootstrap.INSTANCE.start();
         hbase = HBaseBootstrap.INSTANCE.start();
     }
 
     @AfterClass
     public static void tearDown() throws Exception {
         hbase.stop();
+        hdfs.stop();
         zookeeper.stop();
     }
 
