@@ -13,6 +13,7 @@ import org.apache.hadoop.hbase.util.Bytes;
 import org.apache.phoenix.jdbc.Jdbc7Shim;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +24,7 @@ import java.util.Properties;
 
 import static org.junit.Assert.assertEquals;
 
+@Ignore
 public class HBasePhoenixBootstrapTest {
     static private Logger LOGGER = LoggerFactory.getLogger(HBasePhoenixBootstrapTest.class);
 
