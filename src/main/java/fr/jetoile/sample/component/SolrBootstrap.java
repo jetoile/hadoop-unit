@@ -1,5 +1,6 @@
 package fr.jetoile.sample.component;
 
+import fr.jetoile.sample.HadoopUtils;
 import fr.jetoile.sample.exception.BootstrapException;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
@@ -41,6 +42,7 @@ public enum SolrBootstrap implements Bootstrap {
     }
 
     private void loadConfig() throws BootstrapException {
+        HadoopUtils.setHadoopHome();
         try {
             configuration = new PropertiesConfiguration("default.properties");
         } catch (ConfigurationException e) {

@@ -3,6 +3,7 @@ package fr.jetoile.sample.component;
 import com.github.sakserv.minicluster.config.ConfigVars;
 import com.github.sakserv.minicluster.impl.HbaseLocalCluster;
 import com.github.sakserv.minicluster.util.FileUtils;
+import fr.jetoile.sample.HadoopUtils;
 import fr.jetoile.sample.exception.BootstrapException;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
@@ -59,6 +60,7 @@ public enum HBaseBootstrap implements Bootstrap {
     }
 
     private void loadConfig() throws BootstrapException {
+        HadoopUtils.setHadoopHome();
         try {
             configuration = new PropertiesConfiguration("default.properties");
         } catch (ConfigurationException e) {

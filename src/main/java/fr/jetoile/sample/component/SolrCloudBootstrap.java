@@ -1,6 +1,7 @@
 package fr.jetoile.sample.component;
 
 import com.github.sakserv.minicluster.config.ConfigVars;
+import fr.jetoile.sample.HadoopUtils;
 import fr.jetoile.sample.exception.BootstrapException;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
@@ -63,6 +64,7 @@ public enum SolrCloudBootstrap implements Bootstrap {
     }
 
     private void loadConfig() throws BootstrapException {
+        HadoopUtils.setHadoopHome();
         try {
             configuration = new PropertiesConfiguration("default.properties");
         } catch (ConfigurationException e) {

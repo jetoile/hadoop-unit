@@ -2,6 +2,7 @@ package fr.jetoile.sample.component;
 
 import com.github.sakserv.minicluster.config.ConfigVars;
 import com.github.sakserv.minicluster.impl.HdfsLocalCluster;
+import fr.jetoile.sample.HadoopUtils;
 import fr.jetoile.sample.exception.BootstrapException;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
@@ -58,6 +59,7 @@ public enum HdfsBootstrap implements Bootstrap {
     }
 
     private void loadConfig() throws BootstrapException {
+        HadoopUtils.setHadoopHome();
         try {
             configuration = new PropertiesConfiguration("default.properties");
         } catch (ConfigurationException e) {
