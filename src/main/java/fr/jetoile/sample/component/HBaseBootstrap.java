@@ -46,6 +46,10 @@ public enum HBaseBootstrap implements Bootstrap {
     }
 
     private void build() {
+        org.apache.hadoop.conf.Configuration hbaseConfiguration = new org.apache.hadoop.conf.Configuration();
+        hbaseConfiguration.setBoolean("hbase.table.sanity.checks", false);
+        hbaseConfiguration.set("fs.default.name", "hdfs://127.0.0.1:" + configuration.getString(ConfigVars.HDFS_NAMENODE_PORT_KEY));
+
         hbaseLocalCluster = new HbaseLocalCluster.Builder()
                 .setHbaseMasterPort(port)
                 .setHbaseMasterInfoPort(infoPort)
@@ -55,7 +59,7 @@ public enum HBaseBootstrap implements Bootstrap {
                 .setZookeeperConnectionString(zookeeperConnectionString)
                 .setZookeeperZnodeParent(zookeeperZnodeParent)
                 .setHbaseWalReplicationEnabled(enableWalReplication)
-                .setHbaseConfiguration(new org.apache.hadoop.conf.Configuration())
+                .setHbaseConfiguration(hbaseConfiguration)
                 .build();
     }
 
