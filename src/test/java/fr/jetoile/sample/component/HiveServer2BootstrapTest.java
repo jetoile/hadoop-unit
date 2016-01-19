@@ -31,8 +31,6 @@ public class HiveServer2BootstrapTest {
 
     @BeforeClass
     public static void setup() throws Exception {
-        WindowsLibsUtils.setHadoopHome();
-
         try {
             configuration = new PropertiesConfiguration("default.properties");
         } catch (ConfigurationException e) {
