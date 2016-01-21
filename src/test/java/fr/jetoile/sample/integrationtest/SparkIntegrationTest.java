@@ -171,7 +171,7 @@ public class SparkIntegrationTest {
         HiveContext sqlContext = new HiveContext(context);
 
         DataFrame sql = sqlContext.sql("SELECT * FROM default.test");
-        sql.write().save("hdfs://localhost:" + configuration.getInt(ConfigVars.HDFS_NAMENODE_PORT_KEY) + "/khanh/test_parquet/file.parquet");
+        sql.write().parquet("hdfs://localhost:" + configuration.getInt(ConfigVars.HDFS_NAMENODE_PORT_KEY) + "/khanh/test_parquet/file.parquet");
 
         FileSystem fileSystem = HdfsUtils.INSTANCE.getFileSystem();
         assertThat(fileSystem.exists(new Path("hdfs://localhost:" + configuration.getInt(ConfigVars.HDFS_NAMENODE_PORT_KEY) + "/khanh/test_parquet/file.parquet"))).isTrue();
@@ -193,7 +193,7 @@ public class SparkIntegrationTest {
         HiveContext hiveContext = new HiveContext(context);
 
         DataFrame sql = hiveContext.sql("SELECT * FROM default.test");
-        sql.write().save("hdfs://localhost:" + configuration.getInt(ConfigVars.HDFS_NAMENODE_PORT_KEY) + "/khanh/test_parquet/file.parquet");
+        sql.write().parquet("hdfs://localhost:" + configuration.getInt(ConfigVars.HDFS_NAMENODE_PORT_KEY) + "/khanh/test_parquet/file.parquet");
 
         FileSystem fileSystem = HdfsUtils.INSTANCE.getFileSystem();
         assertThat(fileSystem.exists(new Path("hdfs://localhost:" + configuration.getInt(ConfigVars.HDFS_NAMENODE_PORT_KEY) + "/khanh/test_parquet/file.parquet"))).isTrue();
