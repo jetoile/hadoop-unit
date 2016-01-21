@@ -121,6 +121,18 @@
             <groupId>com.github.sakserv</groupId>
             <artifactId>hadoop-mini-clusters-kafka</artifactId>
             <version>${hadoop-mini-clusters.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.kafka</groupId>
+                    <artifactId>kafka_2.9.2</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.kafka</groupId>
+            <artifactId>kafka_2.10</artifactId>
+            <version>0.9.0.0</version>
         </dependency>
 
         <dependency>
@@ -214,13 +226,21 @@
             <groupId>org.apache.spark</groupId>
             <artifactId>spark-core_2.10</artifactId>
             <version>1.6.0</version>
+            <!--<version>1.5.2</version>-->
             <scope>test</scope>
+            <!--<exclusions>-->
+                <!--<exclusion>-->
+                    <!--<groupId>org.scala-lang</groupId>-->
+                    <!--<artifactId>scala-library</artifactId>-->
+                <!--</exclusion>-->
+            <!--</exclusions>-->
         </dependency>
 
         <dependency>
             <groupId>org.apache.spark</groupId>
             <artifactId>spark-sql_2.10</artifactId>
             <version>1.6.0</version>
+            <!--<version>1.5.2</version>-->
             <scope>test</scope>
         </dependency>
 
@@ -228,6 +248,7 @@
             <groupId>org.apache.spark</groupId>
             <artifactId>spark-hive_2.10</artifactId>
             <version>1.6.0</version>
+            <!--<version>1.5.2</version>-->
             <scope>test</scope>
         </dependency>
 
@@ -243,6 +264,12 @@
             <artifactId>spark-solr</artifactId>
             <version>1.1.2</version>
             <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.scala-lang</groupId>
+                    <artifactId>scala-library</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
