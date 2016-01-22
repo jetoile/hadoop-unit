@@ -122,7 +122,7 @@ public class IntegrationBootstrapTest {
         List<String> seeds = new ArrayList<String>();
         seeds.add(configuration.getString(ConfigVars.KAFKA_HOSTNAME_KEY));
         KafkaTestConsumer kafkaTestConsumer = new KafkaTestConsumer();
-        kafkaTestConsumer.consumeMessages(
+        kafkaTestConsumer.consumeMessages2(
                 configuration.getInt(ConfigVars.KAFKA_TEST_MESSAGE_COUNT_KEY),
                 configuration.getString(ConfigVars.KAFKA_TEST_TOPIC_KEY),
                 0,

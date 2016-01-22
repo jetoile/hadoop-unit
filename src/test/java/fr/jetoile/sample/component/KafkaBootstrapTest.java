@@ -8,10 +8,7 @@ import fr.jetoile.sample.kafka.producer.KafkaTestProducer;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
-import org.junit.AfterClass;
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -64,7 +61,7 @@ public class KafkaBootstrapTest {
         List<String> seeds = new ArrayList<String>();
         seeds.add(configuration.getString(ConfigVars.KAFKA_HOSTNAME_KEY));
         KafkaTestConsumer kafkaTestConsumer = new KafkaTestConsumer();
-        kafkaTestConsumer.consumeMessages(
+        kafkaTestConsumer.consumeMessages2(
                 configuration.getInt(ConfigVars.KAFKA_TEST_MESSAGE_COUNT_KEY),
                 configuration.getString(ConfigVars.KAFKA_TEST_TOPIC_KEY),
                 0,

@@ -13,9 +13,9 @@
  */
 package fr.jetoile.sample.kafka.producer;
 
-import kafka.javaapi.producer.Producer;
-import kafka.producer.KeyedMessage;
-import kafka.producer.ProducerConfig;
+import org.apache.kafka.clients.producer.KafkaProducer;
+import org.apache.kafka.clients.producer.Producer;
+import org.apache.kafka.clients.producer.ProducerRecord;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 import org.slf4j.Logger;
@@ -91,10 +91,20 @@ public class KafkaTestProducer {
 
     public void produceMessages() {
         Properties props = new Properties();
-        props.put("metadata.broker.list", getKafkaHostname() + ":" + getKafkaPort());
-        props.put("serializer.class", "kafka.serializer.StringEncoder");
-        ProducerConfig config = new ProducerConfig(props);
-        Producer<String, String> producer = new Producer<String, String>(config);
+        props.put("bootstrap.servers", getKafkaHostname() + ":" + getKafkaPort());
+        props.put("acks", "all");
+        props.put("retries", 0);
+        props.put("batch.size", 10);
+        props.put("linger.ms", 1);
+        props.put("buffer.memory", 33554432);
+        props.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
+        props.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
+
+        Producer<String, String> producer = new KafkaProducer(props);
+//        props.put("metadata.broker.list", getKafkaHostname() + ":" + getKafkaPort());
+//        props.put("serializer.class", "kafka.serializer.StringEncoder");
+//        ProducerConfig config = new ProducerConfig(props);
+//        Producer<String, String> producer = new Producer<String, String>(config);
 
         // Send 10 messages to the local kafka server:
         LOG.info("KAFKA: Preparing to send {} initial messages", messageCount);
@@ -111,9 +121,10 @@ public class KafkaTestProducer {
             }
             String payload = obj.toString();
 
-            KeyedMessage<String, String> data = new KeyedMessage<String, String>(getTopic(), null, payload);
-            producer.send(data);
-            LOG.info("Sent message: {}", data.toString());
+//            KeyedMessage<String, String> data = new KeyedMessage<String, String>(getTopic(), null, payload);
+//            producer.send(data);
+            producer.send(new ProducerRecord<>(getTopic(), String.valueOf(i), obj.toString()));
+            LOG.info("Sent message: {}", obj.toString());
         }
         LOG.info("KAFKA: Initial messages sent");
 

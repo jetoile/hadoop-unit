@@ -28,10 +28,10 @@
 
 
 
-<property>
-<name>hive.exec.scratchdir</name>
-<value>/tmp/hive</value>
-<description>Scratch space for Hive jobs</description>
-</property>
+<!--<property>-->
+<!--<name>hive.exec.scratchdir</name>-->
+<!--<value>/tmp/hive</value>-->
+<!--<description>Scratch space for Hive jobs</description>-->
+<!--</property>-->
 
 </configuration>

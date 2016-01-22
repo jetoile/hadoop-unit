@@ -143,7 +143,7 @@ public class SparkSolrIntegrationTest {
         JavaSparkContext context = new JavaSparkContext(conf);
 
         //read hive-site from classpath
-        HiveContext hiveContext = new HiveContext(context);
+        HiveContext hiveContext = new HiveContext(context.sc());
 
         DataFrame sql = hiveContext.sql("SELECT * FROM default.test");
         sql.write().parquet("hdfs://localhost:" + configuration.getInt(ConfigVars.HDFS_NAMENODE_PORT_KEY) + "/khanh/test_parquet/file.parquet");
