@@ -24,7 +24,7 @@
 package fr.jetoile.sample.integrationtest;
 
 import com.github.sakserv.minicluster.config.ConfigVars;
-import com.lucidworks.spark.SchemaPreservingSolrRDD;
+//import com.lucidworks.spark.SolrSupport;
 import com.lucidworks.spark.SolrSupport;
 import com.ninja_squad.dbsetup.Operations;
 import com.ninja_squad.dbsetup.operation.Operation;
@@ -35,7 +35,6 @@ import fr.jetoile.sample.Component;
 import fr.jetoile.sample.HadoopBootstrap;
 import fr.jetoile.sample.component.SolrCloudBootstrap;
 import fr.jetoile.sample.exception.BootstrapException;
-import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
@@ -48,21 +47,16 @@ import org.apache.solr.common.SolrInputDocument;
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
-import org.apache.spark.api.java.function.Function;
-import org.apache.spark.rdd.RDD;
 import org.apache.spark.sql.DataFrame;
-import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SQLContext;
 import org.apache.spark.sql.hive.HiveContext;
 import org.junit.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import scala.Function1;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.sql.SQLException;
-import java.util.HashMap;
 
 import static com.ninja_squad.dbsetup.Operations.sequenceOf;
 import static com.ninja_squad.dbsetup.Operations.sql;

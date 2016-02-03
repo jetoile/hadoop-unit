@@ -226,21 +226,13 @@
             <groupId>org.apache.spark</groupId>
             <artifactId>spark-core_2.10</artifactId>
             <version>1.6.0</version>
-            <!--<version>1.5.2</version>-->
             <scope>test</scope>
-            <!--<exclusions>-->
-                <!--<exclusion>-->
-                    <!--<groupId>org.scala-lang</groupId>-->
-                    <!--<artifactId>scala-library</artifactId>-->
-                <!--</exclusion>-->
-            <!--</exclusions>-->
         </dependency>
 
         <dependency>
             <groupId>org.apache.spark</groupId>
             <artifactId>spark-sql_2.10</artifactId>
             <version>1.6.0</version>
-            <!--<version>1.5.2</version>-->
             <scope>test</scope>
         </dependency>
 
@@ -248,7 +240,6 @@
             <groupId>org.apache.spark</groupId>
             <artifactId>spark-hive_2.10</artifactId>
             <version>1.6.0</version>
-            <!--<version>1.5.2</version>-->
             <scope>test</scope>
         </dependency>
 
@@ -265,6 +256,22 @@
             <version>1.1.2</version>
             <scope>test</scope>
             <exclusions>
+                <exclusion>
+                    <groupId>org.ow2.asm</groupId>
+                    <artifactId>asm</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.ow2.asm</groupId>
+                    <artifactId>asm-commons</artifactId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>spark-mllib_2.10</artifactId>
+                    <groupId>org.apache.spark</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>spark-streaming-twitter_2.10</artifactId>
+                    <groupId>org.apache.spark</groupId>
+                </exclusion>
                 <exclusion>
                     <groupId>org.scala-lang</groupId>
                     <artifactId>scala-library</artifactId>
