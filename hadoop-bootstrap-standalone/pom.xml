@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>hadoop-bootstrap</artifactId>
+        <groupId>fr.jetoile.sample</groupId>
+        <version>1.1-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>hadoop-bootstrap-standalone</artifactId>
+
+    <dependencies>
+        <dependency>
+            <groupId>fr.jetoile.sample</groupId>
+            <artifactId>hadoop-bootstrap-commons</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>fr.jetoile.sample</groupId>
+            <artifactId>hadoop-bootstrap-hbase</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>fr.jetoile.sample</groupId>
+            <artifactId>hadoop-bootstrap-hdfs</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>fr.jetoile.sample</groupId>
+            <artifactId>hadoop-bootstrap-hive</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>fr.jetoile.sample</groupId>
+            <artifactId>hadoop-bootstrap-kafka</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>fr.jetoile.sample</groupId>
+            <artifactId>hadoop-bootstrap-oozie</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>fr.jetoile.sample</groupId>
+            <artifactId>hadoop-bootstrap-solr</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>fr.jetoile.sample</groupId>
+            <artifactId>hadoop-bootstrap-solrcloud</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>fr.jetoile.sample</groupId>
+            <artifactId>hadoop-bootstrap-zookeeper</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-configuration</groupId>
+            <artifactId>commons-configuration</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.hadoop</groupId>
+            <artifactId>hadoop-client</artifactId>
+            <exclusions>
+                <exclusion>
+                    <artifactId>servlet-api</artifactId>
+                    <groupId>javax.servlet</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-core_2.10</artifactId>
+            <version>1.6.0</version>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <artifactId>hadoop-client</artifactId>
+                    <groupId>org.apache.hadoop</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-sql_2.10</artifactId>
+            <version>1.6.0</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-hive_2.10</artifactId>
+            <version>1.6.0</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>fr.jetoile.sample</groupId>
+            <artifactId>hadoop-bootstrap-test-utils</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.lucidworks.spark</groupId>
+            <artifactId>spark-solr</artifactId>
+            <version>1.1.2</version>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.ow2.asm</groupId>
+                    <artifactId>asm</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.ow2.asm</groupId>
+                    <artifactId>asm-commons</artifactId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>spark-mllib_2.10</artifactId>
+                    <groupId>org.apache.spark</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>spark-streaming-twitter_2.10</artifactId>
+                    <groupId>org.apache.spark</groupId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.scala-lang</groupId>
+                    <artifactId>scala-library</artifactId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>hadoop-hdfs</artifactId>
+                    <groupId>org.apache.hadoop</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>hadoop-client</artifactId>
+                    <groupId>org.apache.hadoop</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>solr-core</artifactId>
+                    <groupId>org.apache.solr</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.derby</groupId>
+            <artifactId>derbyclient</artifactId>
+            <version>10.10.2.0</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+
+        <plugins>
+
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy-resources</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>
+                                ${basedir}/target/appassembler-jsw/jsw/hadoop-bootstrap-standalone/conf
+                            </outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>src/main/conf</directory>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>appassembler-maven-plugin</artifactId>
+                <executions>
+
+                    <execution>
+                        <id>hadoop-bootstrap</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>generate-daemons</goal>
+                        </goals>
+                        <configuration>
+                            <target>${project.build.directory}/appassembler-jsw</target>
+
+                            <repositoryLayout>flat</repositoryLayout>
+
+                            <daemons>
+                                <daemon>
+                                    <id>${project.name}</id>
+                                    <mainClass>fr.jetoile.sample.HadoopStandaloneBootstrap</mainClass>
+                                    <commandLineArguments>
+                                    </commandLineArguments>
+                                    <platforms>
+                                        <platform>jsw</platform>
+                                    </platforms>
+                                    <generatorConfigurations>
+                                        <generatorConfiguration>
+                                            <generator>jsw</generator>
+                                            <includes>
+                                                <include>linux-x86-64</include>
+                                                <include>linux-x86-64</include>
+                                                <include>windows-x86-32</include>
+                                                <include>windows-x86-64</include>
+                                                <include>macosx-universal-64</include>
+                                            </includes>
+                                            <configuration>
+
+                                                <property>
+                                                    <name>configuration.directory.in.classpath.first</name>
+                                                    <value>conf</value>
+                                                </property>
+
+                                                <property>
+                                                    <name>wrapper.logfile.maxsize</name>
+                                                    <value>100m</value>
+                                                </property>
+
+                                            </configuration>
+                                        </generatorConfiguration>
+                                    </generatorConfigurations>
+                                    <jvmSettings>
+                                        <initialMemorySize>256M</initialMemorySize>
+                                        <maxMemorySize>2048M</maxMemorySize>
+                                        <systemProperties>
+                                            <systemProperty>com.sun.management.jmxremote</systemProperty>
+                                            <systemProperty>com.sun.management.jmxremote.port=8199</systemProperty>
+                                            <systemProperty>com.sun.management.jmxremote.authenticate=false
+                                            </systemProperty>
+                                            <systemProperty>com.sun.management.jmxremote.ssl=false</systemProperty>
+                                            <systemProperty>com.sun.management.jmxremote.local.only=false
+                                            </systemProperty>
+                                        </systemProperties>
+                                        <extraArguments>
+                                            <extraArgument>-Xdebug</extraArgument>
+                                            <extraArgument>
+                                                -Xrunjdwp:transport=dt_socket,address=8000,server=y,suspend=n
+                                            </extraArgument>
+                                            <extraArgument>-server</extraArgument>
+                                            <!--<extraArgument>-XX:+UnlockCommercialFeatures</extraArgument>-->
+                                            <!--<extraArgument>-XX:+FlightRecorder</extraArgument>-->
+                                            <extraArgument>-XX:+HeapDumpOnOutOfMemoryError</extraArgument>
+                                        </extraArguments>
+                                    </jvmSettings>
+                                </daemon>
+                            </daemons>
+                        </configuration>
+                    </execution>
+                </executions>
+                <configuration>
+
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <!-- Packaging -->
+                <artifactId>maven-assembly-plugin</artifactId>
+                <configuration>
+                    <descriptors>
+                        <descriptor>src/main/assembly/descriptor.xml</descriptor>
+                    </descriptors>
+                    <appendAssemblyId>false</appendAssemblyId>
+
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

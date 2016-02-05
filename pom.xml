@@ -5,12 +5,34 @@
 
     <groupId>fr.jetoile.sample</groupId>
     <artifactId>hadoop-bootstrap</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <version>1.1-SNAPSHOT</version>
 
     <scm>
         <connection>scm:git:https://git@github.com/jetoile/hadoop-bootstrap.git</connection>
         <tag>HEAD</tag>
     </scm>
+    <modules>
+        <module>hadoop-bootstrap-kafka</module>
+        <module>hadoop-bootstrap-oozie</module>
+        <module>hadoop-bootstrap-hive</module>
+        <module>hadoop-bootstrap-zookeeper</module>
+        <module>hadoop-bootstrap-solr</module>
+        <module>hadoop-bootstrap-solrcloud</module>
+        <module>hadoop-bootstrap-hdfs</module>
+        <module>hadoop-bootstrap-hbase</module>
+        <module>hadoop-bootstrap-standalone</module>
+        <module>hadoop-bootstrap-commons</module>
+    </modules>
+
+    <repositories>
+        <repository>
+            <id>public.repo.hortonworks.com</id>
+            <name>Public Hortonworks Maven Repo</name>
+            <url>http://repo.hortonworks.com/content/groups/public/</url>
+        </repository>
+    </repositories>
+
 
 
     <properties>
@@ -30,12 +52,254 @@
 
         <hive.version>1.2.1</hive.version>
 
-        <solr.version>5.2.1</solr.version>
+        <!--<solr.version>5.2.1</solr.version>-->
+        <solr.version>5.4.1</solr.version>
         <hadoop-mini-clusters.version>0.1.3</hadoop-mini-clusters.version>
         <oozie.version>4.2.0.2.3.2.0-2950</oozie.version>
+        <hadoop.version>2.7.1.2.3.2.0-2950</hadoop.version>
 
+
+        <hadoop-bootstrap.version>1.1-SNAPSHOT</hadoop-bootstrap.version>
     </properties>
 
+
+    <dependencyManagement>
+        <dependencies>
+
+            <dependency>
+                <groupId>fr.jetoile.sample</groupId>
+                <artifactId>hadoop-bootstrap-test-utils</artifactId>
+                <version>1.0-SNAPSHOT</version>
+                <scope>test</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>fr.jetoile.sample</groupId>
+                <artifactId>hadoop-bootstrap-commons</artifactId>
+                <version>${hadoop-bootstrap.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>fr.jetoile.sample</groupId>
+                <artifactId>hadoop-bootstrap-zookeeper</artifactId>
+                <version>${hadoop-bootstrap.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>fr.jetoile.sample</groupId>
+                <artifactId>hadoop-bootstrap-hdfs</artifactId>
+                <version>${hadoop-bootstrap.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>fr.jetoile.sample</groupId>
+                <artifactId>hadoop-bootstrap-hive</artifactId>
+                <version>${hadoop-bootstrap.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>fr.jetoile.sample</groupId>
+                <artifactId>hadoop-bootstrap-hbase</artifactId>
+                <version>${hadoop-bootstrap.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>fr.jetoile.sample</groupId>
+                <artifactId>hadoop-bootstrap-oozie</artifactId>
+                <version>${hadoop-bootstrap.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>fr.jetoile.sample</groupId>
+                <artifactId>hadoop-bootstrap-solr</artifactId>
+                <version>${hadoop-bootstrap.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>fr.jetoile.sample</groupId>
+                <artifactId>hadoop-bootstrap-solrcloud</artifactId>
+                <version>${hadoop-bootstrap.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>fr.jetoile.sample</groupId>
+                <artifactId>hadoop-bootstrap-kafka</artifactId>
+                <version>${hadoop-bootstrap.version}</version>
+            </dependency>
+
+
+            <dependency>
+                <groupId>com.github.sakserv</groupId>
+                <artifactId>hadoop-mini-clusters-zookeeper</artifactId>
+                <version>${hadoop-mini-clusters.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.solr</groupId>
+                <artifactId>solr-solrj</artifactId>
+                <version>${solr.version}</version>
+                <!--<version>5.3.1</version>-->
+                <!--<version>5.4.1</version>-->
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.hadoop</groupId>
+                <artifactId>hadoop-common</artifactId>
+                <version>${hadoop.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>httpclient</artifactId>
+                <version>4.3.1</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.hadoop</groupId>
+                <artifactId>hadoop-client</artifactId>
+                <version>${hadoop.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.solr</groupId>
+                <artifactId>solr-test-framework</artifactId>
+                <version>${solr.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.apache.hadoop</groupId>
+                        <artifactId>hadoop-core</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.apache.hadoop</groupId>
+                        <artifactId>hadoop-common</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.apache.hadoop</groupId>
+                        <artifactId>hadoop-auth</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.apache.hadoop</groupId>
+                        <artifactId>hadoop-hdfs</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.apache.hadoop</groupId>
+                        <artifactId>hadoop-annotations</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.ow2.asm</groupId>
+                        <artifactId>asm</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.ow2.asm</groupId>
+                        <artifactId>asm-commons</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>com.github.sakserv</groupId>
+                <artifactId>hadoop-mini-clusters-common</artifactId>
+                <version>${hadoop-mini-clusters.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.github.sakserv</groupId>
+                <artifactId>hadoop-mini-clusters-oozie</artifactId>
+                <version>${hadoop-mini-clusters.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.github.sakserv</groupId>
+                <artifactId>hadoop-mini-clusters-mapreduce</artifactId>
+                <version>${hadoop-mini-clusters.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.github.sakserv</groupId>
+                <artifactId>hadoop-mini-clusters-yarn</artifactId>
+                <version>${hadoop-mini-clusters.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.github.sakserv</groupId>
+                <artifactId>hadoop-mini-clusters-kafka</artifactId>
+                <version>${hadoop-mini-clusters.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.apache.kafka</groupId>
+                        <artifactId>kafka_2.9.2</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.kafka</groupId>
+                <artifactId>kafka_2.10</artifactId>
+                <version>0.9.0.0</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.github.sakserv</groupId>
+                <artifactId>hadoop-mini-clusters-hivemetastore</artifactId>
+                <version>${hadoop-mini-clusters.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.github.sakserv</groupId>
+                <artifactId>hadoop-mini-clusters-hiveserver2</artifactId>
+                <version>${hadoop-mini-clusters.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.github.sakserv</groupId>
+                <artifactId>hadoop-mini-clusters-hdfs</artifactId>
+                <version>${hadoop-mini-clusters.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.github.sakserv</groupId>
+                <artifactId>hadoop-mini-clusters-hbase</artifactId>
+                <version>${hadoop-mini-clusters.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>commons-configuration</groupId>
+                <artifactId>commons-configuration</artifactId>
+                <version>${commons-configuration.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>commons-collections</groupId>
+                <artifactId>commons-collections</artifactId>
+                <version>${commons-collections.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>${commons-io.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>${slf4j.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-classic</artifactId>
+                <version>${logback-classic.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>1.16.6</version>
+                <scope>provided</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <dependencies>
 
@@ -57,150 +321,6 @@
         <!--<version>3.0.0</version>-->
         <!--</dependency>-->
 
-        <dependency>
-            <groupId>org.apache.solr</groupId>
-            <artifactId>solr-solrj</artifactId>
-            <version>${solr.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.solr</groupId>
-            <artifactId>solr-test-framework</artifactId>
-            <version>${solr.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.apache.hadoop</groupId>
-                    <artifactId>hadoop-core</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.apache.hadoop</groupId>
-                    <artifactId>hadoop-common</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.apache.hadoop</groupId>
-                    <artifactId>hadoop-auth</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.apache.hadoop</groupId>
-                    <artifactId>hadoop-hdfs</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.apache.hadoop</groupId>
-                    <artifactId>hadoop-annotations</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.ow2.asm</groupId>
-                    <artifactId>asm</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.ow2.asm</groupId>
-                    <artifactId>asm-commons</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-
-        <dependency>
-            <groupId>com.github.sakserv</groupId>
-            <artifactId>hadoop-mini-clusters-oozie</artifactId>
-            <version>${hadoop-mini-clusters.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.github.sakserv</groupId>
-            <artifactId>hadoop-mini-clusters-mapreduce</artifactId>
-            <version>${hadoop-mini-clusters.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.github.sakserv</groupId>
-            <artifactId>hadoop-mini-clusters-yarn</artifactId>
-            <version>${hadoop-mini-clusters.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.github.sakserv</groupId>
-            <artifactId>hadoop-mini-clusters-kafka</artifactId>
-            <version>${hadoop-mini-clusters.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.apache.kafka</groupId>
-                    <artifactId>kafka_2.9.2</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.kafka</groupId>
-            <artifactId>kafka_2.10</artifactId>
-            <version>0.9.0.0</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.github.sakserv</groupId>
-            <artifactId>hadoop-mini-clusters-hivemetastore</artifactId>
-            <version>${hadoop-mini-clusters.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.github.sakserv</groupId>
-            <artifactId>hadoop-mini-clusters-hdfs</artifactId>
-            <version>${hadoop-mini-clusters.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.github.sakserv</groupId>
-            <artifactId>hadoop-mini-clusters-hbase</artifactId>
-            <version>${hadoop-mini-clusters.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.github.sakserv</groupId>
-            <artifactId>hadoop-mini-clusters-hiveserver2</artifactId>
-            <version>${hadoop-mini-clusters.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.github.sakserv</groupId>
-            <artifactId>hadoop-mini-clusters-zookeeper</artifactId>
-            <version>${hadoop-mini-clusters.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>commons-configuration</groupId>
-            <artifactId>commons-configuration</artifactId>
-            <version>${commons-configuration.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>commons-collections</groupId>
-            <artifactId>commons-collections</artifactId>
-            <version>${commons-collections.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-            <version>${commons-io.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>${slf4j.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
-            <version>${logback-classic.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>1.16.6</version>
-            <scope>provided</scope>
-        </dependency>
 
         <!-- Dependances autres - test -->
         <dependency>
@@ -222,69 +342,7 @@
             <scope>test</scope>
         </dependency>
 
-        <dependency>
-            <groupId>org.apache.spark</groupId>
-            <artifactId>spark-core_2.10</artifactId>
-            <version>1.6.0</version>
-            <scope>test</scope>
-        </dependency>
 
-        <dependency>
-            <groupId>org.apache.spark</groupId>
-            <artifactId>spark-sql_2.10</artifactId>
-            <version>1.6.0</version>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.spark</groupId>
-            <artifactId>spark-hive_2.10</artifactId>
-            <version>1.6.0</version>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>fr.jetoile.sample</groupId>
-            <artifactId>hadoop-bootstrap-test-utils</artifactId>
-            <version>1.0-SNAPSHOT</version>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>com.lucidworks.spark</groupId>
-            <artifactId>spark-solr</artifactId>
-            <version>1.1.2</version>
-            <scope>test</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.ow2.asm</groupId>
-                    <artifactId>asm</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.ow2.asm</groupId>
-                    <artifactId>asm-commons</artifactId>
-                </exclusion>
-                <exclusion>
-                    <artifactId>spark-mllib_2.10</artifactId>
-                    <groupId>org.apache.spark</groupId>
-                </exclusion>
-                <exclusion>
-                    <artifactId>spark-streaming-twitter_2.10</artifactId>
-                    <groupId>org.apache.spark</groupId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.scala-lang</groupId>
-                    <artifactId>scala-library</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.derby</groupId>
-            <artifactId>derbyclient</artifactId>
-            <version>10.10.2.0</version>
-            <scope>test</scope>
-        </dependency>
     </dependencies>
 
     <build>
@@ -331,135 +389,6 @@
             </plugins>
         </pluginManagement>
 
-        <plugins>
-
-            <plugin>
-                <artifactId>maven-resources-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>copy-resources</id>
-                        <phase>validate</phase>
-                        <goals>
-                            <goal>copy-resources</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>
-                                ${basedir}/target/appassembler-jsw/jsw/hadoop-bootstrap/conf
-                            </outputDirectory>
-                            <resources>
-                                <resource>
-                                    <directory>src/main/conf</directory>
-                                </resource>
-                            </resources>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>appassembler-maven-plugin</artifactId>
-                <executions>
-
-                    <execution>
-                        <id>hadoop-bootstrap</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>generate-daemons</goal>
-                        </goals>
-                        <configuration>
-                            <target>${project.build.directory}/appassembler-jsw</target>
-
-                            <repositoryLayout>flat</repositoryLayout>
-
-                            <daemons>
-                                <daemon>
-                                    <id>${project.name}</id>
-                                    <mainClass>fr.jetoile.sample.HadoopBootstrap</mainClass>
-                                    <commandLineArguments>
-                                    </commandLineArguments>
-                                    <platforms>
-                                        <platform>jsw</platform>
-                                    </platforms>
-                                    <generatorConfigurations>
-                                        <generatorConfiguration>
-                                            <generator>jsw</generator>
-                                            <includes>
-                                                <include>linux-x86-64</include>
-                                                <include>linux-x86-64</include>
-                                                <include>windows-x86-32</include>
-                                                <include>windows-x86-64</include>
-                                                <include>macosx-universal-64</include>
-                                            </includes>
-                                            <configuration>
-
-                                                <property>
-                                                    <name>configuration.directory.in.classpath.first</name>
-                                                    <value>conf</value>
-                                                </property>
-
-                                                <property>
-                                                    <name>wrapper.logfile.maxsize</name>
-                                                    <value>100m</value>
-                                                </property>
-
-                                            </configuration>
-                                        </generatorConfiguration>
-                                    </generatorConfigurations>
-                                    <jvmSettings>
-                                        <initialMemorySize>256M</initialMemorySize>
-                                        <maxMemorySize>2048M</maxMemorySize>
-                                        <systemProperties>
-                                            <systemProperty>com.sun.management.jmxremote</systemProperty>
-                                            <systemProperty>com.sun.management.jmxremote.port=8199</systemProperty>
-                                            <systemProperty>com.sun.management.jmxremote.authenticate=false
-                                            </systemProperty>
-                                            <systemProperty>com.sun.management.jmxremote.ssl=false</systemProperty>
-                                            <systemProperty>com.sun.management.jmxremote.local.only=false
-                                            </systemProperty>
-                                        </systemProperties>
-                                        <extraArguments>
-                                            <extraArgument>-Xdebug</extraArgument>
-                                            <extraArgument>
-                                                -Xrunjdwp:transport=dt_socket,address=8000,server=y,suspend=n
-                                            </extraArgument>
-                                            <extraArgument>-server</extraArgument>
-                                            <!--<extraArgument>-XX:+UnlockCommercialFeatures</extraArgument>-->
-                                            <!--<extraArgument>-XX:+FlightRecorder</extraArgument>-->
-                                            <extraArgument>-XX:+HeapDumpOnOutOfMemoryError</extraArgument>
-                                        </extraArguments>
-                                    </jvmSettings>
-                                </daemon>
-                            </daemons>
-                        </configuration>
-                    </execution>
-                </executions>
-                <configuration>
-
-                </configuration>
-            </plugin>
-
-            <plugin>
-                <!-- Packaging -->
-                <artifactId>maven-assembly-plugin</artifactId>
-                <configuration>
-                    <descriptors>
-                        <descriptor>src/main/assembly/descriptor.xml</descriptor>
-                    </descriptors>
-                    <appendAssemblyId>false</appendAssemblyId>
-
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>assembly</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>single</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
     </build>
 
 </project>
