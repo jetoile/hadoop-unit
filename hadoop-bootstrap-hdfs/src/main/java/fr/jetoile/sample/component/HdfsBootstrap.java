@@ -23,9 +23,9 @@
  */
 package fr.jetoile.sample.component;
 
-import com.github.sakserv.minicluster.config.ConfigVars;
 import com.github.sakserv.minicluster.impl.HdfsLocalCluster;
 import fr.jetoile.sample.Component;
+import fr.jetoile.sample.Config;
 import fr.jetoile.sample.HadoopUtils;
 import fr.jetoile.sample.exception.BootstrapException;
 import org.apache.commons.configuration.Configuration;
@@ -96,13 +96,13 @@ public class HdfsBootstrap implements Bootstrap {
             throw new BootstrapException("bad config", e);
         }
 
-        port = configuration.getInt(ConfigVars.HDFS_NAMENODE_PORT_KEY);
-        httpPort = configuration.getInt(ConfigVars.HDFS_NAMENODE_HTTP_PORT_KEY);
-        tempDirectory = configuration.getString(ConfigVars.HDFS_TEMP_DIR_KEY);
-        numDatanodes = configuration.getInt(ConfigVars.HDFS_NUM_DATANODES_KEY);
-        enablePermission = configuration.getBoolean(ConfigVars.HDFS_ENABLE_PERMISSIONS_KEY);
-        format = configuration.getBoolean(ConfigVars.HDFS_FORMAT_KEY);
-        enableRunningUserAsProxy = configuration.getBoolean(ConfigVars.HDFS_ENABLE_RUNNING_USER_AS_PROXY_USER);
+        port = configuration.getInt(Config.HDFS_NAMENODE_PORT_KEY);
+        httpPort = configuration.getInt(Config.HDFS_NAMENODE_HTTP_PORT_KEY);
+        tempDirectory = configuration.getString(Config.HDFS_TEMP_DIR_KEY);
+        numDatanodes = configuration.getInt(Config.HDFS_NUM_DATANODES_KEY);
+        enablePermission = configuration.getBoolean(Config.HDFS_ENABLE_PERMISSIONS_KEY);
+        format = configuration.getBoolean(Config.HDFS_FORMAT_KEY);
+        enableRunningUserAsProxy = configuration.getBoolean(Config.HDFS_ENABLE_RUNNING_USER_AS_PROXY_USER);
     }
 
     @Override

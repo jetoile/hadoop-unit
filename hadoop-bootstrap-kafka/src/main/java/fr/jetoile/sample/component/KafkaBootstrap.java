@@ -23,9 +23,9 @@
  */
 package fr.jetoile.sample.component;
 
-import com.github.sakserv.minicluster.config.ConfigVars;
 import com.github.sakserv.minicluster.impl.KafkaLocalBroker;
 import fr.jetoile.sample.Component;
+import fr.jetoile.sample.Config;
 import fr.jetoile.sample.HadoopUtils;
 import fr.jetoile.sample.exception.BootstrapException;
 import org.apache.commons.configuration.Configuration;
@@ -91,11 +91,11 @@ public class KafkaBootstrap implements Bootstrap {
         } catch (ConfigurationException e) {
             throw new BootstrapException("bad config", e);
         }
-        host = configuration.getString(ConfigVars.KAFKA_HOSTNAME_KEY);
-        port = configuration.getInt(ConfigVars.KAFKA_PORT_KEY);
-        brokerId = configuration.getInt(ConfigVars.KAFKA_TEST_BROKER_ID_KEY);
-        tmpDirectory = configuration.getString(ConfigVars.KAFKA_TEST_TEMP_DIR_KEY);
-        zookeeperConnectionString = configuration.getString(ConfigVars.ZOOKEEPER_HOST_KEY) + ":" + configuration.getInt(ConfigVars.ZOOKEEPER_PORT_KEY);
+        host = configuration.getString(Config.KAFKA_HOSTNAME_KEY);
+        port = configuration.getInt(Config.KAFKA_PORT_KEY);
+        brokerId = configuration.getInt(Config.KAFKA_TEST_BROKER_ID_KEY);
+        tmpDirectory = configuration.getString(Config.KAFKA_TEST_TEMP_DIR_KEY);
+        zookeeperConnectionString = configuration.getString(Config.ZOOKEEPER_HOST_KEY) + ":" + configuration.getInt(Config.ZOOKEEPER_PORT_KEY);
 
     }
 

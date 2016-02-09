@@ -23,11 +23,11 @@
  */
 package fr.jetoile.sample.component;
 
-import com.github.sakserv.minicluster.config.ConfigVars;
 import com.github.sakserv.minicluster.impl.HiveLocalServer2;
 import com.github.sakserv.minicluster.util.FileUtils;
 import com.github.sakserv.minicluster.util.WindowsLibsUtils;
 import fr.jetoile.sample.Component;
+import fr.jetoile.sample.Config;
 import fr.jetoile.sample.HadoopUtils;
 import fr.jetoile.sample.exception.BootstrapException;
 import org.apache.commons.configuration.Configuration;
@@ -79,14 +79,14 @@ public class HiveServer2Bootstrap implements Bootstrap {
         } catch (ConfigurationException e) {
             throw new BootstrapException("bad config", e);
         }
-        host = configuration.getString(ConfigVars.HIVE_SERVER2_HOSTNAME_KEY);
-        port = configuration.getInt(ConfigVars.HIVE_SERVER2_PORT_KEY);
-        hostMetastore = configuration.getString(ConfigVars.HIVE_METASTORE_HOSTNAME_KEY);
-        portMetastore = configuration.getInt(ConfigVars.HIVE_METASTORE_PORT_KEY);
-        derbyDirectory = configuration.getString(ConfigVars.HIVE_METASTORE_DERBY_DB_DIR_KEY);
-        scratchDirectory = configuration.getString(ConfigVars.HIVE_SCRATCH_DIR_KEY);
-        warehouseDirectory = configuration.getString(ConfigVars.HIVE_WAREHOUSE_DIR_KEY);
-        zookeeperConnectionString = configuration.getString(ConfigVars.ZOOKEEPER_HOST_KEY) + ":" + configuration.getInt(ConfigVars.ZOOKEEPER_PORT_KEY);
+        host = configuration.getString(Config.HIVE_SERVER2_HOSTNAME_KEY);
+        port = configuration.getInt(Config.HIVE_SERVER2_PORT_KEY);
+        hostMetastore = configuration.getString(Config.HIVE_METASTORE_HOSTNAME_KEY);
+        portMetastore = configuration.getInt(Config.HIVE_METASTORE_PORT_KEY);
+        derbyDirectory = configuration.getString(Config.HIVE_METASTORE_DERBY_DB_DIR_KEY);
+        scratchDirectory = configuration.getString(Config.HIVE_SCRATCH_DIR_KEY);
+        warehouseDirectory = configuration.getString(Config.HIVE_WAREHOUSE_DIR_KEY);
+        zookeeperConnectionString = configuration.getString(Config.ZOOKEEPER_HOST_KEY) + ":" + configuration.getInt(Config.ZOOKEEPER_PORT_KEY);
 
     }
 

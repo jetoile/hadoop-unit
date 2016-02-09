@@ -1,8 +1,9 @@
 package fr.jetoile.sample.integrationtest;
 
 
-import com.github.sakserv.minicluster.config.ConfigVars;
+import fr.jetoile.hadoop.test.hdfs.HdfsUtils;
 import fr.jetoile.sample.Component;
+import fr.jetoile.sample.Config;
 import fr.jetoile.sample.HadoopBootstrap;
 import fr.jetoile.sample.Utils;
 import fr.jetoile.sample.component.HdfsBootstrap;
@@ -79,7 +80,7 @@ public class IntegrationBootstrapTest {
 
         String collectionName = configuration.getString(SolrCloudBootstrap.SOLR_COLLECTION_NAME);
 
-        String zkHostString = configuration.getString(ConfigVars.ZOOKEEPER_HOST_KEY) + ":" + configuration.getInt(ConfigVars.ZOOKEEPER_PORT_KEY);
+        String zkHostString = configuration.getString(Config.ZOOKEEPER_HOST_KEY) + ":" + configuration.getInt(Config.ZOOKEEPER_PORT_KEY);
         CloudSolrClient client = new CloudSolrClient(zkHostString);
 
         for (int i = 0; i < 1000; ++i) {
@@ -107,31 +108,32 @@ public class IntegrationBootstrapTest {
 
         // Producer
         KafkaTestProducer kafkaTestProducer = new KafkaTestProducer.Builder()
-                .setKafkaHostname(configuration.getString(ConfigVars.KAFKA_HOSTNAME_KEY))
-                .setKafkaPort(configuration.getInt(ConfigVars.KAFKA_PORT_KEY))
-                .setTopic(configuration.getString(ConfigVars.KAFKA_TEST_TOPIC_KEY))
-                .setMessageCount(configuration.getInt(ConfigVars.KAFKA_TEST_MESSAGE_COUNT_KEY))
+                .setKafkaHostname(configuration.getString(Config.KAFKA_HOSTNAME_KEY))
+                .setKafkaPort(configuration.getInt(Config.KAFKA_PORT_KEY))
+                .setTopic(configuration.getString(Config.KAFKA_TEST_TOPIC_KEY))
+                .setMessageCount(configuration.getInt(Config.KAFKA_TEST_MESSAGE_COUNT_KEY))
                 .build();
         kafkaTestProducer.produceMessages();
 
 
         // Consumer
         List<String> seeds = new ArrayList<String>();
-        seeds.add(configuration.getString(ConfigVars.KAFKA_HOSTNAME_KEY));
+        seeds.add(configuration.getString(Config.KAFKA_HOSTNAME_KEY));
         KafkaTestConsumer kafkaTestConsumer = new KafkaTestConsumer();
         kafkaTestConsumer.consumeMessages2(
-                configuration.getInt(ConfigVars.KAFKA_TEST_MESSAGE_COUNT_KEY),
-                configuration.getString(ConfigVars.KAFKA_TEST_TOPIC_KEY),
+                configuration.getInt(Config.KAFKA_TEST_MESSAGE_COUNT_KEY),
+                configuration.getString(Config.KAFKA_TEST_TOPIC_KEY),
                 0,
                 seeds,
-                configuration.getInt(ConfigVars.KAFKA_PORT_KEY));
+                configuration.getInt(Config.KAFKA_PORT_KEY));
 
         // Assert num of messages produced = num of message consumed
-        Assert.assertEquals(configuration.getLong(ConfigVars.KAFKA_TEST_MESSAGE_COUNT_KEY),
+        Assert.assertEquals(configuration.getLong(Config.KAFKA_TEST_MESSAGE_COUNT_KEY),
                 kafkaTestConsumer.getNumRead());
     }
 
     @Test
+    @Ignore
     public void hiveServer2ShouldStart() throws InterruptedException, ClassNotFoundException, SQLException {
 
 //        assertThat(Utils.available("127.0.0.1", 20103)).isFalse();
@@ -145,9 +147,9 @@ public class IntegrationBootstrapTest {
         //
         // Get the connection
         Connection con = DriverManager.getConnection("jdbc:hive2://" +
-                        configuration.getString(ConfigVars.HIVE_SERVER2_HOSTNAME_KEY) + ":" +
-                        configuration.getInt(ConfigVars.HIVE_SERVER2_PORT_KEY) + "/" +
-                        configuration.getString(ConfigVars.HIVE_TEST_DATABASE_NAME_KEY),
+                        configuration.getString(Config.HIVE_SERVER2_HOSTNAME_KEY) + ":" +
+                        configuration.getInt(Config.HIVE_SERVER2_PORT_KEY) + "/" +
+                        configuration.getString(Config.HIVE_TEST_DATABASE_NAME_KEY),
                 "user",
                 "pass");
 
@@ -155,7 +157,7 @@ public class IntegrationBootstrapTest {
         Statement stmt;
         try {
             String createDbDdl = "CREATE DATABASE IF NOT EXISTS " +
-                    configuration.getString(ConfigVars.HIVE_TEST_DATABASE_NAME_KEY);
+                    configuration.getString(Config.HIVE_TEST_DATABASE_NAME_KEY);
             stmt = con.createStatement();
             LOGGER.info("HIVE: Running Create Database Statement: {}", createDbDdl);
             stmt.execute(createDbDdl);
@@ -164,16 +166,16 @@ public class IntegrationBootstrapTest {
         }
 
         // Drop the table incase it still exists
-        String dropDdl = "DROP TABLE " + configuration.getString(ConfigVars.HIVE_TEST_DATABASE_NAME_KEY) + "." +
-                configuration.getString(ConfigVars.HIVE_TEST_TABLE_NAME_KEY);
+        String dropDdl = "DROP TABLE " + configuration.getString(Config.HIVE_TEST_DATABASE_NAME_KEY) + "." +
+                configuration.getString(Config.HIVE_TEST_TABLE_NAME_KEY);
         stmt = con.createStatement();
         LOGGER.info("HIVE: Running Drop Table Statement: {}", dropDdl);
         stmt.execute(dropDdl);
 
         // Create the ORC table
         String createDdl = "CREATE TABLE IF NOT EXISTS " +
-                configuration.getString(ConfigVars.HIVE_TEST_DATABASE_NAME_KEY) + "." +
-                configuration.getString(ConfigVars.HIVE_TEST_TABLE_NAME_KEY) + " (id INT, msg STRING) " +
+                configuration.getString(Config.HIVE_TEST_DATABASE_NAME_KEY) + "." +
+                configuration.getString(Config.HIVE_TEST_TABLE_NAME_KEY) + " (id INT, msg STRING) " +
                 "PARTITIONED BY (dt STRING) " +
                 "CLUSTERED BY (id) INTO 16 BUCKETS " +
                 "STORED AS ORC tblproperties(\"orc.compress\"=\"NONE\")";
@@ -184,7 +186,7 @@ public class IntegrationBootstrapTest {
         // Issue a describe on the new table and display the output
         LOGGER.info("HIVE: Validating Table was Created: ");
         ResultSet resultSet = stmt.executeQuery("DESCRIBE FORMATTED " +
-                configuration.getString(ConfigVars.HIVE_TEST_TABLE_NAME_KEY));
+                configuration.getString(Config.HIVE_TEST_TABLE_NAME_KEY));
         int count = 0;
         while (resultSet.next()) {
             ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
@@ -197,8 +199,8 @@ public class IntegrationBootstrapTest {
         assertEquals(33, count);
 
         // Drop the table
-        dropDdl = "DROP TABLE " + configuration.getString(ConfigVars.HIVE_TEST_DATABASE_NAME_KEY) + "." +
-                configuration.getString(ConfigVars.HIVE_TEST_TABLE_NAME_KEY);
+        dropDdl = "DROP TABLE " + configuration.getString(Config.HIVE_TEST_DATABASE_NAME_KEY) + "." +
+                configuration.getString(Config.HIVE_TEST_TABLE_NAME_KEY);
         stmt = con.createStatement();
         LOGGER.info("HIVE: Running Drop Table Statement: {}", dropDdl);
         stmt.execute(dropDdl);
@@ -208,28 +210,30 @@ public class IntegrationBootstrapTest {
     @Test
     public void hdfsShouldStart() throws Exception {
 
-        assertThat(Utils.available("127.0.0.1", configuration.getInt(ConfigVars.HDFS_NAMENODE_HTTP_PORT_KEY))).isFalse();
+        assertThat(Utils.available("127.0.0.1", configuration.getInt(Config.HDFS_NAMENODE_HTTP_PORT_KEY))).isFalse();
 
-        org.apache.hadoop.conf.Configuration conf = new org.apache.hadoop.conf.Configuration();
-        conf.set("fs.default.name", "hdfs://127.0.0.1:" + configuration.getInt(ConfigVars.HDFS_NAMENODE_PORT_KEY));
+//        org.apache.hadoop.conf.Configuration conf = new org.apache.hadoop.conf.Configuration();
+//        conf.set("fs.default.name", "hdfs://127.0.0.1:" + configuration.getInt(Config.HDFS_NAMENODE_PORT_KEY));
+//
+//        URI uri = URI.create ("hdfs://127.0.0.1:" + configuration.getInt(Config.HDFS_NAMENODE_PORT_KEY));
+//
+//        FileSystem hdfsFsHandle = FileSystem.get (uri, conf);
+        FileSystem hdfsFsHandle = HdfsUtils.INSTANCE.getFileSystem();
 
-        URI uri = URI.create ("hdfs://127.0.0.1:" + configuration.getInt(ConfigVars.HDFS_NAMENODE_PORT_KEY));
 
-        FileSystem hdfsFsHandle = FileSystem.get (uri, conf);
-
-        FSDataOutputStream writer = hdfsFsHandle.create(new Path(configuration.getString(ConfigVars.HDFS_TEST_FILE_KEY)));
-        writer.writeUTF(configuration.getString(ConfigVars.HDFS_TEST_STRING_KEY));
+        FSDataOutputStream writer = hdfsFsHandle.create(new Path(configuration.getString(Config.HDFS_TEST_FILE_KEY)));
+        writer.writeUTF(configuration.getString(Config.HDFS_TEST_STRING_KEY));
         writer.close();
 
         // Read the file and compare to test string
-        FSDataInputStream reader = hdfsFsHandle.open(new Path(configuration.getString(ConfigVars.HDFS_TEST_FILE_KEY)));
-        assertEquals(reader.readUTF(), configuration.getString(ConfigVars.HDFS_TEST_STRING_KEY));
+        FSDataInputStream reader = hdfsFsHandle.open(new Path(configuration.getString(Config.HDFS_TEST_FILE_KEY)));
+        assertEquals(reader.readUTF(), configuration.getString(Config.HDFS_TEST_STRING_KEY));
         reader.close();
         hdfsFsHandle.close();
 
         URL url = new URL(
                 String.format( "http://localhost:%s/webhdfs/v1?op=GETHOMEDIRECTORY&user.name=guest",
-                        configuration.getInt( ConfigVars.HDFS_NAMENODE_HTTP_PORT_KEY ) ) );
+                        configuration.getInt( Config.HDFS_NAMENODE_HTTP_PORT_KEY ) ) );
         URLConnection connection = url.openConnection();
         connection.setRequestProperty( "Accept-Charset", "UTF-8" );
         BufferedReader response = new BufferedReader( new InputStreamReader( connection.getInputStream() ) );
@@ -243,16 +247,16 @@ public class IntegrationBootstrapTest {
     @Test
     public void hBaseShouldStart() throws Exception {
 
-        String tableName = configuration.getString(ConfigVars.HBASE_TEST_TABLE_NAME_KEY);
-        String colFamName = configuration.getString(ConfigVars.HBASE_TEST_COL_FAMILY_NAME_KEY);
-        String colQualiferName = configuration.getString(ConfigVars.HBASE_TEST_COL_QUALIFIER_NAME_KEY);
-        Integer numRowsToPut = configuration.getInt(ConfigVars.HBASE_TEST_NUM_ROWS_TO_PUT_KEY);
+        String tableName = configuration.getString(Config.HBASE_TEST_TABLE_NAME_KEY);
+        String colFamName = configuration.getString(Config.HBASE_TEST_COL_FAMILY_NAME_KEY);
+        String colQualiferName = configuration.getString(Config.HBASE_TEST_COL_QUALIFIER_NAME_KEY);
+        Integer numRowsToPut = configuration.getInt(Config.HBASE_TEST_NUM_ROWS_TO_PUT_KEY);
 
         org.apache.hadoop.conf.Configuration hbaseConfiguration = HBaseConfiguration.create();
-        hbaseConfiguration.set("hbase.zookeeper.quorum", configuration.getString(ConfigVars.ZOOKEEPER_HOST_KEY));
-        hbaseConfiguration.setInt("hbase.zookeeper.property.clientPort", configuration.getInt(ConfigVars.ZOOKEEPER_PORT_KEY));
-        hbaseConfiguration.set("hbase.master", "127.0.0.1:" + configuration.getInt(ConfigVars.HBASE_MASTER_PORT_KEY));
-        hbaseConfiguration.set("zookeeper.znode.parent", configuration.getString(ConfigVars.HBASE_ZNODE_PARENT_KEY));
+        hbaseConfiguration.set("hbase.zookeeper.quorum", configuration.getString(Config.ZOOKEEPER_HOST_KEY));
+        hbaseConfiguration.setInt("hbase.zookeeper.property.clientPort", configuration.getInt(Config.ZOOKEEPER_PORT_KEY));
+        hbaseConfiguration.set("hbase.master", "127.0.0.1:" + configuration.getInt(Config.HBASE_MASTER_PORT_KEY));
+        hbaseConfiguration.set("zookeeper.znode.parent", configuration.getString(Config.HBASE_ZNODE_PARENT_KEY));
 
 
         LOGGER.info("HBASE: Creating table {} with column family {}", tableName, colFamName);
@@ -276,9 +280,9 @@ public class IntegrationBootstrapTest {
         LOGGER.info("OOZIE: Test Submit Workflow Start");
 
         org.apache.hadoop.conf.Configuration conf = new org.apache.hadoop.conf.Configuration();
-        conf.set("fs.default.name", "hdfs://127.0.0.1:" + configuration.getInt(ConfigVars.HDFS_NAMENODE_PORT_KEY));
+        conf.set("fs.default.name", "hdfs://127.0.0.1:" + configuration.getInt(Config.HDFS_NAMENODE_PORT_KEY));
 
-        URI uri = URI.create ("hdfs://127.0.0.1:" + configuration.getInt(ConfigVars.HDFS_NAMENODE_PORT_KEY));
+        URI uri = URI.create ("hdfs://127.0.0.1:" + configuration.getInt(Config.HDFS_NAMENODE_PORT_KEY));
 
         FileSystem hdfsFs = FileSystem.get (uri, conf);
 

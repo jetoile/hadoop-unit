@@ -1,9 +1,8 @@
 package fr.jetoile.sample.component;
 
 
-import com.github.sakserv.minicluster.config.ConfigVars;
-import com.github.sakserv.minicluster.util.WindowsLibsUtils;
 import fr.jetoile.sample.Component;
+import fr.jetoile.sample.Config;
 import fr.jetoile.sample.HadoopBootstrap;
 import fr.jetoile.sample.exception.BootstrapException;
 import fr.jetoile.sample.Utils;
@@ -56,20 +55,20 @@ public class HdfsBootstrapTest {
         // Write a file to HDFS containing the test string
         FileSystem hdfsFsHandle = ((HdfsBootstrap)HadoopBootstrap.INSTANCE.getService(Component.HDFS)).getHdfsFileSystemHandle();
         FSDataOutputStream writer = hdfsFsHandle.create(
-                new Path(configuration.getString(ConfigVars.HDFS_TEST_FILE_KEY)));
-        writer.writeUTF(configuration.getString(ConfigVars.HDFS_TEST_STRING_KEY));
+                new Path(configuration.getString(Config.HDFS_TEST_FILE_KEY)));
+        writer.writeUTF(configuration.getString(Config.HDFS_TEST_STRING_KEY));
         writer.close();
 
         // Read the file and compare to test string
         FSDataInputStream reader = hdfsFsHandle.open(
-                new Path(configuration.getString(ConfigVars.HDFS_TEST_FILE_KEY)));
-        assertEquals(reader.readUTF(), configuration.getString(ConfigVars.HDFS_TEST_STRING_KEY));
+                new Path(configuration.getString(Config.HDFS_TEST_FILE_KEY)));
+        assertEquals(reader.readUTF(), configuration.getString(Config.HDFS_TEST_STRING_KEY));
         reader.close();
         hdfsFsHandle.close();
 
         URL url = new URL(
                 String.format( "http://localhost:%s/webhdfs/v1?op=GETHOMEDIRECTORY&user.name=guest",
-                        configuration.getInt( ConfigVars.HDFS_NAMENODE_HTTP_PORT_KEY ) ) );
+                        configuration.getInt( Config.HDFS_NAMENODE_HTTP_PORT_KEY ) ) );
         URLConnection connection = url.openConnection();
         connection.setRequestProperty( "Accept-Charset", "UTF-8" );
         BufferedReader response = new BufferedReader( new InputStreamReader( connection.getInputStream() ) );

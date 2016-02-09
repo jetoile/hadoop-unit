@@ -23,9 +23,9 @@
  */
 package fr.jetoile.sample.component;
 
-import com.github.sakserv.minicluster.config.ConfigVars;
 import com.github.sakserv.minicluster.impl.ZookeeperLocalCluster;
 import fr.jetoile.sample.Component;
+import fr.jetoile.sample.Config;
 import fr.jetoile.sample.HadoopUtils;
 import fr.jetoile.sample.exception.BootstrapException;
 import org.apache.commons.configuration.Configuration;
@@ -77,9 +77,9 @@ public class ZookeeperBootstrap implements Bootstrap {
         } catch (ConfigurationException e) {
             throw new BootstrapException("bad config", e);
         }
-        port = configuration.getInt(ConfigVars.ZOOKEEPER_PORT_KEY);
-        localDir = configuration.getString(ConfigVars.ZOOKEEPER_TEMP_DIR_KEY);
-        host = configuration.getString(ConfigVars.ZOOKEEPER_HOST_KEY);
+        port = configuration.getInt(Config.ZOOKEEPER_PORT_KEY);
+        localDir = configuration.getString(Config.ZOOKEEPER_TEMP_DIR_KEY);
+        host = configuration.getString(Config.ZOOKEEPER_HOST_KEY);
 
     }
 

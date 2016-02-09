@@ -44,11 +44,6 @@
             <version>9.2.10.v20150310</version>
         </dependency>
 
-        <dependency>
-            <groupId>fr.jetoile.sample</groupId>
-            <artifactId>hadoop-bootstrap-test-utils</artifactId>
-            <scope>test</scope>
-        </dependency>
     </dependencies>
 
 </project>

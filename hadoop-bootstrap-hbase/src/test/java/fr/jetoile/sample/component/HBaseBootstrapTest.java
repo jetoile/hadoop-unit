@@ -1,8 +1,8 @@
 package fr.jetoile.sample.component;
 
 
-import com.github.sakserv.minicluster.config.ConfigVars;
 import fr.jetoile.sample.Component;
+import fr.jetoile.sample.Config;
 import fr.jetoile.sample.HadoopBootstrap;
 import fr.jetoile.sample.exception.BootstrapException;
 import org.apache.commons.configuration.Configuration;
@@ -48,10 +48,10 @@ public class HBaseBootstrapTest {
     @Test
     public void hBaseShouldStart() throws Exception {
 
-        String tableName = configuration.getString(ConfigVars.HBASE_TEST_TABLE_NAME_KEY);
-        String colFamName = configuration.getString(ConfigVars.HBASE_TEST_COL_FAMILY_NAME_KEY);
-        String colQualiferName = configuration.getString(ConfigVars.HBASE_TEST_COL_QUALIFIER_NAME_KEY);
-        Integer numRowsToPut = configuration.getInt(ConfigVars.HBASE_TEST_NUM_ROWS_TO_PUT_KEY);
+        String tableName = configuration.getString(Config.HBASE_TEST_TABLE_NAME_KEY);
+        String colFamName = configuration.getString(Config.HBASE_TEST_COL_FAMILY_NAME_KEY);
+        String colQualiferName = configuration.getString(Config.HBASE_TEST_COL_QUALIFIER_NAME_KEY);
+        Integer numRowsToPut = configuration.getInt(Config.HBASE_TEST_NUM_ROWS_TO_PUT_KEY);
         org.apache.hadoop.conf.Configuration hbaseConfiguration = HadoopBootstrap.INSTANCE.getService(Component.HBASE).getConfiguration();
 
         LOGGER.info("HBASE: Creating table {} with column family {}", tableName, colFamName);

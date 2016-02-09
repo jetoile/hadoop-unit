@@ -52,7 +52,7 @@ public class SolrCloudBootstrapTest {
 
         String collectionName = configuration.getString(SolrCloudBootstrap.SOLR_COLLECTION_NAME);
 
-//        String zkHostString = configuration.getString(ConfigVars.ZOOKEEPER_HOST_KEY) + ":" + configuration.getInt(ConfigVars.ZOOKEEPER_PORT_KEY);
+//        String zkHostString = configuration.getString(Config.ZOOKEEPER_HOST_KEY) + ":" + configuration.getInt(Config.ZOOKEEPER_PORT_KEY);
 //        CloudSolrClient client = new CloudSolrClient(zkHostString);
         CloudSolrClient client = ((SolrCloudBootstrap) HadoopBootstrap.INSTANCE.getService(Component.SOLRCLOUD)).getClient();
 

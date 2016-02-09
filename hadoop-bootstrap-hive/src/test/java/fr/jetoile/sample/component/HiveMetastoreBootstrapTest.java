@@ -1,8 +1,8 @@
 package fr.jetoile.sample.component;
 
 
-import com.github.sakserv.minicluster.config.ConfigVars;
 import fr.jetoile.sample.Component;
+import fr.jetoile.sample.Config;
 import fr.jetoile.sample.HadoopBootstrap;
 import fr.jetoile.sample.Utils;
 import fr.jetoile.sample.exception.BootstrapException;
@@ -65,8 +65,8 @@ public class HiveMetastoreBootstrapTest {
         try {
             HiveMetaStoreClient hiveClient = new HiveMetaStoreClient((HiveConf) HadoopBootstrap.INSTANCE.getService(Component.HIVEMETA).getConfiguration());
 
-            hiveClient.dropTable(configuration.getString(ConfigVars.HIVE_TEST_DATABASE_NAME_KEY),
-                    configuration.getString(ConfigVars.HIVE_TEST_TABLE_NAME_KEY),
+            hiveClient.dropTable(configuration.getString(Config.HIVE_TEST_DATABASE_NAME_KEY),
+                    configuration.getString(Config.HIVE_TEST_TABLE_NAME_KEY),
                     true,
                     true);
 
@@ -76,7 +76,7 @@ public class HiveMetastoreBootstrapTest {
             cols.add(new FieldSchema("msg", serdeConstants.STRING_TYPE_NAME, ""));
 
             // Values for the StorageDescriptor
-            String location = new File(configuration.getString(ConfigVars.HIVE_TEST_TABLE_NAME_KEY)).getAbsolutePath();
+            String location = new File(configuration.getString(Config.HIVE_TEST_TABLE_NAME_KEY)).getAbsolutePath();
             String inputFormat = "org.apache.hadoop.hive.ql.io.orc.OrcInputFormat";
             String outputFormat = "org.apache.hadoop.hive.ql.io.orc.OrcOutputFormat";
             int numBuckets = 16;
@@ -100,8 +100,8 @@ public class HiveMetastoreBootstrapTest {
 
             // Define the table
             Table tbl = new Table();
-            tbl.setDbName(configuration.getString(ConfigVars.HIVE_TEST_DATABASE_NAME_KEY));
-            tbl.setTableName(configuration.getString(ConfigVars.HIVE_TEST_TABLE_NAME_KEY));
+            tbl.setDbName(configuration.getString(Config.HIVE_TEST_DATABASE_NAME_KEY));
+            tbl.setTableName(configuration.getString(Config.HIVE_TEST_TABLE_NAME_KEY));
             tbl.setSd(sd);
             tbl.setOwner(System.getProperty("user.name"));
             tbl.setParameters(new HashMap<>());
@@ -117,9 +117,9 @@ public class HiveMetastoreBootstrapTest {
 
             // Describe the table
             Table createdTable = hiveClient.getTable(
-                    configuration.getString(ConfigVars.HIVE_TEST_DATABASE_NAME_KEY),
-                    configuration.getString(ConfigVars.HIVE_TEST_TABLE_NAME_KEY));
-            assertThat(createdTable.toString()).contains(configuration.getString(ConfigVars.HIVE_TEST_TABLE_NAME_KEY));
+                    configuration.getString(Config.HIVE_TEST_DATABASE_NAME_KEY),
+                    configuration.getString(Config.HIVE_TEST_TABLE_NAME_KEY));
+            assertThat(createdTable.toString()).contains(configuration.getString(Config.HIVE_TEST_TABLE_NAME_KEY));
 
         } catch (MetaException e) {
             e.printStackTrace();

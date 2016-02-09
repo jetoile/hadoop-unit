@@ -23,11 +23,11 @@
  */
 package fr.jetoile.sample.component;
 
-import com.github.sakserv.minicluster.config.ConfigVars;
 import com.github.sakserv.minicluster.impl.MRLocalCluster;
 import com.github.sakserv.minicluster.impl.OozieLocalServer;
 import com.github.sakserv.minicluster.util.FileUtils;
 import fr.jetoile.sample.Component;
+import fr.jetoile.sample.Config;
 import fr.jetoile.sample.HadoopBootstrap;
 import fr.jetoile.sample.HadoopUtils;
 import fr.jetoile.sample.exception.BootstrapException;
@@ -156,25 +156,25 @@ public class OozieBootstrap implements Bootstrap {
             throw new BootstrapException("bad config", e);
         }
 
-        oozieTestDir = configuration.getString(ConfigVars.OOZIE_TEST_DIR_KEY);
-        oozieHomeDir = configuration.getString(ConfigVars.OOZIE_HOME_DIR_KEY);
+        oozieTestDir = configuration.getString(Config.OOZIE_TEST_DIR_KEY);
+        oozieHomeDir = configuration.getString(Config.OOZIE_HOME_DIR_KEY);
         oozieUsername = System.getProperty("user.name");
-        oozieGroupname = configuration.getString(ConfigVars.OOZIE_GROUPNAME_KEY);
-        oozieYarnResourceManagerAddress = configuration.getString(ConfigVars.YARN_RESOURCE_MANAGER_ADDRESS_KEY);
+        oozieGroupname = configuration.getString(Config.OOZIE_GROUPNAME_KEY);
+        oozieYarnResourceManagerAddress = configuration.getString(Config.YARN_RESOURCE_MANAGER_ADDRESS_KEY);
 
-        oozieHdfsShareLibDir = configuration.getString(ConfigVars.OOZIE_HDFS_SHARE_LIB_DIR_KEY);
-        oozieShareLibCreate = configuration.getBoolean(ConfigVars.OOZIE_SHARE_LIB_CREATE_KEY);
-        oozieLocalShareLibCacheDir = configuration.getString(ConfigVars.OOZIE_LOCAL_SHARE_LIB_CACHE_DIR_KEY);
-        ooziePurgeLocalShareLibCache = configuration.getBoolean(ConfigVars.OOZIE_PURGE_LOCAL_SHARE_LIB_CACHE_KEY);
+        oozieHdfsShareLibDir = configuration.getString(Config.OOZIE_HDFS_SHARE_LIB_DIR_KEY);
+        oozieShareLibCreate = configuration.getBoolean(Config.OOZIE_SHARE_LIB_CREATE_KEY);
+        oozieLocalShareLibCacheDir = configuration.getString(Config.OOZIE_LOCAL_SHARE_LIB_CACHE_DIR_KEY);
+        ooziePurgeLocalShareLibCache = configuration.getBoolean(Config.OOZIE_PURGE_LOCAL_SHARE_LIB_CACHE_KEY);
 
-        numNodeManagers = Integer.parseInt(configuration.getString(ConfigVars.YARN_NUM_NODE_MANAGERS_KEY));
-        jobHistoryAddress = configuration.getString(ConfigVars.MR_JOB_HISTORY_ADDRESS_KEY);
-        resourceManagerAddress = configuration.getString(ConfigVars.YARN_RESOURCE_MANAGER_ADDRESS_KEY);
-        resourceManagerHostname = configuration.getString(ConfigVars.YARN_RESOURCE_MANAGER_HOSTNAME_KEY);
-        resourceManagerSchedulerAddress = configuration.getString(ConfigVars.YARN_RESOURCE_MANAGER_SCHEDULER_ADDRESS_KEY);
-        resourceManagerResourceTrackerAddress = configuration.getString(ConfigVars.YARN_RESOURCE_MANAGER_RESOURCE_TRACKER_ADDRESS_KEY);
-        resourceManagerWebappAddress = configuration.getString(ConfigVars.YARN_RESOURCE_MANAGER_WEBAPP_ADDRESS_KEY);
-        useInJvmContainerExecutor = configuration.getBoolean(ConfigVars.YARN_USE_IN_JVM_CONTAINER_EXECUTOR_KEY);
+        numNodeManagers = Integer.parseInt(configuration.getString(Config.YARN_NUM_NODE_MANAGERS_KEY));
+        jobHistoryAddress = configuration.getString(Config.MR_JOB_HISTORY_ADDRESS_KEY);
+        resourceManagerAddress = configuration.getString(Config.YARN_RESOURCE_MANAGER_ADDRESS_KEY);
+        resourceManagerHostname = configuration.getString(Config.YARN_RESOURCE_MANAGER_HOSTNAME_KEY);
+        resourceManagerSchedulerAddress = configuration.getString(Config.YARN_RESOURCE_MANAGER_SCHEDULER_ADDRESS_KEY);
+        resourceManagerResourceTrackerAddress = configuration.getString(Config.YARN_RESOURCE_MANAGER_RESOURCE_TRACKER_ADDRESS_KEY);
+        resourceManagerWebappAddress = configuration.getString(Config.YARN_RESOURCE_MANAGER_WEBAPP_ADDRESS_KEY);
+        useInJvmContainerExecutor = configuration.getBoolean(Config.YARN_USE_IN_JVM_CONTAINER_EXECUTOR_KEY);
 
         ooziePort = configuration.getInt(OOZIE_PORT);
         oozieHost = configuration.getString(OOZIE_HOST);

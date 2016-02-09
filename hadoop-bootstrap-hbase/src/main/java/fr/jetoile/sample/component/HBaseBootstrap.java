@@ -23,10 +23,10 @@
  */
 package fr.jetoile.sample.component;
 
-import com.github.sakserv.minicluster.config.ConfigVars;
 import com.github.sakserv.minicluster.impl.HbaseLocalCluster;
 import com.github.sakserv.minicluster.util.FileUtils;
 import fr.jetoile.sample.Component;
+import fr.jetoile.sample.Config;
 import fr.jetoile.sample.HadoopUtils;
 import fr.jetoile.sample.exception.BootstrapException;
 import org.apache.commons.configuration.Configuration;
@@ -77,7 +77,7 @@ public class HBaseBootstrap implements Bootstrap {
     private void build() {
         org.apache.hadoop.conf.Configuration hbaseConfiguration = new org.apache.hadoop.conf.Configuration();
         hbaseConfiguration.setBoolean("hbase.table.sanity.checks", false);
-        hbaseConfiguration.set("fs.default.name", "hdfs://127.0.0.1:" + configuration.getString(ConfigVars.HDFS_NAMENODE_PORT_KEY));
+        hbaseConfiguration.set("fs.default.name", "hdfs://127.0.0.1:" + configuration.getString(Config.HDFS_NAMENODE_PORT_KEY));
 
         hbaseLocalCluster = new HbaseLocalCluster.Builder()
                 .setHbaseMasterPort(port)
@@ -100,14 +100,14 @@ public class HBaseBootstrap implements Bootstrap {
             throw new BootstrapException("bad config", e);
         }
 
-        port = configuration.getInt(ConfigVars.HBASE_MASTER_PORT_KEY);
-        infoPort = configuration.getInt(ConfigVars.HBASE_MASTER_INFO_PORT_KEY);
-        nbRegionServer = configuration.getInt(ConfigVars.HBASE_NUM_REGION_SERVERS_KEY);
-        rootDirectory = configuration.getString(ConfigVars.HBASE_ROOT_DIR_KEY);
-        zookeeperConnectionString = configuration.getString(ConfigVars.ZOOKEEPER_HOST_KEY) + ":" + configuration.getInt(ConfigVars.ZOOKEEPER_PORT_KEY);
-        zookeeperPort = configuration.getInt(ConfigVars.ZOOKEEPER_PORT_KEY);
-        zookeeperZnodeParent = configuration.getString(ConfigVars.HBASE_ZNODE_PARENT_KEY);
-        enableWalReplication = configuration.getBoolean(ConfigVars.HBASE_WAL_REPLICATION_ENABLED_KEY);
+        port = configuration.getInt(Config.HBASE_MASTER_PORT_KEY);
+        infoPort = configuration.getInt(Config.HBASE_MASTER_INFO_PORT_KEY);
+        nbRegionServer = configuration.getInt(Config.HBASE_NUM_REGION_SERVERS_KEY);
+        rootDirectory = configuration.getString(Config.HBASE_ROOT_DIR_KEY);
+        zookeeperConnectionString = configuration.getString(Config.ZOOKEEPER_HOST_KEY) + ":" + configuration.getInt(Config.ZOOKEEPER_PORT_KEY);
+        zookeeperPort = configuration.getInt(Config.ZOOKEEPER_PORT_KEY);
+        zookeeperZnodeParent = configuration.getString(Config.HBASE_ZNODE_PARENT_KEY);
+        enableWalReplication = configuration.getBoolean(Config.HBASE_WAL_REPLICATION_ENABLED_KEY);
 
     }
 

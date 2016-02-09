@@ -23,8 +23,8 @@
  */
 package fr.jetoile.sample.component;
 
-import com.github.sakserv.minicluster.config.ConfigVars;
 import fr.jetoile.sample.Component;
+import fr.jetoile.sample.Config;
 import fr.jetoile.sample.HadoopUtils;
 import fr.jetoile.sample.exception.BootstrapException;
 import org.apache.commons.configuration.Configuration;
@@ -102,7 +102,7 @@ public class SolrCloudBootstrap implements Bootstrap {
         solrDirectory = configuration.getString(SOLR_DIR_KEY);
         solrCollectionName = configuration.getString(SOLR_COLLECTION_NAME);
         solrPort = configuration.getInt(SOLR_PORT);
-        zkHostString = configuration.getString(ConfigVars.ZOOKEEPER_HOST_KEY) + ":" + configuration.getInt(ConfigVars.ZOOKEEPER_PORT_KEY);
+        zkHostString = configuration.getString(Config.ZOOKEEPER_HOST_KEY) + ":" + configuration.getInt(Config.ZOOKEEPER_PORT_KEY);
 
     }
 

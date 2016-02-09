@@ -1,7 +1,7 @@
 package fr.jetoile.sample.component;
 
 
-import com.github.sakserv.minicluster.config.ConfigVars;
+import fr.jetoile.sample.Config;
 import fr.jetoile.sample.HadoopBootstrap;
 import fr.jetoile.sample.exception.BootstrapException;
 import fr.jetoile.sample.kafka.consumer.KafkaTestConsumer;
@@ -48,27 +48,27 @@ public class KafkaBootstrapTest {
 
         // Producer
         KafkaTestProducer kafkaTestProducer = new KafkaTestProducer.Builder()
-                .setKafkaHostname(configuration.getString(ConfigVars.KAFKA_HOSTNAME_KEY))
-                .setKafkaPort(configuration.getInt(ConfigVars.KAFKA_PORT_KEY))
-                .setTopic(configuration.getString(ConfigVars.KAFKA_TEST_TOPIC_KEY))
-                .setMessageCount(configuration.getInt(ConfigVars.KAFKA_TEST_MESSAGE_COUNT_KEY))
+                .setKafkaHostname(configuration.getString(Config.KAFKA_HOSTNAME_KEY))
+                .setKafkaPort(configuration.getInt(Config.KAFKA_PORT_KEY))
+                .setTopic(configuration.getString(Config.KAFKA_TEST_TOPIC_KEY))
+                .setMessageCount(configuration.getInt(Config.KAFKA_TEST_MESSAGE_COUNT_KEY))
                 .build();
         kafkaTestProducer.produceMessages();
 
 
         // Consumer
         List<String> seeds = new ArrayList<String>();
-        seeds.add(configuration.getString(ConfigVars.KAFKA_HOSTNAME_KEY));
+        seeds.add(configuration.getString(Config.KAFKA_HOSTNAME_KEY));
         KafkaTestConsumer kafkaTestConsumer = new KafkaTestConsumer();
         kafkaTestConsumer.consumeMessages2(
-                configuration.getInt(ConfigVars.KAFKA_TEST_MESSAGE_COUNT_KEY),
-                configuration.getString(ConfigVars.KAFKA_TEST_TOPIC_KEY),
+                configuration.getInt(Config.KAFKA_TEST_MESSAGE_COUNT_KEY),
+                configuration.getString(Config.KAFKA_TEST_TOPIC_KEY),
                 0,
                 seeds,
-                configuration.getInt(ConfigVars.KAFKA_PORT_KEY));
+                configuration.getInt(Config.KAFKA_PORT_KEY));
 
         // Assert num of messages produced = num of message consumed
-        Assert.assertEquals(configuration.getLong(ConfigVars.KAFKA_TEST_MESSAGE_COUNT_KEY),
+        Assert.assertEquals(configuration.getLong(Config.KAFKA_TEST_MESSAGE_COUNT_KEY),
                 kafkaTestConsumer.getNumRead());
     }
 }

@@ -23,8 +23,6 @@
  */
 package fr.jetoile.sample.integrationtest;
 
-import com.github.sakserv.minicluster.config.ConfigVars;
-//import com.lucidworks.spark.SolrSupport;
 import com.lucidworks.spark.SolrSupport;
 import com.ninja_squad.dbsetup.Operations;
 import com.ninja_squad.dbsetup.operation.Operation;
@@ -32,6 +30,7 @@ import fr.jetoile.hadoop.test.hdfs.HdfsUtils;
 import fr.jetoile.hadoop.test.hive.HiveConnectionUtils;
 import fr.jetoile.hadoop.test.hive.HiveSetup;
 import fr.jetoile.sample.Component;
+import fr.jetoile.sample.Config;
 import fr.jetoile.sample.HadoopBootstrap;
 import fr.jetoile.sample.component.SolrCloudBootstrap;
 import fr.jetoile.sample.exception.BootstrapException;
@@ -64,6 +63,8 @@ import static com.ninja_squad.dbsetup.Operations.sql;
 import static junit.framework.TestCase.assertNotNull;
 import static org.fest.assertions.Assertions.assertThat;
 
+
+@Ignore
 public class SparkSolrIntegrationTest {
     static private Logger LOGGER = LoggerFactory.getLogger(SparkSolrIntegrationTest.class);
 
@@ -82,7 +83,6 @@ public class SparkSolrIntegrationTest {
             throw new BootstrapException("bad config", e);
         }
 
-//        HadoopBootstrap.INSTANCE.startAll();
         HadoopBootstrap.INSTANCE
                 .start(Component.ZOOKEEPER)
                 .start(Component.HDFS)
@@ -94,11 +94,11 @@ public class SparkSolrIntegrationTest {
                 sequenceOf(sql("CREATE EXTERNAL TABLE IF NOT EXISTS default.test(id INT, value STRING) " +
                                 " ROW FORMAT DELIMITED FIELDS TERMINATED BY ';'" +
                                 " STORED AS TEXTFILE" +
-                                " LOCATION 'hdfs://localhost:" + configuration.getInt(ConfigVars.HDFS_NAMENODE_PORT_KEY) + "/khanh/test'"),
+                                " LOCATION 'hdfs://localhost:" + configuration.getInt(Config.HDFS_NAMENODE_PORT_KEY) + "/khanh/test'"),
                         sql("CREATE EXTERNAL TABLE IF NOT EXISTS default.test_parquet(id INT, value STRING) " +
                                 " ROW FORMAT DELIMITED FIELDS TERMINATED BY ';'" +
                                 " STORED AS PARQUET" +
-                                " LOCATION 'hdfs://localhost:" + configuration.getInt(ConfigVars.HDFS_NAMENODE_PORT_KEY) + "/khanh/test_parquet'"));
+                                " LOCATION 'hdfs://localhost:" + configuration.getInt(Config.HDFS_NAMENODE_PORT_KEY) + "/khanh/test_parquet'"));
 
         DROP_TABLES =
                 sequenceOf(sql("DROP TABLE IF EXISTS default.test"),
@@ -114,7 +114,6 @@ public class SparkSolrIntegrationTest {
                 .stop(Component.HIVESERVER2)
                 .stop(Component.HDFS)
                 .stop(Component.ZOOKEEPER);
-//        HadoopBootstrap.INSTANCE.stopAll();
     }
 
     @Before
@@ -152,10 +151,10 @@ public class SparkSolrIntegrationTest {
         HiveContext hiveContext = new HiveContext(context.sc());
 
         DataFrame sql = hiveContext.sql("SELECT * FROM default.test");
-        sql.write().parquet("hdfs://localhost:" + configuration.getInt(ConfigVars.HDFS_NAMENODE_PORT_KEY) + "/khanh/test_parquet/file.parquet");
+        sql.write().parquet("hdfs://localhost:" + configuration.getInt(Config.HDFS_NAMENODE_PORT_KEY) + "/khanh/test_parquet/file.parquet");
 
         FileSystem fileSystem = HdfsUtils.INSTANCE.getFileSystem();
-        assertThat(fileSystem.exists(new Path("hdfs://localhost:" + configuration.getInt(ConfigVars.HDFS_NAMENODE_PORT_KEY) + "/khanh/test_parquet/file.parquet"))).isTrue();
+        assertThat(fileSystem.exists(new Path("hdfs://localhost:" + configuration.getInt(Config.HDFS_NAMENODE_PORT_KEY) + "/khanh/test_parquet/file.parquet"))).isTrue();
 
         context.close();
 
@@ -163,7 +162,7 @@ public class SparkSolrIntegrationTest {
         context = new JavaSparkContext(conf);
         SQLContext sqlContext = new SQLContext(context);
 
-        DataFrame file = sqlContext.read().parquet("hdfs://localhost:" + configuration.getInt(ConfigVars.HDFS_NAMENODE_PORT_KEY) + "/khanh/test_parquet/file.parquet");
+        DataFrame file = sqlContext.read().parquet("hdfs://localhost:" + configuration.getInt(Config.HDFS_NAMENODE_PORT_KEY) + "/khanh/test_parquet/file.parquet");
         DataFrame select = file.select("id", "value");
 
         JavaRDD<SolrInputDocument> solrInputDocument = select.toJavaRDD().map(r -> {
@@ -174,7 +173,7 @@ public class SparkSolrIntegrationTest {
         });
 
         String collectionName = configuration.getString(SolrCloudBootstrap.SOLR_COLLECTION_NAME);
-        String zkHostString = configuration.getString(ConfigVars.ZOOKEEPER_HOST_KEY) + ":" + configuration.getInt(ConfigVars.ZOOKEEPER_PORT_KEY);
+        String zkHostString = configuration.getString(Config.ZOOKEEPER_HOST_KEY) + ":" + configuration.getInt(Config.ZOOKEEPER_PORT_KEY);
         SolrSupport.indexDocs(zkHostString, collectionName, 1000, solrInputDocument);
 
         //then

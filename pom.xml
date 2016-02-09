@@ -23,6 +23,7 @@
         <module>hadoop-bootstrap-hbase</module>
         <module>hadoop-bootstrap-standalone</module>
         <module>hadoop-bootstrap-commons</module>
+        <module>hadoop-bootstrap-client</module>
     </modules>
 
     <repositories>
@@ -60,6 +61,7 @@
 
 
         <hadoop-bootstrap.version>1.1-SNAPSHOT</hadoop-bootstrap.version>
+        <dbSetup.version>1.6.0</dbSetup.version>
     </properties>
 
 
@@ -67,9 +69,42 @@
         <dependencies>
 
             <dependency>
+                <groupId>com.ninja-squad</groupId>
+                <artifactId>DbSetup</artifactId>
+                <version>${dbSetup.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.hive</groupId>
+                <artifactId>hive-jdbc</artifactId>
+                <version>${hive.version}</version>
+            </dependency>
+
+            <dependency>
                 <groupId>fr.jetoile.sample</groupId>
-                <artifactId>hadoop-bootstrap-test-utils</artifactId>
-                <version>1.0-SNAPSHOT</version>
+                <artifactId>hadoop-bootstrap-client-solrcloud</artifactId>
+                <version>${hadoop-bootstrap.version}</version>
+                <scope>test</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>fr.jetoile.sample</groupId>
+                <artifactId>hadoop-bootstrap-client-spark</artifactId>
+                <version>${hadoop-bootstrap.version}</version>
+                <scope>test</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>fr.jetoile.sample</groupId>
+                <artifactId>hadoop-bootstrap-client-hdfs</artifactId>
+                <version>${hadoop-bootstrap.version}</version>
+                <scope>test</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>fr.jetoile.sample</groupId>
+                <artifactId>hadoop-bootstrap-client-hive</artifactId>
+                <version>${hadoop-bootstrap.version}</version>
                 <scope>test</scope>
             </dependency>
 
