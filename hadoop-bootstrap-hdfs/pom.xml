@@ -14,6 +14,11 @@
 
     <dependencies>
         <dependency>
+            <groupId>fr.jetoile.sample</groupId>
+            <artifactId>hadoop-bootstrap-commons</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>com.github.sakserv</groupId>
             <artifactId>hadoop-mini-clusters-hdfs</artifactId>
             <exclusions>
@@ -24,10 +29,6 @@
             </exclusions>
         </dependency>
 
-        <dependency>
-            <groupId>fr.jetoile.sample</groupId>
-            <artifactId>hadoop-bootstrap-commons</artifactId>
-        </dependency>
 
         <dependency>
             <groupId>javax.servlet</groupId>
@@ -35,4 +36,5 @@
             <version>3.1.0</version>
         </dependency>
     </dependencies>
+
 </project>

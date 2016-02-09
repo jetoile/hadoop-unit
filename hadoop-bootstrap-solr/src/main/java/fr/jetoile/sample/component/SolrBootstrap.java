@@ -134,7 +134,7 @@ public class SolrBootstrap implements Bootstrap {
 
         String solrHomeDirectory = path;
         if (System.getProperty("os.name").startsWith("Windows")) {
-            solrHomeDirectory = solrHomeDirectory.substring(1);
+//            solrHomeDirectory = solrHomeDirectory.substring(1);
         }
 
         solrHomeDirectory = URLDecoder.decode(solrHomeDirectory, "utf-8");
