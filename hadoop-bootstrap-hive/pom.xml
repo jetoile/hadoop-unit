@@ -29,19 +29,11 @@
         <dependency>
             <groupId>com.github.sakserv</groupId>
             <artifactId>hadoop-mini-clusters-hiveserver2</artifactId>
-            <exclusions>
-                <exclusion>
-                    <artifactId>jetty-all</artifactId>
-                    <groupId>org.eclipse.jetty.aggregate</groupId>
-                </exclusion>
-            </exclusions>
         </dependency>
 
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-util</artifactId>
-            <!--<version>9.3.7.v20160115</version>-->
-            <version>9.2.10.v20150310</version>
         </dependency>
 
     </dependencies>

@@ -17,41 +17,6 @@
         <dependency>
             <groupId>com.lucidworks.spark</groupId>
             <artifactId>spark-solr</artifactId>
-            <version>1.1.2</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.ow2.asm</groupId>
-                    <artifactId>asm</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.ow2.asm</groupId>
-                    <artifactId>asm-commons</artifactId>
-                </exclusion>
-                <exclusion>
-                    <artifactId>spark-mllib_2.10</artifactId>
-                    <groupId>org.apache.spark</groupId>
-                </exclusion>
-                <exclusion>
-                    <artifactId>spark-streaming-twitter_2.10</artifactId>
-                    <groupId>org.apache.spark</groupId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.scala-lang</groupId>
-                    <artifactId>scala-library</artifactId>
-                </exclusion>
-                <exclusion>
-                    <artifactId>hadoop-hdfs</artifactId>
-                    <groupId>org.apache.hadoop</groupId>
-                </exclusion>
-                <exclusion>
-                    <artifactId>hadoop-client</artifactId>
-                    <groupId>org.apache.hadoop</groupId>
-                </exclusion>
-                <exclusion>
-                    <artifactId>solr-core</artifactId>
-                    <groupId>org.apache.solr</groupId>
-                </exclusion>
-            </exclusions>
         </dependency>
     </dependencies>
 

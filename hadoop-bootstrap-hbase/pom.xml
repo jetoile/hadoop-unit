@@ -32,12 +32,6 @@
         <dependency>
             <groupId>com.github.sakserv</groupId>
             <artifactId>hadoop-mini-clusters-hbase</artifactId>
-            <exclusions>
-                <exclusion>
-                    <artifactId>servlet-api-2.5</artifactId>
-                    <groupId>org.mortbay.jetty</groupId>
-                </exclusion>
-            </exclusions>
         </dependency>
 
     </dependencies>

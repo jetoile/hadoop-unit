@@ -21,19 +21,12 @@
         <dependency>
             <groupId>com.github.sakserv</groupId>
             <artifactId>hadoop-mini-clusters-hdfs</artifactId>
-            <exclusions>
-                <exclusion>
-                    <artifactId>servlet-api</artifactId>
-                    <groupId>javax.servlet</groupId>
-                </exclusion>
-            </exclusions>
         </dependency>
 
 
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
-            <version>3.1.0</version>
         </dependency>
     </dependencies>
 
