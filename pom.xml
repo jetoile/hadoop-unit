@@ -3,27 +3,27 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>fr.jetoile.sample</groupId>
-    <artifactId>hadoop-bootstrap</artifactId>
+    <groupId>fr.jetoile.hadoop</groupId>
+    <artifactId>hadoop-unit</artifactId>
     <packaging>pom</packaging>
     <version>1.1-SNAPSHOT</version>
 
     <scm>
-        <connection>scm:git:https://git@github.com/jetoile/hadoop-bootstrap.git</connection>
+        <connection>scm:git:https://git@github.com/jetoile/hadoop-unit.git</connection>
         <tag>HEAD</tag>
     </scm>
     <modules>
-        <module>hadoop-bootstrap-kafka</module>
-        <module>hadoop-bootstrap-oozie</module>
-        <module>hadoop-bootstrap-hive</module>
-        <module>hadoop-bootstrap-zookeeper</module>
-        <module>hadoop-bootstrap-solr</module>
-        <module>hadoop-bootstrap-solrcloud</module>
-        <module>hadoop-bootstrap-hdfs</module>
-        <module>hadoop-bootstrap-hbase</module>
-        <module>hadoop-bootstrap-standalone</module>
-        <module>hadoop-bootstrap-commons</module>
-        <module>hadoop-bootstrap-client</module>
+        <module>hadoop-unit-kafka</module>
+        <module>hadoop-unit-oozie</module>
+        <module>hadoop-unit-hive</module>
+        <module>hadoop-unit-zookeeper</module>
+        <module>hadoop-unit-solr</module>
+        <module>hadoop-unit-solrcloud</module>
+        <module>hadoop-unit-hdfs</module>
+        <module>hadoop-unit-hbase</module>
+        <module>hadoop-unit-standalone</module>
+        <module>hadoop-unit-commons</module>
+        <module>hadoop-unit-client</module>
     </modules>
 
     <repositories>
@@ -60,7 +60,7 @@
         <hadoop.version>2.7.1.2.3.2.0-2950</hadoop.version>
 
 
-        <hadoop-bootstrap.version>1.1-SNAPSHOT</hadoop-bootstrap.version>
+        <hadoop-unit.version>1.1-SNAPSHOT</hadoop-unit.version>
         <dbSetup.version>1.6.0</dbSetup.version>
     </properties>
 
@@ -81,37 +81,37 @@
             </dependency>
 
             <dependency>
-                <groupId>fr.jetoile.sample</groupId>
-                <artifactId>hadoop-bootstrap-client-solrcloud</artifactId>
-                <version>${hadoop-bootstrap.version}</version>
+                <groupId>fr.jetoile.hadoop</groupId>
+                <artifactId>hadoop-unit-client-solrcloud</artifactId>
+                <version>${hadoop-unit.version}</version>
                 <scope>test</scope>
             </dependency>
 
             <dependency>
-                <groupId>fr.jetoile.sample</groupId>
-                <artifactId>hadoop-bootstrap-client-spark</artifactId>
-                <version>${hadoop-bootstrap.version}</version>
+                <groupId>fr.jetoile.hadoop</groupId>
+                <artifactId>hadoop-unit-client-spark</artifactId>
+                <version>${hadoop-unit.version}</version>
                 <scope>test</scope>
             </dependency>
 
             <dependency>
-                <groupId>fr.jetoile.sample</groupId>
-                <artifactId>hadoop-bootstrap-client-hdfs</artifactId>
-                <version>${hadoop-bootstrap.version}</version>
+                <groupId>fr.jetoile.hadoop</groupId>
+                <artifactId>hadoop-unit-client-hdfs</artifactId>
+                <version>${hadoop-unit.version}</version>
                 <scope>test</scope>
             </dependency>
 
             <dependency>
-                <groupId>fr.jetoile.sample</groupId>
-                <artifactId>hadoop-bootstrap-client-hive</artifactId>
-                <version>${hadoop-bootstrap.version}</version>
+                <groupId>fr.jetoile.hadoop</groupId>
+                <artifactId>hadoop-unit-client-hive</artifactId>
+                <version>${hadoop-unit.version}</version>
                 <scope>test</scope>
             </dependency>
 
             <dependency>
-                <groupId>fr.jetoile.sample</groupId>
-                <artifactId>hadoop-bootstrap-commons</artifactId>
-                <version>${hadoop-bootstrap.version}</version>
+                <groupId>fr.jetoile.hadoop</groupId>
+                <artifactId>hadoop-unit-commons</artifactId>
+                <version>${hadoop-unit.version}</version>
                 <exclusions>
                     <exclusion>
                         <artifactId>servlet-api</artifactId>
@@ -121,51 +121,51 @@
             </dependency>
 
             <dependency>
-                <groupId>fr.jetoile.sample</groupId>
-                <artifactId>hadoop-bootstrap-zookeeper</artifactId>
-                <version>${hadoop-bootstrap.version}</version>
+                <groupId>fr.jetoile.hadoop</groupId>
+                <artifactId>hadoop-unit-zookeeper</artifactId>
+                <version>${hadoop-unit.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>fr.jetoile.sample</groupId>
-                <artifactId>hadoop-bootstrap-hdfs</artifactId>
-                <version>${hadoop-bootstrap.version}</version>
+                <groupId>fr.jetoile.hadoop</groupId>
+                <artifactId>hadoop-unit-hdfs</artifactId>
+                <version>${hadoop-unit.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>fr.jetoile.sample</groupId>
-                <artifactId>hadoop-bootstrap-hive</artifactId>
-                <version>${hadoop-bootstrap.version}</version>
+                <groupId>fr.jetoile.hadoop</groupId>
+                <artifactId>hadoop-unit-hive</artifactId>
+                <version>${hadoop-unit.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>fr.jetoile.sample</groupId>
-                <artifactId>hadoop-bootstrap-hbase</artifactId>
-                <version>${hadoop-bootstrap.version}</version>
+                <groupId>fr.jetoile.hadoop</groupId>
+                <artifactId>hadoop-unit-hbase</artifactId>
+                <version>${hadoop-unit.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>fr.jetoile.sample</groupId>
-                <artifactId>hadoop-bootstrap-oozie</artifactId>
-                <version>${hadoop-bootstrap.version}</version>
+                <groupId>fr.jetoile.hadoop</groupId>
+                <artifactId>hadoop-unit-oozie</artifactId>
+                <version>${hadoop-unit.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>fr.jetoile.sample</groupId>
-                <artifactId>hadoop-bootstrap-solr</artifactId>
-                <version>${hadoop-bootstrap.version}</version>
+                <groupId>fr.jetoile.hadoop</groupId>
+                <artifactId>hadoop-unit-solr</artifactId>
+                <version>${hadoop-unit.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>fr.jetoile.sample</groupId>
-                <artifactId>hadoop-bootstrap-solrcloud</artifactId>
-                <version>${hadoop-bootstrap.version}</version>
+                <groupId>fr.jetoile.hadoop</groupId>
+                <artifactId>hadoop-unit-solrcloud</artifactId>
+                <version>${hadoop-unit.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>fr.jetoile.sample</groupId>
-                <artifactId>hadoop-bootstrap-kafka</artifactId>
-                <version>${hadoop-bootstrap.version}</version>
+                <groupId>fr.jetoile.hadoop</groupId>
+                <artifactId>hadoop-unit-kafka</artifactId>
+                <version>${hadoop-unit.version}</version>
             </dependency>
 
 
