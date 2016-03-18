@@ -60,7 +60,7 @@ public static void tearDown() throws NotFoundServiceException {
 ```
 
 ##Standalone mode
-Unzip hadoop-unit-standalone-<version>.tar.gz
+Unzip `hadoop-unit-standalone-<version>.tar.gz`
 Change `conf/default.properties`
 Change `conf/hadoop.properties`
 
@@ -77,6 +77,68 @@ Start in bg with:
 Stop with:
 ```bash
 ./bin/hadoop-unit-standalone stop
+```
+
+##Shell Usage
+Hadoop-unit can be used with common tools such as:
+
+* hbase shell
+* kafka-console command
+* hdfs command
+* hive shell
+
+###Kafka-console command
+
+* Download and unzip kafka
+* From directory `KAFKA_HOME/bin` (or `KAFKA_HOME/bin/windows` for windows), execute command: 
+```bash
+kafka-console-consumer --zookeeper localhost:22010 --topic topic
+```
+
+###HBase Shell
+
+* Download and unzip HBase
+* set variable `HBASE_HOME`
+* edit file `HBASE_HOME/conf/hbase-site.xml`:
+```bash
+<configuration>
+	<property>
+		<name>hbase.zookeeper.quorum</name>
+		<value>127.0.0.1:22010</value>
+	</property>
+	<property>
+		<name>zookeeper.znode.parent</name>
+		<value>/hbase-unsecure</value>
+	</property>
+</configuration>
+```
+
+* From directory `HBASE_HOME/bin`, execute command: 
+```bash
+hbase shell
+```
+
+###HDFS command
+
+* From directory `HADOOP_HOME/bin`, execute command: 
+```bash
+hdfs dfs -ls hdfs://localhost:20112/
+```
+###Hive Shell
+
+* Download and unzip Hive
+* edit file `HIVE_HOME/conf/hive-site.xml`:
+```bash
+<configuration>
+	<property>
+		<name>hive.metastore.uris</name>
+		<value>127.0.0.1:20102</value>
+	</property>
+</configuration>
+```
+* From directory `HIVE_HOME/bin`, execute command: 
+```bash
+hive
 ```
 
 #Sample
