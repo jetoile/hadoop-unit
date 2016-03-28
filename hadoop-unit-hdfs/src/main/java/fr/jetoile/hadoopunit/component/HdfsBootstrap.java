@@ -122,7 +122,7 @@ public class HdfsBootstrap implements Bootstrap {
             try {
                 hdfsLocalCluster.start();
             } catch (Exception e) {
-                LOGGER.error("unable to start hdfs", e);
+                LOGGER.error("unable to add hdfs", e);
             }
             state = State.STARTED;
             LOGGER.info("{} is started", this.getClass().getName());

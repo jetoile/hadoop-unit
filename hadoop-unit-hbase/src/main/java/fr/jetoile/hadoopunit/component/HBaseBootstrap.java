@@ -134,7 +134,7 @@ public class HBaseBootstrap implements Bootstrap {
             try {
                 hbaseLocalCluster.start();
             } catch (Exception e) {
-                LOGGER.error("unable to start hbase", e);
+                LOGGER.error("unable to add hbase", e);
             }
             state = State.STARTED;
             LOGGER.info("{} is started", this.getClass().getName());

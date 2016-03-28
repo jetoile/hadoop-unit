@@ -120,7 +120,7 @@ public class ZookeeperBootstrap implements Bootstrap {
             try {
                 zookeeperLocalCluster.start();
             } catch (Exception e) {
-                LOGGER.error("unable to start zookeeper", e);
+                LOGGER.error("unable to add zookeeper", e);
             }
             state = State.STARTED;
             LOGGER.info("{} is started", this.getClass().getName());

@@ -147,7 +147,7 @@ public class HiveServer2Bootstrap implements Bootstrap {
             try {
                 hiveLocalServer2.start();
             } catch (Exception e) {
-                LOGGER.error("unable to start hiveserver2", e);
+                LOGGER.error("unable to add hiveserver2", e);
             }
             state = State.STARTED;
             LOGGER.info("{} is started", this.getClass().getName());

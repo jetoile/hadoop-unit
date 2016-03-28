@@ -127,7 +127,7 @@ public class SolrCloudBootstrap implements Bootstrap {
             try {
                 solrServer.start();
             } catch (Exception e) {
-                LOGGER.error("unable to start SolrCloudServer", e);
+                LOGGER.error("unable to add SolrCloudServer", e);
             }
 
 //        final ModifiableSolrParams params = new ModifiableSolrParams();

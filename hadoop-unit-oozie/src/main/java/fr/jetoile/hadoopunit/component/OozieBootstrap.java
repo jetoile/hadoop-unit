@@ -201,14 +201,14 @@ public class OozieBootstrap implements Bootstrap {
             try {
                 build();
             } catch (NotFoundServiceException e) {
-                LOGGER.error("unable to start oozie", e);
+                LOGGER.error("unable to add oozie", e);
             }
             createShareLib();
             try {
                 mrLocalCluster.start();
                 oozieLocalCluster.start();
             } catch (Exception e) {
-                LOGGER.error("unable to start oozie", e);
+                LOGGER.error("unable to add oozie", e);
             }
             state = State.STARTED;
             LOGGER.info("{} is started", this.getClass().getName());

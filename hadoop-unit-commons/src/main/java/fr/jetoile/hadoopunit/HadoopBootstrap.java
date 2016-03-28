@@ -99,17 +99,14 @@ public enum HadoopBootstrap {
         if (manualComponentsToStop.isEmpty()) {
             internalStop(componentsToStop);
         } else {
+            manualComponentsToStop = Lists.newArrayList(this.manualComponentsToStart);
+            Collections.reverse(manualComponentsToStop);
             internalStop(manualComponentsToStop);
         }
     }
 
-    public HadoopBootstrap start(Component component) throws NotFoundServiceException {
+    public HadoopBootstrap add(Component component) throws NotFoundServiceException {
         manualComponentsToStart.add(getService(component));
-        return this;
-    }
-
-    public HadoopBootstrap stop(Component component) throws NotFoundServiceException {
-        manualComponentsToStop.add(getService(component));
         return this;
     }
 

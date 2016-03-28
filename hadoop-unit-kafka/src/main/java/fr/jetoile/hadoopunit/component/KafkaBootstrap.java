@@ -118,7 +118,7 @@ public class KafkaBootstrap implements Bootstrap {
             try {
                 kafkaLocalCluster.start();
             } catch (Exception e) {
-                LOGGER.error("unable to start kafka", e);
+                LOGGER.error("unable to add kafka", e);
             }
             state = State.STARTED;
             LOGGER.info("{} is started", this.getClass().getName());

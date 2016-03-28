@@ -84,11 +84,11 @@ public class SparkSolrIntegrationTest {
         }
 
         HadoopBootstrap.INSTANCE
-                .start(Component.ZOOKEEPER)
-                .start(Component.HDFS)
-                .start(Component.HIVEMETA)
-                .start(Component.HIVESERVER2)
-                .start(Component.SOLRCLOUD)
+                .add(Component.ZOOKEEPER)
+                .add(Component.HDFS)
+                .add(Component.HIVEMETA)
+                .add(Component.HIVESERVER2)
+                .add(Component.SOLRCLOUD)
                 .startAll();
 
         CREATE_TABLES =
@@ -110,11 +110,6 @@ public class SparkSolrIntegrationTest {
     public static void tearDown() throws NotFoundServiceException {
 
         HadoopBootstrap.INSTANCE
-                .stop(Component.SOLRCLOUD)
-                .stop(Component.HIVEMETA)
-                .stop(Component.HIVESERVER2)
-                .stop(Component.HDFS)
-                .stop(Component.ZOOKEEPER)
                 .stopAll();
     }
 

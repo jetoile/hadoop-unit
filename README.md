@@ -53,10 +53,6 @@ public static void setup() throws NotFoundServiceException {
 @AfterClass
 public static void tearDown() throws NotFoundServiceException {
     HadoopBootstrap.INSTANCE
-        .stop(Component.HIVESERVER2)
-        .stop(Component.HIVEMETA)
-        .stop(Component.HDFS)
-        .stop(Component.ZOOKEEPER)
         .stopAll();
 }
 ```

@@ -136,7 +136,7 @@ public class HiveMetastoreBootstrap implements Bootstrap {
             try {
                 hiveLocalMetaStore.start();
             } catch (Exception e) {
-                LOGGER.error("unable to start hivemetastore", e);
+                LOGGER.error("unable to add hivemetastore", e);
             }
             state = State.STARTED;
             LOGGER.info("{} is started", this.getClass().getName());
