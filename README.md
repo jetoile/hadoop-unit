@@ -25,7 +25,7 @@ public static void tearDown() {
 }
 ```
 
-##WIntegration testing v2 (with specific component)
+##Integration testing v2 (with specific component)
 With maven, add dependencies of components which are needed
 
 Sample:
@@ -152,18 +152,6 @@ To use it, add into the pom project stuff like that:
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.11</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.easytesting</groupId>
-            <artifactId>fest-assert</artifactId>
-            <version>1.4</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-all</artifactId>
-            <version>1.8.5</version>
             <scope>test</scope>
         </dependency>
 
@@ -322,8 +310,8 @@ Built on:
 
 Use: 
 * download and unzip hadoop
-* download and unzip oozie (http://s3.amazonaws.com/public-repo-1.hortonworks.com/HDP/centos6/2.x/updates/2.3.4.0/tars/oozie-4.2.0.2.3.4.0-3485-distro.tar.gz)
-* edit default.properties and indicate HADOOP_HOME
+* [for oozie only] download and unzip oozie (http://s3.amazonaws.com/public-repo-1.hortonworks.com/HDP/centos6/2.x/updates/2.3.4.0/tars/oozie-4.2.0.2.3.4.0-3485-distro.tar.gz)
+* edit default.properties and indicate HADOOP_HOME or set your HADOOP_HOME environment variable
 * edit default.properties and indicate oozie.sharelib.path
 
 Todo:
