@@ -24,6 +24,7 @@
         <module>hadoop-unit-standalone</module>
         <module>hadoop-unit-commons</module>
         <module>hadoop-unit-client</module>
+        <module>hadoop-unit-maven-plugin</module>
     </modules>
 
     <repositories>
