@@ -35,5 +35,7 @@ public interface Bootstrap {
 
     String getName();
 
+    String getProperties();
+
 
 }

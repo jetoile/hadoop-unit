@@ -70,6 +70,13 @@ public class HBaseBootstrap implements Bootstrap {
         return NAME;
     }
 
+    @Override
+    public String getProperties() {
+        return "[" +
+                "port:" + port +
+                "]";
+    }
+
     private void init() {
 
     }

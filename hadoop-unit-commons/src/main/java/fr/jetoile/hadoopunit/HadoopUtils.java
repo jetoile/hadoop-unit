@@ -30,6 +30,8 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.*;
+
 public class HadoopUtils {
 
 
@@ -53,6 +55,21 @@ public class HadoopUtils {
 
         } else {
             System.setProperty("HADOOP_HOME", System.getenv("HADOOP_HOME"));
+        }
+    }
+
+    public static void printBanner(PrintStream out) {
+        try {
+            InputStream banner = HadoopUtils.class.getResourceAsStream("/banner.txt");
+
+            BufferedReader br = new BufferedReader(new InputStreamReader(banner));
+            String line = null;
+            while ((line = br.readLine()) != null) {
+                out.println(line);
+            }
+        }
+        catch (Exception ex) {
+            LOG.warn("Banner not printable", ex);
         }
     }
 }

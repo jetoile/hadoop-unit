@@ -30,6 +30,8 @@ import org.apache.commons.configuration.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.*;
+import java.nio.charset.Charset;
 import java.util.*;
 
 public enum HadoopBootstrap {
@@ -40,7 +42,9 @@ public enum HadoopBootstrap {
 
     private Configuration configuration;
     List<Bootstrap> componentsToStart = new ArrayList<>();
+    List<Bootstrap> manualComponentsToStart = new ArrayList<>();
     List<Bootstrap> componentsToStop = new ArrayList<>();
+    List<Bootstrap> manualComponentsToStop = new ArrayList<>();
 
     private ServiceLoader<Bootstrap> commandLoader = ServiceLoader.load(Bootstrap.class);
     private Map<String, Bootstrap> commands = new HashMap<>();
@@ -83,25 +87,45 @@ public enum HadoopBootstrap {
     }
 
     public void startAll() {
-        componentsToStart.stream().forEach(c -> {
-            startService(c);
-        });
+        if (manualComponentsToStart.isEmpty()) {
+            internalStart(componentsToStart);
+        } else {
+            internalStart(manualComponentsToStart);
+        }
     }
 
+
     public void stopAll() {
-        componentsToStop.stream().forEach(c -> {
-            stopService(c);
-        });
+        if (manualComponentsToStop.isEmpty()) {
+            internalStop(componentsToStop);
+        } else {
+            internalStop(manualComponentsToStop);
+        }
     }
 
     public HadoopBootstrap start(Component component) throws NotFoundServiceException {
-        getService(component).start();
+        manualComponentsToStart.add(getService(component));
         return this;
     }
 
     public HadoopBootstrap stop(Component component) throws NotFoundServiceException {
-        getService(component).stop();
+        manualComponentsToStop.add(getService(component));
         return this;
+    }
+
+    private void internalStart(List<Bootstrap> componentsToStart) {
+        componentsToStart.stream().forEach(c -> {
+            startService(c);
+        });
+        HadoopUtils.printBanner(System.out);
+        componentsToStart.stream().forEach(c -> System.out.println("\t\t - " + c.getName() + " " + c.getProperties()));
+        System.out.println();
+    }
+
+    private void internalStop(List<Bootstrap> componentsToStop) {
+        componentsToStop.stream().forEach(c -> {
+            stopService(c);
+        });
     }
 
     private void startService(Bootstrap c) {

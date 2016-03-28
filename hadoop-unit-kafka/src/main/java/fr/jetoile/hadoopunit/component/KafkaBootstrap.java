@@ -69,6 +69,14 @@ public class KafkaBootstrap implements Bootstrap {
         return NAME;
     }
 
+    @Override
+    public String getProperties() {
+        return "[" +
+                "host:" + host +
+                ", port:" + port +
+                "]";
+    }
+
     private void init() {
 
     }

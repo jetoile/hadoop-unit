@@ -108,6 +108,14 @@ public class OozieBootstrap implements Bootstrap {
         return NAME;
     }
 
+    @Override
+    public String getProperties() {
+        return "[" +
+                "host:" + oozieHost +
+                ", port:" + ooziePort +
+                "]";
+    }
+
     private void init() {
 
     }

@@ -70,6 +70,14 @@ public class ZookeeperBootstrap implements Bootstrap {
         return NAME;
     }
 
+    @Override
+    public String getProperties() {
+        return "[" +
+                "host:" + host +
+                ", port:" + port +
+                "]";
+    }
+
     private void loadConfig() throws BootstrapException {
         HadoopUtils.setHadoopHome();
         try {

@@ -78,6 +78,15 @@ public class SolrCloudBootstrap implements Bootstrap {
         return NAME;
     }
 
+    @Override
+    public String getProperties() {
+        return "[" +
+                "zh:" + zkHostString +
+                ", port:" + solrPort +
+                ", collection:" + solrCollectionName +
+                "]";
+    }
+
     private void build() {
         File solrXml = null;
         try {

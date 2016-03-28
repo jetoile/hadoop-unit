@@ -88,7 +88,8 @@ public class SparkSolrIntegrationTest {
                 .start(Component.HDFS)
                 .start(Component.HIVEMETA)
                 .start(Component.HIVESERVER2)
-                .start(Component.SOLRCLOUD);
+                .start(Component.SOLRCLOUD)
+                .startAll();
 
         CREATE_TABLES =
                 sequenceOf(sql("CREATE EXTERNAL TABLE IF NOT EXISTS default.test(id INT, value STRING) " +
@@ -113,7 +114,8 @@ public class SparkSolrIntegrationTest {
                 .stop(Component.HIVEMETA)
                 .stop(Component.HIVESERVER2)
                 .stop(Component.HDFS)
-                .stop(Component.ZOOKEEPER);
+                .stop(Component.ZOOKEEPER)
+                .stopAll();
     }
 
     @Before

@@ -71,6 +71,13 @@ public class SolrBootstrap implements Bootstrap {
         return NAME;
     }
 
+    @Override
+    public String getProperties() {
+        return "[" +
+                "collection:" + solrCollectionInternalName +
+                "]";
+    }
+
     private void loadConfig() throws BootstrapException {
         HadoopUtils.setHadoopHome();
         try {

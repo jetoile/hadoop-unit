@@ -68,6 +68,13 @@ public class HiveMetastoreBootstrap implements Bootstrap {
         return NAME;
     }
 
+    @Override
+    public String getProperties() {
+        return "[" +
+                "port:" + port +
+                "]";
+    }
+
     private void loadConfig() throws BootstrapException {
         HadoopUtils.setHadoopHome();
         try {

@@ -71,6 +71,13 @@ public class HdfsBootstrap implements Bootstrap {
         return NAME;
     }
 
+    @Override
+    public String getProperties() {
+        return "[" +
+                "port:" + port +
+                "]";
+    }
+
     private void init() {
 
     }
