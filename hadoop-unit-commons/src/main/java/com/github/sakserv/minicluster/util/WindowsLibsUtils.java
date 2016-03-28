@@ -28,22 +28,25 @@ public class WindowsLibsUtils {
 
     public static String getHadoopHome() {
 
-        LOG.info("HADOOP_HOME: " + System.getProperty("HADOOP_HOME"));
+        LOG.info("HADOOP_HOME: " + System.getenv("HADOOP_HOME"));
 
-        if(System.getProperty("HADOOP_HOME") != null) {
-            return System.getProperty("HADOOP_HOME");
+        if(System.getenv("HADOOP_HOME") != null) {
+            return System.getenv("HADOOP_HOME");
         } else {
+            if (System.getProperty("HADOOP_HOME") != null) {
+                return System.getProperty("HADOOP_HOME");
+            } else {
+                File windowsLibDir = new File("." + Path.SEPARATOR + "windows_libs" +
+                        Path.SEPARATOR + System.getProperty("hdp.release.version"));
 
-            File windowsLibDir = new File("." + Path.SEPARATOR + "windows_libs" +
-                    Path.SEPARATOR + System.getProperty("hdp.release.version"));
-
-            if (!windowsLibDir.exists()) {
-                windowsLibDir = new File(".." + Path.SEPARATOR + windowsLibDir);
                 if (!windowsLibDir.exists()) {
-                    LOG.error("WINDOWS: ERROR: Could not find windows native libs");
+                    windowsLibDir = new File(".." + Path.SEPARATOR + windowsLibDir);
+                    if (!windowsLibDir.exists()) {
+                        LOG.error("WINDOWS: ERROR: Could not find windows native libs");
+                    }
                 }
+                return windowsLibDir.getAbsolutePath();
             }
-            return windowsLibDir.getAbsolutePath();
         }
 
     }

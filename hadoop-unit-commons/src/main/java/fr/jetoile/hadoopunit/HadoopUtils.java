@@ -38,7 +38,7 @@ public class HadoopUtils {
 
     public static void setHadoopHome() {
 
-        if (StringUtils.isEmpty(System.getProperty("HADOOP_HOME"))) {
+        if (StringUtils.isEmpty(System.getenv("HADOOP_HOME"))) {
 
             try {
                 configuration = new PropertiesConfiguration("default.properties");
@@ -51,6 +51,8 @@ public class HadoopUtils {
             LOG.info("Setting hadoop.home.dir: {}", hadoop_home);
             System.setProperty("HADOOP_HOME", hadoop_home);
 
+        } else {
+            System.setProperty("HADOOP_HOME", System.getenv("HADOOP_HOME"));
         }
     }
 }
