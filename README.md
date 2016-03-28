@@ -1,4 +1,23 @@
 #Usage
+
+When Hadoop Unit is started, it should display stuff like that:
+```bash
+                   ______  __      _________                         _____  __      __________
+                   ___  / / /_____ ______  /___________________      __  / / /_________(_)_  /_ 1.1-SNAPSHOT
+                   __  /_/ /_  __ `/  __  /_  __ \  __ \__  __ \     _  / / /__  __ \_  /_  __/
+                   _  __  / / /_/ // /_/ / / /_/ / /_/ /_  /_/ /     / /_/ / _  / / /  / / /_
+                   /_/ /_/  \__,_/ \__,_/  \____/\____/_  .___/      \____/  /_/ /_//_/  \__/
+                                                       /_/
+ 		 - ZOOKEEPER [host:127.0.0.1, port:22010]
+ 		 - HDFS [port:20112]
+ 		 - HIVEMETA [port:20102]
+ 		 - HIVESERVER2 [port:20103]
+ 		 - KAFKA [host:127.0.0.1, port:20111]
+ 		 - HBASE [port:25111]
+ 		 - SOLRCLOUD [zh:127.0.0.1:22010, port:8983, collection:collection1]
+
+```
+
 ##Integration testing (will start each component present into classpath)
 With maven, add dependencies of components which are needed
 
