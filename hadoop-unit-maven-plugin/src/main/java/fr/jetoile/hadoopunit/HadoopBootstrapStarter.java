@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 
-@Mojo(name = "start", defaultPhase = LifecyclePhase.PRE_INTEGRATION_TEST, threadSafe = false)
+@Mojo(name = "embedded-start", defaultPhase = LifecyclePhase.PRE_INTEGRATION_TEST, threadSafe = false)
 public class HadoopBootstrapStarter extends AbstractMojo {
 
     @Parameter(property = "values", required = true)
@@ -31,11 +31,13 @@ public class HadoopBootstrapStarter extends AbstractMojo {
                 values.contains(c.getName().toUpperCase())
         ).collect(Collectors.toList());
 
+        getLog().info("is going to start hadoop unit");
         try {
             HadoopBootstrap.INSTANCE.startAll();
         } catch (Exception e) {
-            e.printStackTrace();
+            getLog().error("unable to start embedded hadoop unit", e);
         }
+        getLog().info("hadoop unit started");
 
     }
 }

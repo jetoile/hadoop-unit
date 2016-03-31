@@ -2,19 +2,19 @@
 
 When Hadoop Unit is started, it should display stuff like that:
 ```bash
-                   ______  __      _________                         _____  __      __________
-                   ___  / / /_____ ______  /___________________      __  / / /_________(_)_  /_ 1.1-SNAPSHOT
-                   __  /_/ /_  __ `/  __  /_  __ \  __ \__  __ \     _  / / /__  __ \_  /_  __/
-                   _  __  / / /_/ // /_/ / / /_/ / /_/ /_  /_/ /     / /_/ / _  / / /  / / /_
-                   /_/ /_/  \__,_/ \__,_/  \____/\____/_  .___/      \____/  /_/ /_//_/  \__/
-                                                       /_/
- 		 - ZOOKEEPER [host:127.0.0.1, port:22010]
- 		 - HDFS [port:20112]
- 		 - HIVEMETA [port:20102]
- 		 - HIVESERVER2 [port:20103]
- 		 - KAFKA [host:127.0.0.1, port:20111]
- 		 - HBASE [port:25111]
- 		 - SOLRCLOUD [zh:127.0.0.1:22010, port:8983, collection:collection1]
+           ______  __      _________                         _____  __      __________
+           ___  / / /_____ ______  /___________________      __  / / /_________(_)_  /_ 1.1-SNAPSHOT
+           __  /_/ /_  __ `/  __  /_  __ \  __ \__  __ \     _  / / /__  __ \_  /_  __/
+           _  __  / / /_/ // /_/ / / /_/ / /_/ /_  /_/ /     / /_/ / _  / / /  / / /_
+           /_/ /_/  \__,_/ \__,_/  \____/\____/_  .___/      \____/  /_/ /_//_/  \__/
+                                               /_/
+ - ZOOKEEPER [host:127.0.0.1, port:22010]
+ - HDFS [port:20112]
+ - HIVEMETA [port:20102]
+ - HIVESERVER2 [port:20103]
+ - KAFKA [host:127.0.0.1, port:20111]
+ - HBASE [port:25111]
+ - SOLRCLOUD [zh:127.0.0.1:22010, port:8983, collection:collection1]
 
 ```
 
@@ -164,108 +164,261 @@ See hadoop-unit-standalone/src/test/java/fr/jetoile/hadoopunit/integrationtest
 #Maven Plugin usage
 A maven plugin is provided for integration test only.
 
+##Embedded mode
+
 To use it, add into the pom project stuff like that:
 ```xml
-    <dependencies>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.11</version>
-            <scope>test</scope>
-        </dependency>
+<dependencies>
+    <dependency>
+        <groupId>junit</groupId>
+        <artifactId>junit</artifactId>
+        <version>4.11</version>
+        <scope>test</scope>
+    </dependency>
 
-        <dependency>
+    <dependency>
+        <groupId>fr.jetoile.hadoop</groupId>
+        <artifactId>hadoop-unit-hdfs</artifactId>
+        <version>1.1-SNAPSHOT</version>
+        <scope>test</scope>
+    </dependency>
+
+    <dependency>
+        <groupId>fr.jetoile.hadoop</groupId>
+        <artifactId>hadoop-unit-hive</artifactId>
+        <version>1.1-SNAPSHOT</version>
+        <scope>test</scope>
+    </dependency>
+
+    <dependency>
+        <groupId>fr.jetoile.hadoop</groupId>
+        <artifactId>hadoop-unit-client-hdfs</artifactId>
+        <version>1.1-SNAPSHOT</version>
+        <scope>test</scope>
+    </dependency>
+
+    <dependency>
+        <groupId>fr.jetoile.hadoop</groupId>
+        <artifactId>hadoop-unit-client-hive</artifactId>
+        <version>1.1-SNAPSHOT</version>
+        <scope>test</scope>
+    </dependency>
+
+    <dependency>
+        <groupId>fr.jetoile.hadoop</groupId>
+        <artifactId>hadoop-unit-client-spark</artifactId>
+        <version>1.1-SNAPSHOT</version>
+        <scope>test</scope>
+    </dependency>
+</dependencies>
+
+<build>
+    <plugins>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <configuration>
+                <excludes>
+                    <exclude>**/*IntegrationTest.java</exclude>
+                </excludes>
+            </configuration>
+            <executions>
+                <execution>
+                    <id>integration-test</id>
+                    <goals>
+                        <goal>test</goal>
+                    </goals>
+                    <phase>integration-test</phase>
+                    <configuration>
+                        <excludes>
+                            <exclude>none</exclude>
+                        </excludes>
+                        <includes>
+                            <include>**/*IntegrationTest.java</include>
+                        </includes>
+                    </configuration>
+                </execution>
+            </executions>
+        </plugin>
+
+        <plugin>
+            <artifactId>hadoop-unit-maven-plugin</artifactId>
             <groupId>fr.jetoile.hadoop</groupId>
-            <artifactId>hadoop-unit-hdfs</artifactId>
             <version>1.1-SNAPSHOT</version>
-            <scope>test</scope>
-        </dependency>
+            <executions>
+                <execution>
+                    <id>start</id>
+                    <goals>
+                        <goal>embedded-start</goal>
+                    </goals>
+                    <phase>pre-integration-test</phase>
+                </execution>
+            </executions>
+            <configuration>
+                <values>
+                    <value>HDFS</value>
+                    <value>ZOOKEEPER</value>
+                    <value>HIVEMETA</value>
+                    <value>HIVESERVER2</value>
+                </values>
+            </configuration>
 
-        <dependency>
-            <groupId>fr.jetoile.hadoop</groupId>
-            <artifactId>hadoop-unit-hive</artifactId>
-            <version>1.1-SNAPSHOT</version>
-            <scope>test</scope>
-        </dependency>
+        </plugin>
 
-        <dependency>
-            <groupId>fr.jetoile.hadoop</groupId>
-            <artifactId>hadoop-unit-client-hdfs</artifactId>
-            <version>1.1-SNAPSHOT</version>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>fr.jetoile.hadoop</groupId>
-            <artifactId>hadoop-unit-client-hive</artifactId>
-            <version>1.1-SNAPSHOT</version>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>fr.jetoile.hadoop</groupId>
-            <artifactId>hadoop-unit-client-spark</artifactId>
-            <version>1.1-SNAPSHOT</version>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
-    
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <configuration>
-                    <excludes>
-                        <exclude>**/*IntegrationTest.java</exclude>
-                    </excludes>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>integration-test</id>
-                        <goals>
-                            <goal>test</goal>
-                        </goals>
-                        <phase>integration-test</phase>
-                        <configuration>
-                            <excludes>
-                                <exclude>none</exclude>
-                            </excludes>
-                            <includes>
-                                <include>**/*IntegrationTest.java</include>
-                            </includes>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <plugin>
-                <artifactId>hadoop-unit-maven-plugin</artifactId>
-                <groupId>fr.jetoile.hadoop</groupId>
-                <version>1.1-SNAPSHOT</version>
-                <executions>
-                    <execution>
-                        <id>start</id>
-                        <goals>
-                            <goal>start</goal>
-                        </goals>
-                        <phase>pre-integration-test</phase>
-                    </execution>
-                </executions>
-                <configuration>
-                    <values>
-                        <value>HDFS</value>
-                        <value>ZOOKEEPER</value>
-                        <value>HIVEMETA</value>
-                        <value>HIVESERVER2</value>
-                    </values>
-                </configuration>
-
-            </plugin>
-
-        </plugins>
-    </build>
+    </plugins>
+</build>
 ```
+Values can be:
+* HDFS
+* ZOOKEEPER
+* HIVEMETA
+* HIVESERVER2
+* SOLR
+* SOLRCLOUD
+* OOZIE
+* KAFKA
+* HBASE
+
+Here is a sample integration test:
+```java
+public class HdfsBootstrapIntegrationTest {
+
+    static private Configuration configuration;
+
+
+    @BeforeClass
+    public static void setup() throws BootstrapException {
+        try {
+            configuration = new PropertiesConfiguration("default.properties");
+        } catch (ConfigurationException e) {
+            throw new BootstrapException("bad config", e);
+        }
+    }
+
+
+    @Test
+    public void hdfsShouldStart() throws Exception {
+
+        FileSystem hdfsFsHandle = HdfsUtils.INSTANCE.getFileSystem();
+
+
+        FSDataOutputStream writer = hdfsFsHandle.create(new Path(configuration.getString(Config.HDFS_TEST_FILE_KEY)));
+        writer.writeUTF(configuration.getString(Config.HDFS_TEST_STRING_KEY));
+        writer.close();
+
+        // Read the file and compare to test string
+        FSDataInputStream reader = hdfsFsHandle.open(new Path(configuration.getString(Config.HDFS_TEST_FILE_KEY)));
+        assertEquals(reader.readUTF(), configuration.getString(Config.HDFS_TEST_STRING_KEY));
+        reader.close();
+        hdfsFsHandle.close();
+
+        URL url = new URL(
+                String.format( "http://localhost:%s/webhdfs/v1?op=GETHOMEDIRECTORY&user.name=guest",
+                        configuration.getInt( Config.HDFS_NAMENODE_HTTP_PORT_KEY ) ) );
+        URLConnection connection = url.openConnection();
+        connection.setRequestProperty( "Accept-Charset", "UTF-8" );
+        BufferedReader response = new BufferedReader( new InputStreamReader( connection.getInputStream() ) );
+        String line = response.readLine();
+        response.close();
+        assertThat("{\"Path\":\"/user/guest\"}").isEqualTo(line);
+    }
+}
+```
+
+##Remote mode
+This plugin start/stop a remote local hadoop-unit-standalone.
+
+To use it, add into the pom project stuff like that:
+```xml
+<plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-surefire-plugin</artifactId>
+    <configuration>
+        <excludes>
+            <exclude>**/*IntegrationTest.java</exclude>
+        </excludes>
+    </configuration>
+    <executions>
+        <execution>
+            <id>integration-test</id>
+            <goals>
+                <goal>test</goal>
+            </goals>
+            <phase>integration-test</phase>
+            <configuration>
+                <excludes>
+                    <exclude>none</exclude>
+                </excludes>
+                <includes>
+                    <include>**/*IntegrationTest.java</include>
+                </includes>
+            </configuration>
+        </execution>
+    </executions>
+</plugin>
+
+<plugin>
+    <artifactId>hadoop-unit-maven-plugin</artifactId>
+    <groupId>fr.jetoile.hadoop</groupId>
+    <version>1.1-SNAPSHOT</version>
+    <executions>
+        <execution>
+            <id>start</id>
+            <goals>
+                <goal>start</goal>
+            </goals>
+            <phase>pre-integration-test</phase>
+        </execution>
+    </executions>
+    <configuration>
+        <hadoopUnitPath>/home/khanh/tools/hadoop-unit-standalone</hadoopUnitPath>
+        <values>
+            <value>ZOOKEEPER</value>
+            <value>HDFS</value>
+            <value>HIVEMETA</value>
+            <value>HIVESERVER2</value>            
+        </values>
+        <outputFile>/tmp/toto.txt</outputFile>
+    </configuration>
+
+</plugin>
+
+<plugin>
+    <artifactId>hadoop-unit-maven-plugin</artifactId>
+    <groupId>fr.jetoile.hadoop</groupId>
+    <version>1.1-SNAPSHOT</version>
+    <executions>
+        <execution>
+            <id>stop</id>
+            <goals>
+                <goal>stop</goal>
+            </goals>
+            <phase>post-integration-test</phase>
+        </execution>
+    </executions>
+    <configuration>
+        <hadoopUnitPath>/home/khanh/tools/hadoop-unit-standalone</hadoopUnitPath>
+        <outputFile>/tmp/toto.txt</outputFile>
+    </configuration>
+
+</plugin>
+```
+Values can be:
+* HDFS
+* ZOOKEEPER
+* HIVEMETA
+* HIVESERVER2
+* SOLR
+* SOLRCLOUD
+* OOZIE
+* KAFKA
+* HBASE
+
+hadoopUnitPath is not mandatory but system enviroment variable HADOOP_UNIT_HOME must be defined. 
+
+If both are set, HADOOP_UNIT_HOME override hadoopUnitPath.
+
+Warning: This plugin will modify hadoop.properties and delete hadoop unit logs.
 
 Here is a sample integration test:
 ```java
@@ -316,7 +469,7 @@ public class HdfsBootstrapIntegrationTest {
 #Component available
 
 * SolrCloud 5.4.1
-* Kafka 0.9.0
+* Kafka 
 * Hive (metastore and server2)
 * Hdfs
 * Zookeeper
