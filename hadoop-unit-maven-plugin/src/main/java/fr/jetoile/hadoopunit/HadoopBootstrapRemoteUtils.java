@@ -28,7 +28,10 @@ public class HadoopBootstrapRemoteUtils {
         this.pluginManager = pluginManager;
     }
 
-    public void operateRemoteHadoopUnit(String hadoopUnitPath, String outputFile, String op) throws MojoExecutionException {
+    public void operateRemoteHadoopUnit(String hadoopUnitPath, String outputFile, String op, String exec) throws MojoExecutionException {
+        if (exec == null) {
+            exec = "./hadoop-unit-standalone";
+        }
         executeMojo(
                 plugin(
                         groupId("org.codehaus.mojo"),
@@ -38,7 +41,7 @@ public class HadoopBootstrapRemoteUtils {
                 goal("exec"),
                 configuration(
                         element(name("workingDirectory"), hadoopUnitPath + "/bin"),
-                        element(name("executable"), "./hadoop-unit-standalone"),
+                        element(name("executable"), exec),
                         element(name("commandlineArgs"), op),
                         element(name("outputFile"), outputFile)
                 ),

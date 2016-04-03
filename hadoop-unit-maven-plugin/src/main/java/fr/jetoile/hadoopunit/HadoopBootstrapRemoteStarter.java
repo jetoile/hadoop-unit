@@ -2,19 +2,19 @@ package fr.jetoile.hadoopunit;
 
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
-import org.apache.commons.lang.StringUtils;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.BuildPluginManager;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
-import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 
-import java.io.*;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
@@ -32,6 +32,9 @@ public class HadoopBootstrapRemoteStarter extends AbstractMojo {
     @Parameter(property = "outputFile")
     protected String outputFile;
 
+    @Parameter(property = "exec")
+    protected String exec;
+
     @Component
     private MavenProject project;
 
@@ -40,7 +43,6 @@ public class HadoopBootstrapRemoteStarter extends AbstractMojo {
 
     @Component
     private BuildPluginManager pluginManager;
-
 
 
     @Override
@@ -58,8 +60,8 @@ public class HadoopBootstrapRemoteStarter extends AbstractMojo {
         Path hadoopLogFilePath = Paths.get(hadoopUnitPath, "wrapper.log");
         deleteLogFile(hadoopLogFilePath);
 
-        getLog().info("is going to start hadoop unit");
-        utils.operateRemoteHadoopUnit(hadoopUnitPath, outputFile, "start");
+        getLog().info("is going to start hadoop unit with executable " + ((exec == null) ? "./hadoop-unit-standalone" : exec));
+        utils.operateRemoteHadoopUnit(hadoopUnitPath, outputFile, "start", exec);
 
         //listen to log file and wait
         getLog().info("is going tail log file");
@@ -86,7 +88,6 @@ public class HadoopBootstrapRemoteStarter extends AbstractMojo {
 
         }
     }
-
 
 
     private void deleteLogFile(Path hadoopLogFilePath) {

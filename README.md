@@ -372,6 +372,7 @@ To use it, add into the pom project stuff like that:
     </executions>
     <configuration>
         <hadoopUnitPath>/home/khanh/tools/hadoop-unit-standalone</hadoopUnitPath>
+        <exec>./hadoop-unit-standalone</exec>
         <values>
             <value>ZOOKEEPER</value>
             <value>HDFS</value>
@@ -398,6 +399,7 @@ To use it, add into the pom project stuff like that:
     </executions>
     <configuration>
         <hadoopUnitPath>/home/khanh/tools/hadoop-unit-standalone</hadoopUnitPath>
+        <exec>./hadoop-unit-standalone</exec>
         <outputFile>/tmp/toto.txt</outputFile>
     </configuration>
 
@@ -415,6 +417,8 @@ Values can be:
 * HBASE
 
 hadoopUnitPath is not mandatory but system enviroment variable HADOOP_UNIT_HOME must be defined. 
+
+exec variable is optional.
 
 If both are set, HADOOP_UNIT_HOME override hadoopUnitPath.
 

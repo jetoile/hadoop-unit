@@ -30,6 +30,9 @@ public class HadoopBootstrapRemoteStopper extends AbstractMojo {
     @Parameter(property = "outputFile")
     protected String outputFile;
 
+    @Parameter(property = "exec")
+    protected String exec;
+
     @Component
     private MavenProject project;
 
@@ -47,8 +50,8 @@ public class HadoopBootstrapRemoteStopper extends AbstractMojo {
 
         utils.getHadoopUnitPath(hadoopUnitPath, getLog());
 
-        getLog().info("is going to stop hadoop unit");
-        utils.operateRemoteHadoopUnit(hadoopUnitPath, outputFile, "stop");
+        getLog().info("is going to stop hadoop unit with executable " + ((exec == null) ? "./hadoop-unit-standalone" : exec));
+        utils.operateRemoteHadoopUnit(hadoopUnitPath, outputFile, "stop", exec);
         Path hadoopLogFilePath = Paths.get(hadoopUnitPath, "wrapper.log");
 
         getLog().info("is going tail log file");
