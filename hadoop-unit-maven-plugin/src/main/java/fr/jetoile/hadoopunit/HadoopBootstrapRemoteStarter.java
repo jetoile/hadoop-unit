@@ -49,7 +49,7 @@ public class HadoopBootstrapRemoteStarter extends AbstractMojo {
     public void execute() throws MojoExecutionException, MojoFailureException {
         HadoopBootstrapRemoteUtils utils = new HadoopBootstrapRemoteUtils(project, session, pluginManager);
 
-        utils.getHadoopUnitPath(hadoopUnitPath, getLog());
+        hadoopUnitPath = utils.getHadoopUnitPath(hadoopUnitPath, getLog());
 
         //change hadoop.properties
         getLog().info("is going to modifying hadoop.properties");

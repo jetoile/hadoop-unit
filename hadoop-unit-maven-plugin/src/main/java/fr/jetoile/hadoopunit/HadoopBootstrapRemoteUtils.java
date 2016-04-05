@@ -74,16 +74,20 @@ public class HadoopBootstrapRemoteUtils {
         }
     }
 
-    public void getHadoopUnitPath(String hadoopUnitPath, Log log) {
+    public String getHadoopUnitPath(String hadoopUnitPath, Log log) {
         String hadoopUnitHome = System.getenv("HADOOP_UNIT_HOME");
+        String res = "";
         if (hadoopUnitHome != null) {
-            hadoopUnitPath = hadoopUnitHome;
+            res = hadoopUnitHome;
             log.info("overriding property hadoopUnitPath with system environment variable" + hadoopUnitHome);
+        } else {
+            res = hadoopUnitPath;
         }
-        log.info("is going to use:" + hadoopUnitPath);
+        log.info("is going to use:" + res);
 
         if (hadoopUnitPath == null) {
             log.error("hadoopUnitPath or HADOOP_UNIT_HOME should be set");
         }
+        return res;
     }
 }

@@ -48,7 +48,7 @@ public class HadoopBootstrapRemoteStopper extends AbstractMojo {
         HadoopBootstrapRemoteUtils utils = new HadoopBootstrapRemoteUtils(project, session, pluginManager);
 
 
-        utils.getHadoopUnitPath(hadoopUnitPath, getLog());
+        hadoopUnitPath = utils.getHadoopUnitPath(hadoopUnitPath, getLog());
 
         getLog().info("is going to stop hadoop unit with executable " + ((exec == null) ? "./hadoop-unit-standalone" : exec));
         utils.operateRemoteHadoopUnit(hadoopUnitPath, outputFile, "stop", exec);
