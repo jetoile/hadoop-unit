@@ -6,7 +6,7 @@
     <groupId>fr.jetoile.hadoop</groupId>
     <artifactId>hadoop-unit</artifactId>
     <packaging>pom</packaging>
-    <version>1.1-SNAPSHOT</version>
+    <version>1.2-SNAPSHOT</version>
 
     <scm>
         <connection>scm:git:https://git@github.com/jetoile/hadoop-unit.git</connection>
@@ -56,12 +56,12 @@
 
         <!--<solr.version>5.2.1</solr.version>-->
         <solr.version>5.4.1</solr.version>
-        <hadoop-mini-clusters.version>0.1.3</hadoop-mini-clusters.version>
-        <oozie.version>4.2.0.2.3.2.0-2950</oozie.version>
-        <hadoop.version>2.7.1.2.3.2.0-2950</hadoop.version>
+        <hadoop-mini-clusters.version>0.1.5</hadoop-mini-clusters.version>
+        <oozie.version>4.2.0.2.4.0.0-169</oozie.version>
+        <hadoop.version>2.7.1.2.4.0.0-169</hadoop.version>
 
 
-        <hadoop-unit.version>1.1-SNAPSHOT</hadoop-unit.version>
+        <hadoop-unit.version>1.2-SNAPSHOT</hadoop-unit.version>
         <dbSetup.version>1.6.0</dbSetup.version>
     </properties>
 

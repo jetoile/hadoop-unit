@@ -4,7 +4,7 @@
     <parent>
         <artifactId>hadoop-unit-client</artifactId>
         <groupId>fr.jetoile.hadoop</groupId>
-        <version>1.1-SNAPSHOT</version>
+        <version>1.2-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -13,9 +13,6 @@
     <properties>
 
         <hive.version>1.2.1</hive.version>
-
-        <solr.version>5.2.1</solr.version>
-        <oozie.version>4.2.0.2.3.2.0-2950</oozie.version>
 
     </properties>
 
@@ -66,33 +63,12 @@
         <dependency>
             <groupId>com.ninja-squad</groupId>
             <artifactId>DbSetup</artifactId>
-            <version>${dbSetup.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <scope>provided</scope>
-        </dependency>
-
-        <!-- Dependances autres - test -->
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.11</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.easytesting</groupId>
-            <artifactId>fest-assert</artifactId>
-            <version>1.4</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-all</artifactId>
-            <version>1.8.5</version>
-            <scope>test</scope>
         </dependency>
 
         <!-- Hive JDBC -->
