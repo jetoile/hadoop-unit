@@ -6,7 +6,7 @@
     <groupId>fr.jetoile.hadoop</groupId>
     <artifactId>hadoop-unit</artifactId>
     <packaging>pom</packaging>
-    <version>1.1-SNAPSHOT</version>
+    <version>1.1</version>
 
     <scm>
         <connection>scm:git:https://git@github.com/jetoile/hadoop-unit.git</connection>
@@ -61,7 +61,7 @@
         <hadoop.version>2.7.1.2.3.2.0-2950</hadoop.version>
 
 
-        <hadoop-unit.version>1.1-SNAPSHOT</hadoop-unit.version>
+        <hadoop-unit.version>1.1</hadoop-unit.version>
         <dbSetup.version>1.6.0</dbSetup.version>
     </properties>
 
