@@ -18,17 +18,16 @@ package fr.jetoile.hadoopunit.component;
 import fr.jetoile.hadoopunit.HadoopUnitConfig;
 import fr.jetoile.hadoopunit.HadoopBootstrap;
 import fr.jetoile.hadoopunit.exception.BootstrapException;
-import fr.jetoile.hadoopunit.kafka.consumer.KafkaTestConsumer;
-import fr.jetoile.hadoopunit.kafka.producer.KafkaTestProducer;
+import fr.jetoile.hadoopunit.test.kafka.KafkaConsumerUtils;
+import fr.jetoile.hadoopunit.test.kafka.KafkaProducerUtils;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
+import org.codehaus.jettison.json.JSONException;
+import org.codehaus.jettison.json.JSONObject;
 import org.junit.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
@@ -61,28 +60,29 @@ public class KafkaBootstrapTest {
     public void kafkaShouldStart() throws Exception {
 
         // Producer
-        KafkaTestProducer kafkaTestProducer = new KafkaTestProducer.Builder()
-                .setKafkaHostname(configuration.getString(HadoopUnitConfig.KAFKA_HOSTNAME_KEY))
-                .setKafkaPort(configuration.getInt(HadoopUnitConfig.KAFKA_PORT_KEY))
-                .setTopic(configuration.getString(HadoopUnitConfig.KAFKA_TEST_TOPIC_KEY))
-                .setMessageCount(configuration.getInt(HadoopUnitConfig.KAFKA_TEST_MESSAGE_COUNT_KEY))
-                .build();
-        kafkaTestProducer.produceMessages();
+        for (int i = 0; i < 10; i++) {
+            String payload = generateMessage(i);
+            KafkaProducerUtils.INSTANCE.produceMessages(configuration.getString(HadoopUnitConfig.KAFKA_TEST_TOPIC_KEY), String.valueOf(i), payload);
+        }
+
 
 
         // Consumer
-        List<String> seeds = new ArrayList<String>();
-        seeds.add(configuration.getString(HadoopUnitConfig.KAFKA_HOSTNAME_KEY));
-        KafkaTestConsumer kafkaTestConsumer = new KafkaTestConsumer();
-        kafkaTestConsumer.consumeMessages2(
-                configuration.getInt(HadoopUnitConfig.KAFKA_TEST_MESSAGE_COUNT_KEY),
-                configuration.getString(HadoopUnitConfig.KAFKA_TEST_TOPIC_KEY),
-                0,
-                seeds,
-                configuration.getInt(HadoopUnitConfig.KAFKA_PORT_KEY));
+//        KafkaConsumerUtils.INSTANCE.consumeMessagesWithOldApi(configuration.getString(HadoopUnitConfig.KAFKA_TEST_TOPIC_KEY), 10);
+        KafkaConsumerUtils.INSTANCE.consumeMessagesWithNewApi(configuration.getString(HadoopUnitConfig.KAFKA_TEST_TOPIC_KEY), 10);
 
         // Assert num of messages produced = num of message consumed
-        Assert.assertEquals(configuration.getLong(HadoopUnitConfig.KAFKA_TEST_MESSAGE_COUNT_KEY),
-                kafkaTestConsumer.getNumRead());
+        Assert.assertEquals(configuration.getLong(HadoopUnitConfig.KAFKA_TEST_MESSAGE_COUNT_KEY), KafkaConsumerUtils.INSTANCE.getNumRead());
+    }
+
+    private String generateMessage(int i) {
+        JSONObject obj = new JSONObject();
+        try {
+            obj.put("id", String.valueOf(i));
+            obj.put("msg", "test-message" + 1);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return obj.toString();
     }
 }

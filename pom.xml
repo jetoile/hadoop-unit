@@ -202,6 +202,13 @@
 
             <dependency>
                 <groupId>fr.jetoile.hadoop</groupId>
+                <artifactId>hadoop-unit-client-kafka</artifactId>
+                <version>${hadoop-unit.version}</version>
+                <scope>test</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>fr.jetoile.hadoop</groupId>
                 <artifactId>hadoop-unit-commons</artifactId>
                 <version>${hadoop-unit.version}</version>
                 <exclusions>
