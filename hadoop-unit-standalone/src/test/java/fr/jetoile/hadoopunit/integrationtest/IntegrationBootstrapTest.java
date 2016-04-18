@@ -15,6 +15,8 @@
 package fr.jetoile.hadoopunit.integrationtest;
 
 
+import com.mongodb.*;
+import fr.jetoile.hadoopunit.exception.NotFoundServiceException;
 import fr.jetoile.hadoopunit.test.hdfs.HdfsUtils;
 import fr.jetoile.hadoopunit.Config;
 import fr.jetoile.hadoopunit.HadoopBootstrap;
@@ -50,13 +52,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
-import java.net.HttpURLConnection;
-import java.net.URI;
-import java.net.URL;
-import java.net.URLConnection;
+import java.net.*;
 import java.sql.*;
 import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.*;
+import java.util.Date;
 
 import static junit.framework.TestCase.assertNotNull;
 import static org.fest.assertions.Assertions.assertThat;

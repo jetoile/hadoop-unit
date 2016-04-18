@@ -26,7 +26,8 @@ public enum Component {
     HBASE("hbase"),
     OOZIE("oozie"),
     SOLRCLOUD("solrcloud"),
-    SOLR("solr");
+    SOLR("solr"),
+    MONGODB("mongodb");
 
     private String key;
 

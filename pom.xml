@@ -25,6 +25,7 @@
         <module>hadoop-unit-commons</module>
         <module>hadoop-unit-client</module>
         <module>hadoop-unit-maven-plugin</module>
+        <module>hadoop-unit-mongodb</module>
     </modules>
 
     <repositories>
@@ -180,6 +181,12 @@
                         <groupId>javax.servlet</groupId>
                     </exclusion>
                 </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>com.github.sakserv</groupId>
+                <artifactId>hadoop-mini-clusters-mongodb</artifactId>
+                <version>${hadoop-mini-clusters.version}</version>
             </dependency>
 
             <dependency>

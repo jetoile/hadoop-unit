@@ -41,6 +41,12 @@ public class Config {
     public static final String HIVE_TEST_DATABASE_NAME_KEY = "hive.test.database.name";
     public static final String HIVE_TEST_TABLE_NAME_KEY = "hive.test.table.name";
 
+    // MongoDB
+    public static final String MONGO_IP_KEY = "mongo.ip";
+    public static final String MONGO_PORT_KEY = "mongo.port";
+    public static final String MONGO_DATABASE_NAME_KEY = "mongo.database.name";
+    public static final String MONGO_COLLECTION_NAME_KEY = "mongo.collection.name";
+
     // Kafka
     public static final String KAFKA_HOSTNAME_KEY = "kafka.hostname";
     public static final String KAFKA_PORT_KEY = "kafka.port";
