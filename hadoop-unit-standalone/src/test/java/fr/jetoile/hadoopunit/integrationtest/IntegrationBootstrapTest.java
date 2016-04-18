@@ -74,7 +74,7 @@ public class IntegrationBootstrapTest {
     @BeforeClass
     public static void setup() throws BootstrapException {
         try {
-            configuration = new PropertiesConfiguration("default.properties");
+            configuration = new PropertiesConfiguration(Config.DEFAULT_PROPS_FILE);
         } catch (ConfigurationException e) {
             throw new BootstrapException("bad config", e);
         }

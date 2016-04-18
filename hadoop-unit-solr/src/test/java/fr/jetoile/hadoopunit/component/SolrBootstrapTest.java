@@ -16,6 +16,7 @@ package fr.jetoile.hadoopunit.component;
 
 
 import fr.jetoile.hadoopunit.Component;
+import fr.jetoile.hadoopunit.Config;
 import fr.jetoile.hadoopunit.HadoopBootstrap;
 import fr.jetoile.hadoopunit.exception.BootstrapException;
 import org.apache.commons.configuration.Configuration;
@@ -45,7 +46,7 @@ public class SolrBootstrapTest {
     @BeforeClass
     public static void setup() throws Exception {
         try {
-            configuration = new PropertiesConfiguration("default.properties");
+            configuration = new PropertiesConfiguration(Config.DEFAULT_PROPS_FILE);
         } catch (ConfigurationException e) {
             throw new BootstrapException("bad config", e);
         }

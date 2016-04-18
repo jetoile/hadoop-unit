@@ -62,7 +62,7 @@ public class SparkIntegrationTest {
     @BeforeClass
     public static void setUp() throws BootstrapException, SQLException, ClassNotFoundException, NotFoundServiceException {
         try {
-            configuration = new PropertiesConfiguration("default.properties");
+            configuration = new PropertiesConfiguration(Config.DEFAULT_PROPS_FILE);
         } catch (ConfigurationException e) {
             throw new BootstrapException("bad config", e);
         }

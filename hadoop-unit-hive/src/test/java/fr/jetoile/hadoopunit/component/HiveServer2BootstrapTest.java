@@ -43,7 +43,7 @@ public class HiveServer2BootstrapTest {
     @BeforeClass
     public static void setup() throws Exception {
         try {
-            configuration = new PropertiesConfiguration("default.properties");
+            configuration = new PropertiesConfiguration(Config.DEFAULT_PROPS_FILE);
         } catch (ConfigurationException e) {
             throw new BootstrapException("bad config", e);
         }
