@@ -278,6 +278,8 @@ Values can be:
 * OOZIE
 * KAFKA
 * HBASE
+* MONGODB
+* CASSANDRA
 
 Here is a sample integration test:
 ```java
@@ -415,6 +417,8 @@ Values can be:
 * OOZIE
 * KAFKA
 * HBASE
+* MONGODB
+* CASSANDRA
 
 hadoopUnitPath is not mandatory but system enviroment variable HADOOP_UNIT_HOME must be defined. 
 
@@ -479,10 +483,13 @@ public class HdfsBootstrapIntegrationTest {
 * Zookeeper
 * Oozie (WIP)
 * HBase
+* MongoDB
+* Cassandra 3.4
 
 Built on:
 
-* hadoop-mini-cluster-0.1.5 (aka. HDP 2.4.0)
+* [hadoop-mini-cluster-0.1.5](https://github.com/sakserv/hadoop-mini-clusters) (aka. HDP 2.4.0)
+* [cassandra-unit-3.0.0.1](https://github.com/jsevellec/cassandra-unit)
 
 Use: 
 * download and unzip hadoop
