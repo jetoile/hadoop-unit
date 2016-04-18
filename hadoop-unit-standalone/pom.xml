@@ -67,6 +67,10 @@
             <artifactId>hadoop-unit-mongodb</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>fr.jetoile.hadoop</groupId>
+            <artifactId>hadoop-unit-cassandra</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>commons-configuration</groupId>

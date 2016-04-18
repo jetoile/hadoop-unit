@@ -32,5 +32,10 @@
             <groupId>org.apache.solr</groupId>
             <artifactId>solr-test-framework</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>com.googlecode.concurrentlinkedhashmap</groupId>
+            <artifactId>concurrentlinkedhashmap-lru</artifactId>
+        </dependency>
     </dependencies>
 </project>

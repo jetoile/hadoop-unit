@@ -15,6 +15,7 @@
 package fr.jetoile.hadoopunit.integrationtest;
 
 
+import com.datastax.driver.core.*;
 import com.mongodb.*;
 import fr.jetoile.hadoopunit.exception.NotFoundServiceException;
 import fr.jetoile.hadoopunit.test.hdfs.HdfsUtils;
@@ -38,6 +39,7 @@ import org.apache.hadoop.hbase.HColumnDescriptor;
 import org.apache.hadoop.hbase.HTableDescriptor;
 import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.*;
+import org.apache.hadoop.hbase.client.Row;
 import org.apache.hadoop.hbase.util.Bytes;
 import org.apache.hadoop.security.UserGroupInformation;
 import org.apache.oozie.client.OozieClient;
@@ -328,6 +330,46 @@ public class IntegrationBootstrapTest {
 
         LOGGER.info("OOZIE: Workflow: {}", wf.toString());
         hdfsFs.close();
+
+    }
+
+    @Test
+    public void mongodbShouldStart() throws UnknownHostException {
+        MongoClient mongo = new MongoClient(configuration.getString(Config.MONGO_IP_KEY), configuration.getInt(Config.MONGO_PORT_KEY));
+
+        DB db = mongo.getDB(configuration.getString(Config.MONGO_DATABASE_NAME_KEY));
+        DBCollection col = db.createCollection(configuration.getString(Config.MONGO_COLLECTION_NAME_KEY),
+                new BasicDBObject());
+
+        col.save(new BasicDBObject("testDoc", new Date()));
+        LOGGER.info("MONGODB: Number of items in collection: {}", col.count());
+        assertEquals(1, col.count());
+
+        DBCursor cursor = col.find();
+        while(cursor.hasNext()) {
+            LOGGER.info("MONGODB: Document output: {}", cursor.next());
+        }
+        cursor.close();
+    }
+
+    @Test
+    public void cassandraShouldStart() throws NotFoundServiceException {
+        Cluster cluster = Cluster.builder()
+                .addContactPoints(configuration.getString(Config.CASSANDRA_IP_KEY)).withPort(configuration.getInt(Config.CASSANDRA_PORT_KEY)).build();
+        Session session = cluster.connect();
+
+        session.execute("create KEYSPACE test WITH replication = {'class': 'SimpleStrategy' , 'replication_factor': '1' }");
+        session.execute("CREATE TABLE test.test (user text, value text, PRIMARY KEY (user))");
+        session.execute("insert into test.test(user, value) values('user1', 'value1')");
+        session.execute("insert into test.test(user, value) values('user2', 'value2')");
+
+        com.datastax.driver.core.ResultSet execute = session.execute("select * from test.test");
+
+        List<com.datastax.driver.core.Row> res = execute.all();
+        assertEquals(res.size(), 2);
+        assertEquals(res.get(0).getString("user"), "user2");
+        assertEquals(res.get(0).getString("value"), "value2");
+        assertEquals(res.get(1).getString("user"), "user1");
 
     }
 

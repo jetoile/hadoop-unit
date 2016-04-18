@@ -27,6 +27,7 @@ public enum Component {
     OOZIE("oozie"),
     SOLRCLOUD("solrcloud"),
     SOLR("solr"),
+    CASSANDRA("cassandra"),
     MONGODB("mongodb");
 
     private String key;

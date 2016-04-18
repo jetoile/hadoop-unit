@@ -47,6 +47,11 @@ public class Config {
     public static final String MONGO_DATABASE_NAME_KEY = "mongo.database.name";
     public static final String MONGO_COLLECTION_NAME_KEY = "mongo.collection.name";
 
+    // Cassandra
+    public static final String CASSANDRA_IP_KEY = "cassandra.ip";
+    public static final String CASSANDRA_PORT_KEY = "cassandra.port";
+    public static final String CASSANDRA_TEMP_DIR_KEY = "cassandra.temp.dir";
+
     // Kafka
     public static final String KAFKA_HOSTNAME_KEY = "kafka.hostname";
     public static final String KAFKA_PORT_KEY = "kafka.port";

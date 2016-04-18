@@ -25,6 +25,7 @@
         <module>hadoop-unit-commons</module>
         <module>hadoop-unit-client</module>
         <module>hadoop-unit-maven-plugin</module>
+        <module>hadoop-unit-cassandra</module>
         <module>hadoop-unit-mongodb</module>
     </modules>
 
@@ -35,7 +36,6 @@
             <url>http://repo.hortonworks.com/content/groups/public/</url>
         </repository>
     </repositories>
-
 
 
     <properties>
@@ -64,6 +64,9 @@
 
         <hadoop-unit.version>1.2-SNAPSHOT</hadoop-unit.version>
         <dbSetup.version>1.6.0</dbSetup.version>
+        <cassandra-unit.version>3.0.0.1</cassandra-unit.version>
+        <cu.cassandra.driver.version>3.0.0</cu.cassandra.driver.version>
+        <snakeyaml.version>1.17</snakeyaml.version>
     </properties>
 
 
@@ -170,6 +173,35 @@
                 <version>${hadoop-unit.version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>fr.jetoile.hadoop</groupId>
+                <artifactId>hadoop-unit-cassandra</artifactId>
+                <version>${hadoop-unit.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>fr.jetoile.hadoop</groupId>
+                <artifactId>hadoop-unit-mongodb</artifactId>
+                <version>${hadoop-unit.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.cassandraunit</groupId>
+                <artifactId>cassandra-unit</artifactId>
+                <version>${cassandra-unit.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.datastax.cassandra</groupId>
+                <artifactId>cassandra-driver-core</artifactId>
+                <version>${cu.cassandra.driver.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.yaml</groupId>
+                <artifactId>snakeyaml</artifactId>
+                <version>${snakeyaml.version}</version>
+            </dependency>
 
             <dependency>
                 <groupId>com.github.sakserv</groupId>
@@ -214,7 +246,17 @@
                         <artifactId>org.eclipse.jetty</artifactId>
                         <groupId>jetty-util</groupId>
                     </exclusion>
+                    <exclusion>
+                        <artifactId>guava</artifactId>
+                        <groupId>com.google.guava</groupId>
+                    </exclusion>
                 </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>18.0</version>
             </dependency>
 
             <dependency>
@@ -272,7 +314,17 @@
                         <artifactId>jetty-util</artifactId>
                         <groupId>org.eclipse.jetty</groupId>
                     </exclusion>
+                    <exclusion>
+                        <groupId>com.googlecode.concurrentlinkedhashmap</groupId>
+                        <artifactId>concurrentlinkedhashmap-lru</artifactId>
+                    </exclusion>
                 </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>com.googlecode.concurrentlinkedhashmap</groupId>
+                <artifactId>concurrentlinkedhashmap-lru</artifactId>
+                <version>1.4</version>
             </dependency>
 
             <dependency>
@@ -488,7 +540,7 @@
         <!--<version>3.0.0</version>-->
         <!--<exclusions>-->
         <!--<exclusion>-->
-        <!--<groupId>com.google.guava</groupId>-->
+        <!--<groupId>com.google.p</groupId>-->
         <!--<artifactId>guava</artifactId>-->
         <!--</exclusion>-->
         <!--</exclusions>-->
