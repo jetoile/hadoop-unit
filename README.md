@@ -117,7 +117,7 @@ kafka-console-consumer --zookeeper localhost:22010 --topic topic
 * Download and unzip HBase
 * set variable `HBASE_HOME`
 * edit file `HBASE_HOME/conf/hbase-site.xml`:
-```bash
+```xml
 <configuration>
 	<property>
 		<name>hbase.zookeeper.quorum</name>
@@ -145,7 +145,7 @@ hdfs dfs -ls hdfs://localhost:20112/
 
 * Download and unzip Hive
 * edit file `HIVE_HOME/conf/hive-site.xml`:
-```bash
+```xml
 <configuration>
 	<property>
 		<name>hive.metastore.uris</name>
