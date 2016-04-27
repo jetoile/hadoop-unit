@@ -149,7 +149,7 @@ hdfs dfs -ls hdfs://localhost:20112/
 <configuration>
 	<property>
 		<name>hive.metastore.uris</name>
-		<value>127.0.0.1:20102</value>
+		<value>thrift://127.0.0.1:20102</value>
 	</property>
 </configuration>
 ```
