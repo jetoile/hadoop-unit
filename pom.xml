@@ -6,7 +6,7 @@
     <groupId>fr.jetoile.hadoop</groupId>
     <artifactId>hadoop-unit</artifactId>
     <packaging>pom</packaging>
-    <version>1.2-SNAPSHOT</version>
+    <version>1.2</version>
 
     <licenses>
         <license>
@@ -91,7 +91,7 @@
         <hadoop.version>2.7.1.2.4.0.0-169</hadoop.version>
 
 
-        <hadoop-unit.version>1.2-SNAPSHOT</hadoop-unit.version>
+        <hadoop-unit.version>1.2</hadoop-unit.version>
         <dbSetup.version>1.6.0</dbSetup.version>
         <cassandra-unit.version>3.0.0.1</cassandra-unit.version>
         <cu.cassandra.driver.version>3.0.0</cu.cassandra.driver.version>
