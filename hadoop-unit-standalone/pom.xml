@@ -5,11 +5,12 @@
     <parent>
         <artifactId>hadoop-unit</artifactId>
         <groupId>fr.jetoile.hadoop</groupId>
-        <version>1.2-SNAPSHOT</version>
+        <version>1.2</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>hadoop-unit-standalone</artifactId>
+    <name>hadoop-unit-standalone</name>
 
     <properties>
         <mongo-java-driver.version>2.11.3</mongo-java-driver.version>

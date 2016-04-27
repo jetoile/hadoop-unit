@@ -4,12 +4,14 @@
     <parent>
         <artifactId>hadoop-unit</artifactId>
         <groupId>fr.jetoile.hadoop</groupId>
-        <version>1.2-SNAPSHOT</version>
+        <version>1.2</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>hadoop-unit-client</artifactId>
     <packaging>pom</packaging>
+    <name>hadoop-unit-client</name>
+
 
     <modules>
         <module>hadoop-unit-client-hive</module>

@@ -6,7 +6,11 @@
     <groupId>fr.jetoile.hadoop</groupId>
     <artifactId>hadoop-unit</artifactId>
     <packaging>pom</packaging>
-    <version>1.2-SNAPSHOT</version>
+    <version>1.2</version>
+    <name>hadoop-unit</name>
+    <url>https://github.com/jetoile/hadoop-unit</url>
+
+    <description>Hadoop Unit</description>
 
     <licenses>
         <license>
@@ -91,7 +95,7 @@
         <hadoop.version>2.7.1.2.4.0.0-169</hadoop.version>
 
 
-        <hadoop-unit.version>1.2-SNAPSHOT</hadoop-unit.version>
+        <hadoop-unit.version>1.2</hadoop-unit.version>
         <dbSetup.version>1.6.0</dbSetup.version>
         <cassandra-unit.version>3.0.0.1</cassandra-unit.version>
         <cu.cassandra.driver.version>3.0.0</cu.cassandra.driver.version>
@@ -689,6 +693,17 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.sonatype.plugins</groupId>
+                <artifactId>nexus-staging-maven-plugin</artifactId>
+                <version>1.6.3</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <serverId>ossrh</serverId>
+                    <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                </configuration>
             </plugin>
         </plugins>
     </build>
