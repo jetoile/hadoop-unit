@@ -5,11 +5,12 @@
     <parent>
         <artifactId>hadoop-unit</artifactId>
         <groupId>fr.jetoile.hadoop</groupId>
-        <version>1.2</version>
+        <version>1.3-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>hadoop-unit-solrcloud</artifactId>
+    <name>hadoop-unit-solrcloud</name>
 
 
     <dependencies>
