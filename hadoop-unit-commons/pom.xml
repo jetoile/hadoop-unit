@@ -63,7 +63,6 @@
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-util</artifactId>
-            <version>9.2.14.v20151106</version>
         </dependency>
 
         <dependency>
