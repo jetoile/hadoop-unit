@@ -1,9 +1,22 @@
+hadoop-unit
+====================
+
+Hadoop-Unit is a project which allow testing projects which need hadoop ecosysteme like kafka, solr, hdfs, hive, hbase, ...
+
+Moreover, it provide a standalone component which can be run locally and which simulate a hadoop cluster.
+
+<p align="center">
+
+  <img src="https://maven-badges.herokuapp.com/maven-central/fr.jetoile.hadoop/hadoop-unit/badge.svg"/>
+
+</p>
+
 #Usage
 
 When Hadoop Unit is started, it should display stuff like that:
 ```bash
            ______  __      _________                         _____  __      __________
-           ___  / / /_____ ______  /___________________      __  / / /_________(_)_  /_ 1.2-SNAPSHOT
+           ___  / / /_____ ______  /___________________      __  / / /_________(_)_  /_ 1.2
            __  /_/ /_  __ `/  __  /_  __ \  __ \__  __ \     _  / / /__  __ \_  /_  __/
            _  __  / / /_/ // /_/ / / /_/ / /_/ /_  /_/ /     / /_/ / _  / / /  / / /_
            /_/ /_/  \__,_/ \__,_/  \____/\____/_  .___/      \____/  /_/ /_//_/  \__/
@@ -26,7 +39,7 @@ Sample:
 <dependency>
     <groupId>fr.jetoile.hadoop</groupId>
     <artifactId>hadoop-unit-hdfs</artifactId>
-    <version>1.2-SNAPSHOT</version>
+    <version>1.2</version>
     <scope>test</scope>
 </dependency>
 ```
@@ -52,7 +65,7 @@ Sample:
 <dependency>
     <groupId>fr.jetoile.hadoop</groupId>
     <artifactId>hadoop-unit-hdfs</artifactId>
-    <version>1.2-SNAPSHOT</version>
+    <version>1.2</version>
     <scope>test</scope>
 </dependency>
 ```
@@ -179,35 +192,35 @@ To use it, add into the pom project stuff like that:
     <dependency>
         <groupId>fr.jetoile.hadoop</groupId>
         <artifactId>hadoop-unit-hdfs</artifactId>
-        <version>1.2-SNAPSHOT</version>
+        <version>1.2</version>
         <scope>test</scope>
     </dependency>
 
     <dependency>
         <groupId>fr.jetoile.hadoop</groupId>
         <artifactId>hadoop-unit-hive</artifactId>
-        <version>1.2-SNAPSHOT</version>
+        <version>1.2</version>
         <scope>test</scope>
     </dependency>
 
     <dependency>
         <groupId>fr.jetoile.hadoop</groupId>
         <artifactId>hadoop-unit-client-hdfs</artifactId>
-        <version>1.2-SNAPSHOT</version>
+        <version>1.2</version>
         <scope>test</scope>
     </dependency>
 
     <dependency>
         <groupId>fr.jetoile.hadoop</groupId>
         <artifactId>hadoop-unit-client-hive</artifactId>
-        <version>1.2-SNAPSHOT</version>
+        <version>1.2</version>
         <scope>test</scope>
     </dependency>
 
     <dependency>
         <groupId>fr.jetoile.hadoop</groupId>
         <artifactId>hadoop-unit-client-spark</artifactId>
-        <version>1.2-SNAPSHOT</version>
+        <version>1.2</version>
         <scope>test</scope>
     </dependency>
 </dependencies>
@@ -244,7 +257,7 @@ To use it, add into the pom project stuff like that:
         <plugin>
             <artifactId>hadoop-unit-maven-plugin</artifactId>
             <groupId>fr.jetoile.hadoop</groupId>
-            <version>1.2-SNAPSHOT</version>
+            <version>1.2</version>
             <executions>
                 <execution>
                     <id>start</id>
@@ -362,7 +375,7 @@ To use it, add into the pom project stuff like that:
 <plugin>
     <artifactId>hadoop-unit-maven-plugin</artifactId>
     <groupId>fr.jetoile.hadoop</groupId>
-    <version>1.2-SNAPSHOT</version>
+    <version>1.2</version>
     <executions>
         <execution>
             <id>start</id>
@@ -389,7 +402,7 @@ To use it, add into the pom project stuff like that:
 <plugin>
     <artifactId>hadoop-unit-maven-plugin</artifactId>
     <groupId>fr.jetoile.hadoop</groupId>
-    <version>1.2-SNAPSHOT</version>
+    <version>1.2</version>
     <executions>
         <execution>
             <id>stop</id>
