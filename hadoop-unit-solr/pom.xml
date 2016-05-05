@@ -32,6 +32,36 @@
             <groupId>com.googlecode.concurrentlinkedhashmap</groupId>
             <artifactId>concurrentlinkedhashmap-lru</artifactId>
         </dependency>
+
+        <!--<dependency>-->
+            <!--<artifactId>lucene-test-framework</artifactId>-->
+            <!--<groupId>org.apache.lucene</groupId>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<artifactId>lucene-analyzers-kuromoji</artifactId>-->
+            <!--<groupId>org.apache.lucene</groupId>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<artifactId>lucene-analyzers-phonetic</artifactId>-->
+            <!--<groupId>org.apache.lucene</groupId>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<artifactId>lucene-codecs</artifactId>-->
+            <!--<groupId>org.apache.lucene</groupId>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<artifactId>lucene-expressions</artifactId>-->
+            <!--<groupId>org.apache.lucene</groupId>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<artifactId>lucene-phonetic</artifactId>-->
+            <!--<groupId>org.apache.lucene</groupId>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<artifactId>lucene-core</artifactId>-->
+            <!--<groupId>org.apache.lucene</groupId>-->
+            <!--<version>5.5.1</version>-->
+        <!--</dependency>-->
     </dependencies>
 
 </project>

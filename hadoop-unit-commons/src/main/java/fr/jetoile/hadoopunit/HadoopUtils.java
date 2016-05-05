@@ -29,22 +29,6 @@ public class HadoopUtils {
     private static final Logger LOG = LoggerFactory.getLogger(HadoopUtils.class);
     private static Configuration configuration;
 
-//    public static void setHadoopHome() {
-//
-//        // Set hadoop.home.dir to point to the windows lib dir
-//        if (System.getProperty("os.name").startsWith("Windows")) {
-//
-//            String windowsLibDir = getHadoopHome();
-//
-//            LOG.info("WINDOWS: Setting hadoop.home.dir: {}", windowsLibDir);
-//            System.setProperty("hadoop.home.dir", windowsLibDir);
-//            System.load(new File(windowsLibDir + Path.SEPARATOR + "lib" + Path.SEPARATOR + "hadoop.dll").getAbsolutePath());
-//            System.load(new File(windowsLibDir + Path.SEPARATOR + "lib" + Path.SEPARATOR + "hdfs.dll").getAbsolutePath());
-//
-//        }
-//    }
-
-
     public static void setHadoopHome() {
 
         // Set hadoop.home.dir to point to the windows lib dir
