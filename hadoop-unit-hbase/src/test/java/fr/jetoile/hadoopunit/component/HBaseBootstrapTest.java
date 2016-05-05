@@ -107,12 +107,11 @@ public class HBaseBootstrapTest {
 
     private static Result getRow(String tableName, String colFamName, String rowKey, String colQualifier,
                                  org.apache.hadoop.conf.Configuration configuration) throws Exception {
-        Result result;
+
         HTable table = new HTable(configuration, tableName);
         Get get = new Get(Bytes.toBytes(rowKey));
         get.addColumn(Bytes.toBytes(colFamName), Bytes.toBytes(colQualifier));
         get.setMaxVersions(1);
-        result = table.get(get);
-        return result;
+        return table.get(get);
     }
 }
