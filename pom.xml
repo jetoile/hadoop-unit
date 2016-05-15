@@ -574,25 +574,6 @@
 
     <dependencies>
 
-        <!--<dependency>-->
-        <!--<groupId>org.apache.curator</groupId>-->
-        <!--<artifactId>curator-client</artifactId>-->
-        <!--<version>3.0.0</version>-->
-        <!--<exclusions>-->
-        <!--<exclusion>-->
-        <!--<groupId>com.google.p</groupId>-->
-        <!--<artifactId>guava</artifactId>-->
-        <!--</exclusion>-->
-        <!--</exclusions>-->
-        <!--</dependency>-->
-
-        <!--<dependency>-->
-        <!--<groupId>org.apache.curator</groupId>-->
-        <!--<artifactId>curator-framework</artifactId>-->
-        <!--<version>3.0.0</version>-->
-        <!--</dependency>-->
-
-
         <!-- Dependances autres - test -->
         <dependency>
             <groupId>junit</groupId>
@@ -629,7 +610,6 @@
                     <configuration>
                         <source>${java.version}</source>
                         <target>${java.version}</target>
-                        <!--<encoding>ISO-8859-1</encoding>-->
                     </configuration>
                 </plugin>
                 <plugin>
