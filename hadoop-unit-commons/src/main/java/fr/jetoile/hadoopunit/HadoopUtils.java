@@ -17,6 +17,7 @@ import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.lang.StringUtils;
+import org.apache.hadoop.fs.Path;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,28 +29,55 @@ public class HadoopUtils {
     private static final Logger LOG = LoggerFactory.getLogger(HadoopUtils.class);
     private static Configuration configuration;
 
+//    public static void setHadoopHome() {
+//
+//        // Set hadoop.home.dir to point to the windows lib dir
+//        if (System.getProperty("os.name").startsWith("Windows")) {
+//
+//            String windowsLibDir = getHadoopHome();
+//
+//            LOG.info("WINDOWS: Setting hadoop.home.dir: {}", windowsLibDir);
+//            System.setProperty("hadoop.home.dir", windowsLibDir);
+//            System.load(new File(windowsLibDir + Path.SEPARATOR + "lib" + Path.SEPARATOR + "hadoop.dll").getAbsolutePath());
+//            System.load(new File(windowsLibDir + Path.SEPARATOR + "lib" + Path.SEPARATOR + "hdfs.dll").getAbsolutePath());
+//
+//        }
+//    }
+
+
     public static void setHadoopHome() {
 
-        if (StringUtils.isEmpty(System.getenv("HADOOP_HOME"))) {
+        // Set hadoop.home.dir to point to the windows lib dir
+        if (System.getProperty("os.name").startsWith("Windows")) {
 
-            try {
-                configuration = new PropertiesConfiguration(Config.DEFAULT_PROPS_FILE);
-            } catch (ConfigurationException e) {
-                LOG.error("unable to load {}", Config.DEFAULT_PROPS_FILE, e);
-            }
+            if (StringUtils.isEmpty(System.getenv("HADOOP_HOME"))) {
 
-            String hadoop_home = configuration.getString("HADOOP_HOME");
+                try {
+                    configuration = new PropertiesConfiguration(Config.DEFAULT_PROPS_FILE);
+                } catch (ConfigurationException e) {
+                    LOG.error("unable to load {}", Config.DEFAULT_PROPS_FILE, e);
+                }
 
-            LOG.info("Setting hadoop.home.dir: {}", hadoop_home);
-            if (hadoop_home == null) {
-                LOG.error("HADOOP_HOME should be set or informed into default.properties");
-                System.exit(-1);
+                String hadoop_home = configuration.getString("HADOOP_HOME");
+
+                LOG.info("Setting hadoop.home.dir: {}", hadoop_home);
+                if (hadoop_home == null) {
+                    LOG.error("HADOOP_HOME should be set or informed into default.properties");
+                    System.exit(-1);
+                } else {
+                    System.setProperty("HADOOP_HOME", hadoop_home);
+                }
+
             } else {
-                System.setProperty("HADOOP_HOME", hadoop_home);
+                System.setProperty("HADOOP_HOME", System.getenv("HADOOP_HOME"));
             }
 
-        } else {
-            System.setProperty("HADOOP_HOME", System.getenv("HADOOP_HOME"));
+            String windowsLibDir = System.getenv("HADOOP_HOME");
+
+            LOG.info("WINDOWS: Setting hadoop.home.dir: {}", windowsLibDir);
+            System.setProperty("hadoop.home.dir", windowsLibDir);
+            System.load(new File(windowsLibDir + Path.SEPARATOR + "bin" + Path.SEPARATOR + "hadoop.dll").getAbsolutePath());
+            System.load(new File(windowsLibDir + Path.SEPARATOR + "bin" + Path.SEPARATOR + "hdfs.dll").getAbsolutePath());
         }
     }
 
