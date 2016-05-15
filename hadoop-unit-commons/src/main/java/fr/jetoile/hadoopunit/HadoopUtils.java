@@ -41,7 +41,12 @@ public class HadoopUtils {
             String hadoop_home = configuration.getString("HADOOP_HOME");
 
             LOG.info("Setting hadoop.home.dir: {}", hadoop_home);
-            System.setProperty("HADOOP_HOME", hadoop_home);
+            if (hadoop_home == null) {
+                LOG.error("HADOOP_HOME should be set or informed into default.properties");
+                System.exit(-1);
+            } else {
+                System.setProperty("HADOOP_HOME", hadoop_home);
+            }
 
         } else {
             System.setProperty("HADOOP_HOME", System.getenv("HADOOP_HOME"));
