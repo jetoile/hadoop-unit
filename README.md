@@ -535,7 +535,7 @@ public class HdfsBootstrapIntegrationTest {
 
 Built on:
 
-* [hadoop-mini-cluster-0.1.5](https://github.com/sakserv/hadoop-mini-clusters) (aka. HDP 2.4.0)
+* [hadoop-mini-cluster-0.1.6](https://github.com/sakserv/hadoop-mini-clusters) (aka. HDP 2.4.0)
 * [cassandra-unit-3.0.0.1](https://github.com/jsevellec/cassandra-unit)
 
 Use: 

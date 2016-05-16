@@ -90,7 +90,7 @@
 
         <hive.version>1.2.1</hive.version>
         <solr.version>5.4.1</solr.version>
-        <hadoop-mini-clusters.version>0.1.5</hadoop-mini-clusters.version>
+        <hadoop-mini-clusters.version>0.1.6</hadoop-mini-clusters.version>
         <oozie.version>4.2.0.2.4.0.0-169</oozie.version>
         <hadoop.version>2.7.1.2.4.0.0-169</hadoop.version>
 
