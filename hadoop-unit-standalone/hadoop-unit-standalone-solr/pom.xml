@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>hadoop-unit-standalone</artifactId>
+        <groupId>fr.jetoile.hadoop</groupId>
+        <version>1.3-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>hadoop-unit-standalone-solr</artifactId>
+    <name>hadoop-unit-standalone-solr</name>
+
+
+    <dependencies>
+        <dependency>
+            <groupId>fr.jetoile.hadoop</groupId>
+            <artifactId>hadoop-unit-solr</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>fr.jetoile.hadoop</groupId>
+            <artifactId>hadoop-unit-solrcloud</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>fr.jetoile.hadoop</groupId>
+            <artifactId>hadoop-unit-standalone-common</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+
+        <plugins>
+
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy-resources</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>
+                                ${basedir}/target/appassembler-jsw/jsw/hadoop-unit-standalone-solr/conf
+                            </outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>src/main/conf</directory>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>appassembler-maven-plugin</artifactId>
+                <executions>
+
+                    <execution>
+                        <id>hadoop-bootstrap</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>generate-daemons</goal>
+                        </goals>
+                        <configuration>
+                            <target>${project.build.directory}/appassembler-jsw</target>
+
+                            <repositoryLayout>flat</repositoryLayout>
+
+                            <daemons>
+                                <daemon>
+                                    <id>${project.name}</id>
+                                    <mainClass>fr.jetoile.hadoopunit.HadoopStandaloneBootstrap</mainClass>
+                                    <commandLineArguments>
+                                    </commandLineArguments>
+                                    <platforms>
+                                        <platform>jsw</platform>
+                                    </platforms>
+                                    <generatorConfigurations>
+                                        <generatorConfiguration>
+                                            <generator>jsw</generator>
+                                            <includes>
+                                                <include>linux-x86-32</include>
+                                                <include>linux-x86-64</include>
+                                                <include>windows-x86-32</include>
+                                                <include>windows-x86-64</include>
+                                                <include>macosx-universal-64</include>
+                                            </includes>
+                                            <configuration>
+
+                                                <property>
+                                                    <name>configuration.directory.in.classpath.first</name>
+                                                    <value>conf</value>
+                                                </property>
+
+                                                <property>
+                                                    <name>wrapper.logfile.maxsize</name>
+                                                    <value>100m</value>
+                                                </property>
+
+                                            </configuration>
+                                        </generatorConfiguration>
+                                    </generatorConfigurations>
+                                    <jvmSettings>
+                                        <initialMemorySize>256M</initialMemorySize>
+                                        <maxMemorySize>2048M</maxMemorySize>
+                                        <systemProperties>
+                                            <systemProperty>com.sun.management.jmxremote</systemProperty>
+                                            <systemProperty>com.sun.management.jmxremote.port=8199</systemProperty>
+                                            <systemProperty>com.sun.management.jmxremote.authenticate=false
+                                            </systemProperty>
+                                            <systemProperty>com.sun.management.jmxremote.ssl=false</systemProperty>
+                                            <systemProperty>com.sun.management.jmxremote.local.only=false
+                                            </systemProperty>
+                                        </systemProperties>
+                                        <extraArguments>
+                                            <extraArgument>-Xdebug</extraArgument>
+                                            <extraArgument>
+                                                -Xrunjdwp:transport=dt_socket,address=8000,server=y,suspend=n
+                                            </extraArgument>
+                                            <extraArgument>-server</extraArgument>
+                                            <!--<extraArgument>-XX:+UnlockCommercialFeatures</extraArgument>-->
+                                            <!--<extraArgument>-XX:+FlightRecorder</extraArgument>-->
+                                            <extraArgument>-XX:+HeapDumpOnOutOfMemoryError</extraArgument>
+                                        </extraArguments>
+                                    </jvmSettings>
+                                </daemon>
+                            </daemons>
+                        </configuration>
+                    </execution>
+                </executions>
+                <configuration>
+
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <!-- Packaging -->
+                <artifactId>maven-assembly-plugin</artifactId>
+                <configuration>
+                    <descriptors>
+                        <descriptor>src/main/assembly/descriptor.xml</descriptor>
+                    </descriptors>
+                    <appendAssemblyId>false</appendAssemblyId>
+
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

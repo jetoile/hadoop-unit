@@ -60,6 +60,7 @@
         <module>hadoop-unit-maven-plugin</module>
         <module>hadoop-unit-cassandra</module>
         <module>hadoop-unit-mongodb</module>
+        <module>hadoop-unit-elasticsearch</module>
     </modules>
 
     <repositories>
@@ -109,6 +110,8 @@
         <jetty-util.version>9.2.14.v20151106</jetty-util.version>
         <javax.servlet-api.version>3.1.0</javax.servlet-api.version>
 
+        <elasticsearch.version>5.0.0-alpha2</elasticsearch.version>
+        <metrics.version>3.1.2</metrics.version>
     </properties>
 
 
@@ -225,6 +228,24 @@
                 <groupId>fr.jetoile.hadoop</groupId>
                 <artifactId>hadoop-unit-mongodb</artifactId>
                 <version>${hadoop-unit.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>fr.jetoile.hadoop</groupId>
+                <artifactId>hadoop-unit-standalone-common</artifactId>
+                <version>${hadoop-unit.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>fr.jetoile.hadoop</groupId>
+                <artifactId>hadoop-unit-elasticsearch</artifactId>
+                <version>${hadoop-unit.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.elasticsearch</groupId>
+                <artifactId>elasticsearch</artifactId>
+                <version>${elasticsearch.version}</version>
             </dependency>
 
             <dependency>
@@ -382,7 +403,43 @@
                         <artifactId>servlet-api</artifactId>
                         <groupId>javax.servlet</groupId>
                     </exclusion>
+                    <exclusion>
+                        <artifactId>metrics-core</artifactId>
+                        <groupId>com.codahale.metrics</groupId>
+                    </exclusion>
+                    <exclusion>
+                        <artifactId>metrics-json</artifactId>
+                        <groupId>com.codahale.metrics</groupId>
+                    </exclusion>
+                    <exclusion>
+                        <artifactId>metrics-jvm</artifactId>
+                        <groupId>com.codahale.metrics</groupId>
+                    </exclusion>
                 </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>io.dropwizard.metrics</groupId>
+                <artifactId>metrics-core</artifactId>
+                <version>${metrics.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.dropwizard.metrics</groupId>
+                <artifactId>metrics-jvm</artifactId>
+                <version>${metrics.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.dropwizard.metrics</groupId>
+                <artifactId>metrics-json</artifactId>
+                <version>${metrics.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.dropwizard.metrics</groupId>
+                <artifactId>metrics-graphite</artifactId>
+                <version>${metrics.version}</version>
             </dependency>
 
             <dependency>

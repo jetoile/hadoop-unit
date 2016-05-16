@@ -293,6 +293,7 @@ Values can be:
 * HBASE
 * MONGODB
 * CASSANDRA
+* ELASTICSEARCH
 
 Here is a sample integration test:
 ```java
@@ -432,6 +433,7 @@ Values can be:
 * HBASE
 * MONGODB
 * CASSANDRA
+* ELASTICSEARCH
 
 hadoopUnitPath is not mandatory but system enviroment variable HADOOP_UNIT_HOME must be defined. 
 
@@ -498,6 +500,7 @@ public class HdfsBootstrapIntegrationTest {
 * HBase
 * MongoDB
 * Cassandra 3.4
+* ElasticSearch 5.0-alpha2
 
 Built on:
 
