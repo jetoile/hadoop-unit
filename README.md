@@ -11,6 +11,15 @@ Moreover, it provide a standalone component which can be run locally and which s
 
 </p>
 
+#Build
+
+For windows users, you need to download a hadoop distribution, to unzip it and to define the system environment variable `HADOOP_HOME`. You can also define the path into files `default.properties` (warning: there are a lot...).
+
+To build, launch the command:
+```bash
+mvn package
+```
+
 #Usage
 
 When Hadoop Unit is started, it should display stuff like that:
@@ -30,6 +39,22 @@ When Hadoop Unit is started, it should display stuff like that:
  - SOLRCLOUD [zh:127.0.0.1:22010, port:8983, collection:collection1]
 
 ```
+
+The available components are:
+* HDFS
+* ZOOKEEPER
+* HIVEMETA
+* HIVESERVER2
+* SOLR
+* SOLRCLOUD
+* OOZIE
+* KAFKA
+* HBASE
+* MONGODB
+* CASSANDRA
+* ELASTICSEARCH
+
+However, for compatibility reason, SolR/SolRCloud and Elasticsearch can not be run into the same JVM. For this purpose, there are 2 standalone packages which are generated (one which is compliant with solr and one which is compliant with elasticsearch).
 
 ##Integration testing (will start each component present into classpath)
 With maven, add dependencies of components which are needed
@@ -90,23 +115,29 @@ public static void tearDown() throws NotFoundServiceException {
 ```
 
 ##Standalone mode
-Unzip `hadoop-unit-standalone-<version>.tar.gz`
+As said above, SolR/SolRCloud and Elasticsearch are not compatible.
+
+For this purpose, two packages are availables:
+* hadoop-unit-standalone-solr
+* hadoop-unit-standalone-elasticsearch
+
+Unzip `hadoop-unit-standalone-<type>-<version>.tar.gz`
 Change `conf/default.properties`
 Change `conf/hadoop.properties`
 
 Start in fg with:
 ```bash
-./bin/hadoop-unit-standalone console
+./bin/hadoop-unit-standalone-<type> console
 ```
 
 Start in bg with:
 ```bash
-./bin/hadoop-unit-standalone start
+./bin/hadoop-unit-standalone-<type> start
 ```
 
 Stop with:
 ```bash
-./bin/hadoop-unit-standalone stop
+./bin/hadoop-unit-standalone-<type> stop
 ```
 
 ##Shell Usage
