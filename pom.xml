@@ -88,7 +88,7 @@
         <commons-configuration.version>1.10</commons-configuration.version>
         <commons-collections.version>3.2.1</commons-collections.version>
 
-        <hive.version>1.2.1</hive.version>
+        <hive.version>1.2.1000.2.4.0.0-169</hive.version>
         <solr.version>5.4.1</solr.version>
         <hadoop-mini-clusters.version>0.1.6</hadoop-mini-clusters.version>
         <oozie.version>4.2.0.2.4.0.0-169</oozie.version>
@@ -414,6 +414,10 @@
                     <exclusion>
                         <artifactId>metrics-jvm</artifactId>
                         <groupId>com.codahale.metrics</groupId>
+                    </exclusion>
+                    <exclusion>
+                        <artifactId>hive-jdbc</artifactId>
+                        <groupId>org.apache.hive</groupId>
                     </exclusion>
                 </exclusions>
             </dependency>

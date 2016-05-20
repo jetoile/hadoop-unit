@@ -11,13 +11,6 @@
     <artifactId>hadoop-unit-client-hive</artifactId>
     <name>hadoop-unit-client-hive</name>
 
-    <properties>
-
-        <hive.version>1.2.1</hive.version>
-
-    </properties>
-
-
     <dependencies>
 
         <dependency>
@@ -76,7 +69,6 @@
         <dependency>
             <groupId>org.apache.hive</groupId>
             <artifactId>hive-jdbc</artifactId>
-            <version>${hive.version}</version>
         </dependency>
 
     </dependencies>
