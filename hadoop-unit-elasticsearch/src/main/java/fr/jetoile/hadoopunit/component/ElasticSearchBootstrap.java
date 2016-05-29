@@ -15,13 +15,12 @@
 package fr.jetoile.hadoopunit.component;
 
 import fr.jetoile.hadoopunit.Component;
-import fr.jetoile.hadoopunit.Config;
+import fr.jetoile.hadoopunit.HadoopUnitConfig;
 import fr.jetoile.hadoopunit.exception.BootstrapException;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.io.FileUtils;
-import org.elasticsearch.action.admin.cluster.health.ClusterHealthResponse;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.node.Node;
@@ -76,17 +75,17 @@ public class ElasticSearchBootstrap implements Bootstrap {
 
     private void loadConfig() throws BootstrapException {
         try {
-            configuration = new PropertiesConfiguration(Config.DEFAULT_PROPS_FILE);
+            configuration = new PropertiesConfiguration(HadoopUnitConfig.DEFAULT_PROPS_FILE);
         } catch (ConfigurationException e) {
             throw new BootstrapException("bad config", e);
         }
 
-        httpPort = configuration.getInt(Config.ELASTICSEARCH_HTTP_PORT_KEY);
-        tcpPort = configuration.getInt(Config.ELASTICSEARCH_TCP_PORT_KEY);
-        ip = configuration.getString(Config.ELASTICSEARCH_IP_KEY);
-        tmpDir = configuration.getString(Config.ELASTICSEARCH_TEMP_DIR_KEY);
-        indexName = configuration.getString(Config.ELASTICSEARCH_INDEX_NAME);
-        clusterName = configuration.getString(Config.ELASTICSEARCH_CLUSTER_NAME);
+        httpPort = configuration.getInt(HadoopUnitConfig.ELASTICSEARCH_HTTP_PORT_KEY);
+        tcpPort = configuration.getInt(HadoopUnitConfig.ELASTICSEARCH_TCP_PORT_KEY);
+        ip = configuration.getString(HadoopUnitConfig.ELASTICSEARCH_IP_KEY);
+        tmpDir = configuration.getString(HadoopUnitConfig.ELASTICSEARCH_TEMP_DIR_KEY);
+        indexName = configuration.getString(HadoopUnitConfig.ELASTICSEARCH_INDEX_NAME);
+        clusterName = configuration.getString(HadoopUnitConfig.ELASTICSEARCH_CLUSTER_NAME);
     }
 
     private void build() {

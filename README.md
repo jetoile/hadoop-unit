@@ -349,19 +349,19 @@ public class HdfsBootstrapIntegrationTest {
         FileSystem hdfsFsHandle = HdfsUtils.INSTANCE.getFileSystem();
 
 
-        FSDataOutputStream writer = hdfsFsHandle.create(new Path(configuration.getString(Config.HDFS_TEST_FILE_KEY)));
-        writer.writeUTF(configuration.getString(Config.HDFS_TEST_STRING_KEY));
+        FSDataOutputStream writer = hdfsFsHandle.create(new Path(configuration.getString(HadoopUnitConfig.HDFS_TEST_FILE_KEY)));
+        writer.writeUTF(configuration.getString(HadoopUnitConfig.HDFS_TEST_STRING_KEY));
         writer.close();
 
         // Read the file and compare to test string
-        FSDataInputStream reader = hdfsFsHandle.open(new Path(configuration.getString(Config.HDFS_TEST_FILE_KEY)));
-        assertEquals(reader.readUTF(), configuration.getString(Config.HDFS_TEST_STRING_KEY));
+        FSDataInputStream reader = hdfsFsHandle.open(new Path(configuration.getString(HadoopUnitConfig.HDFS_TEST_FILE_KEY)));
+        assertEquals(reader.readUTF(), configuration.getString(HadoopUnitConfig.HDFS_TEST_STRING_KEY));
         reader.close();
         hdfsFsHandle.close();
 
         URL url = new URL(
                 String.format( "http://localhost:%s/webhdfs/v1?op=GETHOMEDIRECTORY&user.name=guest",
-                        configuration.getInt( Config.HDFS_NAMENODE_HTTP_PORT_KEY ) ) );
+                        configuration.getInt( HadoopUnitConfig.HDFS_NAMENODE_HTTP_PORT_KEY ) ) );
         URLConnection connection = url.openConnection();
         connection.setRequestProperty( "Accept-Charset", "UTF-8" );
         BufferedReader response = new BufferedReader( new InputStreamReader( connection.getInputStream() ) );
@@ -497,19 +497,19 @@ public class HdfsBootstrapIntegrationTest {
         FileSystem hdfsFsHandle = HdfsUtils.INSTANCE.getFileSystem();
 
 
-        FSDataOutputStream writer = hdfsFsHandle.create(new Path(configuration.getString(Config.HDFS_TEST_FILE_KEY)));
-        writer.writeUTF(configuration.getString(Config.HDFS_TEST_STRING_KEY));
+        FSDataOutputStream writer = hdfsFsHandle.create(new Path(configuration.getString(HadoopUnitConfig.HDFS_TEST_FILE_KEY)));
+        writer.writeUTF(configuration.getString(HadoopUnitConfig.HDFS_TEST_STRING_KEY));
         writer.close();
 
         // Read the file and compare to test string
-        FSDataInputStream reader = hdfsFsHandle.open(new Path(configuration.getString(Config.HDFS_TEST_FILE_KEY)));
-        assertEquals(reader.readUTF(), configuration.getString(Config.HDFS_TEST_STRING_KEY));
+        FSDataInputStream reader = hdfsFsHandle.open(new Path(configuration.getString(HadoopUnitConfig.HDFS_TEST_FILE_KEY)));
+        assertEquals(reader.readUTF(), configuration.getString(HadoopUnitConfig.HDFS_TEST_STRING_KEY));
         reader.close();
         hdfsFsHandle.close();
 
         URL url = new URL(
                 String.format( "http://localhost:%s/webhdfs/v1?op=GETHOMEDIRECTORY&user.name=guest",
-                        configuration.getInt( Config.HDFS_NAMENODE_HTTP_PORT_KEY ) ) );
+                        configuration.getInt( HadoopUnitConfig.HDFS_NAMENODE_HTTP_PORT_KEY ) ) );
         URLConnection connection = url.openConnection();
         connection.setRequestProperty( "Accept-Charset", "UTF-8" );
         BufferedReader response = new BufferedReader( new InputStreamReader( connection.getInputStream() ) );

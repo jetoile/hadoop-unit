@@ -17,7 +17,7 @@ import com.github.sakserv.minicluster.impl.MRLocalCluster;
 import com.github.sakserv.minicluster.impl.OozieLocalServer;
 import com.github.sakserv.minicluster.util.FileUtils;
 import fr.jetoile.hadoopunit.Component;
-import fr.jetoile.hadoopunit.Config;
+import fr.jetoile.hadoopunit.HadoopUnitConfig;
 import fr.jetoile.hadoopunit.HadoopBootstrap;
 import fr.jetoile.hadoopunit.HadoopUtils;
 import fr.jetoile.hadoopunit.exception.BootstrapException;
@@ -149,30 +149,30 @@ public class OozieBootstrap implements Bootstrap {
         HadoopUtils.setHadoopHome();
 
         try {
-            configuration = new PropertiesConfiguration(Config.DEFAULT_PROPS_FILE);
+            configuration = new PropertiesConfiguration(HadoopUnitConfig.DEFAULT_PROPS_FILE);
         } catch (ConfigurationException e) {
             throw new BootstrapException("bad config", e);
         }
 
-        oozieTestDir = configuration.getString(Config.OOZIE_TEST_DIR_KEY);
-        oozieHomeDir = configuration.getString(Config.OOZIE_HOME_DIR_KEY);
+        oozieTestDir = configuration.getString(HadoopUnitConfig.OOZIE_TEST_DIR_KEY);
+        oozieHomeDir = configuration.getString(HadoopUnitConfig.OOZIE_HOME_DIR_KEY);
         oozieUsername = System.getProperty("user.name");
-        oozieGroupname = configuration.getString(Config.OOZIE_GROUPNAME_KEY);
-        oozieYarnResourceManagerAddress = configuration.getString(Config.YARN_RESOURCE_MANAGER_ADDRESS_KEY);
+        oozieGroupname = configuration.getString(HadoopUnitConfig.OOZIE_GROUPNAME_KEY);
+        oozieYarnResourceManagerAddress = configuration.getString(HadoopUnitConfig.YARN_RESOURCE_MANAGER_ADDRESS_KEY);
 
-        oozieHdfsShareLibDir = configuration.getString(Config.OOZIE_HDFS_SHARE_LIB_DIR_KEY);
-        oozieShareLibCreate = configuration.getBoolean(Config.OOZIE_SHARE_LIB_CREATE_KEY);
-        oozieLocalShareLibCacheDir = configuration.getString(Config.OOZIE_LOCAL_SHARE_LIB_CACHE_DIR_KEY);
-        ooziePurgeLocalShareLibCache = configuration.getBoolean(Config.OOZIE_PURGE_LOCAL_SHARE_LIB_CACHE_KEY);
+        oozieHdfsShareLibDir = configuration.getString(HadoopUnitConfig.OOZIE_HDFS_SHARE_LIB_DIR_KEY);
+        oozieShareLibCreate = configuration.getBoolean(HadoopUnitConfig.OOZIE_SHARE_LIB_CREATE_KEY);
+        oozieLocalShareLibCacheDir = configuration.getString(HadoopUnitConfig.OOZIE_LOCAL_SHARE_LIB_CACHE_DIR_KEY);
+        ooziePurgeLocalShareLibCache = configuration.getBoolean(HadoopUnitConfig.OOZIE_PURGE_LOCAL_SHARE_LIB_CACHE_KEY);
 
-        numNodeManagers = Integer.parseInt(configuration.getString(Config.YARN_NUM_NODE_MANAGERS_KEY));
-        jobHistoryAddress = configuration.getString(Config.MR_JOB_HISTORY_ADDRESS_KEY);
-        resourceManagerAddress = configuration.getString(Config.YARN_RESOURCE_MANAGER_ADDRESS_KEY);
-        resourceManagerHostname = configuration.getString(Config.YARN_RESOURCE_MANAGER_HOSTNAME_KEY);
-        resourceManagerSchedulerAddress = configuration.getString(Config.YARN_RESOURCE_MANAGER_SCHEDULER_ADDRESS_KEY);
-        resourceManagerResourceTrackerAddress = configuration.getString(Config.YARN_RESOURCE_MANAGER_RESOURCE_TRACKER_ADDRESS_KEY);
-        resourceManagerWebappAddress = configuration.getString(Config.YARN_RESOURCE_MANAGER_WEBAPP_ADDRESS_KEY);
-        useInJvmContainerExecutor = configuration.getBoolean(Config.YARN_USE_IN_JVM_CONTAINER_EXECUTOR_KEY);
+        numNodeManagers = Integer.parseInt(configuration.getString(HadoopUnitConfig.YARN_NUM_NODE_MANAGERS_KEY));
+        jobHistoryAddress = configuration.getString(HadoopUnitConfig.MR_JOB_HISTORY_ADDRESS_KEY);
+        resourceManagerAddress = configuration.getString(HadoopUnitConfig.YARN_RESOURCE_MANAGER_ADDRESS_KEY);
+        resourceManagerHostname = configuration.getString(HadoopUnitConfig.YARN_RESOURCE_MANAGER_HOSTNAME_KEY);
+        resourceManagerSchedulerAddress = configuration.getString(HadoopUnitConfig.YARN_RESOURCE_MANAGER_SCHEDULER_ADDRESS_KEY);
+        resourceManagerResourceTrackerAddress = configuration.getString(HadoopUnitConfig.YARN_RESOURCE_MANAGER_RESOURCE_TRACKER_ADDRESS_KEY);
+        resourceManagerWebappAddress = configuration.getString(HadoopUnitConfig.YARN_RESOURCE_MANAGER_WEBAPP_ADDRESS_KEY);
+        useInJvmContainerExecutor = configuration.getBoolean(HadoopUnitConfig.YARN_USE_IN_JVM_CONTAINER_EXECUTOR_KEY);
 
         ooziePort = configuration.getInt(OOZIE_PORT);
         oozieHost = configuration.getString(OOZIE_HOST);

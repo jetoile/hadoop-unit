@@ -15,7 +15,7 @@
 package fr.jetoile.hadoopunit.component;
 
 import com.mongodb.*;
-import fr.jetoile.hadoopunit.Config;
+import fr.jetoile.hadoopunit.HadoopUnitConfig;
 import fr.jetoile.hadoopunit.HadoopBootstrap;
 import fr.jetoile.hadoopunit.exception.BootstrapException;
 import org.apache.commons.configuration.Configuration;
@@ -44,7 +44,7 @@ public class MongoDbBootstrapTest {
         HadoopBootstrap.INSTANCE.startAll();
 
         try {
-            configuration = new PropertiesConfiguration(Config.DEFAULT_PROPS_FILE);
+            configuration = new PropertiesConfiguration(HadoopUnitConfig.DEFAULT_PROPS_FILE);
         } catch (ConfigurationException e) {
             throw new BootstrapException("bad config", e);
         }
@@ -57,10 +57,10 @@ public class MongoDbBootstrapTest {
 
     @Test
     public void mongodbShouldStart() throws UnknownHostException {
-        MongoClient mongo = new MongoClient(configuration.getString(Config.MONGO_IP_KEY), configuration.getInt(Config.MONGO_PORT_KEY));
+        MongoClient mongo = new MongoClient(configuration.getString(HadoopUnitConfig.MONGO_IP_KEY), configuration.getInt(HadoopUnitConfig.MONGO_PORT_KEY));
 
-        DB db = mongo.getDB(configuration.getString(Config.MONGO_DATABASE_NAME_KEY));
-        DBCollection col = db.createCollection(configuration.getString(Config.MONGO_COLLECTION_NAME_KEY),
+        DB db = mongo.getDB(configuration.getString(HadoopUnitConfig.MONGO_DATABASE_NAME_KEY));
+        DBCollection col = db.createCollection(configuration.getString(HadoopUnitConfig.MONGO_COLLECTION_NAME_KEY),
                 new BasicDBObject());
 
         col.save(new BasicDBObject("testDoc", new Date()));

@@ -17,7 +17,7 @@ import com.github.sakserv.minicluster.impl.HiveLocalServer2;
 import com.github.sakserv.minicluster.util.FileUtils;
 import com.github.sakserv.minicluster.util.WindowsLibsUtils;
 import fr.jetoile.hadoopunit.Component;
-import fr.jetoile.hadoopunit.Config;
+import fr.jetoile.hadoopunit.HadoopUnitConfig;
 import fr.jetoile.hadoopunit.HadoopUtils;
 import fr.jetoile.hadoopunit.exception.BootstrapException;
 import org.apache.commons.configuration.Configuration;
@@ -72,18 +72,18 @@ public class HiveServer2Bootstrap implements Bootstrap {
     private void loadConfig() throws BootstrapException {
         HadoopUtils.setHadoopHome();
         try {
-            configuration = new PropertiesConfiguration(Config.DEFAULT_PROPS_FILE);
+            configuration = new PropertiesConfiguration(HadoopUnitConfig.DEFAULT_PROPS_FILE);
         } catch (ConfigurationException e) {
             throw new BootstrapException("bad config", e);
         }
-        host = configuration.getString(Config.HIVE_SERVER2_HOSTNAME_KEY);
-        port = configuration.getInt(Config.HIVE_SERVER2_PORT_KEY);
-        hostMetastore = configuration.getString(Config.HIVE_METASTORE_HOSTNAME_KEY);
-        portMetastore = configuration.getInt(Config.HIVE_METASTORE_PORT_KEY);
-        derbyDirectory = configuration.getString(Config.HIVE_METASTORE_DERBY_DB_DIR_KEY);
-        scratchDirectory = configuration.getString(Config.HIVE_SCRATCH_DIR_KEY);
-        warehouseDirectory = configuration.getString(Config.HIVE_WAREHOUSE_DIR_KEY);
-        zookeeperConnectionString = configuration.getString(Config.ZOOKEEPER_HOST_KEY) + ":" + configuration.getInt(Config.ZOOKEEPER_PORT_KEY);
+        host = configuration.getString(HadoopUnitConfig.HIVE_SERVER2_HOSTNAME_KEY);
+        port = configuration.getInt(HadoopUnitConfig.HIVE_SERVER2_PORT_KEY);
+        hostMetastore = configuration.getString(HadoopUnitConfig.HIVE_METASTORE_HOSTNAME_KEY);
+        portMetastore = configuration.getInt(HadoopUnitConfig.HIVE_METASTORE_PORT_KEY);
+        derbyDirectory = configuration.getString(HadoopUnitConfig.HIVE_METASTORE_DERBY_DB_DIR_KEY);
+        scratchDirectory = configuration.getString(HadoopUnitConfig.HIVE_SCRATCH_DIR_KEY);
+        warehouseDirectory = configuration.getString(HadoopUnitConfig.HIVE_WAREHOUSE_DIR_KEY);
+        zookeeperConnectionString = configuration.getString(HadoopUnitConfig.ZOOKEEPER_HOST_KEY) + ":" + configuration.getInt(HadoopUnitConfig.ZOOKEEPER_PORT_KEY);
 
     }
 

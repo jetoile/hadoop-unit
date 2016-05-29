@@ -15,7 +15,7 @@
 package fr.jetoile.hadoopunit.component;
 
 import fr.jetoile.hadoopunit.Component;
-import fr.jetoile.hadoopunit.Config;
+import fr.jetoile.hadoopunit.HadoopUnitConfig;
 import fr.jetoile.hadoopunit.HadoopBootstrap;
 import fr.jetoile.hadoopunit.exception.BootstrapException;
 import fr.jetoile.hadoopunit.exception.NotFoundServiceException;
@@ -31,7 +31,6 @@ import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.transport.InetSocketTransportAddress;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,7 +54,7 @@ public class ElasticSearchBootstrapTest {
         HadoopBootstrap.INSTANCE.startAll();
 
         try {
-            configuration = new PropertiesConfiguration(Config.DEFAULT_PROPS_FILE);
+            configuration = new PropertiesConfiguration(HadoopUnitConfig.DEFAULT_PROPS_FILE);
         } catch (ConfigurationException e) {
             throw new BootstrapException("bad config", e);
         }
@@ -96,10 +95,10 @@ public class ElasticSearchBootstrapTest {
     public void elasticSearchShouldStartWithRealDriver() throws NotFoundServiceException, IOException {
 
         Settings settings = Settings.builder()
-                .put("cluster.name", configuration.getString(Config.ELASTICSEARCH_CLUSTER_NAME))
+                .put("cluster.name", configuration.getString(HadoopUnitConfig.ELASTICSEARCH_CLUSTER_NAME))
                 .build();
         Client client = TransportClient.builder().settings(settings).build()
-                .addTransportAddress(new InetSocketTransportAddress(InetAddress.getByName(configuration.getString(Config.ELASTICSEARCH_IP_KEY)), configuration.getInt(Config.ELASTICSEARCH_TCP_PORT_KEY)));
+                .addTransportAddress(new InetSocketTransportAddress(InetAddress.getByName(configuration.getString(HadoopUnitConfig.ELASTICSEARCH_IP_KEY)), configuration.getInt(HadoopUnitConfig.ELASTICSEARCH_TCP_PORT_KEY)));
 
         ObjectMapper mapper = new ObjectMapper();
 

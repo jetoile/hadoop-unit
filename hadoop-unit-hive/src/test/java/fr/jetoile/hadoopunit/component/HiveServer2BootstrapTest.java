@@ -15,7 +15,7 @@
 package fr.jetoile.hadoopunit.component;
 
 
-import fr.jetoile.hadoopunit.Config;
+import fr.jetoile.hadoopunit.HadoopUnitConfig;
 import fr.jetoile.hadoopunit.HadoopBootstrap;
 import fr.jetoile.hadoopunit.exception.BootstrapException;
 import org.apache.commons.configuration.Configuration;
@@ -43,7 +43,7 @@ public class HiveServer2BootstrapTest {
     @BeforeClass
     public static void setup() throws Exception {
         try {
-            configuration = new PropertiesConfiguration(Config.DEFAULT_PROPS_FILE);
+            configuration = new PropertiesConfiguration(HadoopUnitConfig.DEFAULT_PROPS_FILE);
         } catch (ConfigurationException e) {
             throw new BootstrapException("bad config", e);
         }
@@ -71,9 +71,9 @@ public class HiveServer2BootstrapTest {
         //
         // Get the connection
         Connection con = DriverManager.getConnection("jdbc:hive2://" +
-                        configuration.getString(Config.HIVE_SERVER2_HOSTNAME_KEY) + ":" +
-                        configuration.getInt(Config.HIVE_SERVER2_PORT_KEY) + "/" +
-                        configuration.getString(Config.HIVE_TEST_DATABASE_NAME_KEY),
+                        configuration.getString(HadoopUnitConfig.HIVE_SERVER2_HOSTNAME_KEY) + ":" +
+                        configuration.getInt(HadoopUnitConfig.HIVE_SERVER2_PORT_KEY) + "/" +
+                        configuration.getString(HadoopUnitConfig.HIVE_TEST_DATABASE_NAME_KEY),
                 "user",
                 "pass");
 
@@ -81,7 +81,7 @@ public class HiveServer2BootstrapTest {
         Statement stmt;
         try {
             String createDbDdl = "CREATE DATABASE IF NOT EXISTS " +
-                    configuration.getString(Config.HIVE_TEST_DATABASE_NAME_KEY);
+                    configuration.getString(HadoopUnitConfig.HIVE_TEST_DATABASE_NAME_KEY);
             stmt = con.createStatement();
             LOGGER.info("HIVE: Running Create Database Statement: {}", createDbDdl);
             stmt.execute(createDbDdl);
@@ -90,16 +90,16 @@ public class HiveServer2BootstrapTest {
         }
 
         // Drop the table incase it still exists
-        String dropDdl = "DROP TABLE " + configuration.getString(Config.HIVE_TEST_DATABASE_NAME_KEY) + "." +
-                configuration.getString(Config.HIVE_TEST_TABLE_NAME_KEY);
+        String dropDdl = "DROP TABLE " + configuration.getString(HadoopUnitConfig.HIVE_TEST_DATABASE_NAME_KEY) + "." +
+                configuration.getString(HadoopUnitConfig.HIVE_TEST_TABLE_NAME_KEY);
         stmt = con.createStatement();
         LOGGER.info("HIVE: Running Drop Table Statement: {}", dropDdl);
         stmt.execute(dropDdl);
 
         // Create the ORC table
         String createDdl = "CREATE TABLE IF NOT EXISTS " +
-                configuration.getString(Config.HIVE_TEST_DATABASE_NAME_KEY) + "." +
-                configuration.getString(Config.HIVE_TEST_TABLE_NAME_KEY) + " (id INT, msg STRING) " +
+                configuration.getString(HadoopUnitConfig.HIVE_TEST_DATABASE_NAME_KEY) + "." +
+                configuration.getString(HadoopUnitConfig.HIVE_TEST_TABLE_NAME_KEY) + " (id INT, msg STRING) " +
                 "PARTITIONED BY (dt STRING) " +
                 "CLUSTERED BY (id) INTO 16 BUCKETS " +
                 "STORED AS ORC tblproperties(\"orc.compress\"=\"NONE\")";
@@ -110,7 +110,7 @@ public class HiveServer2BootstrapTest {
         // Issue a describe on the new table and display the output
         LOGGER.info("HIVE: Validating Table was Created: ");
         ResultSet resultSet = stmt.executeQuery("DESCRIBE FORMATTED " +
-                configuration.getString(Config.HIVE_TEST_TABLE_NAME_KEY));
+                configuration.getString(HadoopUnitConfig.HIVE_TEST_TABLE_NAME_KEY));
         int count = 0;
         while (resultSet.next()) {
             ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
@@ -123,8 +123,8 @@ public class HiveServer2BootstrapTest {
         assertEquals(33, count);
 
         // Drop the table
-        dropDdl = "DROP TABLE " + configuration.getString(Config.HIVE_TEST_DATABASE_NAME_KEY) + "." +
-                configuration.getString(Config.HIVE_TEST_TABLE_NAME_KEY);
+        dropDdl = "DROP TABLE " + configuration.getString(HadoopUnitConfig.HIVE_TEST_DATABASE_NAME_KEY) + "." +
+                configuration.getString(HadoopUnitConfig.HIVE_TEST_TABLE_NAME_KEY);
         stmt = con.createStatement();
         LOGGER.info("HIVE: Running Drop Table Statement: {}", dropDdl);
         stmt.execute(dropDdl);

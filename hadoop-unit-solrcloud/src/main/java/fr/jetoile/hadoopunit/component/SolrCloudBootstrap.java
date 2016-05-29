@@ -14,7 +14,7 @@
 package fr.jetoile.hadoopunit.component;
 
 import fr.jetoile.hadoopunit.Component;
-import fr.jetoile.hadoopunit.Config;
+import fr.jetoile.hadoopunit.HadoopUnitConfig;
 import fr.jetoile.hadoopunit.HadoopUtils;
 import fr.jetoile.hadoopunit.exception.BootstrapException;
 import org.apache.commons.configuration.Configuration;
@@ -94,14 +94,14 @@ public class SolrCloudBootstrap implements Bootstrap {
     private void loadConfig() throws BootstrapException {
         HadoopUtils.setHadoopHome();
         try {
-            configuration = new PropertiesConfiguration(Config.DEFAULT_PROPS_FILE);
+            configuration = new PropertiesConfiguration(HadoopUnitConfig.DEFAULT_PROPS_FILE);
         } catch (ConfigurationException e) {
             throw new BootstrapException("bad config", e);
         }
         solrDirectory = configuration.getString(SOLR_DIR_KEY);
         solrCollectionName = configuration.getString(SOLR_COLLECTION_NAME);
         solrPort = configuration.getInt(SOLR_PORT);
-        zkHostString = configuration.getString(Config.ZOOKEEPER_HOST_KEY) + ":" + configuration.getInt(Config.ZOOKEEPER_PORT_KEY);
+        zkHostString = configuration.getString(HadoopUnitConfig.ZOOKEEPER_HOST_KEY) + ":" + configuration.getInt(HadoopUnitConfig.ZOOKEEPER_PORT_KEY);
 
     }
 
