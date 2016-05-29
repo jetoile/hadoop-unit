@@ -16,7 +16,7 @@ package fr.jetoile.hadoopunit;
 
 public class Config {
     // Props file
-    public static final String DEFAULT_PROPS_FILE = "default.properties";
+    public static final String DEFAULT_PROPS_FILE = "hadoop-unit-default.properties";
 
     // Zookeeper
     public static final String ZOOKEEPER_PORT_KEY = "zookeeper.port";
