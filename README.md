@@ -20,6 +20,14 @@ To build, launch the command:
 mvn package
 ```
 
+#Compatibility matrix
+
+Hadoop Unit version|Hadoop mini cluster version|HDP version
+- |:-: | -:
+1.4-SNAPSHOT | 0.1.7 | HDP 2.4.2.0
+1.3 | 0.1.6 | HDP 2.4.0.0
+1.2 | 0.1.5 | HDP 2.4.0.0
+
 #Usage
 
 When Hadoop Unit is started, it should display stuff like that:
