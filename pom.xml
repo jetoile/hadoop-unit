@@ -132,11 +132,7 @@
         <spark-solr.version>1.1.2</spark-solr.version>
         <kafka_2.10.version>0.9.0.2.4.2.0-258</kafka_2.10.version>
 
-        <cassandra-unit.version>3.0.0.1</cassandra-unit.version>
-        <cu.cassandra.driver.version>3.0.0</cu.cassandra.driver.version>
-
         <dbSetup.version>1.6.0</dbSetup.version>
-        <snakeyaml.version>1.17</snakeyaml.version>
         <httpclient.version>4.3.1</httpclient.version>
         <guava.version>18.0</guava.version>
         <concurrentlinkedhashmap-lru.version>1.4</concurrentlinkedhashmap-lru.version>
@@ -146,6 +142,7 @@
 
         <elasticsearch.version>5.0.0-alpha3</elasticsearch.version>
         <metrics.version>3.1.2</metrics.version>
+        <achilles.version>4.2.0</achilles.version>
     </properties>
 
 
@@ -283,21 +280,9 @@
             </dependency>
 
             <dependency>
-                <groupId>org.cassandraunit</groupId>
-                <artifactId>cassandra-unit</artifactId>
-                <version>${cassandra-unit.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.datastax.cassandra</groupId>
-                <artifactId>cassandra-driver-core</artifactId>
-                <version>${cu.cassandra.driver.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.yaml</groupId>
-                <artifactId>snakeyaml</artifactId>
-                <version>${snakeyaml.version}</version>
+                <groupId>info.archinnov</groupId>
+                <artifactId>achilles-embedded</artifactId>
+                <version>${achilles.version}</version>
             </dependency>
 
             <dependency>

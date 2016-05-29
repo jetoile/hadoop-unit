@@ -20,13 +20,14 @@ import com.datastax.driver.core.SocketOptions;
 import fr.jetoile.hadoopunit.Component;
 import fr.jetoile.hadoopunit.HadoopUnitConfig;
 import fr.jetoile.hadoopunit.exception.BootstrapException;
+import info.archinnov.achilles.embedded.CassandraEmbeddedServerBuilder;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.io.FileUtils;
 import org.apache.thrift.transport.TTransportException;
-import org.cassandraunit.dataset.CQLDataSet;
-import org.cassandraunit.utils.EmbeddedCassandraServerHelper;
+//import org.cassandraunit.dataset.CQLDataSet;
+//import org.cassandraunit.utils.EmbeddedCassandraServerHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yaml.snakeyaml.Yaml;
@@ -35,6 +36,7 @@ import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
@@ -52,12 +54,7 @@ public class CassandraBootstrap implements Bootstrap {
     private int port;
     private String ip;
 
-    protected int readTimeoutMillis = 12000;
-
-    private CQLDataSet dataSet;
-
     public Session session;
-    public Cluster cluster;
 
     public CassandraBootstrap() {
         try {
@@ -89,20 +86,16 @@ public class CassandraBootstrap implements Bootstrap {
 
         port = configuration.getInt(HadoopUnitConfig.CASSANDRA_PORT_KEY);
         ip = configuration.getString(HadoopUnitConfig.CASSANDRA_IP_KEY);
-        editCassandraConfFile();
     }
 
     private void build() throws InterruptedException, IOException, TTransportException {
-        EmbeddedCassandraServerHelper.startEmbeddedCassandra("cu-cassandra.yaml", configuration.getString(HadoopUnitConfig.CASSANDRA_TEMP_DIR_KEY), EmbeddedCassandraServerHelper.DEFAULT_STARTUP_TIMEOUT);
-        cluster = new Cluster.Builder().addContactPoints(ip).withPort(port).withSocketOptions(getSocketOptions())
-                .build();
-        session = cluster.connect();
-    }
+        Files.createDirectory(Paths.get(configuration.getString(HadoopUnitConfig.CASSANDRA_TEMP_DIR_KEY)));
+        Files.createDirectory(Paths.get(configuration.getString(HadoopUnitConfig.CASSANDRA_TEMP_DIR_KEY) + "/embeddedCassandra"));
 
-    protected SocketOptions getSocketOptions() {
-        SocketOptions socketOptions = new SocketOptions();
-        socketOptions.setReadTimeoutMillis(this.readTimeoutMillis);
-        return socketOptions;
+        session = CassandraEmbeddedServerBuilder.builder()
+                .withCQLPort(port)
+                .withDataFolder(configuration.getString(HadoopUnitConfig.CASSANDRA_TEMP_DIR_KEY) + "/embeddedCassandra")
+                .buildNativeSession();
     }
 
     @Override
@@ -129,7 +122,6 @@ public class CassandraBootstrap implements Bootstrap {
             LOGGER.info("{} is stopping", this.getClass().getName());
             try {
                 session.close();
-                cluster.close();
                 cleanup();
             } catch (Exception e) {
                 LOGGER.error("unable to stop cassandra", e);
@@ -155,34 +147,6 @@ public class CassandraBootstrap implements Bootstrap {
 
     public Session getCassandraSession() {
         return this.session;
-    }
-
-    private void editCassandraConfFile() {
-        try {
-            Path cassandraPropertiesBackupPath = Paths.get(configuration.getString(HadoopUnitConfig.CASSANDRA_TEMP_DIR_KEY) + "/cu-cassandra.yaml.old");
-            Path cassandraPropertiesPath = Paths.get(CassandraBootstrap.class.getClassLoader().getResource("cu-cassandra.yaml").toURI());
-            if (cassandraPropertiesBackupPath.toFile().exists() && cassandraPropertiesBackupPath.toFile().canWrite()) {
-                cassandraPropertiesBackupPath.toFile().delete();
-            }
-
-            Yaml yaml = new Yaml();
-
-            Map<String, Object> params = (Map<String, Object>) yaml.load(new FileInputStream(cassandraPropertiesPath.toString()));
-
-            params.put("hints_directory", configuration.getString(HadoopUnitConfig.CASSANDRA_TEMP_DIR_KEY));
-            params.put("data_file_directories", Arrays.asList(configuration.getString(HadoopUnitConfig.CASSANDRA_TEMP_DIR_KEY) + "/embeddedCassandra/data"));
-            params.put("commitlog_directory", Arrays.asList(configuration.getString(HadoopUnitConfig.CASSANDRA_TEMP_DIR_KEY) + "/embeddedCassandra/commitlog"));
-            params.put("saved_caches_directory", Arrays.asList(configuration.getString(HadoopUnitConfig.CASSANDRA_TEMP_DIR_KEY) + "/embeddedCassandra/saved_caches"));
-            params.put("native_transport_port", configuration.getInt(HadoopUnitConfig.CASSANDRA_PORT_KEY));
-
-            cassandraPropertiesPath.toFile().renameTo(cassandraPropertiesBackupPath.toFile());
-
-            FileWriter writer = new FileWriter(cassandraPropertiesPath.toFile());
-            yaml.dump(params, writer);
-
-        } catch (IOException | URISyntaxException e) {
-            LOGGER.error("unable to find or modifying cu-cassandra.yaml. Check user rights", e);
-        }
     }
 
 }

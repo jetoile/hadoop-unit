@@ -20,19 +20,24 @@
         </dependency>
 
         <dependency>
-            <groupId>org.cassandraunit</groupId>
-            <artifactId>cassandra-unit</artifactId>
+            <groupId>info.archinnov</groupId>
+            <artifactId>achilles-embedded</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>com.datastax.cassandra</groupId>
-            <artifactId>cassandra-driver-core</artifactId>
-        </dependency>
+        <!--<dependency>-->
+        <!--<groupId>org.cassandraunit</groupId>-->
+        <!--<artifactId>cassandra-unit</artifactId>-->
+        <!--</dependency>-->
 
-        <dependency>
-            <groupId>org.yaml</groupId>
-            <artifactId>snakeyaml</artifactId>
-        </dependency>
+        <!--<dependency>-->
+        <!--<groupId>com.datastax.cassandra</groupId>-->
+        <!--<artifactId>cassandra-driver-core</artifactId>-->
+        <!--</dependency>-->
+
+        <!--<dependency>-->
+        <!--<groupId>org.yaml</groupId>-->
+        <!--<artifactId>snakeyaml</artifactId>-->
+        <!--</dependency>-->
     </dependencies>
 
 </project>
