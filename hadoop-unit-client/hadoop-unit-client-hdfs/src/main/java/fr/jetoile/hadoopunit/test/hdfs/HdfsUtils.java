@@ -15,7 +15,7 @@
 package fr.jetoile.hadoopunit.test.hdfs;
 
 
-import fr.jetoile.hadoopunit.Config;
+import fr.jetoile.hadoopunit.HadoopUnitConfig;
 import fr.jetoile.hadoopunit.exception.ConfigException;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
@@ -45,9 +45,9 @@ public enum HdfsUtils {
             System.exit(-1);
         }
         org.apache.hadoop.conf.Configuration conf = new org.apache.hadoop.conf.Configuration();
-        conf.set("fs.default.name", "hdfs://127.0.0.1:" + configuration.getInt(Config.HDFS_NAMENODE_PORT_KEY));
+        conf.set("fs.default.name", "hdfs://127.0.0.1:" + configuration.getInt(HadoopUnitConfig.HDFS_NAMENODE_PORT_KEY));
 
-        URI uri = URI.create("hdfs://127.0.0.1:" + configuration.getInt(Config.HDFS_NAMENODE_PORT_KEY));
+        URI uri = URI.create("hdfs://127.0.0.1:" + configuration.getInt(HadoopUnitConfig.HDFS_NAMENODE_PORT_KEY));
 
         try {
             fileSystem = FileSystem.get(uri, conf);
@@ -58,13 +58,13 @@ public enum HdfsUtils {
 
     private void loadConfig() throws ConfigException {
         try {
-            configuration = new PropertiesConfiguration(Config.DEFAULT_PROPS_FILE);
+            configuration = new PropertiesConfiguration(HadoopUnitConfig.DEFAULT_PROPS_FILE);
         } catch (ConfigurationException e) {
             throw new ConfigException("bad config", e);
         }
 
-        port = configuration.getInt(Config.HDFS_NAMENODE_PORT_KEY);
-        httpPort = configuration.getInt(Config.HDFS_NAMENODE_HTTP_PORT_KEY);
+        port = configuration.getInt(HadoopUnitConfig.HDFS_NAMENODE_PORT_KEY);
+        httpPort = configuration.getInt(HadoopUnitConfig.HDFS_NAMENODE_HTTP_PORT_KEY);
     }
 
 

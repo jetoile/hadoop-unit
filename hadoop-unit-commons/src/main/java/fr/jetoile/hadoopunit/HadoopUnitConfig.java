@@ -14,7 +14,7 @@
 
 package fr.jetoile.hadoopunit;
 
-public class Config {
+public class HadoopUnitConfig {
     // Props file
     public static final String DEFAULT_PROPS_FILE = "hadoop-unit-default.properties";
 

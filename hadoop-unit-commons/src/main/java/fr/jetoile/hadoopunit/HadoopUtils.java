@@ -37,9 +37,9 @@ public class HadoopUtils {
             if (StringUtils.isEmpty(System.getenv("HADOOP_HOME"))) {
 
                 try {
-                    configuration = new PropertiesConfiguration(Config.DEFAULT_PROPS_FILE);
+                    configuration = new PropertiesConfiguration(HadoopUnitConfig.DEFAULT_PROPS_FILE);
                 } catch (ConfigurationException e) {
-                    LOG.error("unable to load {}", Config.DEFAULT_PROPS_FILE, e);
+                    LOG.error("unable to load {}", HadoopUnitConfig.DEFAULT_PROPS_FILE, e);
                 }
 
                 String hadoop_home = configuration.getString("HADOOP_HOME");

@@ -16,7 +16,7 @@ package fr.jetoile.hadoopunit.component;
 
 import com.github.sakserv.minicluster.impl.MongodbLocalServer;
 import fr.jetoile.hadoopunit.Component;
-import fr.jetoile.hadoopunit.Config;
+import fr.jetoile.hadoopunit.HadoopUnitConfig;
 import fr.jetoile.hadoopunit.exception.BootstrapException;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
@@ -64,13 +64,13 @@ public class MongoDbBootstrap implements Bootstrap {
 
     private void loadConfig() throws BootstrapException {
         try {
-            configuration = new PropertiesConfiguration(Config.DEFAULT_PROPS_FILE);
+            configuration = new PropertiesConfiguration(HadoopUnitConfig.DEFAULT_PROPS_FILE);
         } catch (ConfigurationException e) {
             throw new BootstrapException("bad config", e);
         }
 
-        port = configuration.getInt(Config.MONGO_PORT_KEY);
-        ip = configuration.getString(Config.MONGO_IP_KEY);
+        port = configuration.getInt(HadoopUnitConfig.MONGO_PORT_KEY);
+        ip = configuration.getString(HadoopUnitConfig.MONGO_IP_KEY);
     }
 
     private void build() {

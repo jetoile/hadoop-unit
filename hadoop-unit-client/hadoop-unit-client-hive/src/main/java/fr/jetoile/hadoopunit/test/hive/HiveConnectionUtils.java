@@ -16,7 +16,7 @@ package fr.jetoile.hadoopunit.test.hive;
 
 import com.ninja_squad.dbsetup.destination.Destination;
 import com.ninja_squad.dbsetup.destination.DriverManagerDestination;
-import fr.jetoile.hadoopunit.Config;
+import fr.jetoile.hadoopunit.HadoopUnitConfig;
 import fr.jetoile.hadoopunit.exception.ConfigException;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
@@ -55,14 +55,14 @@ public enum HiveConnectionUtils {
 
     private void loadConfig() throws ConfigException {
         try {
-            configuration = new PropertiesConfiguration(Config.DEFAULT_PROPS_FILE);
+            configuration = new PropertiesConfiguration(HadoopUnitConfig.DEFAULT_PROPS_FILE);
         } catch (ConfigurationException e) {
             throw new ConfigException("bad config", e);
         }
 
-        port = configuration.getInt(Config.HIVE_SERVER2_PORT_KEY);
-        host = configuration.getString(Config.HIVE_SERVER2_HOSTNAME_KEY);
-        databaseName = configuration.getString(Config.HIVE_TEST_DATABASE_NAME_KEY);
+        port = configuration.getInt(HadoopUnitConfig.HIVE_SERVER2_PORT_KEY);
+        host = configuration.getString(HadoopUnitConfig.HIVE_SERVER2_HOSTNAME_KEY);
+        databaseName = configuration.getString(HadoopUnitConfig.HIVE_TEST_DATABASE_NAME_KEY);
     }
 
     public Destination getDestination() {

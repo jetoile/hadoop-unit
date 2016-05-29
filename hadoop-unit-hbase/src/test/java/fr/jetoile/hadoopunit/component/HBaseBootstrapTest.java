@@ -16,7 +16,7 @@ package fr.jetoile.hadoopunit.component;
 
 
 import fr.jetoile.hadoopunit.Component;
-import fr.jetoile.hadoopunit.Config;
+import fr.jetoile.hadoopunit.HadoopUnitConfig;
 import fr.jetoile.hadoopunit.HadoopBootstrap;
 import fr.jetoile.hadoopunit.exception.BootstrapException;
 import org.apache.commons.configuration.Configuration;
@@ -44,7 +44,7 @@ public class HBaseBootstrapTest {
     @BeforeClass
     public static void setup() throws Exception {
         try {
-            configuration = new PropertiesConfiguration(Config.DEFAULT_PROPS_FILE);
+            configuration = new PropertiesConfiguration(HadoopUnitConfig.DEFAULT_PROPS_FILE);
         } catch (ConfigurationException e) {
             throw new BootstrapException("bad config", e);
         }
@@ -62,10 +62,10 @@ public class HBaseBootstrapTest {
     @Test
     public void hBaseShouldStart() throws Exception {
 
-        String tableName = configuration.getString(Config.HBASE_TEST_TABLE_NAME_KEY);
-        String colFamName = configuration.getString(Config.HBASE_TEST_COL_FAMILY_NAME_KEY);
-        String colQualiferName = configuration.getString(Config.HBASE_TEST_COL_QUALIFIER_NAME_KEY);
-        Integer numRowsToPut = configuration.getInt(Config.HBASE_TEST_NUM_ROWS_TO_PUT_KEY);
+        String tableName = configuration.getString(HadoopUnitConfig.HBASE_TEST_TABLE_NAME_KEY);
+        String colFamName = configuration.getString(HadoopUnitConfig.HBASE_TEST_COL_FAMILY_NAME_KEY);
+        String colQualiferName = configuration.getString(HadoopUnitConfig.HBASE_TEST_COL_QUALIFIER_NAME_KEY);
+        Integer numRowsToPut = configuration.getInt(HadoopUnitConfig.HBASE_TEST_NUM_ROWS_TO_PUT_KEY);
         org.apache.hadoop.conf.Configuration hbaseConfiguration = HadoopBootstrap.INSTANCE.getService(Component.HBASE).getConfiguration();
 
         LOGGER.info("HBASE: Creating table {} with column family {}", tableName, colFamName);

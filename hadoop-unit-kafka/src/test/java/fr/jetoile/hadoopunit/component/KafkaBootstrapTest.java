@@ -15,7 +15,7 @@
 package fr.jetoile.hadoopunit.component;
 
 
-import fr.jetoile.hadoopunit.Config;
+import fr.jetoile.hadoopunit.HadoopUnitConfig;
 import fr.jetoile.hadoopunit.HadoopBootstrap;
 import fr.jetoile.hadoopunit.exception.BootstrapException;
 import fr.jetoile.hadoopunit.kafka.consumer.KafkaTestConsumer;
@@ -41,7 +41,7 @@ public class KafkaBootstrapTest {
     @BeforeClass
     public static void setup() throws Exception {
         try {
-            configuration = new PropertiesConfiguration(Config.DEFAULT_PROPS_FILE);
+            configuration = new PropertiesConfiguration(HadoopUnitConfig.DEFAULT_PROPS_FILE);
         } catch (ConfigurationException e) {
             throw new BootstrapException("bad config", e);
         }
@@ -62,27 +62,27 @@ public class KafkaBootstrapTest {
 
         // Producer
         KafkaTestProducer kafkaTestProducer = new KafkaTestProducer.Builder()
-                .setKafkaHostname(configuration.getString(Config.KAFKA_HOSTNAME_KEY))
-                .setKafkaPort(configuration.getInt(Config.KAFKA_PORT_KEY))
-                .setTopic(configuration.getString(Config.KAFKA_TEST_TOPIC_KEY))
-                .setMessageCount(configuration.getInt(Config.KAFKA_TEST_MESSAGE_COUNT_KEY))
+                .setKafkaHostname(configuration.getString(HadoopUnitConfig.KAFKA_HOSTNAME_KEY))
+                .setKafkaPort(configuration.getInt(HadoopUnitConfig.KAFKA_PORT_KEY))
+                .setTopic(configuration.getString(HadoopUnitConfig.KAFKA_TEST_TOPIC_KEY))
+                .setMessageCount(configuration.getInt(HadoopUnitConfig.KAFKA_TEST_MESSAGE_COUNT_KEY))
                 .build();
         kafkaTestProducer.produceMessages();
 
 
         // Consumer
         List<String> seeds = new ArrayList<String>();
-        seeds.add(configuration.getString(Config.KAFKA_HOSTNAME_KEY));
+        seeds.add(configuration.getString(HadoopUnitConfig.KAFKA_HOSTNAME_KEY));
         KafkaTestConsumer kafkaTestConsumer = new KafkaTestConsumer();
         kafkaTestConsumer.consumeMessages2(
-                configuration.getInt(Config.KAFKA_TEST_MESSAGE_COUNT_KEY),
-                configuration.getString(Config.KAFKA_TEST_TOPIC_KEY),
+                configuration.getInt(HadoopUnitConfig.KAFKA_TEST_MESSAGE_COUNT_KEY),
+                configuration.getString(HadoopUnitConfig.KAFKA_TEST_TOPIC_KEY),
                 0,
                 seeds,
-                configuration.getInt(Config.KAFKA_PORT_KEY));
+                configuration.getInt(HadoopUnitConfig.KAFKA_PORT_KEY));
 
         // Assert num of messages produced = num of message consumed
-        Assert.assertEquals(configuration.getLong(Config.KAFKA_TEST_MESSAGE_COUNT_KEY),
+        Assert.assertEquals(configuration.getLong(HadoopUnitConfig.KAFKA_TEST_MESSAGE_COUNT_KEY),
                 kafkaTestConsumer.getNumRead());
     }
 }

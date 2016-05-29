@@ -16,7 +16,7 @@ package fr.jetoile.hadoopunit.component;
 
 
 import fr.jetoile.hadoopunit.Component;
-import fr.jetoile.hadoopunit.Config;
+import fr.jetoile.hadoopunit.HadoopUnitConfig;
 import fr.jetoile.hadoopunit.HadoopBootstrap;
 import fr.jetoile.hadoopunit.exception.BootstrapException;
 import fr.jetoile.hadoopunit.Utils;
@@ -48,7 +48,7 @@ public class HdfsBootstrapTest {
         HadoopBootstrap.INSTANCE.startAll();
 
         try {
-            configuration = new PropertiesConfiguration(Config.DEFAULT_PROPS_FILE);
+            configuration = new PropertiesConfiguration(HadoopUnitConfig.DEFAULT_PROPS_FILE);
         } catch (ConfigurationException e) {
             throw new BootstrapException("bad config", e);
         }
@@ -69,20 +69,20 @@ public class HdfsBootstrapTest {
         // Write a file to HDFS containing the test string
         FileSystem hdfsFsHandle = ((HdfsBootstrap)HadoopBootstrap.INSTANCE.getService(Component.HDFS)).getHdfsFileSystemHandle();
         FSDataOutputStream writer = hdfsFsHandle.create(
-                new Path(configuration.getString(Config.HDFS_TEST_FILE_KEY)));
-        writer.writeUTF(configuration.getString(Config.HDFS_TEST_STRING_KEY));
+                new Path(configuration.getString(HadoopUnitConfig.HDFS_TEST_FILE_KEY)));
+        writer.writeUTF(configuration.getString(HadoopUnitConfig.HDFS_TEST_STRING_KEY));
         writer.close();
 
         // Read the file and compare to test string
         FSDataInputStream reader = hdfsFsHandle.open(
-                new Path(configuration.getString(Config.HDFS_TEST_FILE_KEY)));
-        assertEquals(reader.readUTF(), configuration.getString(Config.HDFS_TEST_STRING_KEY));
+                new Path(configuration.getString(HadoopUnitConfig.HDFS_TEST_FILE_KEY)));
+        assertEquals(reader.readUTF(), configuration.getString(HadoopUnitConfig.HDFS_TEST_STRING_KEY));
         reader.close();
         hdfsFsHandle.close();
 
         URL url = new URL(
                 String.format( "http://localhost:%s/webhdfs/v1?op=GETHOMEDIRECTORY&user.name=guest",
-                        configuration.getInt( Config.HDFS_NAMENODE_HTTP_PORT_KEY ) ) );
+                        configuration.getInt( HadoopUnitConfig.HDFS_NAMENODE_HTTP_PORT_KEY ) ) );
         URLConnection connection = url.openConnection();
         connection.setRequestProperty( "Accept-Charset", "UTF-8" );
         BufferedReader response = new BufferedReader( new InputStreamReader( connection.getInputStream() ) );

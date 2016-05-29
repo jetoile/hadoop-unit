@@ -17,7 +17,7 @@ import com.lucidworks.spark.SolrSupport;
 import com.ninja_squad.dbsetup.Operations;
 import com.ninja_squad.dbsetup.operation.Operation;
 import fr.jetoile.hadoopunit.Component;
-import fr.jetoile.hadoopunit.Config;
+import fr.jetoile.hadoopunit.HadoopUnitConfig;
 import fr.jetoile.hadoopunit.HadoopBootstrap;
 import fr.jetoile.hadoopunit.component.SolrCloudBootstrap;
 import fr.jetoile.hadoopunit.exception.BootstrapException;
@@ -68,7 +68,7 @@ public class SparkSolrIntegrationTest {
     @BeforeClass
     public static void setUp() throws BootstrapException, SQLException, ClassNotFoundException, NotFoundServiceException {
         try {
-            configuration = new PropertiesConfiguration(Config.DEFAULT_PROPS_FILE);
+            configuration = new PropertiesConfiguration(HadoopUnitConfig.DEFAULT_PROPS_FILE);
         } catch (ConfigurationException e) {
             throw new BootstrapException("bad config", e);
         }
@@ -85,11 +85,11 @@ public class SparkSolrIntegrationTest {
                 sequenceOf(sql("CREATE EXTERNAL TABLE IF NOT EXISTS default.test(id INT, value STRING) " +
                                 " ROW FORMAT DELIMITED FIELDS TERMINATED BY ';'" +
                                 " STORED AS TEXTFILE" +
-                                " LOCATION 'hdfs://localhost:" + configuration.getInt(Config.HDFS_NAMENODE_PORT_KEY) + "/khanh/test'"),
+                                " LOCATION 'hdfs://localhost:" + configuration.getInt(HadoopUnitConfig.HDFS_NAMENODE_PORT_KEY) + "/khanh/test'"),
                         sql("CREATE EXTERNAL TABLE IF NOT EXISTS default.test_parquet(id INT, value STRING) " +
                                 " ROW FORMAT DELIMITED FIELDS TERMINATED BY ';'" +
                                 " STORED AS PARQUET" +
-                                " LOCATION 'hdfs://localhost:" + configuration.getInt(Config.HDFS_NAMENODE_PORT_KEY) + "/khanh/test_parquet'"));
+                                " LOCATION 'hdfs://localhost:" + configuration.getInt(HadoopUnitConfig.HDFS_NAMENODE_PORT_KEY) + "/khanh/test_parquet'"));
 
         DROP_TABLES =
                 sequenceOf(sql("DROP TABLE IF EXISTS default.test"),
@@ -138,10 +138,10 @@ public class SparkSolrIntegrationTest {
         HiveContext hiveContext = new HiveContext(context.sc());
 
         DataFrame sql = hiveContext.sql("SELECT * FROM default.test");
-        sql.write().parquet("hdfs://localhost:" + configuration.getInt(Config.HDFS_NAMENODE_PORT_KEY) + "/khanh/test_parquet/file.parquet");
+        sql.write().parquet("hdfs://localhost:" + configuration.getInt(HadoopUnitConfig.HDFS_NAMENODE_PORT_KEY) + "/khanh/test_parquet/file.parquet");
 
         FileSystem fileSystem = HdfsUtils.INSTANCE.getFileSystem();
-        assertThat(fileSystem.exists(new Path("hdfs://localhost:" + configuration.getInt(Config.HDFS_NAMENODE_PORT_KEY) + "/khanh/test_parquet/file.parquet"))).isTrue();
+        assertThat(fileSystem.exists(new Path("hdfs://localhost:" + configuration.getInt(HadoopUnitConfig.HDFS_NAMENODE_PORT_KEY) + "/khanh/test_parquet/file.parquet"))).isTrue();
 
         context.close();
 
@@ -149,7 +149,7 @@ public class SparkSolrIntegrationTest {
         context = new JavaSparkContext(conf);
         SQLContext sqlContext = new SQLContext(context);
 
-        DataFrame file = sqlContext.read().parquet("hdfs://localhost:" + configuration.getInt(Config.HDFS_NAMENODE_PORT_KEY) + "/khanh/test_parquet/file.parquet");
+        DataFrame file = sqlContext.read().parquet("hdfs://localhost:" + configuration.getInt(HadoopUnitConfig.HDFS_NAMENODE_PORT_KEY) + "/khanh/test_parquet/file.parquet");
         DataFrame select = file.select("id", "value");
 
         JavaRDD<SolrInputDocument> solrInputDocument = select.toJavaRDD().map(r -> {
@@ -160,7 +160,7 @@ public class SparkSolrIntegrationTest {
         });
 
         String collectionName = configuration.getString(SolrCloudBootstrap.SOLR_COLLECTION_NAME);
-        String zkHostString = configuration.getString(Config.ZOOKEEPER_HOST_KEY) + ":" + configuration.getInt(Config.ZOOKEEPER_PORT_KEY);
+        String zkHostString = configuration.getString(HadoopUnitConfig.ZOOKEEPER_HOST_KEY) + ":" + configuration.getInt(HadoopUnitConfig.ZOOKEEPER_PORT_KEY);
         SolrSupport.indexDocs(zkHostString, collectionName, 1000, solrInputDocument);
 
         //then

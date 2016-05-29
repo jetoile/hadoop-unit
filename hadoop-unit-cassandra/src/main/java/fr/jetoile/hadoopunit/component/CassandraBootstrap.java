@@ -18,7 +18,7 @@ import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.Session;
 import com.datastax.driver.core.SocketOptions;
 import fr.jetoile.hadoopunit.Component;
-import fr.jetoile.hadoopunit.Config;
+import fr.jetoile.hadoopunit.HadoopUnitConfig;
 import fr.jetoile.hadoopunit.exception.BootstrapException;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
@@ -82,18 +82,18 @@ public class CassandraBootstrap implements Bootstrap {
 
     private void loadConfig() throws BootstrapException {
         try {
-            configuration = new PropertiesConfiguration(Config.DEFAULT_PROPS_FILE);
+            configuration = new PropertiesConfiguration(HadoopUnitConfig.DEFAULT_PROPS_FILE);
         } catch (ConfigurationException e) {
             throw new BootstrapException("bad config", e);
         }
 
-        port = configuration.getInt(Config.CASSANDRA_PORT_KEY);
-        ip = configuration.getString(Config.CASSANDRA_IP_KEY);
+        port = configuration.getInt(HadoopUnitConfig.CASSANDRA_PORT_KEY);
+        ip = configuration.getString(HadoopUnitConfig.CASSANDRA_IP_KEY);
         editCassandraConfFile();
     }
 
     private void build() throws InterruptedException, IOException, TTransportException {
-        EmbeddedCassandraServerHelper.startEmbeddedCassandra("cu-cassandra.yaml", configuration.getString(Config.CASSANDRA_TEMP_DIR_KEY), EmbeddedCassandraServerHelper.DEFAULT_STARTUP_TIMEOUT);
+        EmbeddedCassandraServerHelper.startEmbeddedCassandra("cu-cassandra.yaml", configuration.getString(HadoopUnitConfig.CASSANDRA_TEMP_DIR_KEY), EmbeddedCassandraServerHelper.DEFAULT_STARTUP_TIMEOUT);
         cluster = new Cluster.Builder().addContactPoints(ip).withPort(port).withSocketOptions(getSocketOptions())
                 .build();
         session = cluster.connect();
@@ -142,9 +142,9 @@ public class CassandraBootstrap implements Bootstrap {
 
     private void cleanup() {
         try {
-            FileUtils.deleteDirectory(Paths.get(configuration.getString(Config.CASSANDRA_TEMP_DIR_KEY)).toFile());
+            FileUtils.deleteDirectory(Paths.get(configuration.getString(HadoopUnitConfig.CASSANDRA_TEMP_DIR_KEY)).toFile());
         } catch (IOException e) {
-            LOGGER.error("unable to delete {}", configuration.getString(Config.CASSANDRA_TEMP_DIR_KEY), e);
+            LOGGER.error("unable to delete {}", configuration.getString(HadoopUnitConfig.CASSANDRA_TEMP_DIR_KEY), e);
         }
     }
 
@@ -159,7 +159,7 @@ public class CassandraBootstrap implements Bootstrap {
 
     private void editCassandraConfFile() {
         try {
-            Path cassandraPropertiesBackupPath = Paths.get(configuration.getString(Config.CASSANDRA_TEMP_DIR_KEY) + "/cu-cassandra.yaml.old");
+            Path cassandraPropertiesBackupPath = Paths.get(configuration.getString(HadoopUnitConfig.CASSANDRA_TEMP_DIR_KEY) + "/cu-cassandra.yaml.old");
             Path cassandraPropertiesPath = Paths.get(CassandraBootstrap.class.getClassLoader().getResource("cu-cassandra.yaml").toURI());
             if (cassandraPropertiesBackupPath.toFile().exists() && cassandraPropertiesBackupPath.toFile().canWrite()) {
                 cassandraPropertiesBackupPath.toFile().delete();
@@ -169,11 +169,11 @@ public class CassandraBootstrap implements Bootstrap {
 
             Map<String, Object> params = (Map<String, Object>) yaml.load(new FileInputStream(cassandraPropertiesPath.toString()));
 
-            params.put("hints_directory", configuration.getString(Config.CASSANDRA_TEMP_DIR_KEY));
-            params.put("data_file_directories", Arrays.asList(configuration.getString(Config.CASSANDRA_TEMP_DIR_KEY) + "/embeddedCassandra/data"));
-            params.put("commitlog_directory", Arrays.asList(configuration.getString(Config.CASSANDRA_TEMP_DIR_KEY) + "/embeddedCassandra/commitlog"));
-            params.put("saved_caches_directory", Arrays.asList(configuration.getString(Config.CASSANDRA_TEMP_DIR_KEY) + "/embeddedCassandra/saved_caches"));
-            params.put("native_transport_port", configuration.getInt(Config.CASSANDRA_PORT_KEY));
+            params.put("hints_directory", configuration.getString(HadoopUnitConfig.CASSANDRA_TEMP_DIR_KEY));
+            params.put("data_file_directories", Arrays.asList(configuration.getString(HadoopUnitConfig.CASSANDRA_TEMP_DIR_KEY) + "/embeddedCassandra/data"));
+            params.put("commitlog_directory", Arrays.asList(configuration.getString(HadoopUnitConfig.CASSANDRA_TEMP_DIR_KEY) + "/embeddedCassandra/commitlog"));
+            params.put("saved_caches_directory", Arrays.asList(configuration.getString(HadoopUnitConfig.CASSANDRA_TEMP_DIR_KEY) + "/embeddedCassandra/saved_caches"));
+            params.put("native_transport_port", configuration.getInt(HadoopUnitConfig.CASSANDRA_PORT_KEY));
 
             cassandraPropertiesPath.toFile().renameTo(cassandraPropertiesBackupPath.toFile());
 

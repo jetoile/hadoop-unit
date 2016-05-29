@@ -15,7 +15,7 @@ package fr.jetoile.hadoopunit.component;
 
 import com.github.sakserv.minicluster.impl.KafkaLocalBroker;
 import fr.jetoile.hadoopunit.Component;
-import fr.jetoile.hadoopunit.Config;
+import fr.jetoile.hadoopunit.HadoopUnitConfig;
 import fr.jetoile.hadoopunit.HadoopUtils;
 import fr.jetoile.hadoopunit.exception.BootstrapException;
 import org.apache.commons.configuration.Configuration;
@@ -85,15 +85,15 @@ public class KafkaBootstrap implements Bootstrap {
     private void loadConfig() throws BootstrapException {
         HadoopUtils.setHadoopHome();
         try {
-            configuration = new PropertiesConfiguration(Config.DEFAULT_PROPS_FILE);
+            configuration = new PropertiesConfiguration(HadoopUnitConfig.DEFAULT_PROPS_FILE);
         } catch (ConfigurationException e) {
             throw new BootstrapException("bad config", e);
         }
-        host = configuration.getString(Config.KAFKA_HOSTNAME_KEY);
-        port = configuration.getInt(Config.KAFKA_PORT_KEY);
-        brokerId = configuration.getInt(Config.KAFKA_TEST_BROKER_ID_KEY);
-        tmpDirectory = configuration.getString(Config.KAFKA_TEST_TEMP_DIR_KEY);
-        zookeeperConnectionString = configuration.getString(Config.ZOOKEEPER_HOST_KEY) + ":" + configuration.getInt(Config.ZOOKEEPER_PORT_KEY);
+        host = configuration.getString(HadoopUnitConfig.KAFKA_HOSTNAME_KEY);
+        port = configuration.getInt(HadoopUnitConfig.KAFKA_PORT_KEY);
+        brokerId = configuration.getInt(HadoopUnitConfig.KAFKA_TEST_BROKER_ID_KEY);
+        tmpDirectory = configuration.getString(HadoopUnitConfig.KAFKA_TEST_TEMP_DIR_KEY);
+        zookeeperConnectionString = configuration.getString(HadoopUnitConfig.ZOOKEEPER_HOST_KEY) + ":" + configuration.getInt(HadoopUnitConfig.ZOOKEEPER_PORT_KEY);
 
     }
 

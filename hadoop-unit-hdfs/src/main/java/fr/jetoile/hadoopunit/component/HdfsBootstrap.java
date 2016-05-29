@@ -15,7 +15,7 @@ package fr.jetoile.hadoopunit.component;
 
 import com.github.sakserv.minicluster.impl.HdfsLocalCluster;
 import fr.jetoile.hadoopunit.Component;
-import fr.jetoile.hadoopunit.Config;
+import fr.jetoile.hadoopunit.HadoopUnitConfig;
 import fr.jetoile.hadoopunit.HadoopUtils;
 import fr.jetoile.hadoopunit.exception.BootstrapException;
 import org.apache.commons.configuration.Configuration;
@@ -88,18 +88,18 @@ public class HdfsBootstrap implements Bootstrap {
     private void loadConfig() throws BootstrapException {
         HadoopUtils.setHadoopHome();
         try {
-            configuration = new PropertiesConfiguration(Config.DEFAULT_PROPS_FILE);
+            configuration = new PropertiesConfiguration(HadoopUnitConfig.DEFAULT_PROPS_FILE);
         } catch (ConfigurationException e) {
             throw new BootstrapException("bad config", e);
         }
 
-        port = configuration.getInt(Config.HDFS_NAMENODE_PORT_KEY);
-        httpPort = configuration.getInt(Config.HDFS_NAMENODE_HTTP_PORT_KEY);
-        tempDirectory = configuration.getString(Config.HDFS_TEMP_DIR_KEY);
-        numDatanodes = configuration.getInt(Config.HDFS_NUM_DATANODES_KEY);
-        enablePermission = configuration.getBoolean(Config.HDFS_ENABLE_PERMISSIONS_KEY);
-        format = configuration.getBoolean(Config.HDFS_FORMAT_KEY);
-        enableRunningUserAsProxy = configuration.getBoolean(Config.HDFS_ENABLE_RUNNING_USER_AS_PROXY_USER);
+        port = configuration.getInt(HadoopUnitConfig.HDFS_NAMENODE_PORT_KEY);
+        httpPort = configuration.getInt(HadoopUnitConfig.HDFS_NAMENODE_HTTP_PORT_KEY);
+        tempDirectory = configuration.getString(HadoopUnitConfig.HDFS_TEMP_DIR_KEY);
+        numDatanodes = configuration.getInt(HadoopUnitConfig.HDFS_NUM_DATANODES_KEY);
+        enablePermission = configuration.getBoolean(HadoopUnitConfig.HDFS_ENABLE_PERMISSIONS_KEY);
+        format = configuration.getBoolean(HadoopUnitConfig.HDFS_FORMAT_KEY);
+        enableRunningUserAsProxy = configuration.getBoolean(HadoopUnitConfig.HDFS_ENABLE_RUNNING_USER_AS_PROXY_USER);
     }
 
     @Override
