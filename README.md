@@ -13,7 +13,7 @@ Moreover, it provide a standalone component which can be run locally and which s
 
 #Build
 
-For windows users, you need to download a hadoop distribution, to unzip it and to define the system environment variable `HADOOP_HOME`. You can also define the path into files `default.properties` (warning: there are a lot...).
+For windows users, you need to download a hadoop distribution, to unzip it and to define the system environment variable `HADOOP_HOME`. You can also define the path into files `hadoop-unit-default.properties` (warning: there are a lot...).
 
 To build, launch the command:
 ```bash
@@ -122,7 +122,7 @@ For this purpose, two packages are availables:
 * hadoop-unit-standalone-elasticsearch
 
 Unzip `hadoop-unit-standalone-<type>-<version>.tar.gz`
-Change `conf/default.properties`
+Change `conf/hadoop-unit-default.properties`
 Change `conf/hadoop.properties`
 
 Start in fg with:
@@ -336,7 +336,7 @@ public class HdfsBootstrapIntegrationTest {
     @BeforeClass
     public static void setup() throws BootstrapException {
         try {
-            configuration = new PropertiesConfiguration("default.properties");
+            configuration = new PropertiesConfiguration("hadoop-unit-default.properties");
         } catch (ConfigurationException e) {
             throw new BootstrapException("bad config", e);
         }
@@ -484,7 +484,7 @@ public class HdfsBootstrapIntegrationTest {
     @BeforeClass
     public static void setup() throws BootstrapException {
         try {
-            configuration = new PropertiesConfiguration("default.properties");
+            configuration = new PropertiesConfiguration("hadoop-unit-default.properties");
         } catch (ConfigurationException e) {
             throw new BootstrapException("bad config", e);
         }
@@ -541,8 +541,8 @@ Built on:
 Use: 
 * download and unzip hadoop
 * [for oozie only] download and unzip oozie (http://s3.amazonaws.com/public-repo-1.hortonworks.com/HDP/centos6/2.x/updates/2.3.4.0/tars/oozie-4.2.0.2.3.4.0-3485-distro.tar.gz)
-* edit default.properties and indicate HADOOP_HOME or set your HADOOP_HOME environment variable
-* edit default.properties and indicate oozie.sharelib.path
+* edit `hadoop-unit-default.properties` and indicate `HADOOP_HOME` or set your `HADOOP_HOME` environment variable
+* edit `hadoop-unit-default.properties` and indicate `oozie.sharelib.path`
 
 Todo:
 * male client utils for kafka produce/consume
