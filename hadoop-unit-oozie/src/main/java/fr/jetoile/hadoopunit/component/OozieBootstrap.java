@@ -318,4 +318,17 @@ public class OozieBootstrap implements Bootstrap {
         Date date = new Date();
         return dateFormat.format(date).toString();
     }
+
+    final public static void main(String... args) throws NotFoundServiceException {
+
+        HadoopBootstrap bootstrap = HadoopBootstrap.INSTANCE;
+
+        Runtime.getRuntime().addShutdownHook(new Thread() {
+            public void run() {
+                bootstrap.stopAll();
+            }
+        });
+
+        bootstrap.add(Component.OOZIE).startAll();
+    }
 }

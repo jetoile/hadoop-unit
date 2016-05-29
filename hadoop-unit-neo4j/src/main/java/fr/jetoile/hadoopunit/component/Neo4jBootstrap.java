@@ -16,13 +16,14 @@ package fr.jetoile.hadoopunit.component;
 
 
 import fr.jetoile.hadoopunit.Component;
+import fr.jetoile.hadoopunit.HadoopBootstrap;
 import fr.jetoile.hadoopunit.HadoopUnitConfig;
 import fr.jetoile.hadoopunit.exception.BootstrapException;
+import fr.jetoile.hadoopunit.exception.NotFoundServiceException;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.io.FileUtils;
-import org.neo4j.cypher.javacompat.internal.GraphDatabaseCypherService;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.factory.GraphDatabaseFactory;
 import org.neo4j.graphdb.factory.GraphDatabaseSettings;
@@ -81,15 +82,15 @@ public class Neo4jBootstrap implements Bootstrap {
     }
 
     private void build() {
-        GraphDatabaseSettings.BoltConnector bolt = GraphDatabaseSettings.boltConnector( "0" );
+        GraphDatabaseSettings.BoltConnector bolt = GraphDatabaseSettings.boltConnector("0");
 
         graphDb = new GraphDatabaseFactory()
                 .newEmbeddedDatabaseBuilder(Paths.get(tmp).toFile())
 //                .setConfig(GraphDatabaseSettings.pagecache_memory, "512M")
 //                .setConfig(GraphDatabaseSettings.string_block_size, "60")
 //                .setConfig(GraphDatabaseSettings.array_block_size, "300")
-                .setConfig( bolt.enabled, "true" )
-                .setConfig( bolt.address, ip + ":" + port )
+                .setConfig(bolt.enabled, "true")
+                .setConfig(bolt.address, ip + ":" + port)
                 .newGraphDatabase();
     }
 
@@ -142,6 +143,19 @@ public class Neo4jBootstrap implements Bootstrap {
 
     public GraphDatabaseService getNeo4jGraph() {
         return this.graphDb;
+    }
+
+    final public static void main(String... args) throws NotFoundServiceException {
+
+        HadoopBootstrap bootstrap = HadoopBootstrap.INSTANCE;
+
+        Runtime.getRuntime().addShutdownHook(new Thread() {
+            public void run() {
+                bootstrap.stopAll();
+            }
+        });
+
+        bootstrap.add(Component.NEO4J).startAll();
     }
 
 }

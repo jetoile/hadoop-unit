@@ -15,9 +15,11 @@ package fr.jetoile.hadoopunit.component;
 
 import com.github.sakserv.minicluster.impl.ZookeeperLocalCluster;
 import fr.jetoile.hadoopunit.Component;
+import fr.jetoile.hadoopunit.HadoopBootstrap;
 import fr.jetoile.hadoopunit.HadoopUnitConfig;
 import fr.jetoile.hadoopunit.HadoopUtils;
 import fr.jetoile.hadoopunit.exception.BootstrapException;
+import fr.jetoile.hadoopunit.exception.NotFoundServiceException;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
@@ -139,5 +141,17 @@ public class ZookeeperBootstrap implements Bootstrap {
         throw new UnsupportedOperationException("the method getConfiguration can not be called on ZookeeperBootstrap");
     }
 
+    final public static void main(String... args) throws NotFoundServiceException {
+
+        HadoopBootstrap bootstrap = HadoopBootstrap.INSTANCE;
+
+        Runtime.getRuntime().addShutdownHook(new Thread() {
+            public void run() {
+                bootstrap.stopAll();
+            }
+        });
+
+        bootstrap.add(Component.ZOOKEEPER).startAll();
+    }
 
 }

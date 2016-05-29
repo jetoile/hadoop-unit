@@ -16,8 +16,10 @@ package fr.jetoile.hadoopunit.component;
 
 import com.datastax.driver.core.Session;
 import fr.jetoile.hadoopunit.Component;
+import fr.jetoile.hadoopunit.HadoopBootstrap;
 import fr.jetoile.hadoopunit.HadoopUnitConfig;
 import fr.jetoile.hadoopunit.exception.BootstrapException;
+import fr.jetoile.hadoopunit.exception.NotFoundServiceException;
 import info.archinnov.achilles.embedded.CassandraEmbeddedServerBuilder;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
@@ -148,4 +150,16 @@ public class CassandraBootstrap implements Bootstrap {
         return this.session;
     }
 
+    final public static void main(String... args) throws NotFoundServiceException {
+
+        HadoopBootstrap bootstrap = HadoopBootstrap.INSTANCE;
+
+        Runtime.getRuntime().addShutdownHook(new Thread() {
+            public void run() {
+                bootstrap.stopAll();
+            }
+        });
+
+        bootstrap.add(Component.CASSANDRA).startAll();
+    }
 }

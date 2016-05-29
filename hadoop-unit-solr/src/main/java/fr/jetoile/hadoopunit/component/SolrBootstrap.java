@@ -14,9 +14,11 @@
 package fr.jetoile.hadoopunit.component;
 
 import fr.jetoile.hadoopunit.Component;
+import fr.jetoile.hadoopunit.HadoopBootstrap;
 import fr.jetoile.hadoopunit.HadoopUnitConfig;
 import fr.jetoile.hadoopunit.HadoopUtils;
 import fr.jetoile.hadoopunit.exception.BootstrapException;
+import fr.jetoile.hadoopunit.exception.NotFoundServiceException;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
@@ -148,4 +150,5 @@ public class SolrBootstrap implements Bootstrap {
     private CoreContainer createCoreContainer(String solrHomeDirectory, File solrXmlFile) {
         return CoreContainer.createAndLoad(Paths.get(solrHomeDirectory), solrXmlFile.toPath());
     }
+
 }

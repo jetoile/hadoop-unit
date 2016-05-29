@@ -1,0 +1,71 @@
+version: '2'
+services:
+  hadoop-unit-neo4j:
+    image: hadoop-unit-neo4j
+    ports:
+    - "13533:13533"
+  hadoop-unit-elasticsearch:
+    image: hadoop-unit-elasticsearch
+    ports:
+    - "14433:14433"
+    - "14533:14533"
+  hadoop-unit-cassandra:
+    image: hadoop-unit-cassandra
+    ports:
+    - "13433:13433"
+  hadoop-unit-mongodb:
+    image: hadoop-unit-mongodb
+    ports:
+    - "13333:13333"
+  hadoop-unit-hbase:
+    image: hadoop-unit-hbase
+    ports:
+    - "20111:20111"
+    links:
+    - hadoop-unit-zookeeper:zookeeper
+  hadoop-unit-solrcloud:
+    image: hadoop-unit-solrcloud
+    ports:
+    - "8983:8983"
+    links:
+    - hadoop-unit-zookeeper:zookeeper
+  hadoop-unit-hive:
+    image: hadoop-unit-hive
+    ports:
+    - "20102:20102"
+    - "20103:20103"
+    extra_hosts:
+    - "127.0.0.1:127.0.0.10"
+    links:
+    - hadoop-unit-hdfs:hdfs
+    - hadoop-unit-zookeeper:zookeeper
+  hadoop-unit-oozie:
+    image: hadoop-unit-oozie
+    ports:
+    - "20113:20113"
+    links:
+    - hadoop-unit-zookeeper:zookeeper
+    - hadoop-unit-hdfs:hdfs
+    - hadoop-unit-hive:hivemeta
+    - hadoop-unit-hive:hiveserver2
+  hadoop-unit-hdfs:
+    image: hadoop-unit-hdfs
+    ports:
+    - "20112:20112"
+    - "50070:50070"
+    extra_hosts:
+    - "127.0.0.1:127.0.0.5"
+  hadoop-unit-kafka:
+    image: hadoop-unit-kafka
+    ports:
+    - "20111:20111"
+    extra_hosts:
+    - "127.0.0.1:127.0.0.20"
+    links:
+    - hadoop-unit-zookeeper:zookeeper
+  hadoop-unit-zookeeper:
+    image: hadoop-unit-zookeeper
+    ports:
+    - "22010:22010"
+    extra_hosts:
+    - "127.0.0.1:127.0.0.15"

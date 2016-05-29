@@ -23,21 +23,60 @@
             <groupId>info.archinnov</groupId>
             <artifactId>achilles-embedded</artifactId>
         </dependency>
-
-        <!--<dependency>-->
-        <!--<groupId>org.cassandraunit</groupId>-->
-        <!--<artifactId>cassandra-unit</artifactId>-->
-        <!--</dependency>-->
-
-        <!--<dependency>-->
-        <!--<groupId>com.datastax.cassandra</groupId>-->
-        <!--<artifactId>cassandra-driver-core</artifactId>-->
-        <!--</dependency>-->
-
-        <!--<dependency>-->
-        <!--<groupId>org.yaml</groupId>-->
-        <!--<artifactId>snakeyaml</artifactId>-->
-        <!--</dependency>-->
     </dependencies>
 
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>appassembler-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>assemble</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <configurationSourceDirectory>src/main/conf</configurationSourceDirectory>
+                    <copyConfigurationDirectory>true</copyConfigurationDirectory>
+                    <configurationDirectory>conf</configurationDirectory>
+                    <programs>
+                        <program>
+                            <mainClass>fr.jetoile.hadoopunit.component.CassandraBootstrap</mainClass>
+                            <name>main</name>
+                        </program>
+                    </programs>
+                    <binFileExtensions>
+                        <unix>.sh</unix>
+                    </binFileExtensions>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>com.spotify</groupId>
+                <artifactId>docker-maven-plugin</artifactId>
+                <configuration>
+                    <imageName>${artifactId}</imageName>
+                    <dockerDirectory>${basedir}/src/main/docker</dockerDirectory>
+                    <resources>
+                        <resource>
+                            <targetPath>/</targetPath>
+                            <directory>${project.build.directory}</directory>
+                        </resource>
+                    </resources>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>docker</id>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>build</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+        </plugins>
+    </build>
 </project>
