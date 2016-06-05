@@ -544,7 +544,7 @@ public class HdfsBootstrapIntegrationTest {
 
 Built on:
 
-* [hadoop-mini-cluster-0.1.6](https://github.com/sakserv/hadoop-mini-clusters) (aka. HDP 2.4.0)
+* [hadoop-mini-cluster-0.1.7](https://github.com/sakserv/hadoop-mini-clusters) (aka. HDP 2.4.2)
 * [achilles-embedded-4.2.0](https://github.com/doanduyhai/Achilles)
 
 Use: 
