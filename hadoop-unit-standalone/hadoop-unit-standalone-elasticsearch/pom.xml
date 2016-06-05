@@ -67,6 +67,12 @@
 
                             <repositoryLayout>flat</repositoryLayout>
 
+                            <configurationSourceDirectory>src/main/conf</configurationSourceDirectory>
+                            <copyConfigurationDirectory>true</copyConfigurationDirectory>
+                            <configurationDirectory>conf</configurationDirectory>
+                            <logsDirectory>logs</logsDirectory>
+                            <useDaemonIdAsWrapperConfName>true</useDaemonIdAsWrapperConfName>
+
                             <daemons>
                                 <daemon>
                                     <id>${project.name}</id>
