@@ -730,7 +730,7 @@
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>appassembler-maven-plugin</artifactId>
-                    <version>1.5</version>
+                    <version>1.10</version>
                 </plugin>
             </plugins>
         </pluginManagement>

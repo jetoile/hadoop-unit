@@ -25,14 +25,6 @@
             <directoryMode>750</directoryMode>
         </fileSet>
 
-        <fileSet>
-            <directory>src/main/assembly</directory>
-            <outputDirectory>/logs</outputDirectory>
-            <excludes>
-                <exclude>*</exclude>
-            </excludes>
-        </fileSet>
-
     </fileSets>
 
     <files>
