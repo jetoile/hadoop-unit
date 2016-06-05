@@ -545,7 +545,7 @@ public class HdfsBootstrapIntegrationTest {
 Built on:
 
 * [hadoop-mini-cluster-0.1.6](https://github.com/sakserv/hadoop-mini-clusters) (aka. HDP 2.4.0)
-* [cassandra-unit-3.0.0.1](https://github.com/jsevellec/cassandra-unit)
+* [achilles-embedded-4.2.0](https://github.com/doanduyhai/Achilles)
 
 Use: 
 * download and unzip hadoop
