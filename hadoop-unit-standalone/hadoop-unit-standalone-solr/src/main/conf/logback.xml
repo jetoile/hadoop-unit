@@ -7,6 +7,9 @@
         </encoder>
     </appender>
 
+    <logger name="BlockStateChange" level="NONE"/>
+    <logger name="BlockManager" level="NONE"/>
+
 
     <root level="info">
         <appender-ref ref="STDOUT" />
