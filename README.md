@@ -540,7 +540,7 @@ public class HdfsBootstrapIntegrationTest {
 * HBase
 * MongoDB
 * Cassandra 3.4
-* ElasticSearch 5.0-alpha2
+* ElasticSearch 5.0-alpha3
 
 Built on:
 
