@@ -18,6 +18,12 @@
         <dependency>
             <groupId>org.apache.spark</groupId>
             <artifactId>spark-core_2.10</artifactId>
+            <exclusions>
+                <exclusion>
+                    <artifactId>jackson-module-scala_2.10</artifactId>
+                    <groupId>com.fasterxml.jackson.module</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
@@ -33,6 +39,7 @@
         <dependency>
             <artifactId>jackson-module-scala_2.10</artifactId>
             <groupId>com.fasterxml.jackson.module</groupId>
+            <version>2.6.5</version>
         </dependency>
 
     </dependencies>
