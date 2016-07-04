@@ -11,13 +11,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package fr.jetoile.hadoopunit.integrationtest;
+
+package fr.jetoile.hadoopunit.sample;
 
 import com.ninja_squad.dbsetup.Operations;
 import com.ninja_squad.dbsetup.operation.Operation;
-import fr.jetoile.hadoopunit.Component;
 import fr.jetoile.hadoopunit.HadoopUnitConfig;
-import fr.jetoile.hadoopunit.HadoopBootstrap;
 import fr.jetoile.hadoopunit.exception.BootstrapException;
 import fr.jetoile.hadoopunit.exception.NotFoundServiceException;
 import fr.jetoile.hadoopunit.test.hdfs.HdfsUtils;
@@ -28,11 +27,12 @@ import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
+import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.solr.client.solrj.impl.CloudSolrClient;
+import org.apache.solr.common.SolrDocument;
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.sql.DataFrame;
-import org.apache.spark.sql.Row;
-import org.apache.spark.sql.SQLContext;
 import org.apache.spark.sql.hive.HiveContext;
 import org.junit.*;
 import org.slf4j.Logger;
@@ -40,17 +40,17 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 import static com.ninja_squad.dbsetup.Operations.sequenceOf;
 import static com.ninja_squad.dbsetup.Operations.sql;
+import static junit.framework.TestCase.assertNotNull;
 import static org.fest.assertions.Assertions.assertThat;
 
 @Ignore
-public class SparkIntegrationTest {
-    static private Logger LOGGER = LoggerFactory.getLogger(SparkIntegrationTest.class);
+public class ParquetToSolrJobTest {
+
+    static private Logger LOGGER = LoggerFactory.getLogger(ParquetToSolrJobTest.class);
 
 
     private static Configuration configuration;
@@ -67,13 +67,6 @@ public class SparkIntegrationTest {
             throw new BootstrapException("bad config", e);
         }
 
-        HadoopBootstrap.INSTANCE
-                .add(Component.ZOOKEEPER)
-                .add(Component.HDFS)
-                .add(Component.HIVEMETA)
-                .add(Component.HIVESERVER2)
-                .startAll();
-
         CREATE_TABLES =
                 sequenceOf(sql("CREATE EXTERNAL TABLE IF NOT EXISTS default.test(id INT, value STRING) " +
                                 " ROW FORMAT DELIMITED FIELDS TERMINATED BY ';'" +
@@ -89,19 +82,13 @@ public class SparkIntegrationTest {
                         sql("DROP TABLE IF EXISTS default.test_parquet"));
     }
 
-    @AfterClass
-    public static void tearDown() throws NotFoundServiceException {
-        HadoopBootstrap.INSTANCE
-                .stopAll();
-    }
-
     @Before
     public void before() throws IOException, URISyntaxException {
         FileSystem fileSystem = HdfsUtils.INSTANCE.getFileSystem();
 
         fileSystem.mkdirs(new Path("/khanh/test"));
         fileSystem.mkdirs(new Path("/khanh/test_parquet"));
-        fileSystem.copyFromLocalFile(new Path(SparkIntegrationTest.class.getClassLoader().getResource("test.csv").toURI()), new Path("/khanh/test/test.csv"));
+        fileSystem.copyFromLocalFile(new Path(ParquetToSolrJobTest.class.getClassLoader().getResource("test.csv").toURI()), new Path("/khanh/test/test.csv"));
 
         new HiveSetup(HiveConnectionUtils.INSTANCE.getDestination(), Operations.sequenceOf(CREATE_TABLES)).launch();
     }
@@ -112,72 +99,11 @@ public class SparkIntegrationTest {
 
         FileSystem fileSystem = HdfsUtils.INSTANCE.getFileSystem();
         fileSystem.delete(new Path("/khanh"), true);
-
-
-    }
-
-    @Test
-    public void upload_file_into_hdfs_and_map_hive_should_success() throws SQLException {
-
-        Statement stmt = HiveConnectionUtils.INSTANCE.getConnection().createStatement();
-
-        String select = "SELECT * FROM default.test";
-        ResultSet resultSet = stmt.executeQuery(select);
-        while (resultSet.next()) {
-            int id = resultSet.getInt(1);
-            String value = resultSet.getString(2);
-            assertThat(id).isNotNull();
-            assertThat(value).isNotNull();
-        }
-    }
-
-    @Test
-    public void spark_should_read_hive() throws SQLException {
-        SparkConf conf = new SparkConf()
-                .setMaster("local[*]")
-                .setAppName("test");
-
-        JavaSparkContext context = new JavaSparkContext(conf);
-
-        //read hive-site from classpath
-        HiveContext sqlContext = new HiveContext(context.sc());
-
-        DataFrame sql = sqlContext.sql("SELECT * FROM default.test");
-//        sql.printSchema();
-        Row[] rows = sql.collect();
-
-        for (int i = 1; i < 4; i++) {
-            Row row = rows[i - 1];
-            assertThat("value" + i).isEqualToIgnoringCase(row.getString(1));
-            assertThat(i).isEqualTo(row.getInt(0));
-        }
-
-        context.close();
-    }
-
-    @Test
-    public void spark_should_create_a_parquet_file() throws SQLException, IOException {
-        SparkConf conf = new SparkConf()
-                .setMaster("local[*]")
-                .setAppName("test");
-
-        JavaSparkContext context = new JavaSparkContext(conf);
-
-        //read hive-site from classpath
-        HiveContext sqlContext = new HiveContext(context.sc());
-
-        DataFrame sql = sqlContext.sql("SELECT * FROM default.test");
-        sql.write().parquet("hdfs://localhost:" + configuration.getInt(HadoopUnitConfig.HDFS_NAMENODE_PORT_KEY) + "/khanh/test_parquet/file.parquet");
-
-        FileSystem fileSystem = HdfsUtils.INSTANCE.getFileSystem();
-        assertThat(fileSystem.exists(new Path("hdfs://localhost:" + configuration.getInt(HadoopUnitConfig.HDFS_NAMENODE_PORT_KEY) + "/khanh/test_parquet/file.parquet"))).isTrue();
-
-        context.close();
     }
 
 
     @Test
-    public void spark_should_read_parquet_file() throws IOException {
+    public void spark_should_read_parquet_file_and_index_into_solr() throws IOException, SolrServerException {
         //given
         SparkConf conf = new SparkConf()
                 .setMaster("local[*]")
@@ -198,18 +124,22 @@ public class SparkIntegrationTest {
 
         //when
         context = new JavaSparkContext(conf);
-        SQLContext sqlContext = new SQLContext(context);
 
-        DataFrame file = sqlContext.read().parquet("hdfs://localhost:" + configuration.getInt(HadoopUnitConfig.HDFS_NAMENODE_PORT_KEY) + "/khanh/test_parquet/file.parquet");
-        DataFrame select = file.select("id", "value");
-        Row[] rows = select.collect();
+        ParquetToSolrJob parquetToSolrJob = new ParquetToSolrJob(context);
+        parquetToSolrJob.run();
+
+        String zkHostString = configuration.getString(HadoopUnitConfig.ZOOKEEPER_HOST_KEY) + ":" + configuration.getInt(HadoopUnitConfig.ZOOKEEPER_PORT_KEY);
 
         //then
-        for (int i = 1; i < 4; i++) {
-            Row row = rows[i - 1];
-            assertThat("value" + i).isEqualToIgnoringCase(row.getString(1));
-            assertThat(i).isEqualTo(row.getInt(0));
-        }
+        CloudSolrClient client = new CloudSolrClient(zkHostString);
+        SolrDocument collection1 = client.getById("collection1", "1");
+
+        assertNotNull(collection1);
+        assertThat(collection1.getFieldValue("value_s")).isEqualTo("value1");
+
+
+        client.close();
+
 
         context.close();
 
