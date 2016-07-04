@@ -22,9 +22,9 @@ import fr.jetoile.hadoopunit.HadoopUnitConfig;
 import fr.jetoile.hadoopunit.component.OozieBootstrap;
 import fr.jetoile.hadoopunit.exception.BootstrapException;
 import fr.jetoile.hadoopunit.exception.NotFoundServiceException;
-import fr.jetoile.hadoopunit.kafka.consumer.KafkaTestConsumer;
-import fr.jetoile.hadoopunit.kafka.producer.KafkaTestProducer;
 import fr.jetoile.hadoopunit.test.hdfs.HdfsUtils;
+import fr.jetoile.hadoopunit.test.kafka.KafkaConsumerUtils;
+import fr.jetoile.hadoopunit.test.kafka.KafkaProducerUtils;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
@@ -42,6 +42,8 @@ import org.apache.hadoop.security.UserGroupInformation;
 import org.apache.oozie.client.OozieClient;
 import org.apache.oozie.client.WorkflowJob;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jettison.json.JSONException;
+import org.codehaus.jettison.json.JSONObject;
 import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.client.Client;
@@ -56,7 +58,6 @@ import java.io.*;
 import java.net.*;
 import java.sql.Connection;
 import java.sql.*;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
@@ -90,29 +91,29 @@ public class ManualIntegrationBootstrapTest {
     public void kafkaShouldStart() throws Exception {
 
         // Producer
-        KafkaTestProducer kafkaTestProducer = new KafkaTestProducer.Builder()
-                .setKafkaHostname(configuration.getString(HadoopUnitConfig.KAFKA_HOSTNAME_KEY))
-                .setKafkaPort(configuration.getInt(HadoopUnitConfig.KAFKA_PORT_KEY))
-                .setTopic(configuration.getString(HadoopUnitConfig.KAFKA_TEST_TOPIC_KEY))
-                .setMessageCount(configuration.getInt(HadoopUnitConfig.KAFKA_TEST_MESSAGE_COUNT_KEY))
-                .build();
-        kafkaTestProducer.produceMessages();
+        for (int i = 0; i < 10; i++) {
+            String payload = generateMessage(i);
+            KafkaProducerUtils.INSTANCE.produceMessages(configuration.getString(HadoopUnitConfig.KAFKA_TEST_TOPIC_KEY), String.valueOf(i), payload);
+        }
+
 
 
         // Consumer
-        List<String> seeds = new ArrayList<String>();
-        seeds.add(configuration.getString(HadoopUnitConfig.KAFKA_HOSTNAME_KEY));
-        KafkaTestConsumer kafkaTestConsumer = new KafkaTestConsumer();
-        kafkaTestConsumer.consumeMessages2(
-                configuration.getInt(HadoopUnitConfig.KAFKA_TEST_MESSAGE_COUNT_KEY),
-                configuration.getString(HadoopUnitConfig.KAFKA_TEST_TOPIC_KEY),
-                0,
-                seeds,
-                configuration.getInt(HadoopUnitConfig.KAFKA_PORT_KEY));
+        KafkaConsumerUtils.INSTANCE.consumeMessagesWithNewApi(configuration.getString(HadoopUnitConfig.KAFKA_TEST_TOPIC_KEY), 10);
 
         // Assert num of messages produced = num of message consumed
-        Assert.assertEquals(configuration.getLong(HadoopUnitConfig.KAFKA_TEST_MESSAGE_COUNT_KEY),
-                kafkaTestConsumer.getNumRead());
+        Assert.assertEquals(configuration.getLong(HadoopUnitConfig.KAFKA_TEST_MESSAGE_COUNT_KEY), KafkaConsumerUtils.INSTANCE.getNumRead());
+    }
+
+    private String generateMessage(int i) {
+        JSONObject obj = new JSONObject();
+        try {
+            obj.put("id", String.valueOf(i));
+            obj.put("msg", "test-message" + 1);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return obj.toString();
     }
 
     @Test

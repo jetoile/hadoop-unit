@@ -17,6 +17,7 @@
         <module>hadoop-unit-client-hdfs</module>
         <module>hadoop-unit-client-solrcloud</module>
         <module>hadoop-unit-client-spark</module>
+        <module>hadoop-unit-client-kafka</module>
     </modules>
 
 
