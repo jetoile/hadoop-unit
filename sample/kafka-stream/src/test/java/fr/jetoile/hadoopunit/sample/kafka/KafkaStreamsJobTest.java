@@ -22,10 +22,12 @@ import org.apache.commons.configuration.PropertiesConfiguration;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
 
+@Ignore
 public class KafkaStreamsJobTest {
 
     private static Configuration configuration;
