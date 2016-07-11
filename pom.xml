@@ -61,6 +61,7 @@
         <module>hadoop-unit-cassandra</module>
         <module>hadoop-unit-mongodb</module>
         <module>hadoop-unit-elasticsearch</module>
+        <module>sample</module>
     </modules>
 
     <repositories>
@@ -128,9 +129,10 @@
         <oozie.version>4.2.0.2.4.2.0-258</oozie.version>
         <hadoop.version>2.7.1.2.4.2.0-258</hadoop.version>
 
-        <spark_2.10.version>1.6.0</spark_2.10.version>
+        <spark_2.10.version>1.6.2</spark_2.10.version>
         <spark-solr.version>1.1.2</spark-solr.version>
-        <kafka_2.10.version>0.9.0.2.4.2.0-258</kafka_2.10.version>
+        <!--<kafka_2.10.version>0.9.0.2.4.2.0-258</kafka_2.10.version>-->
+        <kafka_2.10.version>0.10.0.0</kafka_2.10.version>
 
         <dbSetup.version>1.6.0</dbSetup.version>
         <httpclient.version>4.3.1</httpclient.version>
