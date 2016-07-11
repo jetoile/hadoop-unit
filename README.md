@@ -532,7 +532,7 @@ public class HdfsBootstrapIntegrationTest {
 #Component available
 
 * SolrCloud 5.4.1
-* Kafka 
+* Kafka 0.10.0.0
 * Hive (metastore and server2)
 * Hdfs
 * Zookeeper
@@ -540,7 +540,7 @@ public class HdfsBootstrapIntegrationTest {
 * HBase
 * MongoDB
 * Cassandra 3.4
-* ElasticSearch 5.0-alpha3
+* ElasticSearch 5.0-alpha4
 
 Built on:
 
