@@ -58,6 +58,11 @@ public class HadoopUnitConfig {
     public static final String CASSANDRA_PORT_KEY = "cassandra.port";
     public static final String CASSANDRA_TEMP_DIR_KEY = "cassandra.temp.dir";
 
+    // Neo4j
+    public static final String NEO4J_IP_KEY = "neo4j.ip";
+    public static final String NEO4J_PORT_KEY = "neo4j.port";
+    public static final String NEO4J_TEMP_DIR_KEY = "neo4j.temp.dir";
+
     // ElasticSearch
     public static final String ELASTICSEARCH_IP_KEY = "elasticsearch.ip";
     public static final String ELASTICSEARCH_HTTP_PORT_KEY = "elasticsearch.http.port";

@@ -29,7 +29,8 @@ public enum Component {
     SOLR("solr"),
     CASSANDRA("cassandra"),
     MONGODB("mongodb"),
-    ELASTICSEARCH("elastic");
+    ELASTICSEARCH("elastic"),
+    NEO4J("neo4j");
 
     private String key;
 

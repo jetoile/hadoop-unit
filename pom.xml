@@ -62,6 +62,7 @@
         <module>hadoop-unit-mongodb</module>
         <module>hadoop-unit-elasticsearch</module>
         <module>sample</module>
+        <module>hadoop-unit-neo4j</module>
     </modules>
 
     <repositories>
@@ -145,6 +146,8 @@
         <metrics.version>3.1.2</metrics.version>
         <achilles.version>4.2.0</achilles.version>
         <jackson-module-scala_2.10.version>2.6.5</jackson-module-scala_2.10.version>
+
+        <neo4j.version>3.0.3</neo4j.version>
     </properties>
 
 
@@ -272,6 +275,24 @@
                 <groupId>fr.jetoile.hadoop</groupId>
                 <artifactId>hadoop-unit-cassandra</artifactId>
                 <version>${hadoop-unit.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>fr.jetoile.hadoop</groupId>
+                <artifactId>hadoop-unit-neo4j</artifactId>
+                <version>${hadoop-unit.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.neo4j</groupId>
+                <artifactId>neo4j</artifactId>
+                <version>${neo4j.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.neo4j</groupId>
+                <artifactId>neo4j-bolt</artifactId>
+                <version>${neo4j.version}</version>
             </dependency>
 
             <dependency>
@@ -628,6 +649,10 @@
                     <exclusion>
                         <artifactId>slf4j-log4j12</artifactId>
                         <groupId>org.slf4j</groupId>
+                    </exclusion>
+                    <exclusion>
+                        <artifactId>netty</artifactId>
+                        <groupId>io.netty</groupId>
                     </exclusion>
                 </exclusions>
             </dependency>
