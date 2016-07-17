@@ -15,6 +15,8 @@ Moreover, it provide a standalone component which can be run locally and which s
 
 For windows users, you need to download a hadoop distribution, to unzip it and to define the system environment variable `HADOOP_HOME`. You can also define the path into files `hadoop-unit-default.properties` (warning: there are a lot...).
 
+Hadoop Unit is using java 8 so set up your environment with it.
+
 To build, launch the command:
 ```bash
 mvn package
@@ -62,6 +64,7 @@ The available components are:
 * MONGODB
 * CASSANDRA
 * ELASTICSEARCH
+* NEO4J
 
 However, for compatibility reason, SolR/SolRCloud and Elasticsearch can not be run into the same JVM. For this purpose, there are 2 standalone packages which are generated (one which is compliant with solr and one which is compliant with elasticsearch).
 
@@ -541,9 +544,9 @@ public class HdfsBootstrapIntegrationTest {
 * MongoDB
 * Cassandra 3.4
 * ElasticSearch 5.0-alpha4
+* Neo4j 3.0.3
 
 Built on:
-
 * [hadoop-mini-cluster-0.1.7](https://github.com/sakserv/hadoop-mini-clusters) (aka. HDP 2.4.2)
 * [achilles-embedded-4.2.0](https://github.com/doanduyhai/Achilles)
 
@@ -553,16 +556,17 @@ Use:
 * edit `hadoop-unit-default.properties` and indicate `HADOOP_HOME` or set your `HADOOP_HOME` environment variable
 * edit `hadoop-unit-default.properties` and indicate `oozie.sharelib.path`
 
-Todo:
-* male client utils for kafka produce/consume
-* make sample with spark streaming and kafka
-
 Issues:
 * oozie does not work on windows 7 (see http://stackoverflow.com/questions/25790319/getting-access-denied-error-while-running-hadoop-2-3-mapreduce-jobs-in-windows-7)
 * integrate phoenix
 * can only manage one solr collection
 * better docs ;)
 
+#Note
+
+Neo4j will not be integrated with the standalone component since there are too much conflicts with dependencies:
+* Kafka (2.10_10.0.0.0) is using scala-library-2.10.6.jar but neo4j-cypher is using scala-library-2.11.8.jar.
+* Neo4j is using lucene 5.5.0 which create conflict with solr and elasticsearch.
 
 # License
 

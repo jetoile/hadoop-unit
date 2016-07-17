@@ -79,13 +79,6 @@
             <artifactId>commons-configuration</artifactId>
         </dependency>
 
-
-        <dependency>
-            <groupId>fr.jetoile.hadoop</groupId>
-            <artifactId>hadoop-unit-client-spark</artifactId>
-            <scope>test</scope>
-        </dependency>
-
         <dependency>
             <groupId>fr.jetoile.hadoop</groupId>
             <artifactId>hadoop-unit-client-kafka</artifactId>
@@ -116,6 +109,7 @@
             <version>${mongo-java-driver.version}</version>
             <scope>test</scope>
         </dependency>
+
     </dependencies>
 
 </project>

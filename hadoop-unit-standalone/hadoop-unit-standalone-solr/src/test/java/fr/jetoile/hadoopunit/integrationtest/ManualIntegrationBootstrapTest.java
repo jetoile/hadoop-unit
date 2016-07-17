@@ -127,7 +127,6 @@ public class ManualIntegrationBootstrapTest {
         }
 
 
-
         // Consumer
         KafkaConsumerUtils.INSTANCE.consumeMessagesWithNewApi(configuration.getString(HadoopUnitConfig.KAFKA_TEST_TOPIC_KEY), 10);
 
@@ -220,7 +219,6 @@ public class ManualIntegrationBootstrapTest {
     }
 
 
-
     @Test
     public void hdfsShouldStart() throws Exception {
 
@@ -246,11 +244,11 @@ public class ManualIntegrationBootstrapTest {
         hdfsFsHandle.close();
 
         URL url = new URL(
-                String.format( "http://localhost:%s/webhdfs/v1?op=GETHOMEDIRECTORY&user.name=guest",
-                        configuration.getInt( HadoopUnitConfig.HDFS_NAMENODE_HTTP_PORT_KEY ) ) );
+                String.format("http://localhost:%s/webhdfs/v1?op=GETHOMEDIRECTORY&user.name=guest",
+                        configuration.getInt(HadoopUnitConfig.HDFS_NAMENODE_HTTP_PORT_KEY)));
         URLConnection connection = url.openConnection();
-        connection.setRequestProperty( "Accept-Charset", "UTF-8" );
-        BufferedReader response = new BufferedReader( new InputStreamReader( connection.getInputStream() ) );
+        connection.setRequestProperty("Accept-Charset", "UTF-8");
+        BufferedReader response = new BufferedReader(new InputStreamReader(connection.getInputStream()));
         String line = response.readLine();
         response.close();
         assertThat("{\"Path\":\"/user/guest\"}").isEqualTo(line);
@@ -297,9 +295,9 @@ public class ManualIntegrationBootstrapTest {
         org.apache.hadoop.conf.Configuration conf = new org.apache.hadoop.conf.Configuration();
         conf.set("fs.default.name", "hdfs://127.0.0.1:" + configuration.getInt(HadoopUnitConfig.HDFS_NAMENODE_PORT_KEY));
 
-        URI uri = URI.create ("hdfs://127.0.0.1:" + configuration.getInt(HadoopUnitConfig.HDFS_NAMENODE_PORT_KEY));
+        URI uri = URI.create("hdfs://127.0.0.1:" + configuration.getInt(HadoopUnitConfig.HDFS_NAMENODE_PORT_KEY));
 
-        FileSystem hdfsFs = FileSystem.get (uri, conf);
+        FileSystem hdfsFs = FileSystem.get(uri, conf);
 
         OozieClient oozieClient = new OozieClient("http://" + configuration.getString(OozieBootstrap.OOZIE_HOST) + ":" + configuration.getInt(OozieBootstrap.OOZIE_PORT) + "/oozie");
 
@@ -379,7 +377,7 @@ public class ManualIntegrationBootstrapTest {
         assertEquals(1, col.count());
 
         DBCursor cursor = col.find();
-        while(cursor.hasNext()) {
+        while (cursor.hasNext()) {
             LOGGER.info("MONGODB: Document output: {}", cursor.next());
         }
         cursor.close();
