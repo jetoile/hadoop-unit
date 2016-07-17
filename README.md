@@ -534,7 +534,7 @@ public class HdfsBootstrapIntegrationTest {
 
 #Component available
 
-* SolrCloud 5.4.1
+* SolrCloud 6.1.0
 * Kafka 0.10.0.0
 * Hive (metastore and server2)
 * Hdfs
