@@ -68,6 +68,10 @@ The available components are:
 
 However, for compatibility reason, SolR/SolRCloud and Elasticsearch can not be run into the same JVM. For this purpose, there are 2 standalone packages which are generated (one which is compliant with solr and one which is compliant with elasticsearch).
 
+Neo4j will not be integrated with the standalone component since there are too much conflicts with dependencies:
+* Kafka (2.10_10.0.0.0) is using scala-library-2.10.6.jar but neo4j-cypher is using scala-library-2.11.8.jar.
+* Neo4j is using lucene 5.5.0 which create conflict with solr and elasticsearch.
+
 ##Integration testing (will start each component present into classpath)
 With maven, add dependencies of components which are needed
 
@@ -215,7 +219,9 @@ hive
 ```
 
 #Sample
-See hadoop-unit-standalone/src/test/java/fr/jetoile/hadoopunit/integrationtest
+See `hadoop-unit-standalone/src/test/java/fr/jetoile/hadoopunit/integrationtest`
+
+See `sample`
 
 #Maven Plugin usage
 A maven plugin is provided for integration test only.
@@ -337,6 +343,7 @@ Values can be:
 * MONGODB
 * CASSANDRA
 * ELASTICSEARCH
+* NEO4J
 
 Here is a sample integration test:
 ```java
@@ -561,12 +568,6 @@ Issues:
 * integrate phoenix
 * can only manage one solr collection
 * better docs ;)
-
-#Note
-
-Neo4j will not be integrated with the standalone component since there are too much conflicts with dependencies:
-* Kafka (2.10_10.0.0.0) is using scala-library-2.10.6.jar but neo4j-cypher is using scala-library-2.11.8.jar.
-* Neo4j is using lucene 5.5.0 which create conflict with solr and elasticsearch.
 
 # License
 
