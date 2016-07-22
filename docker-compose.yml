@@ -20,7 +20,7 @@ services:
   hadoop-unit-hbase:
     image: hadoop-unit-hbase
     ports:
-    - "20111:20111"
+    - "25111:25111"
     links:
     - hadoop-unit-zookeeper:zookeeper
   hadoop-unit-solrcloud:
@@ -34,8 +34,8 @@ services:
     ports:
     - "20102:20102"
     - "20103:20103"
-    extra_hosts:
-    - "127.0.0.1:127.0.0.10"
+#    extra_hosts:
+#    - "127.0.0.1:127.0.0.10"
     links:
     - hadoop-unit-hdfs:hdfs
     - hadoop-unit-zookeeper:zookeeper
@@ -53,19 +53,19 @@ services:
     ports:
     - "20112:20112"
     - "50070:50070"
-    extra_hosts:
-    - "127.0.0.1:127.0.0.5"
+#    extra_hosts:
+#    - "127.0.0.1:127.0.0.5"
   hadoop-unit-kafka:
     image: hadoop-unit-kafka
     ports:
     - "20111:20111"
-    extra_hosts:
-    - "127.0.0.1:127.0.0.20"
+#    extra_hosts:
+#    - "127.0.0.1:127.0.0.20"
     links:
     - hadoop-unit-zookeeper:zookeeper
   hadoop-unit-zookeeper:
     image: hadoop-unit-zookeeper
     ports:
     - "22010:22010"
-    extra_hosts:
-    - "127.0.0.1:127.0.0.15"
+#    extra_hosts:
+#    - "127.0.0.1:127.0.0.15"

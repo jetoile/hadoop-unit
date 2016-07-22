@@ -76,7 +76,7 @@ public class HBaseBootstrap implements Bootstrap {
     private void build() {
         org.apache.hadoop.conf.Configuration hbaseConfiguration = new org.apache.hadoop.conf.Configuration();
         hbaseConfiguration.setBoolean("hbase.table.sanity.checks", false);
-        hbaseConfiguration.set("fs.default.name", "hdfs://127.0.0.1:" + configuration.getString(HadoopUnitConfig.HDFS_NAMENODE_PORT_KEY));
+        hbaseConfiguration.set("fs.default.name", "hdfs://" + configuration.getString(HadoopUnitConfig.HDFS_NAMENODE_HOST_KEY) + ":" + configuration.getString(HadoopUnitConfig.HDFS_NAMENODE_PORT_KEY));
 
         hbaseLocalCluster = new HbaseLocalCluster.Builder()
                 .setHbaseMasterPort(port)

@@ -37,6 +37,7 @@ public enum HdfsUtils {
     private Configuration configuration;
     private int port;
     private int httpPort;
+    private String hdfsHost;
 
     HdfsUtils() {
         try {
@@ -45,9 +46,9 @@ public enum HdfsUtils {
             System.exit(-1);
         }
         org.apache.hadoop.conf.Configuration conf = new org.apache.hadoop.conf.Configuration();
-        conf.set("fs.default.name", "hdfs://127.0.0.1:" + configuration.getInt(HadoopUnitConfig.HDFS_NAMENODE_PORT_KEY));
+        conf.set("fs.default.name", "hdfs://" + configuration.getString(HadoopUnitConfig.HDFS_NAMENODE_HOST_KEY) + ":" + configuration.getInt(HadoopUnitConfig.HDFS_NAMENODE_PORT_KEY));
 
-        URI uri = URI.create("hdfs://127.0.0.1:" + configuration.getInt(HadoopUnitConfig.HDFS_NAMENODE_PORT_KEY));
+        URI uri = URI.create("hdfs://" + configuration.getString(HadoopUnitConfig.HDFS_NAMENODE_HOST_KEY) + ":" + configuration.getInt(HadoopUnitConfig.HDFS_NAMENODE_PORT_KEY));
 
         try {
             fileSystem = FileSystem.get(uri, conf);
@@ -65,6 +66,7 @@ public enum HdfsUtils {
 
         port = configuration.getInt(HadoopUnitConfig.HDFS_NAMENODE_PORT_KEY);
         httpPort = configuration.getInt(HadoopUnitConfig.HDFS_NAMENODE_HTTP_PORT_KEY);
+        hdfsHost = configuration.getString(HadoopUnitConfig.HDFS_NAMENODE_HOST_KEY);
     }
 
 
