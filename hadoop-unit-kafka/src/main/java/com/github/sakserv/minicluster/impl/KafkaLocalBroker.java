@@ -21,7 +21,9 @@ import kafka.server.KafkaConfig;
 import kafka.server.KafkaServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import scala.Option;
 
+import java.lang.reflect.Constructor;
 import java.util.Properties;
 
 /**
@@ -32,10 +34,10 @@ public class KafkaLocalBroker implements MiniCluster {
 
     // Logger
     private static final Logger LOG = LoggerFactory.getLogger(KafkaLocalBroker.class);
-    
+
     private KafkaServer kafkaServer;
     private KafkaConfig kafkaConfig;
-    
+
     private String kafkaHostname;
     private Integer kafkaPort;
     private Integer kafkaBrokerId;
@@ -66,7 +68,7 @@ public class KafkaLocalBroker implements MiniCluster {
     public String getZookeeperConnectionString() {
         return zookeeperConnectionString;
     }
-    
+
     private KafkaLocalBroker(Builder builder) {
         this.kafkaHostname = builder.kafkaHostname;
         this.kafkaPort = builder.kafkaPort;
@@ -74,10 +76,10 @@ public class KafkaLocalBroker implements MiniCluster {
         this.kafkaProperties = builder.kafkaProperties;
         this.kafkaTempDir = builder.kafkaTempDir;
         this.zookeeperConnectionString = builder.zookeeperConnectionString;
-        
+
     }
 
-    
+
     public static class Builder {
         private String kafkaHostname;
         private Integer kafkaPort;
@@ -85,65 +87,65 @@ public class KafkaLocalBroker implements MiniCluster {
         private Properties kafkaProperties;
         private String kafkaTempDir;
         private String zookeeperConnectionString;
-        
+
         public Builder setKafkaHostname(String kafkaHostname) {
             this.kafkaHostname = kafkaHostname;
             return this;
         }
-        
+
         public Builder setKafkaPort(Integer kafkaPort) {
             this.kafkaPort = kafkaPort;
             return this;
         }
-        
-        public Builder setKafkaBrokerId(Integer kafkaBrokerId){
+
+        public Builder setKafkaBrokerId(Integer kafkaBrokerId) {
             this.kafkaBrokerId = kafkaBrokerId;
             return this;
         }
-        
+
         public Builder setKafkaProperties(Properties kafkaProperties) {
             this.kafkaProperties = kafkaProperties;
             return this;
         }
-        
+
         public Builder setKafkaTempDir(String kafkaTempDir) {
             this.kafkaTempDir = kafkaTempDir;
             return this;
         }
-        
+
         public Builder setZookeeperConnectionString(String zookeeperConnectionString) {
             this.zookeeperConnectionString = zookeeperConnectionString;
             return this;
         }
-        
+
         public KafkaLocalBroker build() {
             KafkaLocalBroker kafkaLocalBroker = new KafkaLocalBroker(this);
             validateObject(kafkaLocalBroker);
             return kafkaLocalBroker;
         }
-        
+
         public void validateObject(KafkaLocalBroker kafkaLocalBroker) {
-            if(kafkaLocalBroker.kafkaHostname == null) {
+            if (kafkaLocalBroker.kafkaHostname == null) {
                 throw new IllegalArgumentException("ERROR: Missing required config: Kafka Hostname");
             }
 
-            if(kafkaLocalBroker.kafkaPort == null) {
+            if (kafkaLocalBroker.kafkaPort == null) {
                 throw new IllegalArgumentException("ERROR: Missing required config: Kafka Port");
             }
 
-            if(kafkaLocalBroker.kafkaBrokerId == null) {
+            if (kafkaLocalBroker.kafkaBrokerId == null) {
                 throw new IllegalArgumentException("ERROR: Missing required config: Kafka Broker Id");
             }
 
-            if(kafkaLocalBroker.kafkaProperties == null) {
+            if (kafkaLocalBroker.kafkaProperties == null) {
                 throw new IllegalArgumentException("ERROR: Missing required config: Kafka Properties");
             }
 
-            if(kafkaLocalBroker.kafkaTempDir == null) {
+            if (kafkaLocalBroker.kafkaTempDir == null) {
                 throw new IllegalArgumentException("ERROR: Missing required config: Kafka Temp Dir");
             }
 
-            if(kafkaLocalBroker.zookeeperConnectionString == null) {
+            if (kafkaLocalBroker.zookeeperConnectionString == null) {
                 throw new IllegalArgumentException("ERROR: Missing required config: Zookeeper Connection String");
             }
         }
@@ -153,7 +155,31 @@ public class KafkaLocalBroker implements MiniCluster {
     public void start() throws Exception {
         LOG.info("KAFKA: Starting Kafka on port: {}", kafkaPort);
         configure();
-        kafkaServer = new KafkaServer(kafkaConfig, new LocalSystemTime(), scala.Option.apply("test"));
+
+        // The Kafka API for KafkaServer has changed multiple times.
+        // Using reflection to call the version specific constructor
+        // with the correct number of arguments.
+
+        // We only expect a single constructor, throw an Exception if there is not exactly 1
+        Class<KafkaServer> kafkaServerClazz = KafkaServer.class;
+        Constructor[] kafkaServerConstructors = kafkaServerClazz.getConstructors();
+        if (kafkaServerConstructors.length != 1) {
+            throw new Exception("kafka.server.KafkaServer has more than one constructor, expected only 1");
+        }
+
+        // We only expect 2 and 3 argument constructors, throw an Exception if not
+        Constructor kafkaServerConstructor = kafkaServerConstructors[0];
+
+        // Kafka 2.9.2 0.8.2 (HDP 2.3.0 and HDP 2.3.2)
+        if (kafkaServerConstructor.getParameterTypes().length == 2) {
+            kafkaServer = (KafkaServer) kafkaServerConstructor.newInstance(kafkaConfig, new LocalSystemTime());
+
+            // Kafka 2.10 0.9.0 (HDP 2.3.4), pass in the threadPrefixName
+        } else if (kafkaServerConstructor.getParameterTypes().length == 3) {
+            Option<String> threadPrefixName = Option.apply("kafka-mini-cluster");
+            kafkaServer = (KafkaServer) kafkaServerConstructor.newInstance(kafkaConfig, new LocalSystemTime(), threadPrefixName);
+        }
+
         kafkaServer.startup();
     }
 
@@ -174,9 +200,9 @@ public class KafkaLocalBroker implements MiniCluster {
 
     @Override
     public void configure() throws Exception {
-        kafkaProperties.put("advertised.host.name", kafkaHostname);
-        kafkaProperties.put("port", kafkaPort+"");
-        kafkaProperties.put("broker.id", kafkaBrokerId+"");
+//        kafkaProperties.put("advertised.listeners", "PLAINTEXT://" + kafkaHostname + ":" + kafkaPort);
+        kafkaProperties.put("listeners", "PLAINTEXT://" + kafkaHostname + ":" + kafkaPort);
+        kafkaProperties.put("broker.id", kafkaBrokerId + "");
         kafkaProperties.put("log.dir", kafkaTempDir);
         kafkaProperties.put("enable.zookeeper", "true");
         kafkaProperties.put("zookeeper.connect", zookeeperConnectionString);

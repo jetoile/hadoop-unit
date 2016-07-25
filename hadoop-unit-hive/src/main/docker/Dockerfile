@@ -1,4 +1,5 @@
 FROM java:8
+#FROM frolvlad/alpine-oraclejdk8
 
 WORKDIR /
 ADD appassembler-jsw/jsw/hadoop-unit-hive /

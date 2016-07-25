@@ -102,7 +102,7 @@ public class Neo4jBootstrap implements Bootstrap {
             try {
                 build();
             } catch (Exception e) {
-                LOGGER.error("unable to add cassandra", e);
+                LOGGER.error("unable to add neo4j", e);
             }
             state = State.STARTED;
             LOGGER.info("{} is started", this.getClass().getName());
@@ -120,7 +120,7 @@ public class Neo4jBootstrap implements Bootstrap {
                 graphDb.shutdown();
                 cleanup();
             } catch (Exception e) {
-                LOGGER.error("unable to stop cassandra", e);
+                LOGGER.error("unable to stop neo4j", e);
             }
             state = State.STOPPED;
             LOGGER.info("{} is stopped", this.getClass().getName());

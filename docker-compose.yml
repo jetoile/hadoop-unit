@@ -21,14 +21,20 @@ services:
     image: hadoop-unit-hbase
     ports:
     - "25111:25111"
-    links:
-    - hadoop-unit-zookeeper:zookeeper
+#    links:
+#    - hadoop-unit-zookeeper:hadoop-unit-zookeeper
+#    - hadoop-unit-hdfs:hadoop-unit-hdfs
+    depends_on:
+      - hadoop-unit-zookeeper
+      - hadoop-unit-hdfs
   hadoop-unit-solrcloud:
     image: hadoop-unit-solrcloud
     ports:
     - "8983:8983"
-    links:
-    - hadoop-unit-zookeeper:zookeeper
+#    links:
+#    - hadoop-unit-zookeeper:hadoop-unit-zookeeper
+    depends_on:
+      - hadoop-unit-zookeeper
   hadoop-unit-hive:
     image: hadoop-unit-hive
     ports:
@@ -36,18 +42,24 @@ services:
     - "20103:20103"
 #    extra_hosts:
 #    - "127.0.0.1:127.0.0.10"
-    links:
-    - hadoop-unit-hdfs:hdfs
-    - hadoop-unit-zookeeper:zookeeper
+#    links:
+#    - hadoop-unit-hdfs:hadoop-unit-hdfs
+#    - hadoop-unit-zookeeper:hadoop-unit-zookeeper
+    depends_on:
+      - hadoop-unit-hdfs
+      - hadoop-unit-zookeeper
   hadoop-unit-oozie:
     image: hadoop-unit-oozie
     ports:
     - "20113:20113"
-    links:
-    - hadoop-unit-zookeeper:zookeeper
-    - hadoop-unit-hdfs:hdfs
-    - hadoop-unit-hive:hivemeta
-    - hadoop-unit-hive:hiveserver2
+#    links:
+#    - hadoop-unit-zookeeper:hadoop-unit-zookeeper
+#    - hadoop-unit-hdfs:hadoop-unit-hdfs
+#    - hadoop-unit-hive:hadoop-unit-hive
+    depends_on:
+      - hadoop-unit-zookeeper
+      - hadoop-unit-hdfs
+      - hadoop-unit-hive
   hadoop-unit-hdfs:
     image: hadoop-unit-hdfs
     ports:
@@ -61,8 +73,10 @@ services:
     - "20111:20111"
 #    extra_hosts:
 #    - "127.0.0.1:127.0.0.20"
-    links:
-    - hadoop-unit-zookeeper:zookeeper
+#    links:
+#    - hadoop-unit-zookeeper:hadoop-unit-zookeeper
+    depends_on:
+      - hadoop-unit-zookeeper
   hadoop-unit-zookeeper:
     image: hadoop-unit-zookeeper
     ports:

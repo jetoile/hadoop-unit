@@ -55,29 +55,115 @@
 
     <build>
         <plugins>
+            <!--<plugin>-->
+                <!--<groupId>org.codehaus.mojo</groupId>-->
+                <!--<artifactId>appassembler-maven-plugin</artifactId>-->
+                <!--<executions>-->
+                    <!--<execution>-->
+                        <!--<goals>-->
+                            <!--<goal>assemble</goal>-->
+                        <!--</goals>-->
+                    <!--</execution>-->
+                <!--</executions>-->
+                <!--<configuration>-->
+                    <!--<configurationSourceDirectory>src/main/conf</configurationSourceDirectory>-->
+                    <!--<copyConfigurationDirectory>true</copyConfigurationDirectory>-->
+                    <!--<configurationDirectory>conf</configurationDirectory>-->
+                    <!--<programs>-->
+                        <!--<program>-->
+                            <!--<mainClass>fr.jetoile.hadoopunit.component.OozieBootstrap</mainClass>-->
+                            <!--<name>main</name>-->
+                        <!--</program>-->
+                    <!--</programs>-->
+                    <!--<binFileExtensions>-->
+                        <!--<unix>.sh</unix>-->
+                    <!--</binFileExtensions>-->
+                <!--</configuration>-->
+            <!--</plugin>-->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>appassembler-maven-plugin</artifactId>
                 <executions>
+
                     <execution>
+                        <id>hadoop-bootstrap</id>
+                        <phase>package</phase>
                         <goals>
-                            <goal>assemble</goal>
+                            <goal>generate-daemons</goal>
                         </goals>
+                        <configuration>
+                            <target>${project.build.directory}/appassembler-jsw</target>
+
+                            <repositoryLayout>flat</repositoryLayout>
+
+                            <configurationSourceDirectory>src/main/conf</configurationSourceDirectory>
+                            <copyConfigurationDirectory>true</copyConfigurationDirectory>
+                            <configurationDirectory>conf</configurationDirectory>
+                            <logsDirectory>logs</logsDirectory>
+                            <useDaemonIdAsWrapperConfName>true</useDaemonIdAsWrapperConfName>
+
+                            <daemons>
+                                <daemon>
+                                    <id>${project.name}</id>
+                                    <mainClass>fr.jetoile.hadoopunit.component.OozieBootstrap</mainClass>
+                                    <commandLineArguments>
+                                    </commandLineArguments>
+                                    <platforms>
+                                        <platform>jsw</platform>
+                                    </platforms>
+                                    <generatorConfigurations>
+                                        <generatorConfiguration>
+                                            <generator>jsw</generator>
+                                            <includes>
+                                                <include>linux-x86-32</include>
+                                                <include>linux-x86-64</include>
+                                                <include>windows-x86-32</include>
+                                                <include>windows-x86-64</include>
+                                                <include>macosx-universal-64</include>
+                                            </includes>
+                                            <configuration>
+
+                                                <property>
+                                                    <name>configuration.directory.in.classpath.first</name>
+                                                    <value>conf</value>
+                                                </property>
+
+                                                <property>
+                                                    <name>wrapper.logfile.maxsize</name>
+                                                    <value>100m</value>
+                                                </property>
+
+                                            </configuration>
+                                        </generatorConfiguration>
+                                    </generatorConfigurations>
+                                    <jvmSettings>
+                                        <initialMemorySize>256M</initialMemorySize>
+                                        <maxMemorySize>2048M</maxMemorySize>
+                                        <systemProperties>
+                                            <systemProperty>com.sun.management.jmxremote</systemProperty>
+                                            <systemProperty>com.sun.management.jmxremote.port=8199</systemProperty>
+                                            <systemProperty>com.sun.management.jmxremote.authenticate=false
+                                            </systemProperty>
+                                            <systemProperty>com.sun.management.jmxremote.ssl=false</systemProperty>
+                                            <systemProperty>com.sun.management.jmxremote.local.only=false
+                                            </systemProperty>
+                                        </systemProperties>
+                                        <extraArguments>
+                                            <extraArgument>-Xdebug</extraArgument>
+                                            <extraArgument>
+                                                -Xrunjdwp:transport=dt_socket,address=8000,server=y,suspend=n
+                                            </extraArgument>
+                                            <extraArgument>-server</extraArgument>
+                                            <extraArgument>-XX:+HeapDumpOnOutOfMemoryError</extraArgument>
+                                        </extraArguments>
+                                    </jvmSettings>
+                                </daemon>
+                            </daemons>
+                        </configuration>
                     </execution>
                 </executions>
                 <configuration>
-                    <configurationSourceDirectory>src/main/conf</configurationSourceDirectory>
-                    <copyConfigurationDirectory>true</copyConfigurationDirectory>
-                    <configurationDirectory>conf</configurationDirectory>
-                    <programs>
-                        <program>
-                            <mainClass>fr.jetoile.hadoopunit.component.OozieBootstrap</mainClass>
-                            <name>main</name>
-                        </program>
-                    </programs>
-                    <binFileExtensions>
-                        <unix>.sh</unix>
-                    </binFileExtensions>
+
                 </configuration>
             </plugin>
 
