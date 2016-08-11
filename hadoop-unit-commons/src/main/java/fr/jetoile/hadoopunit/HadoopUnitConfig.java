@@ -124,6 +124,7 @@ public class HadoopUnitConfig {
     public static final String HBASE_TEST_NUM_ROWS_TO_PUT_KEY = "hbase.test.num.rows.to.put";
 
     //Oozie
+    public static final String OOZIE_TMP_DIR_KEY = "oozie.tmp.dir";
     public static final String OOZIE_TEST_DIR_KEY = "oozie.test.dir";
     public static final String OOZIE_HOME_DIR_KEY = "oozie.home.dir";
     public static final String OOZIE_USERNAME_KEY = "oozie.username";
