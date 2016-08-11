@@ -34,6 +34,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -56,6 +57,7 @@ public class OozieBootstrap implements Bootstrap {
     private State state = State.STOPPED;
 
     private Configuration configuration;
+    private String oozieTmpDir;
     private String oozieTestDir;
     private String oozieHomeDir;
     private String oozieUsername;
@@ -165,6 +167,8 @@ public class OozieBootstrap implements Bootstrap {
         oozieLocalShareLibCacheDir = configuration.getString(HadoopUnitConfig.OOZIE_LOCAL_SHARE_LIB_CACHE_DIR_KEY);
         ooziePurgeLocalShareLibCache = configuration.getBoolean(HadoopUnitConfig.OOZIE_PURGE_LOCAL_SHARE_LIB_CACHE_KEY);
 
+        oozieTmpDir = configuration.getString(HadoopUnitConfig.OOZIE_TMP_DIR_KEY);
+
         numNodeManagers = Integer.parseInt(configuration.getString(HadoopUnitConfig.YARN_NUM_NODE_MANAGERS_KEY));
         jobHistoryAddress = configuration.getString(HadoopUnitConfig.MR_JOB_HISTORY_ADDRESS_KEY);
         resourceManagerAddress = configuration.getString(HadoopUnitConfig.YARN_RESOURCE_MANAGER_ADDRESS_KEY);
@@ -229,6 +233,7 @@ public class OozieBootstrap implements Bootstrap {
     private void cleanup() {
         FileUtils.deleteFolder(fullOozieShareLibTarFilePath);
         FileUtils.deleteFolder(oozieShareLibExtractTempDir);
+        FileUtils.deleteFolder(oozieTmpDir);
     }
 
     @Override
@@ -249,6 +254,7 @@ public class OozieBootstrap implements Bootstrap {
         } else {
 
             try {
+                Paths.get(oozieTmpDir).toFile().mkdirs();
                 // Get and extract the oozie release
                 String oozieExtractTempDir = extractOozieTarFileToTempDir(new File(oozieShareLibPath + Path.SEPARATOR + oozieShareLibName));
 
@@ -260,8 +266,7 @@ public class OozieBootstrap implements Bootstrap {
                 oozieShareLibExtractTempDir = extractOozieShareLibTarFileToTempDir(new File(fullOozieShareLibTarFilePath));
 
                 // Copy the sharelib into HDFS
-                Path destPath = new Path(oozieHdfsShareLibDir + Path.SEPARATOR +
-                        SHARE_LIB_PREFIX + getTimestampDirectory());
+                Path destPath = new Path(oozieHdfsShareLibDir + Path.SEPARATOR + SHARE_LIB_PREFIX + getTimestampDirectory());
                 LOGGER.info("OOZIE: Writing share lib contents to: {}", destPath);
                 FileSystem hdfsFileSystem = null;
                 try {
@@ -276,13 +281,13 @@ public class OozieBootstrap implements Bootstrap {
 //                }
 
             } catch (IOException e) {
-                LOGGER.error("unable to copy oozie sharelib into hdfs");
+                LOGGER.error("unable to copy oozie sharelib into hdfs", e);
             }
         }
     }
 
     public String extractOozieTarFileToTempDir(File fullOozieTarFilePath) throws IOException {
-        File tempDir = File.createTempFile(SHARE_LIB_LOCAL_TEMP_PREFIX, "");
+        File tempDir = File.createTempFile(SHARE_LIB_LOCAL_TEMP_PREFIX, "", Paths.get(oozieTmpDir).toFile());
         tempDir.delete();
         tempDir.mkdir();
         tempDir.deleteOnExit();
@@ -293,7 +298,7 @@ public class OozieBootstrap implements Bootstrap {
     }
 
     public String extractOozieShareLibTarFileToTempDir(File fullOozieShareLibTarFilePath) throws IOException {
-        File tempDir = File.createTempFile(SHARE_LIB_LOCAL_TEMP_PREFIX, "");
+        File tempDir = File.createTempFile(SHARE_LIB_LOCAL_TEMP_PREFIX, "", Paths.get(oozieTmpDir).toFile());
         tempDir.delete();
         tempDir.mkdir();
         tempDir.deleteOnExit();
