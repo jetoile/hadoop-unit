@@ -15,6 +15,7 @@
         <module>solr-parquet-spark</module>
         <module>parquet-spark</module>
         <module>kafka-stream</module>
+        <module>spark-streaming-cassandra</module>
     </modules>
 
     <artifactId>sample</artifactId>
