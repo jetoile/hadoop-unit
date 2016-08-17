@@ -8,7 +8,8 @@ RUN chmod +x /bin/wrapper-linux-x86-32
 RUN chmod +x /bin/wrapper-linux-x86-64
 RUN mkdir /logs
 
-EXPOSE 22010
+EXPOSE 25111
+EXPOSE 32000-33000
 
 CMD /bin/hadoop-unit-hbase console
 

@@ -4,26 +4,41 @@ services:
     image: hadoop-unit-neo4j
     ports:
     - "13533:13533"
+#  hadoop-unit-elasticsearch:
+#    image: hadoop-unit-elasticsearch
+#    ports:
+#    - "14433:14433"
+#    - "14533:14533"
   hadoop-unit-elasticsearch:
-    image: hadoop-unit-elasticsearch
+    image: elasticsearch:5.0.0-alpha4
     ports:
-    - "14433:14433"
-    - "14533:14533"
+    - "14433:9200"
+    - "14533:9300"
+    security_opt:
+    - seccomp:unconfined
+    environment:
+    - ES_JAVA_OPTS=-Xms1g -Xmx1g
+#  hadoop-unit-cassandra:
+#    image: hadoop-unit-cassandra
+#    ports:
+#    - "13433:13433"
   hadoop-unit-cassandra:
-    image: hadoop-unit-cassandra
+    image: cassandra:3.7
     ports:
-    - "13433:13433"
+    - "13433:9042"
+#  hadoop-unit-mongodb:
+#    image: hadoop-unit-mongodb
+#    ports:
+#    - "13333:13333"
   hadoop-unit-mongodb:
-    image: hadoop-unit-mongodb
+    image: mongo:3.3.11
     ports:
-    - "13333:13333"
+    - "13333:27017"
   hadoop-unit-hbase:
     image: hadoop-unit-hbase
     ports:
     - "25111:25111"
-#    links:
-#    - hadoop-unit-zookeeper:hadoop-unit-zookeeper
-#    - hadoop-unit-hdfs:hadoop-unit-hdfs
+#    - "30000-45000"
     depends_on:
       - hadoop-unit-zookeeper
       - hadoop-unit-hdfs
@@ -31,8 +46,6 @@ services:
     image: hadoop-unit-solrcloud
     ports:
     - "8983:8983"
-#    links:
-#    - hadoop-unit-zookeeper:hadoop-unit-zookeeper
     depends_on:
       - hadoop-unit-zookeeper
   hadoop-unit-hive:
@@ -40,11 +53,6 @@ services:
     ports:
     - "20102:20102"
     - "20103:20103"
-#    extra_hosts:
-#    - "127.0.0.1:127.0.0.10"
-#    links:
-#    - hadoop-unit-hdfs:hadoop-unit-hdfs
-#    - hadoop-unit-zookeeper:hadoop-unit-zookeeper
     depends_on:
       - hadoop-unit-hdfs
       - hadoop-unit-zookeeper
@@ -52,10 +60,6 @@ services:
     image: hadoop-unit-oozie
     ports:
     - "20113:20113"
-#    links:
-#    - hadoop-unit-zookeeper:hadoop-unit-zookeeper
-#    - hadoop-unit-hdfs:hadoop-unit-hdfs
-#    - hadoop-unit-hive:hadoop-unit-hive
     depends_on:
       - hadoop-unit-zookeeper
       - hadoop-unit-hdfs
@@ -65,21 +69,22 @@ services:
     ports:
     - "20112:20112"
     - "50070:50070"
-#    extra_hosts:
-#    - "127.0.0.1:127.0.0.5"
+#  hadoop-unit-kafka:
+#    image: hadoop-unit-kafka
+#    ports:
+#    - "9092:9092"
+#    depends_on:
+#      - hadoop-unit-zookeeper
   hadoop-unit-kafka:
-    image: hadoop-unit-kafka
+    image: ches/kafka
     ports:
-    - "20111:20111"
-#    extra_hosts:
-#    - "127.0.0.1:127.0.0.20"
-#    links:
-#    - hadoop-unit-zookeeper:hadoop-unit-zookeeper
+    - "20111:9092"
+    environment:
+    - ZOOKEEPER_IP=hadoop-unit-zookeeper
+    - ZOOKEEPER_PORT=22010
     depends_on:
-      - hadoop-unit-zookeeper
+    - hadoop-unit-zookeeper
   hadoop-unit-zookeeper:
     image: hadoop-unit-zookeeper
     ports:
     - "22010:22010"
-#    extra_hosts:
-#    - "127.0.0.1:127.0.0.15"

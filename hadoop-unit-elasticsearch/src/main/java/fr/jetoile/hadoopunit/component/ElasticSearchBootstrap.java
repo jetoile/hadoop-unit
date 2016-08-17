@@ -168,16 +168,4 @@ public class ElasticSearchBootstrap implements Bootstrap {
         return client;
     }
 
-    final public static void main(String... args) throws NotFoundServiceException {
-
-        HadoopBootstrap bootstrap = HadoopBootstrap.INSTANCE;
-
-        Runtime.getRuntime().addShutdownHook(new Thread() {
-            public void run() {
-                bootstrap.stopAll();
-            }
-        });
-
-        bootstrap.add(Component.ELASTICSEARCH).startAll();
-    }
 }

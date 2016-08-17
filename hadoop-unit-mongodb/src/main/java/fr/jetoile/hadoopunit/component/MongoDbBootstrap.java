@@ -121,17 +121,4 @@ public class MongoDbBootstrap implements Bootstrap {
         throw new UnsupportedOperationException("the method getConfiguration can not be called on MongoDbBootstrap");
     }
 
-    final public static void main(String... args) throws NotFoundServiceException {
-
-        HadoopBootstrap bootstrap = HadoopBootstrap.INSTANCE;
-
-        Runtime.getRuntime().addShutdownHook(new Thread() {
-            public void run() {
-                bootstrap.stopAll();
-            }
-        });
-
-        bootstrap.add(Component.MONGODB).startAll();
-    }
-
 }

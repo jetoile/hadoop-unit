@@ -114,8 +114,13 @@ public class OozieBootstrap implements Bootstrap {
 
     private void build() throws NotFoundServiceException {
         //is done lazy because hdfsBootstrap should be started
-        hdfsDefaultFs = HadoopBootstrap.INSTANCE.getService(Component.HDFS).getConfiguration().get("fs.defaultFS");
-        hadoopConf = HadoopBootstrap.INSTANCE.getService(Component.HDFS).getConfiguration();
+//        hdfsDefaultFs = HadoopBootstrap.INSTANCE.getService(Component.HDFS).getConfiguration().get("fs.defaultFS");
+//        hadoopConf = HadoopBootstrap.INSTANCE.getService(Component.HDFS).getConfiguration();
+
+        org.apache.hadoop.conf.Configuration hadoopConf = new org.apache.hadoop.conf.Configuration();
+        hadoopConf.set("fs.defaultFS", "hdfs://" + configuration.getString(HadoopUnitConfig.HDFS_NAMENODE_HOST_KEY) + ":" + configuration.getString(HadoopUnitConfig.HDFS_NAMENODE_PORT_KEY));
+        hdfsDefaultFs = "hdfs://" + configuration.getString(HadoopUnitConfig.HDFS_NAMENODE_HOST_KEY) + ":" + configuration.getString(HadoopUnitConfig.HDFS_NAMENODE_PORT_KEY);
+
 
         mrLocalCluster = new MRLocalCluster.Builder()
                 .setNumNodeManagers(numNodeManagers)

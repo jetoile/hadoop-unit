@@ -194,16 +194,7 @@ public class ManualIntegrationBootstrapTest {
     @Test
     public void hdfsShouldStart() throws Exception {
 
-//        assertThat(Utils.available("127.0.0.1", configuration.getInt(Config.HDFS_NAMENODE_HTTP_PORT_KEY))).isFalse();
-//
-//        org.apache.hadoop.conf.Configuration conf = new org.apache.hadoop.conf.Configuration();
-//        conf.set("fs.default.name", "hdfs://127.0.0.1:" + configuration.getInt(Config.HDFS_NAMENODE_PORT_KEY));
-//
-//        URI uri = URI.create ("hdfs://127.0.0.1:" + configuration.getInt(Config.HDFS_NAMENODE_PORT_KEY));
-//
-//        FileSystem hdfsFsHandle = FileSystem.get (uri, conf);
         FileSystem hdfsFsHandle = HdfsUtils.INSTANCE.getFileSystem();
-
 
         FSDataOutputStream writer = hdfsFsHandle.create(new Path(configuration.getString(HadoopUnitConfig.HDFS_TEST_FILE_KEY)));
         writer.writeUTF(configuration.getString(HadoopUnitConfig.HDFS_TEST_STRING_KEY));

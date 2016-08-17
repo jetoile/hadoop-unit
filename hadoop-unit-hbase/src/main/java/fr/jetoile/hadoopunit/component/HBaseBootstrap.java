@@ -77,6 +77,10 @@ public class HBaseBootstrap implements Bootstrap {
         org.apache.hadoop.conf.Configuration hbaseConfiguration = new org.apache.hadoop.conf.Configuration();
         hbaseConfiguration.setBoolean("hbase.table.sanity.checks", false);
         hbaseConfiguration.set("fs.default.name", "hdfs://" + configuration.getString(HadoopUnitConfig.HDFS_NAMENODE_HOST_KEY) + ":" + configuration.getString(HadoopUnitConfig.HDFS_NAMENODE_PORT_KEY));
+        hbaseConfiguration.set("fs.defaultFS", "hdfs://" + configuration.getString(HadoopUnitConfig.HDFS_NAMENODE_HOST_KEY) + ":" + configuration.getString(HadoopUnitConfig.HDFS_NAMENODE_PORT_KEY));
+        hbaseConfiguration.set("hadoop.registry.zk.quorum", zookeeperConnectionString);
+//        hbaseConfiguration.set("hbase.master", configuration.getString("hbase.host") + ":" + configuration.getInt(HadoopUnitConfig.HBASE_MASTER_PORT_KEY));
+
 
         hbaseLocalCluster = new HbaseLocalCluster.Builder()
                 .setHbaseMasterPort(port)
@@ -88,6 +92,7 @@ public class HBaseBootstrap implements Bootstrap {
                 .setZookeeperZnodeParent(zookeeperZnodeParent)
                 .setHbaseWalReplicationEnabled(enableWalReplication)
                 .setHbaseConfiguration(hbaseConfiguration)
+//                .setHdfsHost("hdfs://" + configuration.getString(HadoopUnitConfig.HDFS_NAMENODE_HOST_KEY) + ":" + configuration.getString(HadoopUnitConfig.HDFS_NAMENODE_PORT_KEY))
                 .build();
     }
 
