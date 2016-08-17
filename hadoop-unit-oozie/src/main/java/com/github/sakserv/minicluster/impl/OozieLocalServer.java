@@ -320,7 +320,7 @@ public class OozieLocalServer implements MiniCluster {
 
         if (oozieShareLibCreate) {
             configuration.set("oozie.service.WorkflowAppService.system.libpath",
-                    oozieHdfsDefaultFs + oozieHdfsShareLibDir);
+                    oozieHdfsShareLibDir);
             configuration.set("use.system.libpath.for.mapreduce.and.pig.jobs", "true");
         }
 

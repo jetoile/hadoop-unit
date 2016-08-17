@@ -138,8 +138,9 @@ public class OozieBootstrap implements Bootstrap {
                 .setOozieYarnResourceManagerAddress(oozieYarnResourceManagerAddress)
                 .setOozieHdfsDefaultFs(hdfsDefaultFs)
                 .setOozieConf(hadoopConf)
-                .setOozieHdfsShareLibDir(oozieHdfsShareLibDir)
+                .setOozieHdfsShareLibDir("file://"+oozieShareLibExtractTempDir)
                 .setOozieShareLibCreate(oozieShareLibCreate)
+//                .setOozieLocalShareLibCacheDir(oozieShareLibExtractTempDir)
                 .setOozieLocalShareLibCacheDir(oozieLocalShareLibCacheDir)
                 .setOoziePurgeLocalShareLibCache(ooziePurgeLocalShareLibCache)
                 .setOoziePort(ooziePort)
@@ -193,11 +194,11 @@ public class OozieBootstrap implements Bootstrap {
             LOGGER.info("{} is starting", this.getClass().getName());
             init();
             try {
+                createShareLib();
                 build();
             } catch (NotFoundServiceException e) {
                 LOGGER.error("unable to add oozie", e);
             }
-            createShareLib();
             try {
                 mrLocalCluster.start();
                 oozieLocalCluster.start();
