@@ -20,6 +20,7 @@
 
     <properties>
         <mongo-java-driver.version>2.11.3</mongo-java-driver.version>
+        <neo4j-java-driver.version>1.0.4</neo4j-java-driver.version>
     </properties>
 
     <dependencies>
@@ -107,6 +108,13 @@
             <groupId>org.mongodb</groupId>
             <artifactId>mongo-java-driver</artifactId>
             <version>${mongo-java-driver.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.neo4j.driver</groupId>
+            <artifactId>neo4j-java-driver</artifactId>
+            <version>${neo4j-java-driver.version}</version>
             <scope>test</scope>
         </dependency>
 

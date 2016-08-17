@@ -1,9 +1,15 @@
 version: '2'
 services:
+#  hadoop-unit-neo4j:
+#    image: hadoop-unit-neo4j
+#    ports:
+#    - "13533:13533"
   hadoop-unit-neo4j:
-    image: hadoop-unit-neo4j
+    image: neo4j:3.0.4
     ports:
-    - "13533:13533"
+    - "13533:7687"
+    environment:
+    - NEO4J_AUTH=none
 #  hadoop-unit-elasticsearch:
 #    image: hadoop-unit-elasticsearch
 #    ports:

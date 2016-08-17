@@ -50,6 +50,7 @@ import org.apache.zookeeper.KeeperException;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 import org.junit.*;
+import org.neo4j.driver.v1.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -60,6 +61,8 @@ import java.net.URLConnection;
 import java.net.UnknownHostException;
 import java.sql.Connection;
 import java.sql.*;
+import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
@@ -402,6 +405,33 @@ public class ManualIntegrationBootstrapTest {
         assertEquals(res.get(0).getString("value"), "value2");
         assertEquals(res.get(1).getString("user"), "user1");
 
+    }
+
+    @Test
+    public void neo4jShouldStartWithRealDriver() {
+
+        org.neo4j.driver.v1.Driver driver = GraphDatabase.driver(
+                "bolt://localhost:13533",
+                Config.build()
+                        .withEncryptionLevel(Config.EncryptionLevel.NONE)
+                        .toConfig()
+        );
+
+        List<Record> results = new ArrayList<>();
+        try (org.neo4j.driver.v1.Session session = driver.session()) {
+            session.run("CREATE (person:Person {name: {name}, title:'King'})", Values.parameters("name", "Arthur"));
+
+            StatementResult result = session.run("MATCH (a:Person) WHERE a.name = 'Arthur' RETURN a.name AS name, a.title AS title");
+            while (result.hasNext()) {
+                Record record = result.next();
+                results.add(record);
+                LOGGER.debug(record.get("title").asString() + " " + record.get("name").asString());
+            }
+        }
+
+        assertEquals(1, results.size());
+        assertEquals("King", results.get(0).get("title").asString());
+        assertEquals("Arthur", results.get(0).get("name").asString());
     }
 
 }
