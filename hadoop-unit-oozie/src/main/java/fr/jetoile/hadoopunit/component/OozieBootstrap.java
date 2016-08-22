@@ -28,12 +28,14 @@ import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.FileUtil;
 import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.hdfs.client.HdfsUtils;
 import org.apache.oozie.client.OozieClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -274,11 +276,15 @@ public class OozieBootstrap implements Bootstrap {
                 // Copy the sharelib into HDFS
                 Path destPath = new Path(oozieHdfsShareLibDir + Path.SEPARATOR + SHARE_LIB_PREFIX + getTimestampDirectory());
                 LOGGER.info("OOZIE: Writing share lib contents to: {}", destPath);
+
                 FileSystem hdfsFileSystem = null;
+                org.apache.hadoop.conf.Configuration conf = new org.apache.hadoop.conf.Configuration();
+                conf.set("fs.default.name", "hdfs://" + configuration.getString(HadoopUnitConfig.HDFS_NAMENODE_HOST_KEY) + ":" + configuration.getInt(HadoopUnitConfig.HDFS_NAMENODE_PORT_KEY));
+                URI uri = URI.create("hdfs://" + configuration.getString(HadoopUnitConfig.HDFS_NAMENODE_HOST_KEY) + ":" + configuration.getInt(HadoopUnitConfig.HDFS_NAMENODE_PORT_KEY));
                 try {
-                    hdfsFileSystem = ((HdfsBootstrap) HadoopBootstrap.INSTANCE.getService(Component.HDFS)).getHdfsFileSystemHandle();
-                } catch (Exception e) {
-                    LOGGER.error("unable to get hdfs client");
+                    hdfsFileSystem = FileSystem.get(uri, conf);
+                } catch (IOException e) {
+                    LOGGER.error("unable to create FileSystem", e);
                 }
                 hdfsFileSystem.copyFromLocalFile(false, new Path(new File(oozieShareLibExtractTempDir).toURI()), destPath);
 

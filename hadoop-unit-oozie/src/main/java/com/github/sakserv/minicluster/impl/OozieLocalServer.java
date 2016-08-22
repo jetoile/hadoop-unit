@@ -4,6 +4,10 @@ import com.github.sakserv.minicluster.MiniCluster;
 import com.github.sakserv.minicluster.oozie.util.OozieConfigUtil;
 import com.github.sakserv.minicluster.util.FileUtils;
 import com.github.sakserv.minicluster.util.WindowsLibsUtils;
+import fr.jetoile.hadoopunit.HadoopUnitConfig;
+import fr.jetoile.hadoopunit.exception.BootstrapException;
+import org.apache.commons.configuration.ConfigurationException;
+import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.security.UserGroupInformation;
 import org.apache.oozie.client.OozieClient;
@@ -314,7 +318,16 @@ public class OozieLocalServer implements MiniCluster {
         System.setProperty("oozielocal.log", fullOozieHomeDir + "/oozielocal.log");
         System.setProperty(XTestCase.OOZIE_TEST_JOB_TRACKER, oozieYarnResourceManagerAddress);
         System.setProperty(XTestCase.OOZIE_TEST_NAME_NODE, oozieHdfsDefaultFs);
-        System.setProperty("oozie.test.db.host", "localhost");
+//        System.setProperty("oozie.test.db.host", "localhost");
+
+        org.apache.commons.configuration.Configuration conf;
+        try {
+            conf = new PropertiesConfiguration(HadoopUnitConfig.DEFAULT_PROPS_FILE);
+        } catch (ConfigurationException e) {
+            throw new BootstrapException("bad config", e);
+        }
+
+        System.setProperty("oozie.test.db.host", conf.getString("oozie.host"));
         System.setProperty(ConfigurationService.OOZIE_DATA_DIR, fullOozieHomeDir);
         System.setProperty(HadoopAccessorService.SUPPORTED_FILESYSTEMS, "*");
 

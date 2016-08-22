@@ -68,7 +68,7 @@ public class SparkKafkaIntegrationTest implements Serializable {
         sparkKafkaJob.run();
 
         scc.start();
-        scc.awaitTermination();
+        scc.awaitTerminationOrTimeout(5000);
     }
 
     private String generateMessge(int i) {

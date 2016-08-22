@@ -284,7 +284,11 @@ public class ManualIntegrationBootstrapTest {
 
         //write job.properties
         Properties oozieConf = oozieClient.createConfiguration();
-        oozieConf.setProperty(OozieClient.APP_PATH, workflow.toString());
+
+        //TODO : for docker test, replace content of file hadoop-uniy-default.properties: hdfs.namenode.host=hadoop-unit-hdfs
+        String hdfsHomeDir = hdfsFs.getHomeDirectory().toString().replace("127.0.0.1", configuration.getString(HadoopUnitConfig.HDFS_NAMENODE_HOST_KEY));
+        oozieConf.setProperty(OozieClient.APP_PATH, hdfsHomeDir +"/testApp/workflow.xml");
+        
         oozieConf.setProperty(OozieClient.USER_NAME, UserGroupInformation.getCurrentUser().getUserName());
 
         //submit and check
