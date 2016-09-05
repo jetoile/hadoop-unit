@@ -34,6 +34,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -113,9 +114,21 @@ public class OozieBootstrap implements Bootstrap {
     }
 
     private void build() throws NotFoundServiceException {
-        //is done lazy because hdfsBootstrap should be started
-        hdfsDefaultFs = HadoopBootstrap.INSTANCE.getService(Component.HDFS).getConfiguration().get("fs.defaultFS");
-        hadoopConf = HadoopBootstrap.INSTANCE.getService(Component.HDFS).getConfiguration();
+
+        org.apache.hadoop.conf.Configuration hadoopConf = new org.apache.hadoop.conf.Configuration();
+        hadoopConf.set("hadoop.proxyuser." + System.getProperty("user.name") + ".hosts", "*");
+        hadoopConf.set("hadoop.proxyuser." + System.getProperty("user.name") + ".groups", "*");
+        hadoopConf.set("oozie.service.WorkflowAppService.system.libpath", hdfsDefaultFs + "/" + oozieHdfsShareLibDir);
+        hadoopConf.set("oozie.use.system.libpath", "true");
+//        hadoopConf.set("oozie.wf.application.lib", "true");
+//        hadoopConf.set("oozie.launcher.oozie.libpath", "true");
+//        hadoopConf.set("oozie.action.sharelib.for.shell", "true");
+
+
+
+        hadoopConf.set("fs.defaultFS", "hdfs://" + configuration.getString(HadoopUnitConfig.HDFS_NAMENODE_HOST_KEY) + ":" + configuration.getString(HadoopUnitConfig.HDFS_NAMENODE_PORT_KEY));
+        hdfsDefaultFs = "hdfs://" + configuration.getString(HadoopUnitConfig.HDFS_NAMENODE_HOST_KEY) + ":" + configuration.getString(HadoopUnitConfig.HDFS_NAMENODE_PORT_KEY);
+
 
         mrLocalCluster = new MRLocalCluster.Builder()
                 .setNumNodeManagers(numNodeManagers)
@@ -139,6 +152,7 @@ public class OozieBootstrap implements Bootstrap {
                 .setOozieHdfsDefaultFs(hdfsDefaultFs)
                 .setOozieConf(hadoopConf)
                 .setOozieHdfsShareLibDir("file://"+oozieShareLibExtractTempDir)
+//                .setOozieHdfsShareLibDir(hdfsDefaultFs + "/" + oozieHdfsShareLibDir)
                 .setOozieShareLibCreate(oozieShareLibCreate)
 //                .setOozieLocalShareLibCacheDir(oozieShareLibExtractTempDir)
                 .setOozieLocalShareLibCacheDir(oozieLocalShareLibCacheDir)
@@ -163,6 +177,7 @@ public class OozieBootstrap implements Bootstrap {
         oozieGroupname = configuration.getString(HadoopUnitConfig.OOZIE_GROUPNAME_KEY);
         oozieYarnResourceManagerAddress = configuration.getString(HadoopUnitConfig.YARN_RESOURCE_MANAGER_ADDRESS_KEY);
 
+        oozieShareLibExtractTempDir = configuration.getString(HadoopUnitConfig.OOZIE_HDFS_SHARE_LIB_DIR_KEY);
         oozieHdfsShareLibDir = configuration.getString(HadoopUnitConfig.OOZIE_HDFS_SHARE_LIB_DIR_KEY);
         oozieShareLibCreate = configuration.getBoolean(HadoopUnitConfig.OOZIE_SHARE_LIB_CREATE_KEY);
         oozieLocalShareLibCacheDir = configuration.getString(HadoopUnitConfig.OOZIE_LOCAL_SHARE_LIB_CACHE_DIR_KEY);
@@ -265,17 +280,22 @@ public class OozieBootstrap implements Bootstrap {
                 ;
 
                 oozieShareLibExtractTempDir = extractOozieShareLibTarFileToTempDir(new File(fullOozieShareLibTarFilePath));
+                oozieShareLibExtractTempDir += "/share/lib";
 
                 // Copy the sharelib into HDFS
-                Path destPath = new Path(oozieHdfsShareLibDir + Path.SEPARATOR + SHARE_LIB_PREFIX + getTimestampDirectory());
-                LOGGER.info("OOZIE: Writing share lib contents to: {}", destPath);
-                FileSystem hdfsFileSystem = null;
-                try {
-                    hdfsFileSystem = ((HdfsBootstrap) HadoopBootstrap.INSTANCE.getService(Component.HDFS)).getHdfsFileSystemHandle();
-                } catch (Exception e) {
-                    LOGGER.error("unable to get hdfs client");
-                }
-                hdfsFileSystem.copyFromLocalFile(false, new Path(new File(oozieShareLibExtractTempDir).toURI()), destPath);
+//                Path destPath = new Path(oozieHdfsShareLibDir + Path.SEPARATOR + SHARE_LIB_PREFIX + getTimestampDirectory());
+//                LOGGER.info("OOZIE: Writing share lib contents to: {}", destPath);
+//
+//                FileSystem hdfsFileSystem = null;
+//                org.apache.hadoop.conf.Configuration conf = new org.apache.hadoop.conf.Configuration();
+//                conf.set("fs.default.name", "hdfs://" + configuration.getString(HadoopUnitConfig.HDFS_NAMENODE_HOST_KEY) + ":" + configuration.getInt(HadoopUnitConfig.HDFS_NAMENODE_PORT_KEY));
+//                URI uri = URI.create("hdfs://" + configuration.getString(HadoopUnitConfig.HDFS_NAMENODE_HOST_KEY) + ":" + configuration.getInt(HadoopUnitConfig.HDFS_NAMENODE_PORT_KEY));
+//                try {
+//                    hdfsFileSystem = FileSystem.get(uri, conf);
+//                } catch (IOException e) {
+//                    LOGGER.error("unable to create FileSystem", e);
+//                }
+//                hdfsFileSystem.copyFromLocalFile(false, new Path(new File(oozieShareLibExtractTempDir).toURI()), destPath);
 
 //                if (purgeLocalShareLibCache) {
 //                    FileUtils.deleteDirectory(new File(shareLibCacheDir));
@@ -317,5 +337,18 @@ public class OozieBootstrap implements Bootstrap {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
         Date date = new Date();
         return dateFormat.format(date).toString();
+    }
+
+    final public static void main(String... args) throws NotFoundServiceException {
+
+        HadoopBootstrap bootstrap = HadoopBootstrap.INSTANCE;
+
+        Runtime.getRuntime().addShutdownHook(new Thread() {
+            public void run() {
+                bootstrap.stopAll();
+            }
+        });
+
+        bootstrap.add(Component.OOZIE).startAll();
     }
 }

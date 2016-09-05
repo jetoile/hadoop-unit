@@ -82,6 +82,7 @@ public class HadoopUnitConfig {
     public static final String KAFKA_TEST_TEMP_DIR_KEY = "kafka.test.temp.dir";
 
     //HDFS
+    public static final String HDFS_NAMENODE_HOST_KEY = "hdfs.namenode.host";
     public static final String HDFS_NAMENODE_PORT_KEY = "hdfs.namenode.port";
     public static final String HDFS_NAMENODE_HTTP_PORT_KEY = "hdfs.namenode.http.port";
     public static final String HDFS_TEMP_DIR_KEY = "hdfs.temp.dir";

@@ -11,3 +11,4 @@ target
 *.log.gz
 rebel.xml
 metastore_db
+**/dependency-reduced-pom.xml
