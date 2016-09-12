@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>sample</artifactId>
+        <groupId>fr.jetoile.hadoop</groupId>
+        <version>1.5-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>spark-streaming-cassandra</artifactId>
+
+    <properties>
+        <datastax.driver.core.version>3.0.0</datastax.driver.core.version>
+        <spark-cassandra-connector.version>1.6.0</spark-cassandra-connector.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-streaming-kafka_2.10</artifactId>
+            <version>${spark_2.10.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.kafka</groupId>
+                    <artifactId>kafka_2.9.2</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.kafka</groupId>
+            <artifactId>kafka_2.10</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>log4j</groupId>
+                    <artifactId>log4j</artifactId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>slf4j-log4j12</artifactId>
+                    <groupId>org.slf4j</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <artifactId>jackson-module-scala_2.10</artifactId>
+            <groupId>com.fasterxml.jackson.module</groupId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-streaming_2.10</artifactId>
+            <version>${spark_2.10.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-sql_2.10</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.datastax.spark</groupId>
+            <artifactId>spark-cassandra-connector_2.10</artifactId>
+            <version>${spark-cassandra-connector.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.datastax.cassandra</groupId>
+            <artifactId>cassandra-driver-core</artifactId>
+            <version>${datastax.driver.core.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>fr.jetoile.hadoop</groupId>
+            <artifactId>hadoop-unit-commons</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>fr.jetoile.hadoop</groupId>
+            <artifactId>hadoop-unit-client-kafka</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+    </dependencies>
+</project>
