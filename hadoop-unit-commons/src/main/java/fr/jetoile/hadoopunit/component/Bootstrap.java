@@ -17,6 +17,8 @@ package fr.jetoile.hadoopunit.component;
 
 import org.apache.hadoop.conf.Configuration;
 
+import java.util.Map;
+
 public interface Bootstrap {
     Bootstrap start();
 
@@ -28,5 +30,10 @@ public interface Bootstrap {
 
     String getProperties();
 
+    /**
+     * Allow to override configurations when using maven plugin
+     * @param configs
+     */
+    void loadConfig(Map<String, String> configs);
 
 }

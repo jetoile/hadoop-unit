@@ -23,14 +23,13 @@ import org.slf4j.LoggerFactory;
 
 import java.io.*;
 
-public class HadoopUtils {
+public enum HadoopUtils {
+    INSTANCE;
 
+    private final Logger LOG = LoggerFactory.getLogger(HadoopUtils.class);
+    private Configuration configuration;
 
-    private static final Logger LOG = LoggerFactory.getLogger(HadoopUtils.class);
-    private static Configuration configuration;
-
-    public static void setHadoopHome() {
-
+    private HadoopUtils() {
         // Set hadoop.home.dir to point to the windows lib dir
         if (System.getProperty("os.name").startsWith("Windows")) {
 
@@ -60,12 +59,20 @@ public class HadoopUtils {
 
             LOG.info("WINDOWS: Setting hadoop.home.dir: {}", windowsLibDir);
             System.setProperty("hadoop.home.dir", windowsLibDir);
-            System.load(new File(windowsLibDir + Path.SEPARATOR + "bin" + Path.SEPARATOR + "hadoop.dll").getAbsolutePath());
-            System.load(new File(windowsLibDir + Path.SEPARATOR + "bin" + Path.SEPARATOR + "hdfs.dll").getAbsolutePath());
+            try {
+                System.load(new File(windowsLibDir + Path.SEPARATOR + "bin" + Path.SEPARATOR + "hadoop.dll").getAbsolutePath());
+                System.load(new File(windowsLibDir + Path.SEPARATOR + "bin" + Path.SEPARATOR + "hdfs.dll").getAbsolutePath());
+            } catch (UnsatisfiedLinkError e) {
+                //ignore it
+            }
         }
     }
 
-    public static void printBanner(PrintStream out) {
+    public void setHadoopHome() {
+
+    }
+
+    public void printBanner(PrintStream out) {
         try {
             InputStream banner = HadoopUtils.class.getResourceAsStream("/banner.txt");
 

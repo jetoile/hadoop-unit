@@ -16,12 +16,15 @@ package fr.jetoile.hadoopunit.component;
 
 
 import fr.jetoile.hadoopunit.Component;
+import fr.jetoile.hadoopunit.HadoopBootstrap;
 import fr.jetoile.hadoopunit.HadoopUnitConfig;
 import fr.jetoile.hadoopunit.exception.BootstrapException;
+import fr.jetoile.hadoopunit.exception.NotFoundServiceException;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang.StringUtils;
 import org.neo4j.cypher.javacompat.internal.GraphDatabaseCypherService;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.factory.GraphDatabaseFactory;
@@ -29,13 +32,15 @@ import org.neo4j.graphdb.factory.GraphDatabaseSettings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.Console;
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.Map;
 
 public class Neo4jBootstrap implements Bootstrap {
     final public static String NAME = Component.NEO4J.name();
 
-    final private Logger LOGGER = LoggerFactory.getLogger(Neo4jBootstrap.class);
+    static final private Logger LOGGER = LoggerFactory.getLogger(Neo4jBootstrap.class);
 
     private State state = State.STOPPED;
 
@@ -78,6 +83,19 @@ public class Neo4jBootstrap implements Bootstrap {
         port = configuration.getInt(HadoopUnitConfig.NEO4J_PORT_KEY);
         ip = configuration.getString(HadoopUnitConfig.NEO4J_IP_KEY);
         tmp = configuration.getString(HadoopUnitConfig.NEO4J_TEMP_DIR_KEY);
+    }
+
+    @Override
+    public void loadConfig(Map<String, String> configs) {
+        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.NEO4J_PORT_KEY))) {
+            port = Integer.parseInt(configs.get(HadoopUnitConfig.NEO4J_PORT_KEY));
+        }
+        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.NEO4J_IP_KEY))) {
+            ip = configs.get(HadoopUnitConfig.NEO4J_IP_KEY);
+        }
+        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.NEO4J_TEMP_DIR_KEY))) {
+            tmp = configs.get(HadoopUnitConfig.NEO4J_TEMP_DIR_KEY);
+        }
     }
 
     private void build() {

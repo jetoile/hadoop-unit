@@ -16,13 +16,16 @@ package fr.jetoile.hadoopunit.component;
 
 import com.datastax.driver.core.Session;
 import fr.jetoile.hadoopunit.Component;
+import fr.jetoile.hadoopunit.HadoopBootstrap;
 import fr.jetoile.hadoopunit.HadoopUnitConfig;
 import fr.jetoile.hadoopunit.exception.BootstrapException;
+import fr.jetoile.hadoopunit.exception.NotFoundServiceException;
 import info.archinnov.achilles.embedded.CassandraEmbeddedServerBuilder;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.thrift.transport.TTransportException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,14 +33,12 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-
-//import org.cassandraunit.dataset.CQLDataSet;
-//import org.cassandraunit.utils.EmbeddedCassandraServerHelper;
+import java.util.Map;
 
 public class CassandraBootstrap implements Bootstrap {
     final public static String NAME = Component.CASSANDRA.name();
 
-    final private Logger LOGGER = LoggerFactory.getLogger(CassandraBootstrap.class);
+    static final private Logger LOGGER = LoggerFactory.getLogger(CassandraBootstrap.class);
 
     private State state = State.STOPPED;
 
@@ -78,6 +79,16 @@ public class CassandraBootstrap implements Bootstrap {
 
         port = configuration.getInt(HadoopUnitConfig.CASSANDRA_PORT_KEY);
         ip = configuration.getString(HadoopUnitConfig.CASSANDRA_IP_KEY);
+    }
+
+    @Override
+    public void loadConfig(Map<String, String> configs) {
+        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.CASSANDRA_PORT_KEY))) {
+            port = Integer.parseInt(configs.get(HadoopUnitConfig.CASSANDRA_PORT_KEY));
+        }
+        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.CASSANDRA_IP_KEY))) {
+            ip = configs.get(HadoopUnitConfig.CASSANDRA_IP_KEY);
+        }
     }
 
     private void build() throws InterruptedException, IOException, TTransportException {

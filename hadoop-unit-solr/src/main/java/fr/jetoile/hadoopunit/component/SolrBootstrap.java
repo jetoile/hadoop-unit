@@ -14,12 +14,15 @@
 package fr.jetoile.hadoopunit.component;
 
 import fr.jetoile.hadoopunit.Component;
+import fr.jetoile.hadoopunit.HadoopBootstrap;
 import fr.jetoile.hadoopunit.HadoopUnitConfig;
 import fr.jetoile.hadoopunit.HadoopUtils;
 import fr.jetoile.hadoopunit.exception.BootstrapException;
+import fr.jetoile.hadoopunit.exception.NotFoundServiceException;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
+import org.apache.commons.lang.StringUtils;
 import org.apache.solr.client.solrj.embedded.EmbeddedSolrServer;
 import org.apache.solr.core.CoreContainer;
 import org.slf4j.Logger;
@@ -31,6 +34,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URLDecoder;
 import java.nio.file.Paths;
+import java.util.Map;
 
 public class SolrBootstrap implements Bootstrap {
     final public static String NAME = Component.SOLR.name();
@@ -70,7 +74,7 @@ public class SolrBootstrap implements Bootstrap {
     }
 
     private void loadConfig() throws BootstrapException {
-        HadoopUtils.setHadoopHome();
+        HadoopUtils.INSTANCE.setHadoopHome();
         try {
             configuration = new PropertiesConfiguration(HadoopUnitConfig.DEFAULT_PROPS_FILE);
         } catch (ConfigurationException e) {
@@ -78,7 +82,16 @@ public class SolrBootstrap implements Bootstrap {
         }
         solrDirectory = configuration.getString(SOLR_DIR_KEY);
         solrCollectionInternalName = configuration.getString(SOLR_COLLECTION_INTERNAL_NAME);
+    }
 
+    @Override
+    public void loadConfig(Map<String, String> configs) {
+        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.SOLR_DIR_KEY))) {
+            solrDirectory = configs.get(HadoopUnitConfig.SOLR_DIR_KEY);
+        }
+        if (StringUtils.isNotEmpty(configs.get(SOLR_COLLECTION_INTERNAL_NAME))) {
+            solrCollectionInternalName = configs.get(SOLR_COLLECTION_INTERNAL_NAME);
+        }
     }
 
     @Override
@@ -148,4 +161,5 @@ public class SolrBootstrap implements Bootstrap {
     private CoreContainer createCoreContainer(String solrHomeDirectory, File solrXmlFile) {
         return CoreContainer.createAndLoad(Paths.get(solrHomeDirectory), solrXmlFile.toPath());
     }
+
 }

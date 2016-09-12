@@ -15,25 +15,30 @@
 package fr.jetoile.hadoopunit.component;
 
 import fr.jetoile.hadoopunit.Component;
+import fr.jetoile.hadoopunit.HadoopBootstrap;
 import fr.jetoile.hadoopunit.HadoopUnitConfig;
 import fr.jetoile.hadoopunit.exception.BootstrapException;
+import fr.jetoile.hadoopunit.exception.NotFoundServiceException;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang.StringUtils;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.node.Node;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.Console;
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.Map;
 
 public class ElasticSearchBootstrap implements Bootstrap {
     final public static String NAME = Component.ELASTICSEARCH.name();
 
-    final private Logger LOGGER = LoggerFactory.getLogger(ElasticSearchBootstrap.class);
+    static final private Logger LOGGER = LoggerFactory.getLogger(ElasticSearchBootstrap.class);
 
     private State state = State.STOPPED;
 
@@ -86,6 +91,28 @@ public class ElasticSearchBootstrap implements Bootstrap {
         tmpDir = configuration.getString(HadoopUnitConfig.ELASTICSEARCH_TEMP_DIR_KEY);
         indexName = configuration.getString(HadoopUnitConfig.ELASTICSEARCH_INDEX_NAME);
         clusterName = configuration.getString(HadoopUnitConfig.ELASTICSEARCH_CLUSTER_NAME);
+    }
+
+    @Override
+    public void loadConfig(Map<String, String> configs) {
+        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.ELASTICSEARCH_HTTP_PORT_KEY))) {
+            httpPort = Integer.parseInt(configs.get(HadoopUnitConfig.ELASTICSEARCH_HTTP_PORT_KEY));
+        }
+        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.ELASTICSEARCH_TCP_PORT_KEY))) {
+            tcpPort = Integer.parseInt(configs.get(HadoopUnitConfig.ELASTICSEARCH_TCP_PORT_KEY));
+        }
+        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.ELASTICSEARCH_IP_KEY))) {
+            ip = configs.get(HadoopUnitConfig.ELASTICSEARCH_IP_KEY);
+        }
+        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.ELASTICSEARCH_TEMP_DIR_KEY))) {
+            tmpDir = configs.get(HadoopUnitConfig.ELASTICSEARCH_TEMP_DIR_KEY);
+        }
+        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.ELASTICSEARCH_INDEX_NAME))) {
+            indexName = configs.get(HadoopUnitConfig.ELASTICSEARCH_INDEX_NAME);
+        }
+        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.ELASTICSEARCH_CLUSTER_NAME))) {
+            clusterName = configs.get(HadoopUnitConfig.ELASTICSEARCH_CLUSTER_NAME);
+        }
     }
 
     private void build() {

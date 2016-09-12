@@ -10,5 +10,6 @@ target
 *.log
 *.log.gz
 rebel.xml
-metastore_db
+**/metastore_db
+**/embedded_kafka
 **/dependency-reduced-pom.xml

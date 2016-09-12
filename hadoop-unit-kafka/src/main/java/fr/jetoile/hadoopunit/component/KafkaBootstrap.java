@@ -15,21 +15,25 @@ package fr.jetoile.hadoopunit.component;
 
 import com.github.sakserv.minicluster.impl.KafkaLocalBroker;
 import fr.jetoile.hadoopunit.Component;
+import fr.jetoile.hadoopunit.HadoopBootstrap;
 import fr.jetoile.hadoopunit.HadoopUnitConfig;
 import fr.jetoile.hadoopunit.HadoopUtils;
 import fr.jetoile.hadoopunit.exception.BootstrapException;
+import fr.jetoile.hadoopunit.exception.NotFoundServiceException;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Map;
 import java.util.Properties;
 
 public class KafkaBootstrap implements Bootstrap {
     final public static String NAME = Component.KAFKA.name();
 
-    final private Logger LOGGER = LoggerFactory.getLogger(KafkaBootstrap.class);
+    static final private Logger LOGGER = LoggerFactory.getLogger(KafkaBootstrap.class);
 
     private KafkaLocalBroker kafkaLocalCluster;
 
@@ -83,7 +87,7 @@ public class KafkaBootstrap implements Bootstrap {
     }
 
     private void loadConfig() throws BootstrapException {
-        HadoopUtils.setHadoopHome();
+        HadoopUtils.INSTANCE.setHadoopHome();
         try {
             configuration = new PropertiesConfiguration(HadoopUnitConfig.DEFAULT_PROPS_FILE);
         } catch (ConfigurationException e) {
@@ -94,7 +98,25 @@ public class KafkaBootstrap implements Bootstrap {
         brokerId = configuration.getInt(HadoopUnitConfig.KAFKA_TEST_BROKER_ID_KEY);
         tmpDirectory = configuration.getString(HadoopUnitConfig.KAFKA_TEST_TEMP_DIR_KEY);
         zookeeperConnectionString = configuration.getString(HadoopUnitConfig.ZOOKEEPER_HOST_KEY) + ":" + configuration.getInt(HadoopUnitConfig.ZOOKEEPER_PORT_KEY);
+    }
 
+    @Override
+    public void loadConfig(Map<String, String> configs) {
+        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.KAFKA_HOSTNAME_KEY))) {
+            host = configs.get(HadoopUnitConfig.KAFKA_HOSTNAME_KEY);
+        }
+        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.KAFKA_PORT_KEY))) {
+            port = Integer.parseInt(configs.get(HadoopUnitConfig.KAFKA_PORT_KEY));
+        }
+        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.KAFKA_TEST_BROKER_ID_KEY))) {
+            brokerId = Integer.parseInt(configs.get(HadoopUnitConfig.KAFKA_TEST_BROKER_ID_KEY));
+        }
+        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.KAFKA_TEST_TEMP_DIR_KEY))) {
+            tmpDirectory = configs.get(HadoopUnitConfig.KAFKA_TEST_TEMP_DIR_KEY);
+        }
+        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.ZOOKEEPER_HOST_KEY)) && StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.ZOOKEEPER_PORT_KEY))) {
+            zookeeperConnectionString = configs.get(HadoopUnitConfig.ZOOKEEPER_HOST_KEY) + ":" + configs.get(HadoopUnitConfig.ZOOKEEPER_PORT_KEY);
+        }
     }
 
     @Override
@@ -138,5 +160,4 @@ public class KafkaBootstrap implements Bootstrap {
     public org.apache.hadoop.conf.Configuration getConfiguration() {
         throw new UnsupportedOperationException("the method getConfiguration can not be called on KafkaBootstrap");
     }
-
 }
