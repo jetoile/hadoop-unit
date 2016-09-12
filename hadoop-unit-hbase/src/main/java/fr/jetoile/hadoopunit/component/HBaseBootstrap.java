@@ -16,19 +16,24 @@ package fr.jetoile.hadoopunit.component;
 import com.github.sakserv.minicluster.impl.HbaseLocalCluster;
 import com.github.sakserv.minicluster.util.FileUtils;
 import fr.jetoile.hadoopunit.Component;
+import fr.jetoile.hadoopunit.HadoopBootstrap;
 import fr.jetoile.hadoopunit.HadoopUnitConfig;
 import fr.jetoile.hadoopunit.HadoopUtils;
 import fr.jetoile.hadoopunit.exception.BootstrapException;
+import fr.jetoile.hadoopunit.exception.NotFoundServiceException;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Map;
 
 public class HBaseBootstrap implements Bootstrap {
     final public static String NAME = Component.HBASE.name();
 
-    final private Logger LOGGER = LoggerFactory.getLogger(HBaseBootstrap.class);
+    static final private Logger LOGGER = LoggerFactory.getLogger(HBaseBootstrap.class);
 
     private HbaseLocalCluster hbaseLocalCluster;
 
@@ -90,7 +95,7 @@ public class HBaseBootstrap implements Bootstrap {
     }
 
     private void loadConfig() throws BootstrapException {
-        HadoopUtils.setHadoopHome();
+        HadoopUtils.INSTANCE.setHadoopHome();
         try {
             configuration = new PropertiesConfiguration(HadoopUnitConfig.DEFAULT_PROPS_FILE);
         } catch (ConfigurationException e) {
@@ -105,6 +110,34 @@ public class HBaseBootstrap implements Bootstrap {
         zookeeperPort = configuration.getInt(HadoopUnitConfig.ZOOKEEPER_PORT_KEY);
         zookeeperZnodeParent = configuration.getString(HadoopUnitConfig.HBASE_ZNODE_PARENT_KEY);
         enableWalReplication = configuration.getBoolean(HadoopUnitConfig.HBASE_WAL_REPLICATION_ENABLED_KEY);
+    }
+
+    @Override
+    public void loadConfig(Map<String, String> configs) {
+        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.HBASE_MASTER_PORT_KEY))) {
+            port = Integer.parseInt(configs.get(HadoopUnitConfig.HBASE_MASTER_PORT_KEY));
+        }
+        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.HBASE_MASTER_INFO_PORT_KEY))) {
+            infoPort = Integer.parseInt(configs.get(HadoopUnitConfig.HBASE_MASTER_INFO_PORT_KEY));
+        }
+        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.HBASE_NUM_REGION_SERVERS_KEY))) {
+            nbRegionServer = Integer.parseInt(configs.get(HadoopUnitConfig.HBASE_NUM_REGION_SERVERS_KEY));
+        }
+        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.HBASE_ROOT_DIR_KEY))) {
+            rootDirectory = configs.get(HadoopUnitConfig.HBASE_ROOT_DIR_KEY);
+        }
+        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.ZOOKEEPER_HOST_KEY)) && StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.ZOOKEEPER_PORT_KEY))) {
+            zookeeperConnectionString = configs.get(HadoopUnitConfig.ZOOKEEPER_HOST_KEY) + ":" + configs.get(HadoopUnitConfig.ZOOKEEPER_PORT_KEY);
+        }
+        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.ZOOKEEPER_PORT_KEY))) {
+            zookeeperPort = Integer.parseInt(configs.get(HadoopUnitConfig.ZOOKEEPER_PORT_KEY));
+        }
+        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.HBASE_ZNODE_PARENT_KEY))) {
+            zookeeperZnodeParent = configs.get(HadoopUnitConfig.HBASE_ZNODE_PARENT_KEY);
+        }
+        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.HBASE_WAL_REPLICATION_ENABLED_KEY))) {
+            enableWalReplication = Boolean.parseBoolean(configs.get(HadoopUnitConfig.HBASE_WAL_REPLICATION_ENABLED_KEY));
+        }
 
     }
 
@@ -154,6 +187,5 @@ public class HBaseBootstrap implements Bootstrap {
     public org.apache.hadoop.conf.Configuration getConfiguration() {
         return hbaseLocalCluster.getHbaseConfiguration();
     }
-
 
 }

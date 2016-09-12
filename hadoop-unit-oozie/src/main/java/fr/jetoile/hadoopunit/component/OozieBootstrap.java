@@ -17,15 +17,15 @@ import com.github.sakserv.minicluster.impl.MRLocalCluster;
 import com.github.sakserv.minicluster.impl.OozieLocalServer;
 import com.github.sakserv.minicluster.util.FileUtils;
 import fr.jetoile.hadoopunit.Component;
-import fr.jetoile.hadoopunit.HadoopUnitConfig;
 import fr.jetoile.hadoopunit.HadoopBootstrap;
+import fr.jetoile.hadoopunit.HadoopUnitConfig;
 import fr.jetoile.hadoopunit.HadoopUtils;
 import fr.jetoile.hadoopunit.exception.BootstrapException;
 import fr.jetoile.hadoopunit.exception.NotFoundServiceException;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
-import org.apache.hadoop.fs.FileSystem;
+import org.apache.commons.lang.StringUtils;
 import org.apache.hadoop.fs.FileUtil;
 import org.apache.hadoop.fs.Path;
 import org.apache.oozie.client.OozieClient;
@@ -34,10 +34,10 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Map;
 
 public class OozieBootstrap implements Bootstrap {
     final public static String NAME = Component.OOZIE.name();
@@ -125,7 +125,6 @@ public class OozieBootstrap implements Bootstrap {
 //        hadoopConf.set("oozie.action.sharelib.for.shell", "true");
 
 
-
         hadoopConf.set("fs.defaultFS", "hdfs://" + configuration.getString(HadoopUnitConfig.HDFS_NAMENODE_HOST_KEY) + ":" + configuration.getString(HadoopUnitConfig.HDFS_NAMENODE_PORT_KEY));
         hdfsDefaultFs = "hdfs://" + configuration.getString(HadoopUnitConfig.HDFS_NAMENODE_HOST_KEY) + ":" + configuration.getString(HadoopUnitConfig.HDFS_NAMENODE_PORT_KEY);
 
@@ -151,7 +150,7 @@ public class OozieBootstrap implements Bootstrap {
                 .setOozieYarnResourceManagerAddress(oozieYarnResourceManagerAddress)
                 .setOozieHdfsDefaultFs(hdfsDefaultFs)
                 .setOozieConf(hadoopConf)
-                .setOozieHdfsShareLibDir("file://"+oozieShareLibExtractTempDir)
+                .setOozieHdfsShareLibDir("file://" + oozieShareLibExtractTempDir)
 //                .setOozieHdfsShareLibDir(hdfsDefaultFs + "/" + oozieHdfsShareLibDir)
                 .setOozieShareLibCreate(oozieShareLibCreate)
 //                .setOozieLocalShareLibCacheDir(oozieShareLibExtractTempDir)
@@ -163,7 +162,7 @@ public class OozieBootstrap implements Bootstrap {
     }
 
     private void loadConfig() throws BootstrapException, NotFoundServiceException {
-        HadoopUtils.setHadoopHome();
+        HadoopUtils.INSTANCE.setHadoopHome();
 
         try {
             configuration = new PropertiesConfiguration(HadoopUnitConfig.DEFAULT_PROPS_FILE);
@@ -194,12 +193,85 @@ public class OozieBootstrap implements Bootstrap {
         resourceManagerWebappAddress = configuration.getString(HadoopUnitConfig.YARN_RESOURCE_MANAGER_WEBAPP_ADDRESS_KEY);
         useInJvmContainerExecutor = configuration.getBoolean(HadoopUnitConfig.YARN_USE_IN_JVM_CONTAINER_EXECUTOR_KEY);
 
-        ooziePort = configuration.getInt(OOZIE_PORT);
-        oozieHost = configuration.getString(OOZIE_HOST);
+        ooziePort = configuration.getInt(HadoopUnitConfig.OOZIE_PORT);
+        oozieHost = configuration.getString(HadoopUnitConfig.OOZIE_HOST);
 
-        oozieShareLibPath = configuration.getString(OOZIE_SHARELIB_PATH_KEY);
-        oozieShareLibName = configuration.getString(OOZIE_SHARELIB_NAME_KEY);
+        oozieShareLibPath = configuration.getString(HadoopUnitConfig.OOZIE_SHARELIB_PATH_KEY);
+        oozieShareLibName = configuration.getString(HadoopUnitConfig.OOZIE_SHARELIB_NAME_KEY);
+    }
 
+    @Override
+    public void loadConfig(Map<String, String> configs) {
+        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.OOZIE_TEST_DIR_KEY))) {
+            oozieTestDir = configs.get(HadoopUnitConfig.OOZIE_TEST_DIR_KEY);
+        }
+        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.OOZIE_HOME_DIR_KEY))) {
+            oozieHomeDir = configs.get(HadoopUnitConfig.OOZIE_HOME_DIR_KEY);
+        }
+        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.OOZIE_GROUPNAME_KEY))) {
+            oozieGroupname = configs.get(HadoopUnitConfig.OOZIE_GROUPNAME_KEY);
+        }
+        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.YARN_RESOURCE_MANAGER_ADDRESS_KEY))) {
+            oozieYarnResourceManagerAddress = configs.get(HadoopUnitConfig.YARN_RESOURCE_MANAGER_ADDRESS_KEY);
+        }
+        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.OOZIE_HDFS_SHARE_LIB_DIR_KEY))) {
+            oozieShareLibExtractTempDir = configs.get(HadoopUnitConfig.OOZIE_HDFS_SHARE_LIB_DIR_KEY);
+        }
+        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.OOZIE_HDFS_SHARE_LIB_DIR_KEY))) {
+            oozieHdfsShareLibDir = configs.get(HadoopUnitConfig.OOZIE_HDFS_SHARE_LIB_DIR_KEY);
+        }
+        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.OOZIE_SHARE_LIB_CREATE_KEY))) {
+            oozieShareLibCreate = Boolean.parseBoolean(configs.get(HadoopUnitConfig.OOZIE_SHARE_LIB_CREATE_KEY));
+        }
+        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.OOZIE_LOCAL_SHARE_LIB_CACHE_DIR_KEY))) {
+            oozieLocalShareLibCacheDir = configs.get(HadoopUnitConfig.OOZIE_LOCAL_SHARE_LIB_CACHE_DIR_KEY);
+        }
+        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.OOZIE_PURGE_LOCAL_SHARE_LIB_CACHE_KEY))) {
+            ooziePurgeLocalShareLibCache = Boolean.parseBoolean(configs.get(HadoopUnitConfig.OOZIE_PURGE_LOCAL_SHARE_LIB_CACHE_KEY));
+        }
+
+        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.OOZIE_TMP_DIR_KEY))) {
+            oozieTmpDir = configs.get(HadoopUnitConfig.OOZIE_TMP_DIR_KEY);
+        }
+
+        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.YARN_NUM_NODE_MANAGERS_KEY))) {
+            numNodeManagers = Integer.parseInt(configs.get(HadoopUnitConfig.YARN_NUM_NODE_MANAGERS_KEY));
+        }
+        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.MR_JOB_HISTORY_ADDRESS_KEY))) {
+            jobHistoryAddress = configs.get(HadoopUnitConfig.MR_JOB_HISTORY_ADDRESS_KEY);
+        }
+        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.YARN_RESOURCE_MANAGER_ADDRESS_KEY))) {
+            resourceManagerAddress = configs.get(HadoopUnitConfig.YARN_RESOURCE_MANAGER_ADDRESS_KEY);
+        }
+        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.YARN_RESOURCE_MANAGER_HOSTNAME_KEY))) {
+            resourceManagerHostname = configs.get(HadoopUnitConfig.YARN_RESOURCE_MANAGER_HOSTNAME_KEY);
+        }
+        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.YARN_RESOURCE_MANAGER_SCHEDULER_ADDRESS_KEY))) {
+            resourceManagerSchedulerAddress = configs.get(HadoopUnitConfig.YARN_RESOURCE_MANAGER_SCHEDULER_ADDRESS_KEY);
+        }
+        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.YARN_RESOURCE_MANAGER_RESOURCE_TRACKER_ADDRESS_KEY))) {
+            resourceManagerResourceTrackerAddress = configs.get(HadoopUnitConfig.YARN_RESOURCE_MANAGER_RESOURCE_TRACKER_ADDRESS_KEY);
+        }
+        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.YARN_RESOURCE_MANAGER_WEBAPP_ADDRESS_KEY))) {
+            resourceManagerWebappAddress = configs.get(HadoopUnitConfig.YARN_RESOURCE_MANAGER_WEBAPP_ADDRESS_KEY);
+        }
+        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.YARN_USE_IN_JVM_CONTAINER_EXECUTOR_KEY))) {
+            useInJvmContainerExecutor = Boolean.parseBoolean(configs.get(HadoopUnitConfig.YARN_USE_IN_JVM_CONTAINER_EXECUTOR_KEY));
+        }
+
+        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.OOZIE_PORT))) {
+            ooziePort = Integer.parseInt(configs.get(HadoopUnitConfig.OOZIE_PORT));
+        }
+        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.OOZIE_HOST))) {
+            oozieHost = configs.get(HadoopUnitConfig.OOZIE_HOST);
+        }
+
+        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.OOZIE_SHARELIB_PATH_KEY))) {
+            oozieShareLibPath = configs.get(HadoopUnitConfig.OOZIE_SHARELIB_PATH_KEY);
+        }
+        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.OOZIE_SHARELIB_NAME_KEY))) {
+            oozieShareLibName = configs.get(HadoopUnitConfig.OOZIE_SHARELIB_NAME_KEY);
+        }
     }
 
     @Override
@@ -237,7 +309,7 @@ public class OozieBootstrap implements Bootstrap {
                 mrLocalCluster.stop(true);
                 cleanup();
             } catch (Exception e) {
-                LOGGER.error("unable to stop hdfs", e);
+                LOGGER.error("unable to stop oozie", e);
             }
             state = State.STOPPED;
             LOGGER.info("{} is stopped", this.getClass().getName());
@@ -308,7 +380,7 @@ public class OozieBootstrap implements Bootstrap {
     }
 
     public String extractOozieTarFileToTempDir(File fullOozieTarFilePath) throws IOException {
-        File tempDir = File.createTempFile(SHARE_LIB_LOCAL_TEMP_PREFIX, "", Paths.get(oozieTmpDir).toFile());
+        File tempDir = File.createTempFile(HadoopUnitConfig.SHARE_LIB_LOCAL_TEMP_PREFIX, "", Paths.get(oozieTmpDir).toFile());
         tempDir.delete();
         tempDir.mkdir();
         tempDir.deleteOnExit();
@@ -319,7 +391,7 @@ public class OozieBootstrap implements Bootstrap {
     }
 
     public String extractOozieShareLibTarFileToTempDir(File fullOozieShareLibTarFilePath) throws IOException {
-        File tempDir = File.createTempFile(SHARE_LIB_LOCAL_TEMP_PREFIX, "", Paths.get(oozieTmpDir).toFile());
+        File tempDir = File.createTempFile(HadoopUnitConfig.SHARE_LIB_LOCAL_TEMP_PREFIX, "", Paths.get(oozieTmpDir).toFile());
         tempDir.delete();
         tempDir.mkdir();
         tempDir.deleteOnExit();
@@ -337,18 +409,5 @@ public class OozieBootstrap implements Bootstrap {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
         Date date = new Date();
         return dateFormat.format(date).toString();
-    }
-
-    final public static void main(String... args) throws NotFoundServiceException {
-
-        HadoopBootstrap bootstrap = HadoopBootstrap.INSTANCE;
-
-        Runtime.getRuntime().addShutdownHook(new Thread() {
-            public void run() {
-                bootstrap.stopAll();
-            }
-        });
-
-        bootstrap.add(Component.OOZIE).startAll();
     }
 }

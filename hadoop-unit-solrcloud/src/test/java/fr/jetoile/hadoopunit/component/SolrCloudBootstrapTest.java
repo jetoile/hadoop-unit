@@ -65,7 +65,7 @@ public class SolrCloudBootstrapTest {
     @Test
     public void solrCloudShouldStart() throws IOException, SolrServerException, KeeperException, InterruptedException, NotFoundServiceException {
 
-        String collectionName = configuration.getString(SolrCloudBootstrap.SOLR_COLLECTION_NAME);
+        String collectionName = configuration.getString(HadoopUnitConfig.SOLR_COLLECTION_NAME);
 
 //        String zkHostString = configuration.getString(Config.ZOOKEEPER_HOST_KEY) + ":" + configuration.getInt(Config.ZOOKEEPER_PORT_KEY);
 //        CloudSolrClient client = new CloudSolrClient(zkHostString);

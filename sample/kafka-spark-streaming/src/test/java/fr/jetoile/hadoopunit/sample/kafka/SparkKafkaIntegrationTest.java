@@ -40,7 +40,6 @@ import java.io.Serializable;
 import java.util.*;
 import java.util.regex.Pattern;
 
-@Ignore
 public class SparkKafkaIntegrationTest implements Serializable {
 
     private static Configuration configuration;
@@ -50,6 +49,7 @@ public class SparkKafkaIntegrationTest implements Serializable {
         configuration = new PropertiesConfiguration(HadoopUnitConfig.DEFAULT_PROPS_FILE);
     }
 
+    @Ignore
     @Test
     public void stark_should_read_kafka() {
 

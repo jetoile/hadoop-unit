@@ -18,29 +18,40 @@ package fr.jetoile.hadoopunit;
  * Warning : this list should be sorted
  */
 public enum Component {
-    ZOOKEEPER("zookeeper"),
-    HDFS("hdfs"),
-    HIVEMETA("hivemeta"),
-    HIVESERVER2("hiveserver2"),
-    KAFKA("kafka"),
-    HBASE("hbase"),
-    OOZIE("oozie"),
-    SOLRCLOUD("solrcloud"),
-    SOLR("solr"),
-    CASSANDRA("cassandra"),
-    MONGODB("mongodb"),
-    ELASTICSEARCH("elastic"),
-    NEO4J("neo4j");
+    HDFS("hdfs", "fr.jetoile.hadoopunit.component.HdfsBootstrap", "hdfs.artifact"),
+    ZOOKEEPER("zookeeper", "fr.jetoile.hadoopunit.component.ZookeeperBootstrap", "zookeeper.artifact"),
+    HIVEMETA("hivemeta", "fr.jetoile.hadoopunit.component.HiveMetastoreBootstrap", "hivemeta.artifact"),
+    HIVESERVER2("hiveserver2", "fr.jetoile.hadoopunit.component.HiveServer2Bootstrap", "hiveserver2.artifact"),
+    KAFKA("kafka", "fr.jetoile.hadoopunit.component.KafkaBootstrap", "kafka.artifact"),
+    HBASE("hbase", "fr.jetoile.hadoopunit.component.HBaseBootstrap", "hbase.artifact"),
+    OOZIE("oozie", "fr.jetoile.hadoopunit.component.OozieBootstrap", "oozie.artifact"),
+    SOLRCLOUD("solrcloud", "fr.jetoile.hadoopunit.component.SolrCloudBootstrap", "solrcloud.artifact"),
+    SOLR("solr", "fr.jetoile.hadoopunit.component.SolrBootstrap", "solr.artifact"),
+    CASSANDRA("cassandra", "fr.jetoile.hadoopunit.component.CassandraBootstrap", "cassandra.artifact"),
+    MONGODB("mongodb", "fr.jetoile.hadoopunit.component.MongoDbBootstrap", "mongodb.artifact"),
+    ELASTICSEARCH("elasticsearch", "fr.jetoile.hadoopunit.component.ElasticSearchBootstrap", "elasticsearch.artifact"),
+    NEO4J("neo4j", "fr.jetoile.hadoopunit.component.Neo4jBootstrap", "neo4j.artifact");
 
     private String key;
+    private String mainClass;
+    private String artifactKey;
 
-    Component(String key) {
+    Component(String key, String mainClass, String artifactKey) {
         this.key = key;
+        this.mainClass = mainClass;
+        this.artifactKey = artifactKey;
     }
 
     public String getKey() {
         return key;
     }
 
+    public String getMainClass() {
+        return mainClass;
+    }
+
+    public String getArtifactKey() {
+        return artifactKey;
+    }
 }
 
