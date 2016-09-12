@@ -1,0 +1,131 @@
+<?xml version="1.0"?>
+<assembly xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2 http://maven.apache.org/xsd/assembly-1.1.2.xsd">
+
+    <id>hadoop-bootstrap</id>
+
+    <includeBaseDirectory>false</includeBaseDirectory>
+
+    <formats>
+        <format>tar.gz</format>
+    </formats>
+
+
+    <dependencySets>
+        <dependencySet>
+            <useProjectArtifact>false</useProjectArtifact>
+            <includes>
+                <include>fr.jetoile.hadoop:hadoop-unit-zookeeper:jar:uber</include>
+            </includes>
+            <outputDirectory>/zookeeper</outputDirectory>
+        </dependencySet>
+
+        <dependencySet>
+            <useProjectArtifact>false</useProjectArtifact>
+            <includes>
+                <include>fr.jetoile.hadoop:hadoop-unit-hdfs:jar:uber</include>
+            </includes>
+            <outputDirectory>/hdfs</outputDirectory>
+            <unpack>false</unpack>
+        </dependencySet>
+
+        <dependencySet>
+            <useProjectArtifact>false</useProjectArtifact>
+            <includes>
+                <include>fr.jetoile.hadoop:hadoop-unit-cassandra:jar:uber</include>
+            </includes>
+            <outputDirectory>/cassandra</outputDirectory>
+            <unpack>false</unpack>
+        </dependencySet>
+
+        <dependencySet>
+            <useProjectArtifact>false</useProjectArtifact>
+            <includes>
+                <include>fr.jetoile.hadoop:hadoop-unit-mongodb:jar:uber</include>
+            </includes>
+            <outputDirectory>/mongodb</outputDirectory>
+            <unpack>false</unpack>
+        </dependencySet>
+
+        <dependencySet>
+            <useProjectArtifact>false</useProjectArtifact>
+            <includes>
+                <include>fr.jetoile.hadoop:hadoop-unit-kafka:jar:uber</include>
+            </includes>
+            <outputDirectory>/kafka</outputDirectory>
+            <unpack>false</unpack>
+        </dependencySet>
+
+        <dependencySet>
+            <useProjectArtifact>false</useProjectArtifact>
+            <includes>
+                <include>fr.jetoile.hadoop:hadoop-unit-oozie:jar:uber</include>
+            </includes>
+            <outputDirectory>/oozie</outputDirectory>
+            <unpack>false</unpack>
+        </dependencySet>
+
+        <dependencySet>
+            <useProjectArtifact>false</useProjectArtifact>
+            <includes>
+                <include>fr.jetoile.hadoop:hadoop-unit-neo4j:jar:uber</include>
+            </includes>
+            <outputDirectory>/neo4j</outputDirectory>
+            <unpack>false</unpack>
+        </dependencySet>
+
+        <dependencySet>
+            <useProjectArtifact>false</useProjectArtifact>
+            <includes>
+                <include>fr.jetoile.hadoop:hadoop-unit-solrcloud:jar:uber</include>
+            </includes>
+            <outputDirectory>/solrcloud</outputDirectory>
+            <unpack>false</unpack>
+        </dependencySet>
+
+        <dependencySet>
+            <useProjectArtifact>false</useProjectArtifact>
+            <includes>
+                <include>fr.jetoile.hadoop:hadoop-unit-elasticsearch:jar:uber</include>
+            </includes>
+            <outputDirectory>/elasticsearch</outputDirectory>
+            <unpack>false</unpack>
+        </dependencySet>
+
+        <dependencySet>
+            <useProjectArtifact>false</useProjectArtifact>
+            <includes>
+                <include>fr.jetoile.hadoop:hadoop-unit-hbase:jar:uber</include>
+            </includes>
+            <outputDirectory>/hbase</outputDirectory>
+            <unpack>false</unpack>
+        </dependencySet>
+
+        <dependencySet>
+            <useProjectArtifact>false</useProjectArtifact>
+            <includes>
+                <include>fr.jetoile.hadoop:hadoop-unit-hive:jar:uber</include>
+                <include>org.datanucleus:datanucleus-rdbms</include>
+                <include>org.datanucleus:datanucleus-core</include>
+                <include>org.datanucleus:datanucleus-api-jdo</include>
+                <!--<include>fr.jetoile.hadoop:hadoop-unit-commons:jar</include>-->
+                <!--<include>org.slf4j:slf4j-api:jar</include>-->
+                <!--<include>org.slf4j:log4j-over-slf4j:jar</include>-->
+                <!--<include>org.apache.hadoop:hadoop-mapreduce-client-core:jar</include>-->
+                <!--<include>org.apache.zookeeper:zookeeper:jar</include>-->
+                <!--<include>commons-io:commons-io:jar</include>-->
+                <!--<include>commons-collections:commons-collections:jar</include>-->
+                <!--<include>com.github.sakserv:hadoop-mini-clusters-common:jar</include>-->
+                <!--<include>org.antlr:antlr-runtime:jar</include>-->
+                <!--<include>org.apache.derby:derby:jar</include>-->
+                <!--<include>com.google.guava:guava:jar:14.0.1</include>-->
+            </includes>
+            <outputDirectory>/hive</outputDirectory>
+            <unpack>false</unpack>
+            <useTransitiveFiltering>true</useTransitiveFiltering>
+        </dependencySet>
+
+    </dependencySets>
+
+</assembly>

@@ -18,29 +18,34 @@ package fr.jetoile.hadoopunit;
  * Warning : this list should be sorted
  */
 public enum Component {
-    ZOOKEEPER("zookeeper"),
-    HDFS("hdfs"),
-    HIVEMETA("hivemeta"),
-    HIVESERVER2("hiveserver2"),
-    KAFKA("kafka"),
-    HBASE("hbase"),
-    OOZIE("oozie"),
-    SOLRCLOUD("solrcloud"),
-    SOLR("solr"),
-    CASSANDRA("cassandra"),
-    MONGODB("mongodb"),
-    ELASTICSEARCH("elastic"),
-    NEO4J("neo4j");
+    ZOOKEEPER("zookeeper", "fr.jetoile.hadoopunit.component.ZookeeperBootstrap"),
+    HDFS("hdfs", "fr.jetoile.hadoopunit.component.HdfsBootstrap"),
+    HIVEMETA("hivemeta", "fr.jetoile.hadoopunit.component.HiveMetastoreBootstrap"),
+    HIVESERVER2("hiveserver2", "fr.jetoile.hadoopunit.component.HiveServer2Bootstrap"),
+    KAFKA("kafka", "fr.jetoile.hadoopunit.component.KafkaBootstrap"),
+    HBASE("hbase", "fr.jetoile.hadoopunit.component.HBaseBootstrap"),
+    OOZIE("oozie", "fr.jetoile.hadoopunit.component.OozieBootstrap"),
+    SOLRCLOUD("solrcloud", "fr.jetoile.hadoopunit.component.SolrCloudBootstrap"),
+    SOLR("solr", "fr.jetoile.hadoopunit.component.SolrBootstrap"),
+    CASSANDRA("cassandra", "fr.jetoile.hadoopunit.component.CassandraBootstrap"),
+    MONGODB("mongodb", "fr.jetoile.hadoopunit.component.MongoDbBootstrap"),
+    ELASTICSEARCH("elasticsearch", "fr.jetoile.hadoopunit.component.ElasticSearchBootstrap"),
+    NEO4J("neo4j", "fr.jetoile.hadoopunit.component.Neo4jBootstrap");
 
     private String key;
+    private String mainClass;
 
-    Component(String key) {
+    Component(String key, String mainClass) {
         this.key = key;
+        this.mainClass = mainClass;
     }
 
     public String getKey() {
         return key;
     }
 
+    public String getMainClass() {
+        return mainClass;
+    }
 }
 

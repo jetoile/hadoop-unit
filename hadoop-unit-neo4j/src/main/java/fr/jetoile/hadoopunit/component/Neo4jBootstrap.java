@@ -16,8 +16,10 @@ package fr.jetoile.hadoopunit.component;
 
 
 import fr.jetoile.hadoopunit.Component;
+import fr.jetoile.hadoopunit.HadoopBootstrap;
 import fr.jetoile.hadoopunit.HadoopUnitConfig;
 import fr.jetoile.hadoopunit.exception.BootstrapException;
+import fr.jetoile.hadoopunit.exception.NotFoundServiceException;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
@@ -29,13 +31,14 @@ import org.neo4j.graphdb.factory.GraphDatabaseSettings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.Console;
 import java.io.IOException;
 import java.nio.file.Paths;
 
 public class Neo4jBootstrap implements Bootstrap {
     final public static String NAME = Component.NEO4J.name();
 
-    final private Logger LOGGER = LoggerFactory.getLogger(Neo4jBootstrap.class);
+    static final private Logger LOGGER = LoggerFactory.getLogger(Neo4jBootstrap.class);
 
     private State state = State.STOPPED;
 
@@ -142,6 +145,20 @@ public class Neo4jBootstrap implements Bootstrap {
 
     public GraphDatabaseService getNeo4jGraph() {
         return this.graphDb;
+    }
+
+    public static void main(String... args) throws NotFoundServiceException {
+        HadoopBootstrap.INSTANCE.add(Component.NEO4J).startAll();
+
+//        System.out.println("type q to exit...");
+//
+//        Console console = System.console();
+//        while (true) {
+//            String s = console.readLine();
+//            if ("q".equalsIgnoreCase(s)) {
+//                break;
+//            }
+//        }
     }
 
 }

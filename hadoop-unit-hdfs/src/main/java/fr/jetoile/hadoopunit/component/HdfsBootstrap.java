@@ -15,9 +15,11 @@ package fr.jetoile.hadoopunit.component;
 
 import com.github.sakserv.minicluster.impl.HdfsLocalCluster;
 import fr.jetoile.hadoopunit.Component;
+import fr.jetoile.hadoopunit.HadoopBootstrap;
 import fr.jetoile.hadoopunit.HadoopUnitConfig;
 import fr.jetoile.hadoopunit.HadoopUtils;
 import fr.jetoile.hadoopunit.exception.BootstrapException;
+import fr.jetoile.hadoopunit.exception.NotFoundServiceException;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
@@ -29,7 +31,7 @@ import org.slf4j.LoggerFactory;
 public class HdfsBootstrap implements Bootstrap {
     final public static String NAME = Component.HDFS.name();
 
-    final private Logger LOGGER = LoggerFactory.getLogger(HdfsBootstrap.class);
+    static final private Logger LOGGER = LoggerFactory.getLogger(HdfsBootstrap.class);
 
     private HdfsLocalCluster hdfsLocalCluster;
 
@@ -148,5 +150,9 @@ public class HdfsBootstrap implements Bootstrap {
         return hdfsLocalCluster.getHdfsFileSystemHandle();
     }
 
+
+    public static void main(String... args) throws NotFoundServiceException {
+        HadoopBootstrap.INSTANCE.add(Component.HDFS).startAll();
+    } 
 
 }

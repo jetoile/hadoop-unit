@@ -13,7 +13,6 @@
  */
 package fr.jetoile.hadoopunit;
 
-import com.google.common.collect.Lists;
 import fr.jetoile.hadoopunit.component.Bootstrap;
 import fr.jetoile.hadoopunit.exception.NotFoundServiceException;
 import org.apache.commons.configuration.Configuration;
@@ -24,13 +23,13 @@ import java.io.*;
 import java.nio.charset.Charset;
 import java.util.*;
 
+import static java.util.stream.Collectors.toList;
+
 public enum HadoopBootstrap {
     INSTANCE;
 
     final private static Logger LOGGER = LoggerFactory.getLogger(HadoopBootstrap.class);
 
-
-    private Configuration configuration;
     List<Bootstrap> componentsToStart = new ArrayList<>();
     List<Bootstrap> manualComponentsToStart = new ArrayList<>();
     List<Bootstrap> componentsToStop = new ArrayList<>();
@@ -56,7 +55,7 @@ public enum HadoopBootstrap {
             }
         });
 
-        componentsToStop = Lists.newArrayList(this.componentsToStart);
+        componentsToStop = this.componentsToStart.stream().collect(toList());
         Collections.reverse(componentsToStop);
 
         Runtime.getRuntime().addShutdownHook(new Thread() {
@@ -89,7 +88,7 @@ public enum HadoopBootstrap {
         if (manualComponentsToStop.isEmpty()) {
             internalStop(componentsToStop);
         } else {
-            manualComponentsToStop = Lists.newArrayList(this.manualComponentsToStart);
+            manualComponentsToStop = this.manualComponentsToStart.stream().collect(toList());
             Collections.reverse(manualComponentsToStop);
             internalStop(manualComponentsToStop);
         }

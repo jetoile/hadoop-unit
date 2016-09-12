@@ -16,18 +16,22 @@ package fr.jetoile.hadoopunit.component;
 
 import com.github.sakserv.minicluster.impl.MongodbLocalServer;
 import fr.jetoile.hadoopunit.Component;
+import fr.jetoile.hadoopunit.HadoopBootstrap;
 import fr.jetoile.hadoopunit.HadoopUnitConfig;
 import fr.jetoile.hadoopunit.exception.BootstrapException;
+import fr.jetoile.hadoopunit.exception.NotFoundServiceException;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.Console;
+
 public class MongoDbBootstrap implements Bootstrap {
     final public static String NAME = Component.MONGODB.name();
 
-    final private Logger LOGGER = LoggerFactory.getLogger(MongoDbBootstrap.class);
+    static final private Logger LOGGER = LoggerFactory.getLogger(MongoDbBootstrap.class);
 
     private State state = State.STOPPED;
 
@@ -117,6 +121,20 @@ public class MongoDbBootstrap implements Bootstrap {
     @Override
     public org.apache.hadoop.conf.Configuration getConfiguration() {
         throw new UnsupportedOperationException("the method getConfiguration can not be called on MongoDbBootstrap");
+    }
+
+    public static void main(String... args) throws NotFoundServiceException {
+        HadoopBootstrap.INSTANCE.add(Component.MONGODB).startAll();
+
+//        System.out.println("type q to exit...");
+//
+//        Console console = System.console();
+//        while (true) {
+//            String s = console.readLine();
+//            if ("q".equalsIgnoreCase(s)) {
+//                break;
+//            }
+//        }
     }
 
 }

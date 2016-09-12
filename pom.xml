@@ -217,6 +217,10 @@
                 <version>${hadoop-unit.version}</version>
                 <exclusions>
                     <exclusion>
+                        <groupId>com.microsoft.windowsazure.storage</groupId>
+                        <artifactId>microsoft-windowsazure-storage-sdk</artifactId>
+                    </exclusion>
+                    <exclusion>
                         <artifactId>servlet-api</artifactId>
                         <groupId>javax.servlet</groupId>
                     </exclusion>
@@ -359,32 +363,6 @@
                 <groupId>org.apache.hadoop</groupId>
                 <artifactId>hadoop-common</artifactId>
                 <version>${hadoop.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <artifactId>httpclient</artifactId>
-                        <groupId>org.apache.httpcomponents</groupId>
-                    </exclusion>
-                    <exclusion>
-                        <artifactId>servlet-api</artifactId>
-                        <groupId>javax.servlet</groupId>
-                    </exclusion>
-                    <exclusion>
-                        <artifactId>org.eclipse.jetty</artifactId>
-                        <groupId>jetty-util</groupId>
-                    </exclusion>
-                    <exclusion>
-                        <artifactId>guava</artifactId>
-                        <groupId>com.google.guava</groupId>
-                    </exclusion>
-                    <exclusion>
-                        <artifactId>log4j</artifactId>
-                        <groupId>log4j</groupId>
-                    </exclusion>
-                    <exclusion>
-                        <artifactId>slf4j-log4j12</artifactId>
-                        <groupId>org.slf4j</groupId>
-                    </exclusion>
-                </exclusions>
             </dependency>
 
             <dependency>
@@ -409,14 +387,6 @@
                     <exclusion>
                         <artifactId>servlet-api</artifactId>
                         <groupId>javax.servlet</groupId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>log4j</groupId>
-                        <artifactId>log4j</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <artifactId>slf4j-log4j12</artifactId>
-                        <groupId>org.slf4j</groupId>
                     </exclusion>
                 </exclusions>
             </dependency>
@@ -447,22 +417,6 @@
                         <artifactId>hadoop-annotations</artifactId>
                     </exclusion>
                     <exclusion>
-                        <groupId>org.ow2.asm</groupId>
-                        <artifactId>asm</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.ow2.asm</groupId>
-                        <artifactId>asm-commons</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <artifactId>jetty-util</artifactId>
-                        <groupId>org.eclipse.jetty</groupId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>com.googlecode.concurrentlinkedhashmap</groupId>
-                        <artifactId>concurrentlinkedhashmap-lru</artifactId>
-                    </exclusion>
-                    <exclusion>
                         <groupId>log4j</groupId>
                         <artifactId>log4j</artifactId>
                     </exclusion>
@@ -485,44 +439,6 @@
                 <groupId>com.github.sakserv</groupId>
                 <artifactId>hadoop-mini-clusters-oozie</artifactId>
                 <version>${hadoop-mini-clusters.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <artifactId>servlet-api</artifactId>
-                        <groupId>javax.servlet</groupId>
-                    </exclusion>
-                    <exclusion>
-                        <artifactId>metrics-core</artifactId>
-                        <groupId>com.codahale.metrics</groupId>
-                    </exclusion>
-                    <exclusion>
-                        <artifactId>metrics-json</artifactId>
-                        <groupId>com.codahale.metrics</groupId>
-                    </exclusion>
-                    <exclusion>
-                        <artifactId>metrics-jvm</artifactId>
-                        <groupId>com.codahale.metrics</groupId>
-                    </exclusion>
-                    <exclusion>
-                        <artifactId>hive-jdbc</artifactId>
-                        <groupId>org.apache.hive</groupId>
-                    </exclusion>
-                    <exclusion>
-                        <artifactId>log4j</artifactId>
-                        <groupId>log4j</groupId>
-                    </exclusion>
-                    <exclusion>
-                        <artifactId>slf4j-simple</artifactId>
-                        <groupId>org.slf4j</groupId>
-                    </exclusion>
-                    <exclusion>
-                        <artifactId>slf4j-log4j12</artifactId>
-                        <groupId>org.slf4j</groupId>
-                    </exclusion>
-                    <exclusion>
-                        <artifactId>property-parser</artifactId>
-                        <groupId>com.github.sakserv</groupId>
-                    </exclusion>
-                </exclusions>
             </dependency>
 
             <dependency>
@@ -606,14 +522,6 @@
                 <artifactId>hadoop-mini-clusters-hivemetastore</artifactId>
                 <version>${hadoop-mini-clusters.version}</version>
                 <exclusions>
-                    <exclusion>
-                        <groupId>log4j</groupId>
-                        <artifactId>log4j</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <artifactId>slf4j-log4j12</artifactId>
-                        <groupId>org.slf4j</groupId>
-                    </exclusion>
                 </exclusions>
             </dependency>
 
@@ -622,10 +530,6 @@
                 <artifactId>hadoop-mini-clusters-hiveserver2</artifactId>
                 <version>${hadoop-mini-clusters.version}</version>
                 <exclusions>
-                    <exclusion>
-                        <artifactId>jetty-all</artifactId>
-                        <groupId>org.eclipse.jetty.aggregate</groupId>
-                    </exclusion>
                     <exclusion>
                         <artifactId>slf4j-log4j12</artifactId>
                         <groupId>org.slf4j</groupId>
@@ -637,36 +541,12 @@
                 <groupId>com.github.sakserv</groupId>
                 <artifactId>hadoop-mini-clusters-hdfs</artifactId>
                 <version>${hadoop-mini-clusters.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <artifactId>servlet-api</artifactId>
-                        <groupId>javax.servlet</groupId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>log4j</groupId>
-                        <artifactId>log4j</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <artifactId>slf4j-log4j12</artifactId>
-                        <groupId>org.slf4j</groupId>
-                    </exclusion>
-                    <exclusion>
-                        <artifactId>netty</artifactId>
-                        <groupId>io.netty</groupId>
-                    </exclusion>
-                </exclusions>
             </dependency>
 
             <dependency>
                 <groupId>com.github.sakserv</groupId>
                 <artifactId>hadoop-mini-clusters-hbase</artifactId>
                 <version>${hadoop-mini-clusters.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <artifactId>servlet-api-2.5</artifactId>
-                        <groupId>org.mortbay.jetty</groupId>
-                    </exclusion>
-                </exclusions>
             </dependency>
 
             <dependency>
@@ -674,14 +554,6 @@
                 <artifactId>spark-solr</artifactId>
                 <version>${spark-solr.version}</version>
                 <exclusions>
-                    <exclusion>
-                        <groupId>org.ow2.asm</groupId>
-                        <artifactId>asm</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.ow2.asm</groupId>
-                        <artifactId>asm-commons</artifactId>
-                    </exclusion>
                     <exclusion>
                         <artifactId>spark-mllib_2.10</artifactId>
                         <groupId>org.apache.spark</groupId>
@@ -828,7 +700,7 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.11</version>
+            <version>4.12</version>
             <scope>test</scope>
         </dependency>
         <dependency>

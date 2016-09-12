@@ -15,9 +15,11 @@ package fr.jetoile.hadoopunit.component;
 
 import com.github.sakserv.minicluster.impl.KafkaLocalBroker;
 import fr.jetoile.hadoopunit.Component;
+import fr.jetoile.hadoopunit.HadoopBootstrap;
 import fr.jetoile.hadoopunit.HadoopUnitConfig;
 import fr.jetoile.hadoopunit.HadoopUtils;
 import fr.jetoile.hadoopunit.exception.BootstrapException;
+import fr.jetoile.hadoopunit.exception.NotFoundServiceException;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
@@ -29,7 +31,7 @@ import java.util.Properties;
 public class KafkaBootstrap implements Bootstrap {
     final public static String NAME = Component.KAFKA.name();
 
-    final private Logger LOGGER = LoggerFactory.getLogger(KafkaBootstrap.class);
+    static final private Logger LOGGER = LoggerFactory.getLogger(KafkaBootstrap.class);
 
     private KafkaLocalBroker kafkaLocalCluster;
 
@@ -139,4 +141,7 @@ public class KafkaBootstrap implements Bootstrap {
         throw new UnsupportedOperationException("the method getConfiguration can not be called on KafkaBootstrap");
     }
 
+    public static void main(String... args) throws NotFoundServiceException {
+        HadoopBootstrap.INSTANCE.add(Component.KAFKA).startAll();
+    }
 }

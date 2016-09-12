@@ -14,12 +14,12 @@
 package fr.jetoile.hadoopunit.component;
 
 import fr.jetoile.hadoopunit.Component;
+import fr.jetoile.hadoopunit.HadoopBootstrap;
 import fr.jetoile.hadoopunit.HadoopUnitConfig;
 import fr.jetoile.hadoopunit.HadoopUtils;
 import fr.jetoile.hadoopunit.exception.BootstrapException;
-import org.apache.commons.configuration.Configuration;
-import org.apache.commons.configuration.ConfigurationException;
-import org.apache.commons.configuration.PropertiesConfiguration;
+import fr.jetoile.hadoopunit.exception.NotFoundServiceException;
+import org.apache.commons.configuration.*;
 import org.apache.solr.client.solrj.embedded.JettySolrRunner;
 import org.apache.solr.client.solrj.impl.CloudSolrClient;
 import org.apache.solr.common.cloud.SolrZkClient;
@@ -31,15 +31,13 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.nio.file.Paths;
 
 public class SolrCloudBootstrap implements Bootstrap {
     final public static String NAME = Component.SOLRCLOUD.name();
 
-    public static final String SOLR_DIR_KEY = "solr.dir";
-    public static final String SOLR_COLLECTION_NAME = "solr.collection.name";
-    public static final String SOLR_PORT = "solr.cloud.port";
-    final private Logger LOGGER = LoggerFactory.getLogger(SolrCloudBootstrap.class);
+    final private static Logger LOGGER = LoggerFactory.getLogger(SolrCloudBootstrap.class);
 
     public static final int TIMEOUT = 10000;
 
@@ -80,7 +78,11 @@ public class SolrCloudBootstrap implements Bootstrap {
     private void build() {
         File solrXml = null;
         try {
-            solrXml = new File(configuration.getClass().getClassLoader().getResource(solrDirectory + "/solr.xml").toURI());
+
+            URL url = ConfigurationUtils.locate(FileSystem.getDefaultFileSystem(), "", solrDirectory + "/solr.xml");
+
+//            solrXml = new File(SolrCloudBootstrap.class.getClass().getClassLoader().getResource(solrDirectory + "/solr.xml").toURI());
+            solrXml = new File(url.toURI());
         } catch (URISyntaxException e) {
             LOGGER.error("unable to instanciate SolrCloudBootstrap", e);
         }
@@ -98,9 +100,9 @@ public class SolrCloudBootstrap implements Bootstrap {
         } catch (ConfigurationException e) {
             throw new BootstrapException("bad config", e);
         }
-        solrDirectory = configuration.getString(SOLR_DIR_KEY);
-        solrCollectionName = configuration.getString(SOLR_COLLECTION_NAME);
-        solrPort = configuration.getInt(SOLR_PORT);
+        solrDirectory = configuration.getString(HadoopUnitConfig.SOLR_DIR_KEY);
+        solrCollectionName = configuration.getString(HadoopUnitConfig.SOLR_COLLECTION_NAME);
+        solrPort = configuration.getInt(HadoopUnitConfig.SOLR_PORT);
         zkHostString = configuration.getString(HadoopUnitConfig.ZOOKEEPER_HOST_KEY) + ":" + configuration.getInt(HadoopUnitConfig.ZOOKEEPER_PORT_KEY);
 
     }
@@ -146,7 +148,10 @@ public class SolrCloudBootstrap implements Bootstrap {
 
         try {
 
-            URI solrDirectoryFile = solrServer.getClass().getClassLoader().getResource(solrDirectory + "/collection1/conf").toURI();
+//            URI solrDirectoryFile = SolrCloudBootstrap.class.getClass().getClassLoader().getResource(solrDirectory + "/collection1/conf").toURI();
+            URL url = ConfigurationUtils.locate(FileSystem.getDefaultFileSystem(), "", solrDirectory + "/collection1/conf");
+            URI solrDirectoryFile = url.toURI();
+
 
             try (SolrZkClient zkClient = new SolrZkClient(zkHostString, TIMEOUT, 45000, null)) {
                 ZkConfigManager manager = new ZkConfigManager(zkClient);
@@ -216,5 +221,8 @@ public class SolrCloudBootstrap implements Bootstrap {
         return new CloudSolrClient(zkHostString);
     }
 
+    public static void main(String... args) throws NotFoundServiceException {
+        HadoopBootstrap.INSTANCE.add(Component.SOLRCLOUD).startAll();
+    }
 
 }

@@ -16,9 +16,11 @@ package fr.jetoile.hadoopunit.component;
 import com.github.sakserv.minicluster.impl.HbaseLocalCluster;
 import com.github.sakserv.minicluster.util.FileUtils;
 import fr.jetoile.hadoopunit.Component;
+import fr.jetoile.hadoopunit.HadoopBootstrap;
 import fr.jetoile.hadoopunit.HadoopUnitConfig;
 import fr.jetoile.hadoopunit.HadoopUtils;
 import fr.jetoile.hadoopunit.exception.BootstrapException;
+import fr.jetoile.hadoopunit.exception.NotFoundServiceException;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
@@ -28,7 +30,7 @@ import org.slf4j.LoggerFactory;
 public class HBaseBootstrap implements Bootstrap {
     final public static String NAME = Component.HBASE.name();
 
-    final private Logger LOGGER = LoggerFactory.getLogger(HBaseBootstrap.class);
+    static final private Logger LOGGER = LoggerFactory.getLogger(HBaseBootstrap.class);
 
     private HbaseLocalCluster hbaseLocalCluster;
 
@@ -155,5 +157,8 @@ public class HBaseBootstrap implements Bootstrap {
         return hbaseLocalCluster.getHbaseConfiguration();
     }
 
+    public static void main(String... args) throws NotFoundServiceException {
+        HadoopBootstrap.INSTANCE.add(Component.HBASE).startAll();
+    }
 
 }

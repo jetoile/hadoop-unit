@@ -17,9 +17,11 @@ import com.github.sakserv.minicluster.impl.HiveLocalMetaStore;
 import com.github.sakserv.minicluster.util.FileUtils;
 import com.github.sakserv.minicluster.util.WindowsLibsUtils;
 import fr.jetoile.hadoopunit.Component;
+import fr.jetoile.hadoopunit.HadoopBootstrap;
 import fr.jetoile.hadoopunit.HadoopUnitConfig;
 import fr.jetoile.hadoopunit.HadoopUtils;
 import fr.jetoile.hadoopunit.exception.BootstrapException;
+import fr.jetoile.hadoopunit.exception.NotFoundServiceException;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
@@ -30,7 +32,7 @@ import org.slf4j.LoggerFactory;
 public class HiveMetastoreBootstrap implements Bootstrap {
     final public static String NAME = Component.HIVEMETA.name();
 
-    final private Logger LOGGER = LoggerFactory.getLogger(HiveMetastoreBootstrap.class);
+    final static private Logger LOGGER = LoggerFactory.getLogger(HiveMetastoreBootstrap.class);
 
     private HiveLocalMetaStore hiveLocalMetaStore;
 
@@ -156,5 +158,9 @@ public class HiveMetastoreBootstrap implements Bootstrap {
         return hiveLocalMetaStore.getHiveConf();
     }
 
+
+    public static void main(String... args) throws NotFoundServiceException {
+        HadoopBootstrap.INSTANCE.add(Component.HIVEMETA).startAll();
+    }
 
 }

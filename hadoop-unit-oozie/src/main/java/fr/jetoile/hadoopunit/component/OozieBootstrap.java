@@ -194,11 +194,11 @@ public class OozieBootstrap implements Bootstrap {
         resourceManagerWebappAddress = configuration.getString(HadoopUnitConfig.YARN_RESOURCE_MANAGER_WEBAPP_ADDRESS_KEY);
         useInJvmContainerExecutor = configuration.getBoolean(HadoopUnitConfig.YARN_USE_IN_JVM_CONTAINER_EXECUTOR_KEY);
 
-        ooziePort = configuration.getInt(OOZIE_PORT);
-        oozieHost = configuration.getString(OOZIE_HOST);
+        ooziePort = configuration.getInt(HadoopUnitConfig.OOZIE_PORT);
+        oozieHost = configuration.getString(HadoopUnitConfig.OOZIE_HOST);
 
-        oozieShareLibPath = configuration.getString(OOZIE_SHARELIB_PATH_KEY);
-        oozieShareLibName = configuration.getString(OOZIE_SHARELIB_NAME_KEY);
+        oozieShareLibPath = configuration.getString(HadoopUnitConfig.OOZIE_SHARELIB_PATH_KEY);
+        oozieShareLibName = configuration.getString(HadoopUnitConfig.OOZIE_SHARELIB_NAME_KEY);
 
     }
 
@@ -237,7 +237,7 @@ public class OozieBootstrap implements Bootstrap {
                 mrLocalCluster.stop(true);
                 cleanup();
             } catch (Exception e) {
-                LOGGER.error("unable to stop hdfs", e);
+                LOGGER.error("unable to stop oozie", e);
             }
             state = State.STOPPED;
             LOGGER.info("{} is stopped", this.getClass().getName());
@@ -308,7 +308,7 @@ public class OozieBootstrap implements Bootstrap {
     }
 
     public String extractOozieTarFileToTempDir(File fullOozieTarFilePath) throws IOException {
-        File tempDir = File.createTempFile(SHARE_LIB_LOCAL_TEMP_PREFIX, "", Paths.get(oozieTmpDir).toFile());
+        File tempDir = File.createTempFile(HadoopUnitConfig.SHARE_LIB_LOCAL_TEMP_PREFIX, "", Paths.get(oozieTmpDir).toFile());
         tempDir.delete();
         tempDir.mkdir();
         tempDir.deleteOnExit();
@@ -319,7 +319,7 @@ public class OozieBootstrap implements Bootstrap {
     }
 
     public String extractOozieShareLibTarFileToTempDir(File fullOozieShareLibTarFilePath) throws IOException {
-        File tempDir = File.createTempFile(SHARE_LIB_LOCAL_TEMP_PREFIX, "", Paths.get(oozieTmpDir).toFile());
+        File tempDir = File.createTempFile(HadoopUnitConfig.SHARE_LIB_LOCAL_TEMP_PREFIX, "", Paths.get(oozieTmpDir).toFile());
         tempDir.delete();
         tempDir.mkdir();
         tempDir.deleteOnExit();
