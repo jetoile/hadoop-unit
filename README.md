@@ -8,8 +8,10 @@ Moreover, it provide a standalone component which can be run locally and which s
 <p align="center">
 
   <img src="https://maven-badges.herokuapp.com/maven-central/fr.jetoile.hadoop/hadoop-unit/badge.svg"/>
-
+  
 </p>
+
+[![Build Status](https://travis-ci.org/jetoile/hadoop-unit.svg?branch=master)](https://travis-ci.org/jetoile/hadoop-unit)
 
 #Build
 
