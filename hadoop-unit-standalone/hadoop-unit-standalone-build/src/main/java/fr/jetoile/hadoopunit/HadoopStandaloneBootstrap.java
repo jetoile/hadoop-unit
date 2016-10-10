@@ -43,7 +43,7 @@ public class HadoopStandaloneBootstrap {
 
     public static void main(String[] args) throws BootstrapException, MalformedURLException, ClassNotFoundException, NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         String homeDirectory = ".";
-//        String homeDirectory = "/home/khanh/github/hadoop-bootstrap/hadoop-unit-standalone2/hadoop-unit-standalone2-build/target/hadoop-unit-standalone2-build-1.5-SNAPSHOT";
+//        String homeDirectory = "/home/khanh/github/hadoop-bootstrap/hadoop-unit-standalone/hadoop-unit-standalone-build/target/hadoop-unit-standalone-build-1.5-SNAPSHOT";
         if (!org.apache.commons.lang.StringUtils.isEmpty(System.getenv("HADOOP_UNIT_HOME"))) {
             homeDirectory = System.getenv("HADOOP_UNIT_HOME");
         }
@@ -148,34 +148,6 @@ public class HadoopStandaloneBootstrap {
             LOGGER.error("unable to reflect main", e);
         }
         return null;
-
-
-//        Object instance = null;
-//        try {
-//            main = mainClass.getMethod("main", new Class[]{args.getClass()});
-//        } catch (NoSuchMethodException  e) {
-//            LOGGER.error("unable to reflect main", e);
-//        }
-//
-//        // well-behaved Java packages work relative to the
-//        // context classloader.  Others don't (like commons-logging)
-//        Thread.currentThread().setContextClassLoader(classloader);
-//        try {
-//            Object[] param = {null};
-//            main.invoke(instance, param);
-//        } catch (IllegalAccessException | InvocationTargetException e) {
-//            LOGGER.error("unable to invoke main method", e);
-//        }
-
-//        try {
-//            Object[] param = {null};
-//            ComponentProperties componentProperties = new ComponentProperties();
-//            componentProperties.setName((String) mainClass.getDeclaredMethod("getName").invoke(invoke, param));
-//            componentProperties.setProperties((String) mainClass.getDeclaredMethod("getProperties").invoke(invoke, param));
-//        } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
-//
-//        }
-//        return null;
     }
 
     private static class ComponentProperties {

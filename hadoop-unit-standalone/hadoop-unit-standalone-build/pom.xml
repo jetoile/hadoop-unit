@@ -112,7 +112,7 @@
 
                             <daemons>
                                 <daemon>
-                                    <id>${project.name}</id>
+                                    <id>hadoop-unit-standalone</id>
                                     <mainClass>fr.jetoile.hadoopunit.HadoopStandaloneBootstrap</mainClass>
                                     <commandLineArguments>
                                     </commandLineArguments>
@@ -190,7 +190,7 @@
                             <artifactItems>
                                 <artifactItem>
                                     <groupId>fr.jetoile.hadoop</groupId>
-                                    <artifactId>hadoop-unit-standalone2-dist</artifactId>
+                                    <artifactId>hadoop-unit-standalone-dist</artifactId>
                                     <version>${project.version}</version>
                                     <type>tar.gz</type>
                                     <overWrite>true</overWrite>

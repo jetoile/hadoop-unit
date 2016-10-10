@@ -17,10 +17,10 @@
         </fileSet>
 
         <fileSet>
-            <directory>${project.build.directory}/appassembler-jsw/jsw/${project.name}</directory>
+            <directory>${project.build.directory}/appassembler-jsw/jsw/hadoop-unit-standalone</directory>
             <outputDirectory>/</outputDirectory>
             <excludes>
-                <exclude>bin/${project.name}</exclude>
+                <exclude>bin/hadoop-unit-standalone</exclude>
                 <exclude>bin/wrapper-linux-x86-32</exclude>
                 <exclude>bin/wrapper-linux-x86-64</exclude>
             </excludes>
@@ -32,12 +32,12 @@
 
     <files>
         <file>
-            <source>${project.build.directory}/appassembler-jsw/jsw/${project.name}/bin/${project.name}</source>
+            <source>${project.build.directory}/appassembler-jsw/jsw/hadoop-unit-standalone/bin/hadoop-unit-standalone</source>
             <outputDirectory>bin</outputDirectory>
             <fileMode>750</fileMode>
         </file>
         <file>
-            <source>${project.build.directory}/appassembler-jsw/jsw/${project.name}/bin/wrapper-linux-x86-64
+            <source>${project.build.directory}/appassembler-jsw/jsw/hadoop-unit-standalone/bin/wrapper-linux-x86-64
             </source>
             <outputDirectory>bin</outputDirectory>
             <fileMode>750</fileMode>
