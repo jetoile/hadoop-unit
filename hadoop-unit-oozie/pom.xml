@@ -51,6 +51,13 @@
             <groupId>io.dropwizard.metrics</groupId>
             <artifactId>metrics-json</artifactId>
         </dependency>
+
+        <!--<dependency>-->
+            <!--<groupId>org.apache.oozie</groupId>-->
+            <!--<artifactId>oozie-sharelib-hive</artifactId>-->
+            <!--<version>4.2.0</version>-->
+            <!--<scope>test</scope>-->
+        <!--</dependency>-->
     </dependencies>
 
 </project>
