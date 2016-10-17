@@ -124,11 +124,11 @@
         <commons-configuration.version>1.10</commons-configuration.version>
         <commons-collections.version>3.2.1</commons-collections.version>
 
-        <hive.version>1.2.1000.2.4.2.0-258</hive.version>
+        <hive.version>1.2.1000.2.5.0.0-1245</hive.version>
         <solr.version>6.1.0</solr.version>
-        <hadoop-mini-clusters.version>0.1.7</hadoop-mini-clusters.version>
-        <oozie.version>4.2.0.2.4.2.0-258</oozie.version>
-        <hadoop.version>2.7.1.2.4.2.0-258</hadoop.version>
+        <hadoop-mini-clusters.version>0.1.8</hadoop-mini-clusters.version>
+        <oozie.version>4.2.0.2.5.0.0-1245</oozie.version>
+        <hadoop.version>2.7.3.2.5.0.0-1245</hadoop.version>
 
         <spark_2.10.version>1.6.2</spark_2.10.version>
         <spark-solr.version>1.1.2</spark-solr.version>
@@ -705,6 +705,10 @@
                     <exclusion>
                         <artifactId>solr-core</artifactId>
                         <groupId>org.apache.solr</groupId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.spark-project.hive</groupId>
+                        <artifactId>hive-metastore</artifactId>
                     </exclusion>
                 </exclusions>
             </dependency>
