@@ -5,8 +5,6 @@
 
     <id>hadoop-bootstrap</id>
 
-    <includeBaseDirectory>false</includeBaseDirectory>
-
     <formats>
         <format>tar.gz</format>
     </formats>
