@@ -28,6 +28,7 @@ mvn package
 
 | Hadoop Unit version  | Hadoop mini cluster version | HDP version |
 | ------------- | ------------- | ------------- |
+| 1.5 | 0.1.8 | HDP 2.5.0.0 |
 | 1.4 | 0.1.7 | HDP 2.4.2.0 |
 | 1.3 | 0.1.6 | HDP 2.4.0.0 |
 | 1.2 | 0.1.5 | HDP 2.4.0.0 |
@@ -82,7 +83,7 @@ Sample:
 <dependency>
     <groupId>fr.jetoile.hadoop</groupId>
     <artifactId>hadoop-unit-hdfs</artifactId>
-    <version>1.3</version>
+    <version>1.5</version>
     <scope>test</scope>
 </dependency>
 ```
@@ -108,7 +109,7 @@ Sample:
 <dependency>
     <groupId>fr.jetoile.hadoop</groupId>
     <artifactId>hadoop-unit-hdfs</artifactId>
-    <version>1.3</version>
+    <version>1.5</version>
     <scope>test</scope>
 </dependency>
 ```
@@ -243,35 +244,35 @@ To use it, add into the pom project stuff like that:
     <dependency>
         <groupId>fr.jetoile.hadoop</groupId>
         <artifactId>hadoop-unit-hdfs</artifactId>
-        <version>1.3</version>
+        <version>1.5</version>
         <scope>test</scope>
     </dependency>
 
     <dependency>
         <groupId>fr.jetoile.hadoop</groupId>
         <artifactId>hadoop-unit-hive</artifactId>
-        <version>1.3</version>
+        <version>1.5</version>
         <scope>test</scope>
     </dependency>
 
     <dependency>
         <groupId>fr.jetoile.hadoop</groupId>
         <artifactId>hadoop-unit-client-hdfs</artifactId>
-        <version>1.3</version>
+        <version>1.5</version>
         <scope>test</scope>
     </dependency>
 
     <dependency>
         <groupId>fr.jetoile.hadoop</groupId>
         <artifactId>hadoop-unit-client-hive</artifactId>
-        <version>1.3</version>
+        <version>1.5</version>
         <scope>test</scope>
     </dependency>
 
     <dependency>
         <groupId>fr.jetoile.hadoop</groupId>
         <artifactId>hadoop-unit-client-spark</artifactId>
-        <version>1.3</version>
+        <version>1.5</version>
         <scope>test</scope>
     </dependency>
 </dependencies>
@@ -308,7 +309,7 @@ To use it, add into the pom project stuff like that:
         <plugin>
             <artifactId>hadoop-unit-maven-plugin</artifactId>
             <groupId>fr.jetoile.hadoop</groupId>
-            <version>1.3</version>
+            <version>1.5</version>
             <executions>
                 <execution>
                     <id>start</id>
@@ -428,7 +429,7 @@ To use it, add into the pom project stuff like that:
 <plugin>
     <artifactId>hadoop-unit-maven-plugin</artifactId>
     <groupId>fr.jetoile.hadoop</groupId>
-    <version>1.3</version>
+    <version>1.5</version>
     <executions>
         <execution>
             <id>start</id>
@@ -455,7 +456,7 @@ To use it, add into the pom project stuff like that:
 <plugin>
     <artifactId>hadoop-unit-maven-plugin</artifactId>
     <groupId>fr.jetoile.hadoop</groupId>
-    <version>1.3</version>
+    <version>1.5</version>
     <executions>
         <execution>
             <id>stop</id>
@@ -556,7 +557,7 @@ public class HdfsBootstrapIntegrationTest {
 * Neo4j 3.0.3
 
 Built on:
-* [hadoop-mini-cluster-0.1.7](https://github.com/sakserv/hadoop-mini-clusters) (aka. HDP 2.4.2)
+* [hadoop-mini-cluster-0.1.8](https://github.com/sakserv/hadoop-mini-clusters) (aka. HDP 2.5.0)
 * [achilles-embedded-4.2.0](https://github.com/doanduyhai/Achilles)
 
 Use: 
