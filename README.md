@@ -28,6 +28,7 @@ mvn package
 
 | Hadoop Unit version  | Hadoop mini cluster version | HDP version |
 | ------------- | ------------- | ------------- |
+| 2.0 | 0.1.9 | HDP 2.5.3.0 |
 | 1.5 | 0.1.8 | HDP 2.5.0.0 |
 | 1.4 | 0.1.7 | HDP 2.4.2.0 |
 | 1.3 | 0.1.6 | HDP 2.4.0.0 |
@@ -69,12 +70,6 @@ The available components are:
 * ELASTICSEARCH
 * NEO4J
 
-However, for compatibility reason, SolR/SolRCloud and Elasticsearch can not be run into the same JVM. For this purpose, there are 2 standalone packages which are generated (one which is compliant with solr and one which is compliant with elasticsearch).
-
-Neo4j will not be integrated with the standalone component since there are too much conflicts with dependencies:
-* Kafka (2.10_10.0.0.0) is using scala-library-2.10.6.jar but neo4j-cypher is using scala-library-2.11.8.jar.
-* Neo4j is using lucene 5.5.0 which create conflict with solr and elasticsearch.
-
 ##Integration testing (will start each component present into classpath)
 With maven, add dependencies of components which are needed
 
@@ -83,7 +78,7 @@ Sample:
 <dependency>
     <groupId>fr.jetoile.hadoop</groupId>
     <artifactId>hadoop-unit-hdfs</artifactId>
-    <version>1.5</version>
+    <version>2.0</version>
     <scope>test</scope>
 </dependency>
 ```
@@ -109,7 +104,7 @@ Sample:
 <dependency>
     <groupId>fr.jetoile.hadoop</groupId>
     <artifactId>hadoop-unit-hdfs</artifactId>
-    <version>1.5</version>
+    <version>2.0</version>
     <scope>test</scope>
 </dependency>
 ```
@@ -134,30 +129,32 @@ public static void tearDown() throws NotFoundServiceException {
 ```
 
 ##Standalone mode
-As said above, SolR/SolRCloud and Elasticsearch are not compatible.
 
-For this purpose, two packages are availables:
-* hadoop-unit-standalone-solr
-* hadoop-unit-standalone-elasticsearch
-
-Unzip `hadoop-unit-standalone-<type>-<version>.tar.gz`
+Unzip `hadoop-unit-standalone-<version>.tar.gz`
 Change `conf/hadoop-unit-default.properties`
 Change `conf/hadoop.properties`
 
 Start in fg with:
 ```bash
-./bin/hadoop-unit-standalone-<type> console
+./bin/hadoop-unit-standalone console
 ```
 
 Start in bg with:
 ```bash
-./bin/hadoop-unit-standalone-<type> start
+./bin/hadoop-unit-standalone start
 ```
 
 Stop with:
 ```bash
-./bin/hadoop-unit-standalone-<type> stop
+./bin/hadoop-unit-standalone stop
 ```
+
+Because of the use of aether, `hadoop-unit-default.properties` has to know where your maven local repo is. In the same way, if a proxy manager like nexus or artifactory is used, it has to be indicated :
+```bash
+maven.central.repo=https://repo.maven.apache.org/maven2/
+maven.local.repo=/home/khanh/.m2/repository
+```
+
 
 ##Shell Usage
 Hadoop-unit can be used with common tools such as:
@@ -241,38 +238,24 @@ To use it, add into the pom project stuff like that:
         <scope>test</scope>
     </dependency>
 
-    <dependency>
-        <groupId>fr.jetoile.hadoop</groupId>
-        <artifactId>hadoop-unit-hdfs</artifactId>
-        <version>1.5</version>
-        <scope>test</scope>
-    </dependency>
-
-    <dependency>
-        <groupId>fr.jetoile.hadoop</groupId>
-        <artifactId>hadoop-unit-hive</artifactId>
-        <version>1.5</version>
-        <scope>test</scope>
-    </dependency>
-
-    <dependency>
+     <dependency>
         <groupId>fr.jetoile.hadoop</groupId>
         <artifactId>hadoop-unit-client-hdfs</artifactId>
-        <version>1.5</version>
+        <version>2.0</version>
         <scope>test</scope>
     </dependency>
 
     <dependency>
         <groupId>fr.jetoile.hadoop</groupId>
         <artifactId>hadoop-unit-client-hive</artifactId>
-        <version>1.5</version>
+        <version>2.0</version>
         <scope>test</scope>
     </dependency>
 
     <dependency>
         <groupId>fr.jetoile.hadoop</groupId>
         <artifactId>hadoop-unit-client-spark</artifactId>
-        <version>1.5</version>
+        <version>2.0</version>
         <scope>test</scope>
     </dependency>
 </dependencies>
@@ -309,7 +292,7 @@ To use it, add into the pom project stuff like that:
         <plugin>
             <artifactId>hadoop-unit-maven-plugin</artifactId>
             <groupId>fr.jetoile.hadoop</groupId>
-            <version>1.5</version>
+            <version>${hadoop-unit.version}</version>
             <executions>
                 <execution>
                     <id>start</id>
@@ -320,12 +303,34 @@ To use it, add into the pom project stuff like that:
                 </execution>
             </executions>
             <configuration>
-                <values>
-                    <value>HDFS</value>
-                    <value>ZOOKEEPER</value>
-                    <value>HIVEMETA</value>
-                    <value>HIVESERVER2</value>
-                </values>
+                <localRepo>/home/khanh/.m2/repository</localRepo>
+                <centralRepo>https://repo.maven.apache.org/maven2/</centralRepo>
+                <components>
+                    <componentArtifact implementation="fr.jetoile.hadoopunit.ComponentArtifact">
+                        <componentName>HDFS</componentName>
+                        <artifact>fr.jetoile.hadoop:hadoop-unit-hdfs:2.0</artifact>
+                    </componentArtifact>
+                    <componentArtifact implementation="fr.jetoile.hadoopunit.ComponentArtifact">
+                        <componentName>ZOOKEEPER</componentName>
+                        <artifact>fr.jetoile.hadoop:hadoop-unit-zookeeper:2.0</artifact>
+                    </componentArtifact>
+                    <componentArtifact implementation="fr.jetoile.hadoopunit.ComponentArtifact">
+                        <componentName>HIVEMETA</componentName>
+                        <artifact>fr.jetoile.hadoop:hadoop-unit-hive:2.0</artifact>
+                    </componentArtifact>
+                    <componentArtifact implementation="fr.jetoile.hadoopunit.ComponentArtifact">
+                        <componentName>HIVESERVER2</componentName>
+                        <artifact>fr.jetoile.hadoop:hadoop-unit-hive:2.0</artifact>
+                    </componentArtifact>
+                    <componentArtifact implementation="fr.jetoile.hadoopunit.ComponentArtifact">
+                        <componentName>SOLRCLOUD</componentName>
+                        <artifact>fr.jetoile.hadoop:hadoop-unit-solrcloud:${hadoop-unit.version}</artifact>
+                        <properties>
+                            <solr.dir>file://${project.basedir}/src/test/resources/solr</solr.dir>
+                        </properties>
+                    </componentArtifact>
+                </components>
+
             </configuration>
 
         </plugin>
@@ -347,6 +352,20 @@ Values can be:
 * CASSANDRA
 * ELASTICSEARCH
 * NEO4J
+
+It is also possible to override configurations with a list of `properties` which accept a map (ie. `<key>value</key>` and where `key` is a property from the file `hadoop-unit-default.properties`). 
+
+For solrcloud, it is mandatory to indicate where is the solr config:
+
+```xml
+    <componentArtifact implementation="fr.jetoile.hadoopunit.ComponentArtifact">
+        <componentName>SOLRCLOUD</componentName>
+        <artifact>fr.jetoile.hadoop:hadoop-unit-solrcloud:${hadoop-unit.version}</artifact>
+        <properties>
+            <solr.dir>file://${project.basedir}/src/test/resources/solr</solr.dir>
+        </properties>
+    </componentArtifact>
+```
 
 Here is a sample integration test:
 ```java
@@ -429,7 +448,7 @@ To use it, add into the pom project stuff like that:
 <plugin>
     <artifactId>hadoop-unit-maven-plugin</artifactId>
     <groupId>fr.jetoile.hadoop</groupId>
-    <version>1.5</version>
+    <version>2.0</version>
     <executions>
         <execution>
             <id>start</id>
@@ -456,7 +475,7 @@ To use it, add into the pom project stuff like that:
 <plugin>
     <artifactId>hadoop-unit-maven-plugin</artifactId>
     <groupId>fr.jetoile.hadoop</groupId>
-    <version>1.5</version>
+    <version>2.0</version>
     <executions>
         <execution>
             <id>stop</id>
@@ -487,6 +506,7 @@ Values can be:
 * MONGODB
 * CASSANDRA
 * ELASTICSEARCH
+* NEO4J
 
 hadoopUnitPath is not mandatory but system enviroment variable HADOOP_UNIT_HOME must be defined. 
 
@@ -557,8 +577,9 @@ public class HdfsBootstrapIntegrationTest {
 * Neo4j 3.0.3
 
 Built on:
-* [hadoop-mini-cluster-0.1.8](https://github.com/sakserv/hadoop-mini-clusters) (aka. HDP 2.5.0)
+* [hadoop-mini-cluster-0.1.9](https://github.com/sakserv/hadoop-mini-clusters) (aka. HDP 2.5.3.0)
 * [achilles-embedded-4.2.0](https://github.com/doanduyhai/Achilles)
+* [maven aether](https://github.com/apache/maven-resolver/)
 
 Use: 
 * download and unzip hadoop
