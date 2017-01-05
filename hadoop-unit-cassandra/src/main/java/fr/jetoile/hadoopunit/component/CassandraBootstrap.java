@@ -21,6 +21,7 @@ import fr.jetoile.hadoopunit.HadoopUnitConfig;
 import fr.jetoile.hadoopunit.exception.BootstrapException;
 import fr.jetoile.hadoopunit.exception.NotFoundServiceException;
 import info.archinnov.achilles.embedded.CassandraEmbeddedServerBuilder;
+import info.archinnov.achilles.embedded.CassandraShutDownHook;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
@@ -43,6 +44,8 @@ public class CassandraBootstrap implements Bootstrap {
     private State state = State.STOPPED;
 
     private Configuration configuration;
+
+    private CassandraShutDownHook shutdownHook;
 
     private int port;
     private String ip;
@@ -98,14 +101,23 @@ public class CassandraBootstrap implements Bootstrap {
         Files.createDirectory(Paths.get(configuration.getString(HadoopUnitConfig.CASSANDRA_TEMP_DIR_KEY) + "/saved_caches"));
         Files.createDirectory(Paths.get(configuration.getString(HadoopUnitConfig.CASSANDRA_TEMP_DIR_KEY) + "/hints"));
 
+        shutdownHook = new CassandraShutDownHook();
+
         session = CassandraEmbeddedServerBuilder.builder()
+                .withListenAddress(ip)
+                .withRpcAddress(ip)
+                .withBroadcastAddress(ip)
+                .withBroadcastRpcAddress(ip)
                 .withCQLPort(port)
                 .withDataFolder(configuration.getString(HadoopUnitConfig.CASSANDRA_TEMP_DIR_KEY) + "/data")
                 .withCommitLogFolder(configuration.getString(HadoopUnitConfig.CASSANDRA_TEMP_DIR_KEY) + "/commitlog")
                 .withSavedCachesFolder(configuration.getString(HadoopUnitConfig.CASSANDRA_TEMP_DIR_KEY) + "/saved_caches")
                 .withHintsFolder(configuration.getString(HadoopUnitConfig.CASSANDRA_TEMP_DIR_KEY) + "/hints")
                 .cleanDataFilesAtStartup(true)
+                .withShutdownHook(shutdownHook)
+                .cleanDataFilesAtStartup(true)
                 .buildNativeSession();
+
     }
 
     @Override
@@ -131,7 +143,7 @@ public class CassandraBootstrap implements Bootstrap {
             state = State.STOPPING;
             LOGGER.info("{} is stopping", this.getClass().getName());
             try {
-                session.close();
+                shutdownHook.shutDownNow();
                 cleanup();
             } catch (Exception e) {
                 LOGGER.error("unable to stop cassandra", e);
