@@ -1,7 +1,8 @@
 language: java
 jdk:
   - oraclejdk8
-script: mvn package -DskipTests
+install: mvn install -DskipTests=true -Dtravis -Dmaven.javadoc.skip=true -B -V
+script: mvn package -DskipTests -Dtravis
 branches:
   only:
     - master
