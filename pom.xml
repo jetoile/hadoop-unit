@@ -61,8 +61,8 @@
         <module>hadoop-unit-cassandra</module>
         <module>hadoop-unit-mongodb</module>
         <module>hadoop-unit-elasticsearch</module>
-        <module>sample</module>
         <module>hadoop-unit-neo4j</module>
+        <module>sample</module>
     </modules>
 
     <repositories>
@@ -124,15 +124,15 @@
         <commons-configuration.version>1.10</commons-configuration.version>
         <commons-collections.version>3.2.1</commons-collections.version>
 
-        <hive.version>1.2.1000.2.5.0.0-1245</hive.version>
+        <hive.version>1.2.1000.2.5.3.0-37</hive.version>
         <solr.version>6.1.0</solr.version>
-        <hadoop-mini-clusters.version>0.1.8</hadoop-mini-clusters.version>
-        <oozie.version>4.2.0.2.5.0.0-1245</oozie.version>
-        <hadoop.version>2.7.3.2.5.0.0-1245</hadoop.version>
+        <hadoop-mini-clusters.version>0.1.9</hadoop-mini-clusters.version>
+        <oozie.version>4.2.0.2.5.3.0-37</oozie.version>
+        <hadoop.version>2.7.3.2.5.3.0-37</hadoop.version>
 
         <spark_2.10.version>1.6.2</spark_2.10.version>
         <spark-solr.version>1.1.2</spark-solr.version>
-        <kafka_2.10.version>0.10.0.0</kafka_2.10.version>
+        <kafka_2.10.version>0.10.0.2.5.3.0-37</kafka_2.10.version>
 
         <dbSetup.version>1.6.0</dbSetup.version>
         <httpclient.version>4.3.1</httpclient.version>
