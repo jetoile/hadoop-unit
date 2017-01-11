@@ -101,8 +101,6 @@
                             </execution>
                         </executions>
                         <configuration>
-                            <localRepo>/home/khanh/.m2/repository</localRepo>
-                            <centralRepo>https://repo.maven.apache.org/maven2/</centralRepo>
                             <components>
                                 <componentArtifact implementation="fr.jetoile.hadoopunit.ComponentArtifact">
                                     <componentName>ZOOKEEPER</componentName>

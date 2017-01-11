@@ -52,9 +52,11 @@ import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.*;
-
-import static com.sun.tools.doclint.Entity.prop;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 
 @Mojo(name = "embedded-start", defaultPhase = LifecyclePhase.PRE_INTEGRATION_TEST, threadSafe = false)
@@ -66,11 +68,23 @@ public class HadoopBootstrapStarter extends AbstractMojo {
     @Parameter(property = "components", required = true)
     protected List<ComponentArtifact> components;
 
-    @Parameter(property = "localRepo", required = true)
-    protected String localRepo;
+    /**
+     * The current repository/network configuration of Maven.
+     *
+     * @parameter default-value="${repositorySystemSession}"
+     * @readonly
+     */
+    @Parameter(property = "repoSession", defaultValue = "${repositorySystemSession}")
+    private RepositorySystemSession repoSession;
 
-    @Parameter(property = "centralRepo", required = true)
-    protected String centralRepo;
+    /**
+     * The project's remote repositories to use for the resolution.
+     *
+     * @parameter default-value="${project.remoteProjectRepositories}"
+     * @readonly
+     */
+    @Parameter(property = "remoteRepos", defaultValue = "${project.remoteProjectRepositories}")
+    private List<RemoteRepository> remoteRepos;
 
     private List<ComponentProperties> componentProperties = new ArrayList<>();
 
@@ -93,7 +107,7 @@ public class HadoopBootstrapStarter extends AbstractMojo {
     public DefaultRepositorySystemSession newRepositorySystemSession(RepositorySystem system) {
         DefaultRepositorySystemSession session = MavenRepositorySystemUtils.newSession();
 
-        LocalRepository localRepo1 = new LocalRepository(localRepo);
+        LocalRepository localRepo1 = new LocalRepository(repoSession.getLocalRepository().getBasedir());
         session.setLocalRepositoryManager(system.newLocalRepositoryManager(session, localRepo1));
 
 //        session.setTransferListener(new ConsoleTransferListener());
@@ -103,11 +117,7 @@ public class HadoopBootstrapStarter extends AbstractMojo {
     }
 
     public List<RemoteRepository> newRepositories(RepositorySystem system, RepositorySystemSession session) {
-        return new ArrayList<>(Arrays.asList(newCentralRepository()));
-    }
-
-    private RemoteRepository newCentralRepository() {
-        return new RemoteRepository.Builder("central", "default", centralRepo).build();
+        return remoteRepos;
     }
 
     @Override
@@ -128,7 +138,7 @@ public class HadoopBootstrapStarter extends AbstractMojo {
                     collectRequest.setRoot(new Dependency(artifact, JavaScopes.COMPILE));
                     collectRequest.setRepositories(newRepositories(system, session));
 
-                    getLog().info("Resolving artifact " + artifact + " from " + centralRepo);
+                    getLog().info("Resolving artifact " + artifact + " from " + remoteRepos.stream().map(r -> r.getId() + "-" + r.getUrl()).collect(Collectors.joining(", ")));
 
                     DependencyRequest dependencyRequest = new DependencyRequest(collectRequest, classpathFilter);
 

@@ -303,8 +303,6 @@ To use it, add into the pom project stuff like that:
                 </execution>
             </executions>
             <configuration>
-                <localRepo>/home/khanh/.m2/repository</localRepo>
-                <centralRepo>https://repo.maven.apache.org/maven2/</centralRepo>
                 <components>
                     <componentArtifact implementation="fr.jetoile.hadoopunit.ComponentArtifact">
                         <componentName>HDFS</componentName>
