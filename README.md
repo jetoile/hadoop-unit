@@ -5,11 +5,8 @@ Hadoop-Unit is a project which allow testing projects which need hadoop ecosyste
 
 Moreover, it provide a standalone component which can be run locally and which simulate a hadoop cluster.
 
-hadoop-unit-standalone-solr:
-[![Maven Central - hadoop-unit-standalone-solr](https://maven-badges.herokuapp.com/maven-central/fr.jetoile.hadoop/hadoop-unit-standalone-solr/badge.svg)](https://maven-badges.herokuapp.com/maven-central/fr.jetoile.hadoop/hadoop-unit-standalone-solr)
-
-hadoop-unit-standalone-elasticsearch:
-[![Maven Central - hadoop-unit-standalone-elasticsearch](https://maven-badges.herokuapp.com/maven-central/fr.jetoile.hadoop/hadoop-unit-standalone-elasticsearch/badge.svg)](https://maven-badges.herokuapp.com/maven-central/fr.jetoile.hadoop/hadoop-unit-standalone-elasticsearch)
+hadoop-unit-standalone:
+[![Maven Central - hadoop-unit-standalone](https://maven-badges.herokuapp.com/maven-central/fr.jetoile.hadoop/hadoop-unit-standalone/badge.svg)](https://maven-badges.herokuapp.com/maven-central/fr.jetoile.hadoop/hadoop-unit-standalone)
 
 [![Build Status](https://travis-ci.org/jetoile/hadoop-unit.svg?branch=master)](https://travis-ci.org/jetoile/hadoop-unit)
 
