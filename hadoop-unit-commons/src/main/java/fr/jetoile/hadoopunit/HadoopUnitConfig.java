@@ -154,6 +154,17 @@ public class HadoopUnitConfig {
     public static final String SOLR_COLLECTION_NAME = "solr.collection.name";
     public static final String SOLR_PORT = "solr.cloud.port";
 
+    // Alluxio
+    public static final String ALLUXIO_WORK_DIR = "alluxio.work.dir";
+    public static final String ALLUXIO_HOSTNAME = "alluxio.hostname";
+    public static final String ALLUXIO_MASTER_RPC_PORT = "alluxio.master.port";
+    public static final String ALLUXIO_MASTER_WEB_PORT = "alluxio.master.web.port";
+    public static final String ALLUXIO_PROXY_WEB_PORT = "alluxio.proxy.web.port";
+    public static final String ALLUXIO_WORKER_RPC_PORT = "alluxio.worker.port";
+    public static final String ALLUXIO_WORKER_DATA_PORT = "alluxio.worker.data.port";
+    public static final String ALLUXIO_WORKER_WEB_PORT = "alluxio.worker.web.port";
+    public static final String ALLUXIO_WEBAPP_DIRECTORY = "alluxio.webapp.directory";
+
     //Knox
     public static final String KNOX_HOST_KEY = "knox.host";
     public static final String KNOX_PORT_KEY = "knox.port";

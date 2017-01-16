@@ -25,6 +25,7 @@ mvn package
 
 | Hadoop Unit version  | Hadoop mini cluster version | HDP version |
 | ------------- | ------------- | ------------- |
+| 2.2 | 0.1.11 | HDP 2.5.3.0 |
 | 2.1 | 0.1.11 | HDP 2.5.3.0 |
 | 2.0 | 0.1.9 | HDP 2.5.3.0 |
 | 1.5 | 0.1.8 | HDP 2.5.0.0 |
@@ -68,6 +69,7 @@ The available components are:
 * ELASTICSEARCH
 * NEO4J
 * KNOX
+* ALLUXIO
 
 ##Integration testing (will start each component present into classpath)
 With maven, add dependencies of components which are needed
@@ -217,6 +219,22 @@ hdfs dfs -ls hdfs://localhost:20112/
 hive
 ```
 
+###Alluxio Shell
+
+* Download and unzip alluxio
+* edit file `ALLUXIO_HOME/conf/alluxio-env.sh`:
+```properties
+ALLUXIO_MASTER_HOSTNAME=localhost
+```
+* edit file `ALLUXIO_HOME/conf/alluxio-site.properties`:
+```properties
+alluxio.master.port=14001
+```
+* From directory `ALLUXIO_HOME/bin`, execute command: 
+```bash
+./alluxio fs ls <path>
+```
+
 #Sample
 See `hadoop-unit-standalone/src/test/java/fr/jetoile/hadoopunit/integrationtest`
 
@@ -350,6 +368,7 @@ Values can be:
 * ELASTICSEARCH
 * NEO4J
 * KNOX
+* ALLUXIO
 
 It is also possible to override configurations with a list of `properties` which accept a map (ie. `<key>value</key>` and where `key` is a property from the file `hadoop-unit-default.properties`). 
 
@@ -505,6 +524,8 @@ Values can be:
 * CASSANDRA
 * ELASTICSEARCH
 * NEO4J
+* KNOX
+* ALLUXIO
 
 hadoopUnitPath is not mandatory but system enviroment variable HADOOP_UNIT_HOME must be defined. 
 
@@ -563,17 +584,18 @@ public class HdfsBootstrapIntegrationTest {
 #Component available
 
 * SolrCloud 6.1.0
-* Kafka 0.10.0.0
+* Kafka 
 * Hive (metastore and server2)
 * Hdfs
 * Zookeeper
 * Oozie (WIP)
 * HBase
+* Knox
 * MongoDB
 * Cassandra 3.4
 * ElasticSearch 5.0-alpha4
 * Neo4j 3.0.3
-* Knox
+* Alluxio 1.4.0
 
 Built on:
 * [hadoop-mini-cluster-0.1.11](https://github.com/sakserv/hadoop-mini-clusters) (aka. HDP 2.5.3.0)

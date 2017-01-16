@@ -15,12 +15,17 @@
 package fr.jetoile.hadoopunit.integrationtest;
 
 
+import alluxio.AlluxioURI;
+import alluxio.client.file.FileInStream;
+import alluxio.client.file.URIStatus;
+import alluxio.exception.AlluxioException;
 import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.Session;
 import com.mongodb.*;
 import fr.jetoile.hadoopunit.HadoopUnitConfig;
 import fr.jetoile.hadoopunit.exception.BootstrapException;
 import fr.jetoile.hadoopunit.exception.NotFoundServiceException;
+import fr.jetoile.hadoopunit.test.alluxio.AlluxioUtils;
 import fr.jetoile.hadoopunit.test.hdfs.HdfsUtils;
 import fr.jetoile.hadoopunit.test.kafka.KafkaConsumerUtils;
 import fr.jetoile.hadoopunit.test.kafka.KafkaProducerUtils;
@@ -62,6 +67,8 @@ import org.slf4j.LoggerFactory;
 import javax.net.ssl.*;
 import java.io.*;
 import java.net.*;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
@@ -83,6 +90,8 @@ public class ManualIntegrationBootstrapTest {
 
     static private Logger LOGGER = LoggerFactory.getLogger(ManualIntegrationBootstrapTest.class);
 
+    public static final int NB_FILE = 1;
+    public static final String PATH = "/fooDirectory";
 
     @BeforeClass
     public static void setup() throws BootstrapException {
@@ -241,7 +250,6 @@ public class ManualIntegrationBootstrapTest {
         FSDataInputStream reader = hdfsFsHandle.open(new Path(configuration.getString(HadoopUnitConfig.HDFS_TEST_FILE_KEY)));
         assertEquals(reader.readUTF(), configuration.getString(HadoopUnitConfig.HDFS_TEST_STRING_KEY));
         reader.close();
-        hdfsFsHandle.close();
 
         URL url = new URL(
                 String.format("http://%s:%s/webhdfs/v1?op=GETHOMEDIRECTORY&user.name=guest",
@@ -355,7 +363,7 @@ public class ManualIntegrationBootstrapTest {
         createHbaseTable(tableName, colFamName, hbaseConfiguration);
 
         LOGGER.info("HBASE: Populate the table with {} rows.", numRowsToPut);
-        for (int i=0; i<numRowsToPut; i++) {
+        for (int i = 0; i < numRowsToPut; i++) {
             putRow(tableName, colFamName, String.valueOf(i), colQualiferName, "row_" + i, hbaseConfiguration);
         }
 
@@ -403,6 +411,61 @@ public class ManualIntegrationBootstrapTest {
         try (BufferedReader response = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
             String line = response.readLine();
             assertTrue(line.contains("{ NAME=> 'hbase_test_table', IS_META => 'false', COLUMNS => [ { NAME => 'cf1', BLOOMFILTER => 'ROW'"));
+        }
+    }
+
+    @Test
+    public void alluxioShouldStart() throws IOException, AlluxioException, InterruptedException {
+        alluxio.client.file.FileSystem fs = AlluxioUtils.INSTANCE.getFileSystem();
+        writeFile(fs);
+
+        assertTrue(readFile(fs));
+
+        HdfsUtils.INSTANCE.getFileSystem().mkdirs(new Path("/khanh/alluxio"));
+        FSDataOutputStream writer = HdfsUtils.INSTANCE.getFileSystem().create(new Path("/khanh/alluxio/test.txt"), true);
+        writer.writeUTF(configuration.getString(HadoopUnitConfig.HDFS_TEST_STRING_KEY));
+        writer.close();
+
+        fs.mount(new AlluxioURI(PATH + "/hdfs"), new AlluxioURI("hdfs://localhost:20112/khanh/alluxio"));
+        assertTrue(fs.exists(new AlluxioURI(PATH + "/hdfs/test.txt")));
+
+        fs.unmount(new AlluxioURI(PATH + "/hdfs"));
+        assertFalse(fs.exists(new AlluxioURI(PATH + "/hdfs/test.txt")));
+    }
+
+    private boolean readFile(alluxio.client.file.FileSystem fs) throws IOException, AlluxioException {
+        boolean pass = true;
+        for (int i = 0; i < NB_FILE; i++) {
+            AlluxioURI filePath = new AlluxioURI(PATH + "/part-" + i);
+            LOGGER.debug("Reading data from {}", filePath);
+
+            FileInStream is = fs.openFile(filePath);
+            URIStatus status = fs.getStatus(filePath);
+            ByteBuffer buf = ByteBuffer.allocate((int) status.getBlockSizeBytes());
+            is.read(buf.array());
+            buf.order(ByteOrder.nativeOrder());
+            for (int k = 0; k < NB_FILE; k++) {
+                pass = pass && (buf.getInt() == k);
+            }
+            is.close();
+        }
+        return pass;
+    }
+
+    private void writeFile(alluxio.client.file.FileSystem fs) throws IOException, AlluxioException {
+        for (int i = 0; i < NB_FILE; i++) {
+            ByteBuffer buf = ByteBuffer.allocate(80);
+            buf.order(ByteOrder.nativeOrder());
+            for (int k = 0; k < NB_FILE; k++) {
+                buf.putInt(k);
+            }
+            buf.flip();
+            AlluxioURI filePath = new AlluxioURI(PATH + "/part-" + i);
+            LOGGER.debug("Writing data to {}", filePath);
+
+            OutputStream os = fs.createFile(filePath);
+            os.write(buf.array());
+            os.close();
         }
     }
 
@@ -642,7 +705,7 @@ class Sample implements Serializable {
 
         if (this.value != sample.value && this.value != null && !this.value.equals(sample.value)) return false;
 
-        if (this.size != sample.size ) return false;
+        if (this.size != sample.size) return false;
         if (this.price != sample.price) return false;
 
         return true;
