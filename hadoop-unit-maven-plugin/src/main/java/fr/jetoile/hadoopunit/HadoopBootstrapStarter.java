@@ -229,6 +229,13 @@ public class HadoopBootstrapStarter extends AbstractMojo {
                 getLog().warn("unable to find solr.dir property");
             }
         }
+        if ("alluxio".equalsIgnoreCase(componentKey)) {
+
+            String alluxioWebappDir = properties.get("alluxio.webapp.directory");
+            if (StringUtils.isEmpty(alluxioWebappDir)) {
+                getLog().warn("unable to find alluxio.webapp.directory property");
+            }
+        }
 
         artifacts.forEach(f -> {
             try {

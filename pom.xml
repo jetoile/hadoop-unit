@@ -64,6 +64,7 @@
         <module>hadoop-unit-neo4j</module>
         <module>sample</module>
         <module>hadoop-unit-knox</module>
+        <module>hadoop-unit-alluxio</module>
     </modules>
 
     <repositories>
@@ -150,6 +151,7 @@
         <jackson-module-scala_2.10.version>2.6.5</jackson-module-scala_2.10.version>
 
         <neo4j.version>3.0.3</neo4j.version>
+        <alluxio.version>1.4.0</alluxio.version>
     </properties>
 
 
@@ -208,6 +210,13 @@
 
             <dependency>
                 <groupId>fr.jetoile.hadoop</groupId>
+                <artifactId>hadoop-unit-client-alluxio</artifactId>
+                <version>${hadoop-unit.version}</version>
+                <scope>test</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>fr.jetoile.hadoop</groupId>
                 <artifactId>hadoop-unit-client-kafka</artifactId>
                 <version>${hadoop-unit.version}</version>
                 <scope>test</scope>
@@ -238,6 +247,12 @@
             <dependency>
                 <groupId>fr.jetoile.hadoop</groupId>
                 <artifactId>hadoop-unit-hdfs</artifactId>
+                <version>${hadoop-unit.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>fr.jetoile.hadoop</groupId>
+                <artifactId>hadoop-unit-alluxio</artifactId>
                 <version>${hadoop-unit.version}</version>
             </dependency>
 
@@ -472,6 +487,18 @@
                 <groupId>com.github.sakserv</groupId>
                 <artifactId>hadoop-mini-clusters-oozie</artifactId>
                 <version>${hadoop-mini-clusters.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.alluxio</groupId>
+                <artifactId>alluxio-minicluster</artifactId>
+                <version>${alluxio.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.alluxio</groupId>
+                <artifactId>alluxio-core-client</artifactId>
+                <version>${alluxio.version}</version>
             </dependency>
 
             <dependency>

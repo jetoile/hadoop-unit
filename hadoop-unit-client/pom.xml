@@ -18,6 +18,7 @@
         <module>hadoop-unit-client-solrcloud</module>
         <module>hadoop-unit-client-spark</module>
         <module>hadoop-unit-client-kafka</module>
+        <module>hadoop-unit-client-alluxio</module>
     </modules>
 
 
