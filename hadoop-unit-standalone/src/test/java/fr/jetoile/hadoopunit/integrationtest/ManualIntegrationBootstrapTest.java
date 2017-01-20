@@ -59,19 +59,22 @@ import org.neo4j.driver.v1.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.net.ssl.*;
 import java.io.*;
 import java.net.*;
-import java.sql.*;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 import java.sql.Connection;
-import java.sql.Driver;
+import java.sql.*;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 @Ignore
 public class ManualIntegrationBootstrapTest {
@@ -227,15 +230,6 @@ public class ManualIntegrationBootstrapTest {
 
     @Test
     public void hdfsShouldStart() throws Exception {
-
-//        assertThat(Utils.available("127.0.0.1", configuration.getInt(Config.HDFS_NAMENODE_HTTP_PORT_KEY))).isFalse();
-//
-//        org.apache.hadoop.conf.Configuration conf = new org.apache.hadoop.conf.Configuration();
-//        conf.set("fs.default.name", "hdfs://127.0.0.1:" + configuration.getInt(HadoopUnitConfig.HDFS_NAMENODE_PORT_KEY));
-//
-//        URI uri = URI.create ("hdfs://127.0.0.1:" + configuration.getInt(HadoopUnitConfig.HDFS_NAMENODE_PORT_KEY));
-//
-//        FileSystem hdfsFsHandle = FileSystem.get (uri, conf);
         FileSystem hdfsFsHandle = HdfsUtils.INSTANCE.getFileSystem();
 
 
@@ -250,7 +244,8 @@ public class ManualIntegrationBootstrapTest {
         hdfsFsHandle.close();
 
         URL url = new URL(
-                String.format("http://localhost:%s/webhdfs/v1?op=GETHOMEDIRECTORY&user.name=guest",
+                String.format("http://%s:%s/webhdfs/v1?op=GETHOMEDIRECTORY&user.name=guest",
+                        configuration.getInt(HadoopUnitConfig.HDFS_NAMENODE_HOST_KEY),
                         configuration.getInt(HadoopUnitConfig.HDFS_NAMENODE_HTTP_PORT_KEY)));
         URLConnection connection = url.openConnection();
         connection.setRequestProperty("Accept-Charset", "UTF-8");
@@ -275,6 +270,8 @@ public class ManualIntegrationBootstrapTest {
         hbaseConfiguration.set("hbase.master", "127.0.0.1:" + configuration.getInt(HadoopUnitConfig.HBASE_MASTER_PORT_KEY));
         hbaseConfiguration.set("zookeeper.znode.parent", configuration.getString(HadoopUnitConfig.HBASE_ZNODE_PARENT_KEY));
 
+        LOGGER.info("HBASE: Deleting table {}", tableName);
+        deleteHbaseTable(tableName, hbaseConfiguration);
 
         LOGGER.info("HBASE: Creating table {} with column family {}", tableName, colFamName);
         createHbaseTable(tableName, colFamName, hbaseConfiguration);
@@ -299,9 +296,9 @@ public class ManualIntegrationBootstrapTest {
         LOGGER.info("OOZIE: Test Submit Workflow Start");
 
         org.apache.hadoop.conf.Configuration conf = new org.apache.hadoop.conf.Configuration();
-        conf.set("fs.default.name", "hdfs://127.0.0.1:" + configuration.getInt(HadoopUnitConfig.HDFS_NAMENODE_PORT_KEY));
+        conf.set("fs.default.name", "hdfs://" + configuration.getInt(HadoopUnitConfig.HDFS_NAMENODE_HOST_KEY) + ":" + configuration.getInt(HadoopUnitConfig.HDFS_NAMENODE_PORT_KEY));
 
-        URI uri = URI.create("hdfs://127.0.0.1:" + configuration.getInt(HadoopUnitConfig.HDFS_NAMENODE_PORT_KEY));
+        URI uri = URI.create("hdfs://" + configuration.getInt(HadoopUnitConfig.HDFS_NAMENODE_HOST_KEY) + ":" + configuration.getInt(HadoopUnitConfig.HDFS_NAMENODE_PORT_KEY));
 
         FileSystem hdfsFs = FileSystem.get(uri, conf);
 
@@ -337,6 +334,78 @@ public class ManualIntegrationBootstrapTest {
 
     }
 
+    @Test
+    public void knoxWithWebhbaseShouldStart() throws Exception {
+
+        String tableName = configuration.getString(HadoopUnitConfig.HBASE_TEST_TABLE_NAME_KEY);
+        String colFamName = configuration.getString(HadoopUnitConfig.HBASE_TEST_COL_FAMILY_NAME_KEY);
+        String colQualiferName = configuration.getString(HadoopUnitConfig.HBASE_TEST_COL_QUALIFIER_NAME_KEY);
+        Integer numRowsToPut = configuration.getInt(HadoopUnitConfig.HBASE_TEST_NUM_ROWS_TO_PUT_KEY);
+
+        org.apache.hadoop.conf.Configuration hbaseConfiguration = HBaseConfiguration.create();
+        hbaseConfiguration.set("hbase.zookeeper.quorum", configuration.getString(HadoopUnitConfig.ZOOKEEPER_HOST_KEY));
+        hbaseConfiguration.setInt("hbase.zookeeper.property.clientPort", configuration.getInt(HadoopUnitConfig.ZOOKEEPER_PORT_KEY));
+        hbaseConfiguration.set("hbase.master", "127.0.0.1:" + configuration.getInt(HadoopUnitConfig.HBASE_MASTER_PORT_KEY));
+        hbaseConfiguration.set("zookeeper.znode.parent", configuration.getString(HadoopUnitConfig.HBASE_ZNODE_PARENT_KEY));
+
+        LOGGER.info("HBASE: Deleting table {}", tableName);
+        deleteHbaseTable(tableName, hbaseConfiguration);
+
+        LOGGER.info("HBASE: Creating table {} with column family {}", tableName, colFamName);
+        createHbaseTable(tableName, colFamName, hbaseConfiguration);
+
+        LOGGER.info("HBASE: Populate the table with {} rows.", numRowsToPut);
+        for (int i=0; i<numRowsToPut; i++) {
+            putRow(tableName, colFamName, String.valueOf(i), colQualiferName, "row_" + i, hbaseConfiguration);
+        }
+
+        URL url = new URL(String.format("http://%s:%s/",
+                configuration.getString(HadoopUnitConfig.KNOX_HOST_KEY),
+                configuration.getString(HadoopUnitConfig.HBASE_REST_PORT_KEY)));
+        URLConnection connection = url.openConnection();
+        connection.setRequestProperty("Accept-Charset", "UTF-8");
+        try (BufferedReader response = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
+            String line = response.readLine();
+            assertTrue(line.contains(tableName));
+        }
+
+        url = new URL(String.format("http://%s:%s/%s/schema",
+                configuration.getString(HadoopUnitConfig.KNOX_HOST_KEY),
+                configuration.getString(HadoopUnitConfig.HBASE_REST_PORT_KEY),
+                tableName));
+        connection = url.openConnection();
+        connection.setRequestProperty("Accept-Charset", "UTF-8");
+        try (BufferedReader response = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
+            String line = response.readLine();
+            assertTrue(line.contains("{ NAME=> 'hbase_test_table', IS_META => 'false', COLUMNS => [ { NAME => 'cf1', BLOOMFILTER => 'ROW'"));
+        }
+
+        // Knox clients need self trusted certificates in tests
+        defaultBlindTrust();
+
+        // Read the hbase throught Knox
+        url = new URL(String.format("https://%s:%s/gateway/mycluster/hbase",
+                configuration.getString(HadoopUnitConfig.KNOX_HOST_KEY),
+                configuration.getString(HadoopUnitConfig.KNOX_PORT_KEY)));
+        connection = url.openConnection();
+        connection.setRequestProperty("Accept-Charset", "UTF-8");
+        try (BufferedReader response = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
+            String line = response.readLine();
+            assertTrue(line.contains(tableName));
+        }
+
+        url = new URL(String.format("https://%s:%s/gateway/mycluster/hbase/%s/schema",
+                configuration.getString(HadoopUnitConfig.KNOX_HOST_KEY),
+                configuration.getString(HadoopUnitConfig.KNOX_PORT_KEY),
+                tableName));
+        connection = url.openConnection();
+        connection.setRequestProperty("Accept-Charset", "UTF-8");
+        try (BufferedReader response = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
+            String line = response.readLine();
+            assertTrue(line.contains("{ NAME=> 'hbase_test_table', IS_META => 'false', COLUMNS => [ { NAME => 'cf1', BLOOMFILTER => 'ROW'"));
+        }
+    }
+
     private static void createHbaseTable(String tableName, String colFamily,
                                          org.apache.hadoop.conf.Configuration configuration) throws Exception {
 
@@ -346,6 +415,15 @@ public class ManualIntegrationBootstrapTest {
 
         hTableDescriptor.addFamily(hColumnDescriptor);
         admin.createTable(hTableDescriptor);
+    }
+
+    private static void deleteHbaseTable(String tableName, org.apache.hadoop.conf.Configuration configuration) throws Exception {
+
+        final HBaseAdmin admin = new HBaseAdmin(configuration);
+        if (admin.tableExists(tableName)) {
+            admin.disableTable(tableName);
+            admin.deleteTable(tableName);
+        }
     }
 
     private static void putRow(String tableName, String colFamName, String rowKey, String colQualifier, String value,
@@ -369,6 +447,55 @@ public class ManualIntegrationBootstrapTest {
         return result;
     }
 
+    private void defaultBlindTrust() throws NoSuchAlgorithmException, KeyManagementException {
+        TrustManager[] trustAllCerts = new TrustManager[]{
+                new X509ExtendedTrustManager() {
+                    @Override
+                    public X509Certificate[] getAcceptedIssuers() {
+                        return null;
+                    }
+
+                    @Override
+                    public void checkClientTrusted(X509Certificate[] certs, String authType) {
+                    }
+
+                    @Override
+                    public void checkServerTrusted(X509Certificate[] certs, String authType) {
+                    }
+
+                    @Override
+                    public void checkClientTrusted(X509Certificate[] xcs, String string, Socket socket) throws CertificateException {
+
+                    }
+
+                    @Override
+                    public void checkServerTrusted(X509Certificate[] xcs, String string, Socket socket) throws CertificateException {
+
+                    }
+
+                    @Override
+                    public void checkClientTrusted(X509Certificate[] xcs, String string, SSLEngine ssle) throws CertificateException {
+
+                    }
+
+                    @Override
+                    public void checkServerTrusted(X509Certificate[] xcs, String string, SSLEngine ssle) throws CertificateException {
+
+                    }
+
+                }
+        };
+        SSLContext sc = SSLContext.getInstance("SSL");
+        sc.init(null, trustAllCerts, new java.security.SecureRandom());
+        HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+        HostnameVerifier allHostsValid = new HostnameVerifier() {
+            @Override
+            public boolean verify(String hostname, SSLSession session) {
+                return true;
+            }
+        };
+        HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid);
+    }
 
     @Test
     public void mongodbShouldStart() throws UnknownHostException {

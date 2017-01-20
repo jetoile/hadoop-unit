@@ -63,6 +63,7 @@
         <module>hadoop-unit-elasticsearch</module>
         <module>hadoop-unit-neo4j</module>
         <module>sample</module>
+        <module>hadoop-unit-knox</module>
     </modules>
 
     <repositories>
@@ -126,13 +127,14 @@
 
         <hive.version>1.2.1000.2.5.3.0-37</hive.version>
         <solr.version>6.1.0</solr.version>
-        <hadoop-mini-clusters.version>0.1.9</hadoop-mini-clusters.version>
+        <hadoop-mini-clusters.version>0.1.11</hadoop-mini-clusters.version>
         <oozie.version>4.2.0.2.5.3.0-37</oozie.version>
         <hadoop.version>2.7.3.2.5.3.0-37</hadoop.version>
 
         <spark_2.10.version>1.6.2</spark_2.10.version>
         <spark-solr.version>1.1.2</spark-solr.version>
         <kafka_2.10.version>0.10.0.2.5.3.0-37</kafka_2.10.version>
+        <knox.version>0.9.0.2.5.3.0-37</knox.version>
 
         <dbSetup.version>1.6.0</dbSetup.version>
         <httpclient.version>4.3.1</httpclient.version>
@@ -351,6 +353,37 @@
                 <groupId>com.github.sakserv</groupId>
                 <artifactId>hadoop-mini-clusters-mongodb</artifactId>
                 <version>${hadoop-mini-clusters.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.github.sakserv</groupId>
+                <artifactId>hadoop-mini-clusters-knox</artifactId>
+                <version>${hadoop-mini-clusters.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.knox</groupId>
+                <artifactId>gateway-shell</artifactId>
+                <version>${knox.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.knox</groupId>
+                <artifactId>gateway-provider-security-authc-anon</artifactId>
+                <version>${knox.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.knox</groupId>
+                <artifactId>gateway-provider-identity-assertion-pseudo</artifactId>
+                <version>${knox.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.knox</groupId>
+                <artifactId>gateway-service-webhdfs</artifactId>
+                <version>${knox.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.knox</groupId>
+                <artifactId>gateway-service-hbase</artifactId>
+                <version>${knox.version}</version>
             </dependency>
 
             <dependency>

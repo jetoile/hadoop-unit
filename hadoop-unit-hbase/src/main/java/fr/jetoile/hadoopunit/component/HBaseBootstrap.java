@@ -16,11 +16,9 @@ package fr.jetoile.hadoopunit.component;
 import com.github.sakserv.minicluster.impl.HbaseLocalCluster;
 import com.github.sakserv.minicluster.util.FileUtils;
 import fr.jetoile.hadoopunit.Component;
-import fr.jetoile.hadoopunit.HadoopBootstrap;
 import fr.jetoile.hadoopunit.HadoopUnitConfig;
 import fr.jetoile.hadoopunit.HadoopUtils;
 import fr.jetoile.hadoopunit.exception.BootstrapException;
-import fr.jetoile.hadoopunit.exception.NotFoundServiceException;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
@@ -49,6 +47,12 @@ public class HBaseBootstrap implements Bootstrap {
     private boolean enableWalReplication;
     private String zookeeperConnectionString;
 
+    private String restHost;
+    private int restPort;
+    private int restInfoPort;
+    private boolean restReadOnly;
+    private int restMaxThread;
+    private int restMinThread;
 
     public HBaseBootstrap() {
         if (hbaseLocalCluster == null) {
@@ -69,6 +73,7 @@ public class HBaseBootstrap implements Bootstrap {
     public String getProperties() {
         return "[" +
                 "port:" + port +
+                ", restPort:" + restPort +
                 "]";
     }
 
@@ -79,7 +84,7 @@ public class HBaseBootstrap implements Bootstrap {
     private void build() {
         org.apache.hadoop.conf.Configuration hbaseConfiguration = new org.apache.hadoop.conf.Configuration();
         hbaseConfiguration.setBoolean("hbase.table.sanity.checks", false);
-        hbaseConfiguration.set("fs.default.name", "hdfs://127.0.0.1:" + configuration.getString(HadoopUnitConfig.HDFS_NAMENODE_PORT_KEY));
+        hbaseConfiguration.set("fs.default.name", "hdfs://" + configuration.getString(HadoopUnitConfig.HDFS_NAMENODE_HOST_KEY) + ":" + configuration.getString(HadoopUnitConfig.HDFS_NAMENODE_PORT_KEY));
 
         hbaseLocalCluster = new HbaseLocalCluster.Builder()
                 .setHbaseMasterPort(port)
@@ -91,6 +96,14 @@ public class HBaseBootstrap implements Bootstrap {
                 .setZookeeperZnodeParent(zookeeperZnodeParent)
                 .setHbaseWalReplicationEnabled(enableWalReplication)
                 .setHbaseConfiguration(hbaseConfiguration)
+                .activeRestGateway()
+                .setHbaseRestHost(restHost)
+                .setHbaseRestPort(restPort)
+                .setHbaseRestInfoPort(restInfoPort)
+                .setHbaseRestReadOnly(restReadOnly)
+                .setHbaseRestThreadMax(restMaxThread)
+                .setHbaseRestThreadMin(restMinThread)
+                .build()
                 .build();
     }
 
@@ -110,6 +123,13 @@ public class HBaseBootstrap implements Bootstrap {
         zookeeperPort = configuration.getInt(HadoopUnitConfig.ZOOKEEPER_PORT_KEY);
         zookeeperZnodeParent = configuration.getString(HadoopUnitConfig.HBASE_ZNODE_PARENT_KEY);
         enableWalReplication = configuration.getBoolean(HadoopUnitConfig.HBASE_WAL_REPLICATION_ENABLED_KEY);
+
+        restHost = configuration.getString(HadoopUnitConfig.HBASE_REST_HOST_KEY);
+        restPort = configuration.getInt(HadoopUnitConfig.HBASE_REST_PORT_KEY);
+        restInfoPort = configuration.getInt(HadoopUnitConfig.HBASE_REST_INFO_PORT_KEY);
+        restReadOnly = configuration.getBoolean(HadoopUnitConfig.HBASE_REST_READONLY_KEY);
+        restMaxThread = configuration.getInt(HadoopUnitConfig.HBASE_REST_THREADMAX_KEY);
+        restMinThread = configuration.getInt(HadoopUnitConfig.HBASE_REST_THREADMIN_KEY);
     }
 
     @Override
@@ -139,6 +159,24 @@ public class HBaseBootstrap implements Bootstrap {
             enableWalReplication = Boolean.parseBoolean(configs.get(HadoopUnitConfig.HBASE_WAL_REPLICATION_ENABLED_KEY));
         }
 
+        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.HBASE_REST_HOST_KEY))) {
+            restHost = configuration.getString(HadoopUnitConfig.HBASE_REST_HOST_KEY);
+        }
+        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.HBASE_REST_PORT_KEY))) {
+            restPort = configuration.getInt(HadoopUnitConfig.HBASE_REST_PORT_KEY);
+        }
+        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.HBASE_REST_INFO_PORT_KEY))) {
+            restInfoPort = configuration.getInt(HadoopUnitConfig.HBASE_REST_INFO_PORT_KEY);
+        }
+        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.HBASE_REST_READONLY_KEY))) {
+            restReadOnly = configuration.getBoolean(HadoopUnitConfig.HBASE_REST_READONLY_KEY);
+        }
+        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.HBASE_REST_THREADMAX_KEY))) {
+            restMaxThread = configuration.getInt(HadoopUnitConfig.HBASE_REST_THREADMAX_KEY);
+        }
+        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.HBASE_REST_THREADMIN_KEY))) {
+            restMinThread = configuration.getInt(HadoopUnitConfig.HBASE_REST_THREADMIN_KEY);
+        }
     }
 
     private void cleanup() {
