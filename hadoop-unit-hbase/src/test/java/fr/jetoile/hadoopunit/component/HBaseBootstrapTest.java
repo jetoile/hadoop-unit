@@ -16,8 +16,8 @@ package fr.jetoile.hadoopunit.component;
 
 
 import fr.jetoile.hadoopunit.Component;
-import fr.jetoile.hadoopunit.HadoopUnitConfig;
 import fr.jetoile.hadoopunit.HadoopBootstrap;
+import fr.jetoile.hadoopunit.HadoopUnitConfig;
 import fr.jetoile.hadoopunit.exception.BootstrapException;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
@@ -33,7 +33,13 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.net.URLConnection;
+
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class HBaseBootstrapTest {
     static private Logger LOGGER = LoggerFactory.getLogger(HBaseBootstrapTest.class);
@@ -68,6 +74,9 @@ public class HBaseBootstrapTest {
         Integer numRowsToPut = configuration.getInt(HadoopUnitConfig.HBASE_TEST_NUM_ROWS_TO_PUT_KEY);
         org.apache.hadoop.conf.Configuration hbaseConfiguration = HadoopBootstrap.INSTANCE.getService(Component.HBASE).getConfiguration();
 
+        LOGGER.info("HBASE: Deleting table {}", tableName);
+        deleteHbaseTable(tableName, hbaseConfiguration);
+
         LOGGER.info("HBASE: Creating table {} with column family {}", tableName, colFamName);
         createHbaseTable(tableName, colFamName, hbaseConfiguration);
 
@@ -84,6 +93,60 @@ public class HBaseBootstrapTest {
 
     }
 
+    @Test
+    public void testHbaseRestLocalCluster() throws Exception {
+        URL url = new URL(
+                String.format("http://localhost:%s/status/cluster/",
+                        configuration.getInt(HadoopUnitConfig.HBASE_REST_PORT_KEY)));
+        URLConnection connection = url.openConnection();
+        connection.setRequestProperty("Accept-Charset", "UTF-8");
+        try (BufferedReader response = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
+            String line = response.readLine();
+            assertTrue(line.contains("2 live servers, 0 dead servers"));
+        }
+
+    }
+
+    @Test
+    public void testHbaseRestLocalClusterWithSchemaRequest() throws Exception {
+        String tableName = configuration.getString(HadoopUnitConfig.HBASE_TEST_TABLE_NAME_KEY);
+        String colFamName = configuration.getString(HadoopUnitConfig.HBASE_TEST_COL_FAMILY_NAME_KEY);
+        String colQualiferName = configuration.getString(HadoopUnitConfig.HBASE_TEST_COL_QUALIFIER_NAME_KEY);
+        Integer numRowsToPut = configuration.getInt(HadoopUnitConfig.HBASE_TEST_NUM_ROWS_TO_PUT_KEY);
+        org.apache.hadoop.conf.Configuration hbaseConfiguration = HadoopBootstrap.INSTANCE.getService(Component.HBASE).getConfiguration();
+
+        LOGGER.info("HBASE: Deleting table {}", tableName);
+        deleteHbaseTable(tableName, hbaseConfiguration);
+
+        LOGGER.info("HBASE: Creating table {} with column family {}", tableName, colFamName);
+        createHbaseTable(tableName, colFamName, hbaseConfiguration);
+
+        LOGGER.info("HBASE: Populate the table with {} rows.", numRowsToPut);
+        for (int i = 0; i < numRowsToPut; i++) {
+            putRow(tableName, colFamName, String.valueOf(i), colQualiferName, "row_" + i, hbaseConfiguration);
+        }
+
+        URL url = new URL(String.format("http://localhost:%s/",
+                configuration.getInt(HadoopUnitConfig.HBASE_REST_PORT_KEY)));
+        URLConnection connection = url.openConnection();
+        connection.setRequestProperty("Accept-Charset", "UTF-8");
+        try (BufferedReader response = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
+            String line = response.readLine();
+            assertTrue(line.contains(tableName));
+        }
+
+        url = new URL(String.format("http://localhost:%s/%s/schema",
+                configuration.getInt(HadoopUnitConfig.HBASE_REST_PORT_KEY),
+                tableName));
+        connection = url.openConnection();
+        connection.setRequestProperty("Accept-Charset", "UTF-8");
+        try (BufferedReader response = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
+            String line = response.readLine();
+            assertTrue(line.contains("{ NAME=> 'hbase_test_table', IS_META => 'false', COLUMNS => [ { NAME => 'cf1', BLOOMFILTER => 'ROW'"));
+        }
+
+    }
+
     private static void createHbaseTable(String tableName, String colFamily,
                                          org.apache.hadoop.conf.Configuration configuration) throws Exception {
 
@@ -93,6 +156,15 @@ public class HBaseBootstrapTest {
 
         hTableDescriptor.addFamily(hColumnDescriptor);
         admin.createTable(hTableDescriptor);
+    }
+
+    private static void deleteHbaseTable(String tableName, org.apache.hadoop.conf.Configuration configuration) throws Exception {
+
+        final HBaseAdmin admin = new HBaseAdmin(configuration);
+        if (admin.tableExists(tableName)) {
+            admin.disableTable(tableName);
+            admin.deleteTable(tableName);
+        }
     }
 
     private static void putRow(String tableName, String colFamName, String rowKey, String colQualifier, String value,

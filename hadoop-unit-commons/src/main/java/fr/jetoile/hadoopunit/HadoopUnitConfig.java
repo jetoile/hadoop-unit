@@ -118,6 +118,14 @@ public class HadoopUnitConfig {
     public static final String HBASE_ZNODE_PARENT_KEY = "hbase.znode.parent";
     public static final String HBASE_WAL_REPLICATION_ENABLED_KEY = "hbase.wal.replication.enabled";
 
+    // HBase Rest
+    public static final String HBASE_REST_PORT_KEY = "hbase.rest.port";
+    public static final String HBASE_REST_READONLY_KEY="hbase.rest.readonly";
+    public static final String HBASE_REST_INFO_PORT_KEY="hbase.rest.info.port";
+    public static final String HBASE_REST_HOST_KEY="hbase.rest.host";
+    public static final String HBASE_REST_THREADMAX_KEY="hbase.rest.threads.max";
+    public static final String HBASE_REST_THREADMIN_KEY="hbase.rest.threads.min";
+
     // HBase Test
     public static final String HBASE_TEST_TABLE_NAME_KEY = "hbase.test.table.name";
     public static final String HBASE_TEST_COL_FAMILY_NAME_KEY = "hbase.test.col.family.name";
@@ -145,4 +153,12 @@ public class HadoopUnitConfig {
     public static final String SOLR_DIR_KEY = "solr.dir";
     public static final String SOLR_COLLECTION_NAME = "solr.collection.name";
     public static final String SOLR_PORT = "solr.cloud.port";
+
+    //Knox
+    public static final String KNOX_HOST_KEY = "knox.host";
+    public static final String KNOX_PORT_KEY = "knox.port";
+    public static final String KNOX_PATH_KEY = "knox.path";
+    public static final String KNOX_CLUSTER_KEY = "knox.cluster";
+    public static final String KNOX_HOME_DIR_KEY = "knox.home.dir";
+    public static final String KNOX_SERVICE_KEY = "knox.service";
 }

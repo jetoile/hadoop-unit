@@ -30,7 +30,8 @@ public enum Component {
     CASSANDRA("cassandra", "fr.jetoile.hadoopunit.component.CassandraBootstrap", "cassandra.artifact"),
     MONGODB("mongodb", "fr.jetoile.hadoopunit.component.MongoDbBootstrap", "mongodb.artifact"),
     ELASTICSEARCH("elasticsearch", "fr.jetoile.hadoopunit.component.ElasticSearchBootstrap", "elasticsearch.artifact"),
-    NEO4J("neo4j", "fr.jetoile.hadoopunit.component.Neo4jBootstrap", "neo4j.artifact");
+    NEO4J("neo4j", "fr.jetoile.hadoopunit.component.Neo4jBootstrap", "neo4j.artifact"),
+    KNOX("knox", "fr.jetoile.hadoopunit.component.KnoxBootstrap", "knox.artifact");
 
     private String key;
     private String mainClass;

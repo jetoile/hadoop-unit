@@ -15,11 +15,9 @@ package fr.jetoile.hadoopunit.component;
 
 import com.github.sakserv.minicluster.impl.HdfsLocalCluster;
 import fr.jetoile.hadoopunit.Component;
-import fr.jetoile.hadoopunit.HadoopBootstrap;
 import fr.jetoile.hadoopunit.HadoopUnitConfig;
 import fr.jetoile.hadoopunit.HadoopUtils;
 import fr.jetoile.hadoopunit.exception.BootstrapException;
-import fr.jetoile.hadoopunit.exception.NotFoundServiceException;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
@@ -49,6 +47,7 @@ public class HdfsBootstrap implements Bootstrap {
     private boolean enablePermission;
     private boolean format;
     private int httpPort;
+    private String host;
 
     public HdfsBootstrap() {
         if (hdfsLocalCluster == null) {
@@ -69,7 +68,8 @@ public class HdfsBootstrap implements Bootstrap {
     @Override
     public String getProperties() {
         return "[" +
-                "port:" + port +
+                "host:" + host +
+                ", port:" + port +
                 "]";
     }
 
@@ -98,6 +98,7 @@ public class HdfsBootstrap implements Bootstrap {
             throw new BootstrapException("bad config", e);
         }
 
+        host = configuration.getString(HadoopUnitConfig.HDFS_NAMENODE_HOST_KEY);
         port = configuration.getInt(HadoopUnitConfig.HDFS_NAMENODE_PORT_KEY);
         httpPort = configuration.getInt(HadoopUnitConfig.HDFS_NAMENODE_HTTP_PORT_KEY);
         tempDirectory = configuration.getString(HadoopUnitConfig.HDFS_TEMP_DIR_KEY);
@@ -109,6 +110,9 @@ public class HdfsBootstrap implements Bootstrap {
 
     @Override
     public void loadConfig(Map<String, String> configs) {
+        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.HDFS_NAMENODE_HOST_KEY))) {
+            host = configs.get(HadoopUnitConfig.HDFS_NAMENODE_HOST_KEY);
+        }
         if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.HDFS_NAMENODE_PORT_KEY))) {
             port = Integer.parseInt(configs.get(HadoopUnitConfig.HDFS_NAMENODE_PORT_KEY));
         }
