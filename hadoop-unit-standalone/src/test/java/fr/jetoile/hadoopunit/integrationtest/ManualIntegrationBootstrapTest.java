@@ -245,7 +245,7 @@ public class ManualIntegrationBootstrapTest {
 
         URL url = new URL(
                 String.format("http://%s:%s/webhdfs/v1?op=GETHOMEDIRECTORY&user.name=guest",
-                        configuration.getInt(HadoopUnitConfig.HDFS_NAMENODE_HOST_KEY),
+                        configuration.getString(HadoopUnitConfig.HDFS_NAMENODE_HOST_KEY),
                         configuration.getInt(HadoopUnitConfig.HDFS_NAMENODE_HTTP_PORT_KEY)));
         URLConnection connection = url.openConnection();
         connection.setRequestProperty("Accept-Charset", "UTF-8");
@@ -296,9 +296,9 @@ public class ManualIntegrationBootstrapTest {
         LOGGER.info("OOZIE: Test Submit Workflow Start");
 
         org.apache.hadoop.conf.Configuration conf = new org.apache.hadoop.conf.Configuration();
-        conf.set("fs.default.name", "hdfs://" + configuration.getInt(HadoopUnitConfig.HDFS_NAMENODE_HOST_KEY) + ":" + configuration.getInt(HadoopUnitConfig.HDFS_NAMENODE_PORT_KEY));
+        conf.set("fs.default.name", "hdfs://" + configuration.getString(HadoopUnitConfig.HDFS_NAMENODE_HOST_KEY) + ":" + configuration.getInt(HadoopUnitConfig.HDFS_NAMENODE_PORT_KEY));
 
-        URI uri = URI.create("hdfs://" + configuration.getInt(HadoopUnitConfig.HDFS_NAMENODE_HOST_KEY) + ":" + configuration.getInt(HadoopUnitConfig.HDFS_NAMENODE_PORT_KEY));
+        URI uri = URI.create("hdfs://" + configuration.getString(HadoopUnitConfig.HDFS_NAMENODE_HOST_KEY) + ":" + configuration.getInt(HadoopUnitConfig.HDFS_NAMENODE_PORT_KEY));
 
         FileSystem hdfsFs = FileSystem.get(uri, conf);
 

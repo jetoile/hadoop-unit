@@ -25,6 +25,7 @@ mvn package
 
 | Hadoop Unit version  | Hadoop mini cluster version | HDP version |
 | ------------- | ------------- | ------------- |
+| 2.1 | 0.1.11 | HDP 2.5.3.0 |
 | 2.0 | 0.1.9 | HDP 2.5.3.0 |
 | 1.5 | 0.1.8 | HDP 2.5.0.0 |
 | 1.4 | 0.1.7 | HDP 2.4.2.0 |
@@ -66,6 +67,7 @@ The available components are:
 * CASSANDRA
 * ELASTICSEARCH
 * NEO4J
+* KNOX
 
 ##Integration testing (will start each component present into classpath)
 With maven, add dependencies of components which are needed
@@ -75,7 +77,7 @@ Sample:
 <dependency>
     <groupId>fr.jetoile.hadoop</groupId>
     <artifactId>hadoop-unit-hdfs</artifactId>
-    <version>2.0</version>
+    <version>2.1</version>
     <scope>test</scope>
 </dependency>
 ```
@@ -101,7 +103,7 @@ Sample:
 <dependency>
     <groupId>fr.jetoile.hadoop</groupId>
     <artifactId>hadoop-unit-hdfs</artifactId>
-    <version>2.0</version>
+    <version>2.1</version>
     <scope>test</scope>
 </dependency>
 ```
@@ -238,21 +240,21 @@ To use it, add into the pom project stuff like that:
      <dependency>
         <groupId>fr.jetoile.hadoop</groupId>
         <artifactId>hadoop-unit-client-hdfs</artifactId>
-        <version>2.0</version>
+        <version>2.1</version>
         <scope>test</scope>
     </dependency>
 
     <dependency>
         <groupId>fr.jetoile.hadoop</groupId>
         <artifactId>hadoop-unit-client-hive</artifactId>
-        <version>2.0</version>
+        <version>2.1</version>
         <scope>test</scope>
     </dependency>
 
     <dependency>
         <groupId>fr.jetoile.hadoop</groupId>
         <artifactId>hadoop-unit-client-spark</artifactId>
-        <version>2.0</version>
+        <version>2.1</version>
         <scope>test</scope>
     </dependency>
 </dependencies>
@@ -303,19 +305,19 @@ To use it, add into the pom project stuff like that:
                 <components>
                     <componentArtifact implementation="fr.jetoile.hadoopunit.ComponentArtifact">
                         <componentName>HDFS</componentName>
-                        <artifact>fr.jetoile.hadoop:hadoop-unit-hdfs:2.0</artifact>
+                        <artifact>fr.jetoile.hadoop:hadoop-unit-hdfs:2.1</artifact>
                     </componentArtifact>
                     <componentArtifact implementation="fr.jetoile.hadoopunit.ComponentArtifact">
                         <componentName>ZOOKEEPER</componentName>
-                        <artifact>fr.jetoile.hadoop:hadoop-unit-zookeeper:2.0</artifact>
+                        <artifact>fr.jetoile.hadoop:hadoop-unit-zookeeper:2.1</artifact>
                     </componentArtifact>
                     <componentArtifact implementation="fr.jetoile.hadoopunit.ComponentArtifact">
                         <componentName>HIVEMETA</componentName>
-                        <artifact>fr.jetoile.hadoop:hadoop-unit-hive:2.0</artifact>
+                        <artifact>fr.jetoile.hadoop:hadoop-unit-hive:2.1</artifact>
                     </componentArtifact>
                     <componentArtifact implementation="fr.jetoile.hadoopunit.ComponentArtifact">
                         <componentName>HIVESERVER2</componentName>
-                        <artifact>fr.jetoile.hadoop:hadoop-unit-hive:2.0</artifact>
+                        <artifact>fr.jetoile.hadoop:hadoop-unit-hive:2.1</artifact>
                     </componentArtifact>
                     <componentArtifact implementation="fr.jetoile.hadoopunit.ComponentArtifact">
                         <componentName>SOLRCLOUD</componentName>
@@ -347,6 +349,7 @@ Values can be:
 * CASSANDRA
 * ELASTICSEARCH
 * NEO4J
+* KNOX
 
 It is also possible to override configurations with a list of `properties` which accept a map (ie. `<key>value</key>` and where `key` is a property from the file `hadoop-unit-default.properties`). 
 
@@ -443,7 +446,7 @@ To use it, add into the pom project stuff like that:
 <plugin>
     <artifactId>hadoop-unit-maven-plugin</artifactId>
     <groupId>fr.jetoile.hadoop</groupId>
-    <version>2.0</version>
+    <version>2.1</version>
     <executions>
         <execution>
             <id>start</id>
@@ -470,7 +473,7 @@ To use it, add into the pom project stuff like that:
 <plugin>
     <artifactId>hadoop-unit-maven-plugin</artifactId>
     <groupId>fr.jetoile.hadoop</groupId>
-    <version>2.0</version>
+    <version>2.1</version>
     <executions>
         <execution>
             <id>stop</id>
@@ -570,9 +573,10 @@ public class HdfsBootstrapIntegrationTest {
 * Cassandra 3.4
 * ElasticSearch 5.0-alpha4
 * Neo4j 3.0.3
+* Knox
 
 Built on:
-* [hadoop-mini-cluster-0.1.9](https://github.com/sakserv/hadoop-mini-clusters) (aka. HDP 2.5.3.0)
+* [hadoop-mini-cluster-0.1.11](https://github.com/sakserv/hadoop-mini-clusters) (aka. HDP 2.5.3.0)
 * [achilles-embedded-4.2.0](https://github.com/doanduyhai/Achilles)
 * [maven aether](https://github.com/apache/maven-resolver/)
 
