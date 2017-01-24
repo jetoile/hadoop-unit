@@ -17,6 +17,7 @@
         <module>kafka-stream</module>
         <module>spark-streaming-cassandra</module>
         <module>all</module>
+        <module>knox-hbase-webhdfs</module>
     </modules>
 
     <artifactId>sample</artifactId>
