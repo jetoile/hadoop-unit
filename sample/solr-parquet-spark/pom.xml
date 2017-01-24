@@ -141,12 +141,12 @@
                         <configuration>
                             <components>
                                 <componentArtifact implementation="fr.jetoile.hadoopunit.ComponentArtifact">
-                                    <componentName>HDFS</componentName>
-                                    <artifact>fr.jetoile.hadoop:hadoop-unit-hdfs:${hadoop-unit.version}</artifact>
-                                </componentArtifact>
-                                <componentArtifact implementation="fr.jetoile.hadoopunit.ComponentArtifact">
                                     <componentName>ZOOKEEPER</componentName>
                                     <artifact>fr.jetoile.hadoop:hadoop-unit-zookeeper:${hadoop-unit.version}</artifact>
+                                </componentArtifact>
+                                <componentArtifact implementation="fr.jetoile.hadoopunit.ComponentArtifact">
+                                    <componentName>HDFS</componentName>
+                                    <artifact>fr.jetoile.hadoop:hadoop-unit-hdfs:${hadoop-unit.version}</artifact>
                                 </componentArtifact>
                                 <componentArtifact implementation="fr.jetoile.hadoopunit.ComponentArtifact">
                                     <componentName>SOLRCLOUD</componentName>
