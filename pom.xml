@@ -65,6 +65,7 @@
         <module>sample</module>
         <module>hadoop-unit-knox</module>
         <module>hadoop-unit-alluxio</module>
+        <module>hadoop-unit-windowslibs</module>
     </modules>
 
     <repositories>
@@ -236,6 +237,12 @@
                         <groupId>javax.servlet</groupId>
                     </exclusion>
                 </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>fr.jetoile.hadoop</groupId>
+                <artifactId>hadoop-unit-windowslibs</artifactId>
+                <version>${hadoop-unit.version}</version>
             </dependency>
 
             <dependency>

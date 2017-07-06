@@ -16,7 +16,9 @@ package fr.jetoile.hadoopunit;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.hadoop.fs.Path;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,46 +28,79 @@ import java.io.*;
 public enum HadoopUtils {
     INSTANCE;
 
-    private final Logger LOG = LoggerFactory.getLogger(HadoopUtils.class);
+    public static final String WINUTILS_EXE = "winutils.exe";
+    public static final String HADOOP_HOME = "HADOOP_HOME";
+    public static final String HADOOP_DLL = "/hadoop.dll";
+    public static final String HDFS_DLL = "/hdfs.dll";
+
+    private final Logger LOGGER = LoggerFactory.getLogger(HadoopUtils.class);
     private Configuration configuration;
 
     private HadoopUtils() {
         // Set hadoop.home.dir to point to the windows lib dir
         if (System.getProperty("os.name").startsWith("Windows")) {
 
-            if (StringUtils.isEmpty(System.getenv("HADOOP_HOME"))) {
+            if (StringUtils.isEmpty(System.getenv(HADOOP_HOME))) {
 
                 try {
                     configuration = new PropertiesConfiguration(HadoopUnitConfig.DEFAULT_PROPS_FILE);
                 } catch (ConfigurationException e) {
-                    LOG.error("unable to load {}", HadoopUnitConfig.DEFAULT_PROPS_FILE, e);
+                    LOGGER.error("unable to load {}", HadoopUnitConfig.DEFAULT_PROPS_FILE, e);
                 }
 
-                String hadoop_home = configuration.getString("HADOOP_HOME");
+                String hadoop_home = configuration.getString(HADOOP_HOME);
 
-                LOG.info("Setting hadoop.home.dir: {}", hadoop_home);
+                LOGGER.info("Setting hadoop.home.dir: {}", hadoop_home);
                 if (hadoop_home == null) {
-                    LOG.error("HADOOP_HOME should be set or informed into hadoop-unit-default.properties");
+                    LOGGER.error("HADOOP_HOME should be set or informed into hadoop-unit-default.properties");
                     System.exit(-1);
                 } else {
-                    System.setProperty("HADOOP_HOME", hadoop_home);
+                    System.setProperty(HADOOP_HOME, hadoop_home);
                 }
 
             } else {
-                System.setProperty("HADOOP_HOME", System.getenv("HADOOP_HOME"));
+                System.setProperty(HADOOP_HOME, System.getenv(HADOOP_HOME));
             }
 
-            String windowsLibDir = System.getenv("HADOOP_HOME");
+            String windowsLibDir = System.getenv(HADOOP_HOME);
 
-            LOG.info("WINDOWS: Setting hadoop.home.dir: {}", windowsLibDir);
-            System.setProperty("hadoop.home.dir", windowsLibDir);
             try {
-                System.load(new File(windowsLibDir + Path.SEPARATOR + "bin" + Path.SEPARATOR + "hadoop.dll").getAbsolutePath());
-                System.load(new File(windowsLibDir + Path.SEPARATOR + "bin" + Path.SEPARATOR + "hdfs.dll").getAbsolutePath());
-            } catch (UnsatisfiedLinkError e) {
-                //ignore it
+                extractAndMoveWinUtils(windowsLibDir);
+                extractAndLoadDll(HADOOP_DLL);
+                extractAndLoadDll(HDFS_DLL);
+            } catch (IOException e) {
+                LOGGER.error("unable to load windows dll", e);
             }
         }
+    }
+
+    private void extractAndLoadDll(String lib) throws IOException {
+        InputStream in = HadoopUtils.class.getResourceAsStream(lib);
+        // always write to different location
+        File fileOut = new File(System.getProperty("java.io.tmpdir") + Path.SEPARATOR + lib);
+        System.out.println("Writing dll to: " + fileOut.getAbsolutePath());
+
+        OutputStream out = FileUtils.openOutputStream(fileOut);
+        IOUtils.copy(in, out);
+        in.close();
+        out.close();
+        try {
+            System.load(fileOut.getAbsolutePath());
+        } catch (UnsatisfiedLinkError e) {
+            //ignore it
+        }
+    }
+
+    private void extractAndMoveWinUtils(String path) throws IOException {
+        InputStream in = HadoopUtils.class.getResourceAsStream("/" + WINUTILS_EXE);
+        // always write to different location
+        File fileOut = new File(path + Path.SEPARATOR + "bin" + Path.SEPARATOR + WINUTILS_EXE);
+        LOGGER.info("Writing {} to: {}", WINUTILS_EXE, fileOut.getAbsolutePath());
+
+        OutputStream out = FileUtils.openOutputStream(fileOut);
+        IOUtils.copy(in, out);
+        in.close();
+        out.close();
     }
 
     public void setHadoopHome() {
@@ -81,9 +116,8 @@ public enum HadoopUtils {
             while ((line = br.readLine()) != null) {
                 out.println(line);
             }
-        }
-        catch (Exception ex) {
-            LOG.warn("Banner not printable", ex);
+        } catch (Exception ex) {
+            LOGGER.warn("Banner not printable", ex);
         }
     }
 }
