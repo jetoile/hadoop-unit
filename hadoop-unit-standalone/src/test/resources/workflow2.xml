@@ -1,0 +1,56 @@
+<workflow-app name="sugar-option-decision" xmlns="uri:oozie:workflow:0.5">
+    <global>
+        <job-tracker>${jobTracker}</job-tracker>
+        <name-node>${nameNode}</name-node>
+        <configuration>
+            <property>
+                <name>mapreduce.output.fileoutputformat.outputdir</name>
+                <value>/tmp/test_output_dir</value>
+            </property>
+            <property>
+                <name>mapreduce.input.fileinputformat.inputdir</name>
+                <value>/tmp/test_input_dir</value>
+            </property>
+        </configuration>
+    </global>
+    <start to="first"/>
+    <action name="first">
+        <map-reduce>
+            <prepare>
+                <delete path="/tmp/test_output_dir"/>
+            </prepare>
+        </map-reduce>
+        <ok to="decision-second-option"/>
+        <error to="kill"/>
+    </action>
+    <decision name="decision-second-option">
+        <switch>
+            <case to="option">${doOption}</case>
+            <default to="second"/>
+        </switch>
+    </decision>
+    <action name="option">
+        <map-reduce>
+            <prepare>
+                <delete path="/tmp/test_output_dir"/>
+            </prepare>
+        </map-reduce>
+        <ok to="second"/>
+        <error to="kill"/>
+    </action>
+    <action name="second">
+        <map-reduce>
+            <prepare>
+                <delete path="/tmp/test_output_dir"/>
+            </prepare>
+        </map-reduce>
+        <ok to="end"/>
+        <error to="kill"/>
+    </action>
+    <kill name="kill">
+        <message>
+            Failed to workflow, error message[${wf: errorMessage (wf: lastErrorNode ())}]
+        </message>
+    </kill>
+    <end name="end"/>
+</workflow-app>

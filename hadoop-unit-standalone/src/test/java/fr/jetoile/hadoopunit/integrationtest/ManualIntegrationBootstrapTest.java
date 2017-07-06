@@ -299,6 +299,118 @@ public class ManualIntegrationBootstrapTest {
 
 
     @Test
+    @Ignore
+    public void oozieWithRealHiveWorkflowShouldStart() throws Exception {
+
+        LOGGER.info("OOZIE: Test Submit Workflow Start");
+
+        org.apache.hadoop.conf.Configuration conf = new org.apache.hadoop.conf.Configuration();
+        conf.set("fs.default.name", "hdfs://" + configuration.getString(HadoopUnitConfig.HDFS_NAMENODE_HOST_KEY) + ":" + configuration.getInt(HadoopUnitConfig.HDFS_NAMENODE_PORT_KEY));
+        URI uri = URI.create("hdfs://" + configuration.getString(HadoopUnitConfig.HDFS_NAMENODE_HOST_KEY) + ":" + configuration.getInt(HadoopUnitConfig.HDFS_NAMENODE_PORT_KEY));
+        FileSystem hdfsFs = FileSystem.get(uri, conf);
+        OozieClient oozieClient = new OozieClient("http://" + configuration.getString(HadoopUnitConfig.OOZIE_HOST) + ":" + configuration.getInt(HadoopUnitConfig.OOZIE_PORT) + "/oozie");
+
+
+        hdfsFs.mkdirs(new Path("/khanh/test2"));
+        hdfsFs.mkdirs(new Path("/khanh/work2"));
+        hdfsFs.mkdirs(new Path("/khanh/etc2"));
+        hdfsFs.copyFromLocalFile(new Path(ManualIntegrationBootstrapTest.class.getClassLoader().getResource("workflow2.xml").toURI()), new Path("/khanh/test2/workflow.xml"));
+        hdfsFs.copyFromLocalFile(new Path(ManualIntegrationBootstrapTest.class.getClassLoader().getResource("hive-site.xml").toURI()), new Path("/khanh/etc2/hive-site.xml"));
+        hdfsFs.copyFromLocalFile(new Path(ManualIntegrationBootstrapTest.class.getClassLoader().getResource("test.csv").toURI()), new Path("/khanh/work2/test.csv"));
+        hdfsFs.copyFromLocalFile(new Path(ManualIntegrationBootstrapTest.class.getClassLoader().getResource("test.hql").toURI()), new Path("/khanh/etc2/test.hql"));
+
+        //write job.properties
+        Properties oozieConf = oozieClient.createConfiguration();
+        oozieConf.setProperty(OozieClient.APP_PATH, "hdfs://localhost:20112/khanh/test2/workflow.xml");
+        oozieConf.setProperty(OozieClient.USER_NAME, UserGroupInformation.getCurrentUser().getUserName());
+        oozieConf.setProperty("jobTracker", "localhost:37001");
+        oozieConf.setProperty("nameNode", "hdfs://localhost:20112");
+        oozieConf.setProperty("hiveTry", "hdfs://localhost:20112/khanh/etc2/test.hql");
+
+        //submit and check
+        final String jobId = oozieClient.run(oozieConf);
+
+        while (oozieClient.getJobInfo(jobId).getStatus() != WorkflowJob.Status.RUNNING) {
+            System.out.println("========== workflow job status " + oozieClient.getJobInfo(jobId).getStatus());
+            Thread.sleep(1000);
+        }
+
+        while (oozieClient.getJobInfo(jobId).getStatus() == WorkflowJob.Status.RUNNING) {
+            System.out.println("========== workflow job status " + oozieClient.getJobInfo(jobId).getStatus());
+            System.out.println("========== job is running");
+            Thread.sleep(1000);
+        }
+
+        System.out.println("=============== OOZIE: Final Workflow status" + oozieClient.getJobInfo(jobId).getStatus());
+        WorkflowJob wf = oozieClient.getJobInfo(jobId);
+        System.out.println("=============== OOZIE: Workflow: {}" + wf.toString());
+
+        assertEquals(WorkflowJob.Status.SUCCEEDED, wf.getStatus());
+
+        hdfsFs.close();
+    }
+
+    @Test
+    @Ignore
+    public void oozieWithRealWorkflowShouldStart() throws Exception {
+
+        LOGGER.info("OOZIE: Test Submit Workflow Start");
+
+        org.apache.hadoop.conf.Configuration conf = new org.apache.hadoop.conf.Configuration();
+        conf.set("fs.default.name", "hdfs://" + configuration.getString(HadoopUnitConfig.HDFS_NAMENODE_HOST_KEY) + ":" + configuration.getInt(HadoopUnitConfig.HDFS_NAMENODE_PORT_KEY));
+        URI uri = URI.create("hdfs://" + configuration.getString(HadoopUnitConfig.HDFS_NAMENODE_HOST_KEY) + ":" + configuration.getInt(HadoopUnitConfig.HDFS_NAMENODE_PORT_KEY));
+        FileSystem hdfsFs = FileSystem.get(uri, conf);
+        OozieClient oozieClient = new OozieClient("http://" + configuration.getString(HadoopUnitConfig.OOZIE_HOST) + ":" + configuration.getInt(HadoopUnitConfig.OOZIE_PORT) + "/oozie");
+
+
+        String testInputFile = "test_input.txt";
+        String testInputDir = "/tmp/test_input_dir";
+
+        // Setup input directory and file
+        hdfsFs.mkdirs(new Path(testInputDir));
+        hdfsFs.copyFromLocalFile(
+                new Path(getClass().getClassLoader().getResource(testInputFile).toURI()), new Path(testInputDir));
+
+        hdfsFs.mkdirs(new Path("/khanh/test"));
+        hdfsFs.copyFromLocalFile(new Path(ManualIntegrationBootstrapTest.class.getClassLoader().getResource("workflow2.xml").toURI()), new Path("/khanh/test/workflow.xml"));
+
+        //write job.properties
+        Properties oozieConf = oozieClient.createConfiguration();
+        oozieConf.setProperty(OozieClient.APP_PATH, "hdfs://localhost:20112/khanh/test/workflow.xml");
+        oozieConf.setProperty(OozieClient.USER_NAME, UserGroupInformation.getCurrentUser().getUserName());
+        oozieConf.setProperty("jobTracker", "localhost:37001");
+        oozieConf.setProperty("nameNode", "hdfs://localhost:20112");
+        oozieConf.setProperty("doOption", "true");
+
+        //submit and check
+        final String jobId = oozieClient.run(oozieConf);
+        WorkflowJob wf = oozieClient.getJobInfo(jobId);
+        assertNotNull(wf);
+
+        LOGGER.info("OOZIE: Workflow: {}", wf.toString());
+
+        while (oozieClient.getJobInfo(jobId).getStatus() != WorkflowJob.Status.RUNNING) {
+            System.out.println("========== workflow job status " + oozieClient.getJobInfo(jobId).getStatus());
+            Thread.sleep(1000);
+        }
+
+        while (oozieClient.getJobInfo(jobId).getStatus() == WorkflowJob.Status.RUNNING) {
+            System.out.println("========== workflow job status " + oozieClient.getJobInfo(jobId).getStatus());
+            System.out.println("========== job is running");
+            Thread.sleep(1000);
+        }
+
+        System.out.println("=============== OOZIE: Final Workflow status" + oozieClient.getJobInfo(jobId).getStatus());
+        wf = oozieClient.getJobInfo(jobId);
+        System.out.println("=============== OOZIE: Workflow: {}" + wf.toString());
+
+        assertEquals(WorkflowJob.Status.SUCCEEDED, wf.getStatus());
+
+
+        hdfsFs.close();
+    }
+
+    @Test
     public void oozieShouldStart() throws Exception {
 
         LOGGER.info("OOZIE: Test Submit Workflow Start");

@@ -148,6 +148,7 @@ public class HadoopUnitConfig {
     public static final String OOZIE_SHARELIB_NAME_KEY = "oozie.sharelib.name";
     public static final String SHARE_LIB_LOCAL_TEMP_PREFIX = "oozie_share_lib_tmp";
     public static final String SHARE_LIB_PREFIX = "lib_";
+    public static final String OOZIE_SHARE_LIB_COMPONENT_KEY = "oozie.sharelib.component";
 
     // SOLR
     public static final String SOLR_DIR_KEY = "solr.dir";

@@ -62,7 +62,7 @@ public class KnoxJobIntegrationTest {
     public void hbase_through_knox_should_be_ok() throws ConfigurationException, KeyManagementException, URISyntaxException, IOException, NoSuchAlgorithmException {
         KnoxJob knoxJob = new KnoxJob();
 
-        assertTrue(knoxJob.getHBaseStatus(hadoop).contains("\"regions\":3"));
+        assertTrue(knoxJob.getHBaseStatus(hadoop).contains("\"regions\":2"));
         knoxJob.createHBaseTable(hadoop);
 
         System.out.println("==============================");

@@ -44,9 +44,31 @@
             </exclusions>
         </dependency>
 
+        <!--
+        * Big Hack to avoid these kind of errors:
+        * java.lang.IncompatibleClassChangeError: class org.eclipse.jetty.annotations.AnnotationParser$MyClassVisitor has interface org.objectweb.asm.ClassVisitor as super class
+        *
+        * https://issues.apache.org/jira/browse/KNOX-943
+        *
+        * The feature : Loading jsp has been disabled
+        -->
         <dependency>
             <groupId>com.github.sakserv</groupId>
             <artifactId>hadoop-mini-clusters-knox</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.eclipse.jetty</groupId>
+                    <artifactId>jetty-annotations</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.eclipse.jetty</groupId>
+                    <artifactId>apache-jsp</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.eclipse.jetty</groupId>
+                    <artifactId>apache-jstl</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
