@@ -74,7 +74,6 @@ public class SolrBootstrap implements Bootstrap {
     }
 
     private void loadConfig() throws BootstrapException {
-        HadoopUtils.INSTANCE.setHadoopHome();
         try {
             configuration = new PropertiesConfiguration(HadoopUnitConfig.DEFAULT_PROPS_FILE);
         } catch (ConfigurationException e) {
