@@ -10,7 +10,7 @@ hadoop-unit-standalone:
 
 [![Build Status](https://travis-ci.org/jetoile/hadoop-unit.svg?branch=master)](https://travis-ci.org/jetoile/hadoop-unit)
 
-#Build
+# Build
 
 For windows users, you need to download a hadoop distribution, to unzip it and to define the system environment variable `HADOOP_HOME`. You can also define the path into files `hadoop-unit-default.properties` (warning: there are a lot...).
 
@@ -21,11 +21,11 @@ To build, launch the command:
 mvn package
 ```
 
-#Compatibility matrix
+# Compatibility matrix
 
 | Hadoop Unit version  | Hadoop mini cluster version | HDP version |
 | ------------- | ------------- | ------------- |
-| 2.2 | 0.1.11 | HDP 2.5.3.0 |
+| 2.2 | 0.1.12 | HDP 2.6.1.0 |
 | 2.1 | 0.1.11 | HDP 2.5.3.0 |
 | 2.0 | 0.1.9 | HDP 2.5.3.0 |
 | 1.5 | 0.1.8 | HDP 2.5.0.0 |
@@ -34,7 +34,7 @@ mvn package
 | 1.2 | 0.1.5 | HDP 2.4.0.0 |
 
 
-#Usage
+# Usage
 
 When Hadoop Unit is started, it should display stuff like that:
 ```bash
@@ -71,7 +71,7 @@ The available components are:
 * KNOX
 * ALLUXIO
 
-##Integration testing (will start each component present into classpath)
+## Integration testing (will start each component present into classpath)
 With maven, add dependencies of components which are needed
 
 Sample:
@@ -97,7 +97,7 @@ public static void tearDown() {
 }
 ```
 
-##Integration testing v2 (with specific component)
+## Integration testing v2 (with specific component)
 With maven, add dependencies of components which are needed
 
 Sample:
@@ -129,7 +129,7 @@ public static void tearDown() throws NotFoundServiceException {
 }
 ```
 
-##Standalone mode
+## Standalone mode
 
 Unzip `hadoop-unit-standalone-<version>.tar.gz`
 Change `conf/hadoop-unit-default.properties`
@@ -157,7 +157,7 @@ maven.local.repo=/home/khanh/.m2/repository
 ```
 
 
-##Shell Usage
+## Shell Usage
 Hadoop-unit can be used with common tools such as:
 
 * hbase shell
@@ -165,7 +165,7 @@ Hadoop-unit can be used with common tools such as:
 * hdfs command
 * hive shell
 
-###Kafka-console command
+### Kafka-console command
 
 * Download and unzip kafka
 * From directory `KAFKA_HOME/bin` (or `KAFKA_HOME/bin/windows` for windows), execute command: 
@@ -173,7 +173,7 @@ Hadoop-unit can be used with common tools such as:
 kafka-console-consumer --zookeeper localhost:22010 --topic topic
 ```
 
-###HBase Shell
+### HBase Shell
 
 * Download and unzip HBase
 * set variable `HBASE_HOME`
@@ -196,13 +196,13 @@ kafka-console-consumer --zookeeper localhost:22010 --topic topic
 hbase shell
 ```
 
-###HDFS command
+### HDFS command
 
 * From directory `HADOOP_HOME/bin`, execute command: 
 ```bash
 hdfs dfs -ls hdfs://localhost:20112/
 ```
-###Hive Shell
+### Hive Shell
 
 * Download and unzip Hive
 * edit file `HIVE_HOME/conf/hive-site.xml`:
@@ -219,7 +219,7 @@ hdfs dfs -ls hdfs://localhost:20112/
 hive
 ```
 
-###Alluxio Shell
+### Alluxio Shell
 
 * Download and unzip alluxio
 * edit file `ALLUXIO_HOME/conf/alluxio-env.sh`:
@@ -235,15 +235,15 @@ alluxio.master.port=14001
 ./alluxio fs ls <path>
 ```
 
-#Sample
+# Sample
 See `hadoop-unit-standalone/src/test/java/fr/jetoile/hadoopunit/integrationtest`
 
 See `sample`
 
-#Maven Plugin usage
+# Maven Plugin usage
 A maven plugin is provided for integration test only.
 
-##Embedded mode
+## Embedded mode
 
 To use it, add into the pom project stuff like that:
 ```xml
@@ -430,7 +430,7 @@ public class HdfsBootstrapIntegrationTest {
 }
 ```
 
-##Remote mode
+## Remote mode
 This plugin start/stop a remote local hadoop-unit-standalone.
 
 To use it, add into the pom project stuff like that:
@@ -581,7 +581,7 @@ public class HdfsBootstrapIntegrationTest {
 }
 ```
 
-#Component available
+# Component available
 
 * SolrCloud 6.1.0
 * Kafka 
@@ -598,7 +598,7 @@ public class HdfsBootstrapIntegrationTest {
 * Alluxio 1.4.0
 
 Built on:
-* [hadoop-mini-cluster-0.1.11](https://github.com/sakserv/hadoop-mini-clusters) (aka. HDP 2.5.3.0)
+* [hadoop-mini-cluster-0.1.12](https://github.com/sakserv/hadoop-mini-clusters) (aka. HDP 2.6.1.0)
 * [achilles-embedded-4.2.0](https://github.com/doanduyhai/Achilles)
 * [maven aether](https://github.com/apache/maven-resolver/)
 
