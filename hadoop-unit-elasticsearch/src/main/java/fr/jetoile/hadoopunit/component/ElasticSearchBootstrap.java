@@ -15,23 +15,21 @@
 package fr.jetoile.hadoopunit.component;
 
 import fr.jetoile.hadoopunit.Component;
-import fr.jetoile.hadoopunit.HadoopBootstrap;
 import fr.jetoile.hadoopunit.HadoopUnitConfig;
 import fr.jetoile.hadoopunit.exception.BootstrapException;
-import fr.jetoile.hadoopunit.exception.NotFoundServiceException;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
-import org.elasticsearch.client.Client;
-import org.elasticsearch.common.settings.Settings;
-import org.elasticsearch.node.Node;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import pl.allegro.tech.embeddedelasticsearch.EmbeddedElastic;
+import pl.allegro.tech.embeddedelasticsearch.IndexSettings;
+import pl.allegro.tech.embeddedelasticsearch.PopularProperties;
 
-import java.io.Console;
 import java.io.IOException;
+import java.net.URL;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Map;
 
@@ -44,14 +42,15 @@ public class ElasticSearchBootstrap implements Bootstrap {
 
     private Configuration configuration;
 
+    private EmbeddedElastic elasticsearchCluster;
+
     private String ip;
     private int httpPort;
     private int tcpPort;
-    private Client client;
-    private Node node;
-    private String tmpDir;
+    private String version;
     private String indexName;
     private String clusterName;
+    private String downloadUrl;
 
     public ElasticSearchBootstrap() {
         try {
@@ -74,7 +73,8 @@ public class ElasticSearchBootstrap implements Bootstrap {
                 ", httpPort:" + httpPort +
                 ", tcpPort:" + tcpPort +
                 ", indexName:" + indexName +
-                ", tmpDir:" + tmpDir +
+                ", version:" + version +
+                (StringUtils.isNotEmpty(downloadUrl) ? ", downloadUrl: " + downloadUrl : "") +
                 "]";
     }
 
@@ -85,12 +85,13 @@ public class ElasticSearchBootstrap implements Bootstrap {
             throw new BootstrapException("bad config", e);
         }
 
+        version = configuration.getString(HadoopUnitConfig.ELASTICSEARCH_VERSION);
         httpPort = configuration.getInt(HadoopUnitConfig.ELASTICSEARCH_HTTP_PORT_KEY);
         tcpPort = configuration.getInt(HadoopUnitConfig.ELASTICSEARCH_TCP_PORT_KEY);
         ip = configuration.getString(HadoopUnitConfig.ELASTICSEARCH_IP_KEY);
-        tmpDir = configuration.getString(HadoopUnitConfig.ELASTICSEARCH_TEMP_DIR_KEY);
         indexName = configuration.getString(HadoopUnitConfig.ELASTICSEARCH_INDEX_NAME);
         clusterName = configuration.getString(HadoopUnitConfig.ELASTICSEARCH_CLUSTER_NAME);
+        downloadUrl = configuration.getString(HadoopUnitConfig.ELASTICSEARCH_DOWNLOAD_URL, null);
     }
 
     @Override
@@ -104,8 +105,8 @@ public class ElasticSearchBootstrap implements Bootstrap {
         if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.ELASTICSEARCH_IP_KEY))) {
             ip = configs.get(HadoopUnitConfig.ELASTICSEARCH_IP_KEY);
         }
-        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.ELASTICSEARCH_TEMP_DIR_KEY))) {
-            tmpDir = configs.get(HadoopUnitConfig.ELASTICSEARCH_TEMP_DIR_KEY);
+        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.ELASTICSEARCH_VERSION))) {
+            version = configs.get(HadoopUnitConfig.ELASTICSEARCH_VERSION);
         }
         if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.ELASTICSEARCH_INDEX_NAME))) {
             indexName = configs.get(HadoopUnitConfig.ELASTICSEARCH_INDEX_NAME);
@@ -113,30 +114,34 @@ public class ElasticSearchBootstrap implements Bootstrap {
         if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.ELASTICSEARCH_CLUSTER_NAME))) {
             clusterName = configs.get(HadoopUnitConfig.ELASTICSEARCH_CLUSTER_NAME);
         }
+        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.ELASTICSEARCH_DOWNLOAD_URL))) {
+            downloadUrl = configs.get(HadoopUnitConfig.ELASTICSEARCH_DOWNLOAD_URL);
+        }
     }
 
-    private void build() {
-        client = createEmbeddedNode().client();
+    private void build() throws IOException, InterruptedException {
+
+        Path esInstallationPath = Paths.get(System.getProperty("user.home") + "/.elasticsearch");
+        esInstallationPath.toFile().mkdirs();
+
+
+        EmbeddedElastic.Builder esBuilder = EmbeddedElastic.builder()
+                .withElasticVersion(version)
+                .withSetting(PopularProperties.TRANSPORT_TCP_PORT, tcpPort)
+                .withSetting(PopularProperties.HTTP_PORT, httpPort)
+                .withSetting(PopularProperties.CLUSTER_NAME, clusterName)
+                .withSetting("network.host", ip)
+                .withIndex(indexName, IndexSettings.builder().build())
+                .withInstallationDirectory(esInstallationPath.toFile())
+                .withCleanInstallationDirectoryOnStop(true);
+
+        if (StringUtils.isNotEmpty(downloadUrl)) {
+            esBuilder.withDownloadUrl(new URL(downloadUrl));
+        }
+
+        elasticsearchCluster = esBuilder.build().start();
     }
 
-    private Node createEmbeddedNode() {
-        // Instancie le client pour inserer
-        Settings settings = Settings.builder()
-                .put("cluster.name", clusterName)
-                .put("path.data", tmpDir + "/data")
-                .put("path.logs", tmpDir + "/logs")
-                .put("http.port", httpPort)
-                .put("transport.tcp.port", tcpPort)
-                .put("network.host", ip)
-                .put("path.home", tmpDir)
-                .build();
-
-        node = new Node(settings);
-        node.start();
-        LOGGER.debug("an embedded node is started");
-
-        return node;
-    }
 
     @Override
     public Bootstrap start() {
@@ -145,9 +150,6 @@ public class ElasticSearchBootstrap implements Bootstrap {
             LOGGER.info("{} is starting", this.getClass().getName());
             try {
                 build();
-                client.admin().indices().prepareCreate(indexName).execute().actionGet();
-
-                client.admin().cluster().prepareHealth().setWaitForYellowStatus().get();
             } catch (Exception e) {
                 LOGGER.error("unable to add elastic", e);
             }
@@ -164,9 +166,7 @@ public class ElasticSearchBootstrap implements Bootstrap {
             state = State.STOPPING;
             LOGGER.info("{} is stopping", this.getClass().getName());
             try {
-                client.close();
-                node.close();
-                cleanup();
+                elasticsearchCluster.stop();
             } catch (Exception e) {
                 LOGGER.error("unable to stop elastic", e);
             }
@@ -179,18 +179,6 @@ public class ElasticSearchBootstrap implements Bootstrap {
     @Override
     public org.apache.hadoop.conf.Configuration getConfiguration() {
         throw new UnsupportedOperationException("the method getConfiguration can not be called on ElasticSearchBootstrap");
-    }
-
-    private void cleanup() {
-        try {
-            FileUtils.deleteDirectory(Paths.get(tmpDir).toFile());
-        } catch (IOException e) {
-            LOGGER.error("unable to delete {}", tmpDir, e);
-        }
-    }
-
-    public Client getClient() {
-        return client;
     }
 
 }

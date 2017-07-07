@@ -39,7 +39,7 @@ mvn package
 When Hadoop Unit is started, it should display stuff like that:
 ```bash
            ______  __      _________                         _____  __      __________
-           ___  / / /_____ ______  /___________________      __  / / /_________(_)_  /_ 1.3
+           ___  / / /_____ ______  /___________________      __  / / /_________(_)_  /_ 2.1
            __  /_/ /_  __ `/  __  /_  __ \  __ \__  __ \     _  / / /__  __ \_  /_  __/
            _  __  / / /_/ // /_/ / / /_/ / /_/ /_  /_/ /     / /_/ / _  / / /  / / /_
            /_/ /_/  \__,_/ \__,_/  \____/\____/_  .___/      \____/  /_/ /_//_/  \__/
@@ -601,7 +601,7 @@ public class HdfsBootstrapIntegrationTest {
 * Knox
 * MongoDB
 * Cassandra 3.7
-* ElasticSearch 5.0-alpha4
+* ElasticSearch 5.4.3
 * Neo4j 3.2.2
 * Alluxio 1.4.0
 
@@ -609,6 +609,7 @@ Built on:
 * [hadoop-mini-cluster-0.1.12](https://github.com/sakserv/hadoop-mini-clusters) (aka. HDP 2.6.1.0)
 * [achilles-embedded-5.2.1](https://github.com/doanduyhai/Achilles)
 * [maven resolver](https://github.com/apache/maven-resolver/)
+* [embedded-elasticsearch](https://github.com/allegro/embedded-elasticsearch)
 
 Use: 
 * download and unzip hadoop

@@ -67,9 +67,10 @@ public class HadoopUnitConfig {
     public static final String ELASTICSEARCH_IP_KEY = "elasticsearch.ip";
     public static final String ELASTICSEARCH_HTTP_PORT_KEY = "elasticsearch.http.port";
     public static final String ELASTICSEARCH_TCP_PORT_KEY = "elasticsearch.tcp.port";
-    public static final String ELASTICSEARCH_TEMP_DIR_KEY = "elasticsearch.temp.dir";
+    public static final String ELASTICSEARCH_VERSION = "elasticsearch.version";
     public static final String ELASTICSEARCH_INDEX_NAME = "elasticsearch.index.name";
     public static final String ELASTICSEARCH_CLUSTER_NAME = "elasticsearch.cluster.name";
+    public static final String ELASTICSEARCH_DOWNLOAD_URL = "elasticsearch.download.url";
 
     // Kafka
     public static final String KAFKA_HOSTNAME_KEY = "kafka.hostname";

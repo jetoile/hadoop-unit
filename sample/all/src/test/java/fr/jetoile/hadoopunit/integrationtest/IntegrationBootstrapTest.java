@@ -40,6 +40,11 @@ import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.*;
 import org.apache.hadoop.hbase.util.Bytes;
 import org.apache.hadoop.security.UserGroupInformation;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpHost;
+import org.apache.http.entity.ContentType;
+import org.apache.http.nio.entity.NStringEntity;
+import org.apache.http.util.EntityUtils;
 import org.apache.oozie.client.OozieClient;
 import org.apache.oozie.client.WorkflowJob;
 import org.apache.solr.client.solrj.SolrServerException;
@@ -47,8 +52,16 @@ import org.apache.solr.client.solrj.impl.CloudSolrClient;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrInputDocument;
 import org.apache.zookeeper.KeeperException;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
+import org.elasticsearch.action.get.GetResponse;
+import org.elasticsearch.action.index.IndexResponse;
+import org.elasticsearch.client.RestClient;
+import org.elasticsearch.client.transport.TransportClient;
+import org.elasticsearch.common.settings.Settings;
+import org.elasticsearch.common.transport.InetSocketTransportAddress;
+import org.elasticsearch.transport.client.PreBuiltTransportClient;
 import org.junit.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -115,6 +128,43 @@ public class IntegrationBootstrapTest {
 
 
         client.close();
+    }
+
+    @Test
+    public void elasticSearchShouldStart() throws NotFoundServiceException, IOException, JSONException {
+
+        RestClient restClient = RestClient.builder(
+                new HttpHost(configuration.getString(HadoopUnitConfig.ELASTICSEARCH_IP_KEY), configuration.getInt(HadoopUnitConfig.ELASTICSEARCH_HTTP_PORT_KEY), "http")).build();
+
+        org.elasticsearch.client.Response response = restClient.performRequest("GET", "/",
+                Collections.singletonMap("pretty", "true"));
+        System.out.println(EntityUtils.toString(response.getEntity()));
+
+        // indexing document
+        HttpEntity entity = new NStringEntity(
+                "{\n" +
+                        "    \"user\" : \"kimchy\",\n" +
+                        "    \"post_date\" : \"2009-11-15T14:12:12\",\n" +
+                        "    \"message\" : \"trying out Elasticsearch\"\n" +
+                        "}", ContentType.APPLICATION_JSON);
+
+        org.elasticsearch.client.Response indexResponse = restClient.performRequest(
+                "PUT",
+                "/twitter/tweet/1",
+                Collections.<String, String>emptyMap(),
+                entity);
+
+        response = restClient.performRequest("GET", "/_search",
+                Collections.singletonMap("pretty", "true"));
+
+
+        String result = EntityUtils.toString(response.getEntity());
+        System.out.println(result);
+        JSONObject obj = new JSONObject(result);
+        int nbResult = obj.getJSONObject("hits").getInt("total");
+        assertThat(nbResult).isEqualTo(1);
+
+        restClient.close();
     }
 
     @Test

@@ -21,6 +21,7 @@ import alluxio.client.file.URIStatus;
 import alluxio.exception.AlluxioException;
 import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.Session;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mongodb.*;
 import fr.jetoile.hadoopunit.HadoopUnitConfig;
 import fr.jetoile.hadoopunit.exception.BootstrapException;
@@ -43,6 +44,11 @@ import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.*;
 import org.apache.hadoop.hbase.util.Bytes;
 import org.apache.hadoop.security.UserGroupInformation;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpHost;
+import org.apache.http.entity.ContentType;
+import org.apache.http.nio.entity.NStringEntity;
+import org.apache.http.util.EntityUtils;
 import org.apache.oozie.client.OozieClient;
 import org.apache.oozie.client.WorkflowJob;
 import org.apache.solr.client.solrj.SolrServerException;
@@ -50,15 +56,9 @@ import org.apache.solr.client.solrj.impl.CloudSolrClient;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrInputDocument;
 import org.apache.zookeeper.KeeperException;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
-import org.elasticsearch.action.get.GetResponse;
-import org.elasticsearch.action.index.IndexResponse;
-import org.elasticsearch.client.Client;
-import org.elasticsearch.client.transport.TransportClient;
-import org.elasticsearch.common.settings.Settings;
-import org.elasticsearch.common.transport.InetSocketTransportAddress;
+import org.elasticsearch.client.RestClient;
 import org.junit.*;
 import org.neo4j.driver.v1.*;
 import org.slf4j.Logger;
@@ -77,6 +77,7 @@ import java.sql.Connection;
 import java.sql.*;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
 
@@ -713,31 +714,40 @@ public class ManualIntegrationBootstrapTest {
     }
 
     @Test
-    public void elasticSearchShouldStartWithRealDriver() throws NotFoundServiceException, IOException {
+    public void elasticSearchShouldStart() throws NotFoundServiceException, IOException, JSONException {
 
-        Settings settings = Settings.builder()
-                .put("cluster.name", configuration.getString(HadoopUnitConfig.ELASTICSEARCH_CLUSTER_NAME))
-                .build();
-        Client client = TransportClient.builder().settings(settings).build()
-                .addTransportAddress(new InetSocketTransportAddress(InetAddress.getByName(configuration.getString(HadoopUnitConfig.ELASTICSEARCH_IP_KEY)), configuration.getInt(HadoopUnitConfig.ELASTICSEARCH_TCP_PORT_KEY)));
+        RestClient restClient = RestClient.builder(
+                new HttpHost(configuration.getString(HadoopUnitConfig.ELASTICSEARCH_IP_KEY), configuration.getInt(HadoopUnitConfig.ELASTICSEARCH_HTTP_PORT_KEY), "http")).build();
 
-        ObjectMapper mapper = new ObjectMapper();
-
-        Sample sample = new Sample("value2", 0.33, 3);
-
-        String jsonString = mapper.writeValueAsString(sample);
+        org.elasticsearch.client.Response response = restClient.performRequest("GET", "/",
+                Collections.singletonMap("pretty", "true"));
+        System.out.println(EntityUtils.toString(response.getEntity()));
 
         // indexing document
-        IndexResponse ir = client.prepareIndex("test_index", "type").setSource(jsonString).setId("2").execute().actionGet();
-        client.admin().indices().prepareRefresh("test_index").execute().actionGet();
+        HttpEntity entity = new NStringEntity(
+                "{\n" +
+                        "    \"user\" : \"kimchy\",\n" +
+                        "    \"post_date\" : \"2009-11-15T14:12:12\",\n" +
+                        "    \"message\" : \"trying out Elasticsearch\"\n" +
+                        "}", ContentType.APPLICATION_JSON);
 
-        assertNotNull(ir);
+        org.elasticsearch.client.Response indexResponse = restClient.performRequest(
+                "PUT",
+                "/twitter/tweet/1",
+                Collections.<String, String>emptyMap(),
+                entity);
 
-        GetResponse gr = client.prepareGet("test_index", "type", "2").execute().actionGet();
+        response = restClient.performRequest("GET", "/_search",
+                Collections.singletonMap("pretty", "true"));
 
-        assertNotNull(gr);
-        assertEquals(gr.getSourceAsString(), "{\"value\":\"value2\",\"size\":0.33,\"price\":3.0}");
 
+        String result = EntityUtils.toString(response.getEntity());
+        System.out.println(result);
+        JSONObject obj = new JSONObject(result);
+        int nbResult = obj.getJSONObject("hits").getInt("total");
+        assertThat(nbResult).isEqualTo(1);
+
+        restClient.close();
     }
 
     @Test
@@ -769,57 +779,3 @@ public class ManualIntegrationBootstrapTest {
 
 }
 
-
-class Sample implements Serializable {
-    private static final long serialVersionUID = 1L;
-
-    private String value;
-    private double size;
-    private double price;
-
-    public Sample(String value, double size, double price) {
-        this.value = value;
-        this.size = size;
-        this.price = price;
-    }
-
-    public double getSize() {
-        return size;
-    }
-
-    public void setSize(double size) {
-        this.size = size;
-    }
-
-    public double getPrice() {
-        return price;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
-    }
-
-    public String getValue() {
-        return value;
-    }
-
-    public void setValue(String value) {
-        this.value = value;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-
-        if (obj == null) return false;
-        if (!(obj instanceof Sample)) return false;
-
-        Sample sample = (Sample) obj;
-
-        if (this.value != sample.value && this.value != null && !this.value.equals(sample.value)) return false;
-
-        if (this.size != sample.size) return false;
-        if (this.price != sample.price) return false;
-
-        return true;
-    }
-}

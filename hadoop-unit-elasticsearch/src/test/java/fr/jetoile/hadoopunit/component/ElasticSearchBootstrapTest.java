@@ -29,6 +29,7 @@ import org.elasticsearch.client.Client;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.transport.InetSocketTransportAddress;
+import org.elasticsearch.transport.client.PreBuiltTransportClient;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -69,8 +70,8 @@ public class ElasticSearchBootstrapTest {
     @Test
     public void elasticSearchShouldStart() throws NotFoundServiceException, IOException {
 
-        Bootstrap elasticsearch = HadoopBootstrap.INSTANCE.getService(Component.ELASTICSEARCH);
-        Client client = ((ElasticSearchBootstrap) elasticsearch).getClient();
+        TransportClient client = new PreBuiltTransportClient(Settings.EMPTY)
+                .addTransportAddress(new InetSocketTransportAddress(InetAddress.getByName(configuration.getString(HadoopUnitConfig.ELASTICSEARCH_IP_KEY)), configuration.getInt(HadoopUnitConfig.ELASTICSEARCH_TCP_PORT_KEY)));
 
         ObjectMapper mapper = new ObjectMapper();
 
@@ -88,34 +89,6 @@ public class ElasticSearchBootstrapTest {
 
         assertNotNull(gr);
         assertEquals(gr.getSourceAsString(), "{\"value\":\"value\",\"size\":0.33,\"price\":3.0}");
-
-    }
-
-    @Test
-    public void elasticSearchShouldStartWithRealDriver() throws NotFoundServiceException, IOException {
-
-        Settings settings = Settings.builder()
-                .put("cluster.name", configuration.getString(HadoopUnitConfig.ELASTICSEARCH_CLUSTER_NAME))
-                .build();
-        Client client = TransportClient.builder().settings(settings).build()
-                .addTransportAddress(new InetSocketTransportAddress(InetAddress.getByName(configuration.getString(HadoopUnitConfig.ELASTICSEARCH_IP_KEY)), configuration.getInt(HadoopUnitConfig.ELASTICSEARCH_TCP_PORT_KEY)));
-
-        ObjectMapper mapper = new ObjectMapper();
-
-        Sample sample = new Sample("value2", 0.33, 3);
-
-        String jsonString = mapper.writeValueAsString(sample);
-
-        // indexing document
-        IndexResponse ir = client.prepareIndex("test_index", "type").setSource(jsonString).setId("2").execute().actionGet();
-        client.admin().indices().prepareRefresh("test_index").execute().actionGet();
-
-        assertNotNull(ir);
-
-        GetResponse gr = client.prepareGet("test_index", "type", "2").execute().actionGet();
-
-        assertNotNull(gr);
-        assertEquals(gr.getSourceAsString(), "{\"value\":\"value2\",\"size\":0.33,\"price\":3.0}");
 
     }
 
