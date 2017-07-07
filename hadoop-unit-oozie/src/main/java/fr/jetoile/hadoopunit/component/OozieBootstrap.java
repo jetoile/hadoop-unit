@@ -104,6 +104,7 @@ public class OozieBootstrap implements Bootstrap {
         return "[" +
                 "host:" + oozieHost +
                 ", port:" + ooziePort +
+                ", resourceManager address: " + resourceManagerWebappAddress +
                 "]";
     }
 
