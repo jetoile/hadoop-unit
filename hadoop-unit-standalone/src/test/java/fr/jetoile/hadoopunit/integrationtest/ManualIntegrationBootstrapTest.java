@@ -26,6 +26,8 @@ import com.mongodb.*;
 import fr.jetoile.hadoopunit.HadoopUnitConfig;
 import fr.jetoile.hadoopunit.exception.BootstrapException;
 import fr.jetoile.hadoopunit.exception.NotFoundServiceException;
+import fr.jetoile.hadoopunit.integrationtest.storm.bolt.PrinterBolt;
+import fr.jetoile.hadoopunit.integrationtest.storm.spout.RandomSentenceSpout;
 import fr.jetoile.hadoopunit.test.alluxio.AlluxioUtils;
 import fr.jetoile.hadoopunit.test.hdfs.HdfsUtils;
 import fr.jetoile.hadoopunit.test.kafka.KafkaConsumerUtils;
@@ -55,6 +57,9 @@ import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.CloudSolrClient;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrInputDocument;
+import org.apache.storm.StormSubmitter;
+import org.apache.storm.topology.TopologyBuilder;
+import org.apache.storm.utils.NimbusClient;
 import org.apache.zookeeper.KeeperException;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
@@ -77,10 +82,8 @@ import java.security.cert.X509Certificate;
 import java.sql.Connection;
 import java.sql.*;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
+import java.util.jar.JarFile;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.junit.Assert.*;
@@ -785,6 +788,62 @@ public class ManualIntegrationBootstrapTest {
         assertEquals(1, results.size());
         assertEquals("King", results.get(0).get("title").asString());
         assertEquals("Arthur", results.get(0).get("name").asString());
+    }
+
+    @Test
+    public void testStormCluster() throws Exception {
+        org.apache.storm.Config stormConf = new org.apache.storm.Config();
+        stormConf.put("nimbus-daemon", true);
+        List<String> stormNimbusSeeds = new ArrayList<>();
+        stormNimbusSeeds.add("localhost");
+        stormConf.put(org.apache.storm.Config.NIMBUS_SEEDS, stormNimbusSeeds);
+        stormConf.put(org.apache.storm.Config.NIMBUS_THRIFT_PORT, 6627);
+        stormConf.put(org.apache.storm.Config.STORM_THRIFT_TRANSPORT_PLUGIN, "org.apache.storm.security.auth.SimpleTransportPlugin");
+        stormConf.put(org.apache.storm.Config.STORM_NIMBUS_RETRY_INTERVAL_CEILING, 60000);
+        stormConf.put(org.apache.storm.Config.STORM_NIMBUS_RETRY_TIMES, 5);
+        stormConf.put(org.apache.storm.Config.STORM_NIMBUS_RETRY_INTERVAL, 2000);
+        stormConf.put(org.apache.storm.Config.NIMBUS_THRIFT_MAX_BUFFER_SIZE, 1048576);
+        stormConf.put(org.apache.storm.Config.STORM_ZOOKEEPER_SERVERS, Arrays.asList(configuration.getString(HadoopUnitConfig.ZOOKEEPER_HOST_KEY)));
+        stormConf.put(org.apache.storm.Config.STORM_ZOOKEEPER_PORT, configuration.getInt(HadoopUnitConfig.ZOOKEEPER_PORT_KEY));
+
+        TopologyBuilder builder = new TopologyBuilder();
+        builder.setSpout("randomsentencespout", new RandomSentenceSpout(), 1);
+        builder.setBolt("print", new PrinterBolt(), 1).shuffleGrouping("randomsentencespout");
+
+        URL url = ManualIntegrationBootstrapTest.class.getClassLoader().getResource("org/apache/storm/bolt/JoinBolt.class");
+        JarURLConnection connection = (JarURLConnection) url.openConnection();
+        JarFile file = connection.getJarFile();
+        String jarPath = file.getName();
+        System.setProperty("storm.jar", jarPath);
+
+        StormSubmitter submitter = new StormSubmitter();
+        submitter.submitTopology(configuration.getString(HadoopUnitConfig.STORM_TOPOLOGY_NAME_KEY)+"_", stormConf, builder.createTopology());
+
+        try {
+            Thread.sleep(5000L);
+        } catch (InterruptedException e) {
+            LOGGER.info("SUCCESSFULLY COMPLETED");
+        }
+    }
+
+    @Test
+    public void testStormNimbusClient() throws Exception {
+        org.apache.storm.Config stormConf = new org.apache.storm.Config();
+        stormConf.put("nimbus-daemon", true);
+        List<String> stormNimbusSeeds = new ArrayList<>();
+        stormNimbusSeeds.add("localhost");
+        stormConf.put(org.apache.storm.Config.NIMBUS_SEEDS, stormNimbusSeeds);
+        stormConf.put(org.apache.storm.Config.NIMBUS_THRIFT_PORT, 6627);
+        stormConf.put(org.apache.storm.Config.STORM_THRIFT_TRANSPORT_PLUGIN, "org.apache.storm.security.auth.SimpleTransportPlugin");
+        stormConf.put(org.apache.storm.Config.STORM_NIMBUS_RETRY_INTERVAL_CEILING, 60000);
+        stormConf.put(org.apache.storm.Config.STORM_NIMBUS_RETRY_TIMES, 5);
+        stormConf.put(org.apache.storm.Config.STORM_NIMBUS_RETRY_INTERVAL, 2000);
+        stormConf.put(org.apache.storm.Config.NIMBUS_THRIFT_MAX_BUFFER_SIZE, 1048576);
+        stormConf.put(org.apache.storm.Config.STORM_ZOOKEEPER_SERVERS, Arrays.asList(configuration.getString(HadoopUnitConfig.ZOOKEEPER_HOST_KEY)));
+        stormConf.put(org.apache.storm.Config.STORM_ZOOKEEPER_PORT, configuration.getInt(HadoopUnitConfig.ZOOKEEPER_PORT_KEY));
+
+        NimbusClient nimbusClient = NimbusClient.getConfiguredClient(stormConf);
+        assertTrue(nimbusClient.getClient().getNimbusConf().length() > 0);
     }
 
 }

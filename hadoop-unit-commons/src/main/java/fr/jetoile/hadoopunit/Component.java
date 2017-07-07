@@ -33,7 +33,8 @@ public enum Component {
     ELASTICSEARCH("elasticsearch", "fr.jetoile.hadoopunit.component.ElasticSearchBootstrap", "elasticsearch.artifact"),
     NEO4J("neo4j", "fr.jetoile.hadoopunit.component.Neo4jBootstrap", "neo4j.artifact"),
     KNOX("knox", "fr.jetoile.hadoopunit.component.KnoxBootstrap", "knox.artifact"),
-    REDIS("redis", "fr.jetoile.hadoopunit.component.RedisBootstrap", "redis.artifact");
+    REDIS("redis", "fr.jetoile.hadoopunit.component.RedisBootstrap", "redis.artifact"),
+    STORM("storm", "fr.jetoile.hadoopunit.component.StormBootstrap", "storm.artifact");
 
     private String key;
     private String mainClass;

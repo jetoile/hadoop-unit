@@ -67,6 +67,7 @@
         <module>hadoop-unit-alluxio</module>
         <module>hadoop-unit-windowslibs</module>
         <module>hadoop-unit-redis</module>
+        <module>hadoop-unit-storm</module>
         <module>sample</module>
     </modules>
 
@@ -149,6 +150,8 @@
         <javax.servlet-api.version>3.1.0</javax.servlet-api.version>
 
         <embedded-mongo.version>2.0.0</embedded-mongo.version>
+
+        <storm.version>1.1.0.2.6.1.0-129</storm.version>
 
         <elasticsearch.version>5.4.3</elasticsearch.version>
         <embedded-elasticsearch.version>2.2.0</embedded-elasticsearch.version>
@@ -414,6 +417,18 @@
                 <groupId>com.github.sakserv</groupId>
                 <artifactId>hadoop-mini-clusters-mongodb</artifactId>
                 <version>${hadoop-mini-clusters.version}</version>
+            </dependency>
+
+            <!-- Storm -->
+            <dependency>
+                <groupId>com.github.sakserv</groupId>
+                <artifactId>hadoop-mini-clusters-storm</artifactId>
+                <version>${hadoop-mini-clusters.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.storm</groupId>
+                <artifactId>storm-core</artifactId>
+                <version>${storm.version}</version>
             </dependency>
 
             <dependency>

@@ -184,4 +184,12 @@ public class HadoopUnitConfig {
     public static final String REDIS_SLAVE_PORT_KEY = "redis.slave.ports";
     public static final String REDIS_SENTINEL_PORT_KEY = "redis.sentinel.ports";
     public static final String REDIS_TMP_DIR_KEY = "redis.temp.dir";
+
+    //Storm
+    public static final String STORM_DEBUG_KEY = "storm.enable.debug";
+    public static final String STORM_NB_WORKER_KEY = "storm.num.workers";
+    public static final String STORM_TOPOLOGY_NAME_KEY = "storm.topology.name";
+    public static final String STORM_HOST_KEY = "storm.host";
+    public static final String STORM_PORT_KEY = "storm.port";
+    public static final String STORM_WORKING_DIR_KEY = "storm.working.dir";
 }
