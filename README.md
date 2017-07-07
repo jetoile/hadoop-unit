@@ -608,11 +608,11 @@ public class HdfsBootstrapIntegrationTest {
 Built on:
 * [hadoop-mini-cluster-0.1.12](https://github.com/sakserv/hadoop-mini-clusters) (aka. HDP 2.6.1.0)
 * [achilles-embedded-5.2.1](https://github.com/doanduyhai/Achilles)
-* [maven aether](https://github.com/apache/maven-resolver/)
+* [maven resolver](https://github.com/apache/maven-resolver/)
 
 Use: 
 * download and unzip hadoop
-* [for oozie only] download and unzip oozie (http://s3.amazonaws.com/public-repo-1.hortonworks.com/HDP/centos6/2.x/updates/2.3.4.0/tars/oozie-4.2.0.2.3.4.0-3485-distro.tar.gz)
+* [for oozie only] download and unzip oozie (http://s3.amazonaws.com/public-repo-1.hortonworks.com/HDP/centos6/2.x/updates/2.6.1.0/tars/oozie/oozie-4.2.0.2.6.1.0-129-distro.tar.gz)
 * edit `hadoop-unit-default.properties` and indicate `HADOOP_HOME` or set your `HADOOP_HOME` environment variable
 * edit `hadoop-unit-default.properties` and indicate `oozie.sharelib.path`
 
