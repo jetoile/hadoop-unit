@@ -138,7 +138,7 @@
         <kafka_2.10.version>0.10.1.2.6.1.0-129</kafka_2.10.version>
         <knox.version>0.12.0.2.6.1.0-129</knox.version>
 
-        <dbSetup.version>1.6.0</dbSetup.version>
+        <dbSetup.version>2.1.0</dbSetup.version>
         <httpclient.version>4.3.1</httpclient.version>
         <guava.version>18.0</guava.version>
         <concurrentlinkedhashmap-lru.version>1.4</concurrentlinkedhashmap-lru.version>
