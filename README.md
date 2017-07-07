@@ -235,6 +235,14 @@ alluxio.master.port=14001
 ./alluxio fs ls <path>
 ```
 
+### Cassandra Shell
+
+* Download and unzip cassandra
+* From directory `CASSANDRA_HOME/bin`, execute command: 
+```bash
+./cqlsh localhost 13433
+```
+
 # Sample
 See `hadoop-unit-standalone/src/test/java/fr/jetoile/hadoopunit/integrationtest`
 
@@ -592,14 +600,14 @@ public class HdfsBootstrapIntegrationTest {
 * HBase
 * Knox
 * MongoDB
-* Cassandra 3.4
+* Cassandra 3.7
 * ElasticSearch 5.0-alpha4
 * Neo4j 3.0.3
 * Alluxio 1.4.0
 
 Built on:
 * [hadoop-mini-cluster-0.1.12](https://github.com/sakserv/hadoop-mini-clusters) (aka. HDP 2.6.1.0)
-* [achilles-embedded-4.2.0](https://github.com/doanduyhai/Achilles)
+* [achilles-embedded-5.2.1](https://github.com/doanduyhai/Achilles)
 * [maven aether](https://github.com/apache/maven-resolver/)
 
 Use: 

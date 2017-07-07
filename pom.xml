@@ -148,7 +148,7 @@
 
         <elasticsearch.version>5.0.0-alpha4</elasticsearch.version>
         <metrics.version>3.1.2</metrics.version>
-        <achilles.version>5.1.5</achilles.version>
+        <achilles.version>5.2.1</achilles.version>
         <jackson-module-scala_2.10.version>2.6.5</jackson-module-scala_2.10.version>
 
         <neo4j.version>3.0.3</neo4j.version>

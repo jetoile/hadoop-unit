@@ -12,8 +12,8 @@
     <artifactId>spark-streaming-cassandra</artifactId>
 
     <properties>
-        <datastax.driver.core.version>3.0.0</datastax.driver.core.version>
-        <spark-cassandra-connector.version>1.6.0</spark-cassandra-connector.version>
+        <datastax.driver.core.version>3.3.0</datastax.driver.core.version>
+        <spark-cassandra-connector.version>2.0.2</spark-cassandra-connector.version>
     </properties>
 
     <dependencies>
