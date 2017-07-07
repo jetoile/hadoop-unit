@@ -151,7 +151,7 @@
         <achilles.version>5.2.1</achilles.version>
         <jackson-module-scala_2.10.version>2.6.5</jackson-module-scala_2.10.version>
 
-        <neo4j.version>3.0.3</neo4j.version>
+        <neo4j.version>3.2.2</neo4j.version>
         <alluxio.version>1.4.0</alluxio.version>
     </properties>
 

@@ -602,7 +602,7 @@ public class HdfsBootstrapIntegrationTest {
 * MongoDB
 * Cassandra 3.7
 * ElasticSearch 5.0-alpha4
-* Neo4j 3.0.3
+* Neo4j 3.2.2
 * Alluxio 1.4.0
 
 Built on:
