@@ -16,23 +16,20 @@ package fr.jetoile.hadoopunit.component;
 
 
 import fr.jetoile.hadoopunit.Component;
-import fr.jetoile.hadoopunit.HadoopBootstrap;
 import fr.jetoile.hadoopunit.HadoopUnitConfig;
 import fr.jetoile.hadoopunit.exception.BootstrapException;
-import fr.jetoile.hadoopunit.exception.NotFoundServiceException;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
-import org.neo4j.cypher.javacompat.internal.GraphDatabaseCypherService;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.factory.GraphDatabaseFactory;
 import org.neo4j.graphdb.factory.GraphDatabaseSettings;
+import org.neo4j.kernel.configuration.BoltConnector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.Console;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.Map;
@@ -99,15 +96,16 @@ public class Neo4jBootstrap implements Bootstrap {
     }
 
     private void build() {
-        GraphDatabaseSettings.BoltConnector bolt = GraphDatabaseSettings.boltConnector( "0" );
+        BoltConnector bolt = new BoltConnector("0");
 
         graphDb = new GraphDatabaseFactory()
                 .newEmbeddedDatabaseBuilder(Paths.get(tmp).toFile())
 //                .setConfig(GraphDatabaseSettings.pagecache_memory, "512M")
 //                .setConfig(GraphDatabaseSettings.string_block_size, "60")
 //                .setConfig(GraphDatabaseSettings.array_block_size, "300")
-                .setConfig( bolt.enabled, "true" )
-                .setConfig( bolt.address, ip + ":" + port )
+                .setConfig(bolt.enabled, "true")
+                .setConfig( bolt.type, "BOLT" )
+                .setConfig(bolt.address, ip + ":" + port)
                 .newGraphDatabase();
     }
 
@@ -119,7 +117,7 @@ public class Neo4jBootstrap implements Bootstrap {
             try {
                 build();
             } catch (Exception e) {
-                LOGGER.error("unable to add cassandra", e);
+                LOGGER.error("unable to add neo4j", e);
             }
             state = State.STARTED;
             LOGGER.info("{} is started", this.getClass().getName());
@@ -137,7 +135,7 @@ public class Neo4jBootstrap implements Bootstrap {
                 graphDb.shutdown();
                 cleanup();
             } catch (Exception e) {
-                LOGGER.error("unable to stop cassandra", e);
+                LOGGER.error("unable to stop neo4j", e);
             }
             state = State.STOPPED;
             LOGGER.info("{} is stopped", this.getClass().getName());
