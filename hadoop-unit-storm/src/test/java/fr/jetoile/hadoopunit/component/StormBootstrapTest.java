@@ -121,6 +121,10 @@ public class StormBootstrapTest {
         stormConf.put(Config.STORM_ZOOKEEPER_SERVERS, Arrays.asList(configuration.getString(HadoopUnitConfig.ZOOKEEPER_HOST_KEY)));
         stormConf.put(Config.STORM_ZOOKEEPER_PORT, configuration.getInt(HadoopUnitConfig.ZOOKEEPER_PORT_KEY));
 
+        stormConf.put(Config.STORM_LOCAL_DIR, "/tmp/storm1");
+        stormConf.put(Config.STORM_LOCAL_HOSTNAME, "localhost");
+        stormConf.put(Config.NIMBUS_THRIFT_PORT, configuration.getInt(HadoopUnitConfig.STORM_PORT_KEY));
+
         TopologyBuilder builder = new TopologyBuilder();
         builder.setSpout("randomsentencespout", new RandomSentenceSpout(), 1);
         builder.setBolt("print", new PrinterBolt(), 1).shuffleGrouping("randomsentencespout");
