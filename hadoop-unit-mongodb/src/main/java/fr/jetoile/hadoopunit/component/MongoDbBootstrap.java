@@ -16,10 +16,8 @@ package fr.jetoile.hadoopunit.component;
 
 import com.github.sakserv.minicluster.impl.MongodbLocalServer;
 import fr.jetoile.hadoopunit.Component;
-import fr.jetoile.hadoopunit.HadoopBootstrap;
 import fr.jetoile.hadoopunit.HadoopUnitConfig;
 import fr.jetoile.hadoopunit.exception.BootstrapException;
-import fr.jetoile.hadoopunit.exception.NotFoundServiceException;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
@@ -27,7 +25,6 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.Console;
 import java.util.Map;
 
 public class MongoDbBootstrap implements Bootstrap {
@@ -130,9 +127,5 @@ public class MongoDbBootstrap implements Bootstrap {
         return this;
     }
 
-    @Override
-    public org.apache.hadoop.conf.Configuration getConfiguration() {
-        throw new UnsupportedOperationException("the method getConfiguration can not be called on MongoDbBootstrap");
-    }
 
 }

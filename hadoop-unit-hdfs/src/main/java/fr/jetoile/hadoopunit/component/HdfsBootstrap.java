@@ -29,7 +29,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 
-public class HdfsBootstrap implements Bootstrap {
+public class HdfsBootstrap implements BootstrapHadoop {
     final public static String NAME = Component.HDFS.name();
 
     static final private Logger LOGGER = LoggerFactory.getLogger(HdfsBootstrap.class);

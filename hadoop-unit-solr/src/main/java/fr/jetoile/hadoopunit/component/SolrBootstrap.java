@@ -129,11 +129,6 @@ public class SolrBootstrap implements Bootstrap {
         return this;
     }
 
-    @Override
-    public org.apache.hadoop.conf.Configuration getConfiguration() {
-        throw new UnsupportedOperationException("the method getConfiguration can not be called on SolrBootstrap");
-    }
-
     public EmbeddedSolrServer getClient() {
         return solrServer;
     }

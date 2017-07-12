@@ -19,7 +19,6 @@ import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.hadoop.fs.Path;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -77,7 +76,7 @@ public enum HadoopUtils {
     private void extractAndLoadDll(String lib) throws IOException {
         InputStream in = HadoopUtils.class.getResourceAsStream(lib);
         // always write to different location
-        File fileOut = new File(System.getProperty("java.io.tmpdir") + Path.SEPARATOR + lib);
+        File fileOut = new File(System.getProperty("java.io.tmpdir") + File.separator + lib);
         System.out.println("Writing dll to: " + fileOut.getAbsolutePath());
 
         OutputStream out = FileUtils.openOutputStream(fileOut);
@@ -94,7 +93,7 @@ public enum HadoopUtils {
     private void extractAndMoveWinUtils(String path) throws IOException {
         InputStream in = HadoopUtils.class.getResourceAsStream("/" + WINUTILS_EXE);
         // always write to different location
-        File fileOut = new File(path + Path.SEPARATOR + "bin" + Path.SEPARATOR + WINUTILS_EXE);
+        File fileOut = new File(path + File.separator + "bin" + File.separator + WINUTILS_EXE);
         LOGGER.info("Writing {} to: {}", WINUTILS_EXE, fileOut.getAbsolutePath());
 
         OutputStream out = FileUtils.openOutputStream(fileOut);

@@ -11,26 +11,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package fr.jetoile.hadoopunit.component;
 
 
-import java.util.Map;
+import org.apache.hadoop.conf.Configuration;
 
-public interface Bootstrap {
-    Bootstrap start();
+public interface BootstrapHadoop extends Bootstrap {
 
-    Bootstrap stop();
-
-    String getName();
-
-    String getProperties();
-
-    /**
-     * Allow to override configurations when using maven plugin
-     *
-     * @param configs
-     */
-    void loadConfig(Map<String, String> configs);
+    Configuration getConfiguration();
 
 }

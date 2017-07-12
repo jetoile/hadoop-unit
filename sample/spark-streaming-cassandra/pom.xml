@@ -13,7 +13,8 @@
 
     <properties>
         <datastax.driver.core.version>3.3.0</datastax.driver.core.version>
-        <spark-cassandra-connector.version>2.0.2</spark-cassandra-connector.version>
+        <!--<spark-cassandra-connector.version>2.0.3</spark-cassandra-connector.version>-->
+        <spark-cassandra-connector.version>1.6.8</spark-cassandra-connector.version>
     </properties>
 
     <dependencies>
@@ -80,13 +81,19 @@
 
         <dependency>
             <groupId>fr.jetoile.hadoop</groupId>
-            <artifactId>hadoop-unit-commons</artifactId>
+            <artifactId>hadoop-unit-commons-hadoop</artifactId>
             <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>fr.jetoile.hadoop</groupId>
             <artifactId>hadoop-unit-client-kafka</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.codehaus.jettison</groupId>
+            <artifactId>jettison</artifactId>
             <scope>test</scope>
         </dependency>
 

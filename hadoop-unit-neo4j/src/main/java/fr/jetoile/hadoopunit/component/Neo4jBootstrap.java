@@ -25,7 +25,6 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.factory.GraphDatabaseFactory;
-import org.neo4j.graphdb.factory.GraphDatabaseSettings;
 import org.neo4j.kernel.configuration.BoltConnector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -104,7 +103,7 @@ public class Neo4jBootstrap implements Bootstrap {
 //                .setConfig(GraphDatabaseSettings.string_block_size, "60")
 //                .setConfig(GraphDatabaseSettings.array_block_size, "300")
                 .setConfig(bolt.enabled, "true")
-                .setConfig( bolt.type, "BOLT" )
+                .setConfig(bolt.type, "BOLT")
                 .setConfig(bolt.address, ip + ":" + port)
                 .newGraphDatabase();
     }
@@ -149,11 +148,6 @@ public class Neo4jBootstrap implements Bootstrap {
         } catch (IOException e) {
             LOGGER.error("unable to delete {}", configuration.getString(HadoopUnitConfig.NEO4J_TEMP_DIR_KEY), e);
         }
-    }
-
-    @Override
-    public org.apache.hadoop.conf.Configuration getConfiguration() {
-        throw new UnsupportedOperationException("the method getConfiguration can not be called on Neo4jBootstrap");
     }
 
     public GraphDatabaseService getNeo4jGraph() {

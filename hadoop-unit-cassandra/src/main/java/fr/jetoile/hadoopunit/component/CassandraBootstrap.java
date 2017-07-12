@@ -16,10 +16,8 @@ package fr.jetoile.hadoopunit.component;
 
 import com.datastax.driver.core.Session;
 import fr.jetoile.hadoopunit.Component;
-import fr.jetoile.hadoopunit.HadoopBootstrap;
 import fr.jetoile.hadoopunit.HadoopUnitConfig;
 import fr.jetoile.hadoopunit.exception.BootstrapException;
-import fr.jetoile.hadoopunit.exception.NotFoundServiceException;
 import info.archinnov.achilles.embedded.CassandraEmbeddedServerBuilder;
 import info.archinnov.achilles.embedded.CassandraShutDownHook;
 import org.apache.commons.configuration.Configuration;
@@ -40,17 +38,12 @@ public class CassandraBootstrap implements Bootstrap {
     final public static String NAME = Component.CASSANDRA.name();
 
     static final private Logger LOGGER = LoggerFactory.getLogger(CassandraBootstrap.class);
-
+    public Session session;
     private State state = State.STOPPED;
-
     private Configuration configuration;
-
     private CassandraShutDownHook shutdownHook;
-
     private int port;
     private String ip;
-
-    public Session session;
 
     public CassandraBootstrap() {
         try {
@@ -160,11 +153,6 @@ public class CassandraBootstrap implements Bootstrap {
         } catch (IOException e) {
             LOGGER.error("unable to delete {}", configuration.getString(HadoopUnitConfig.CASSANDRA_TEMP_DIR_KEY), e);
         }
-    }
-
-    @Override
-    public org.apache.hadoop.conf.Configuration getConfiguration() {
-        throw new UnsupportedOperationException("the method getConfiguration can not be called on CassandraBootstrap");
     }
 
     public Session getCassandraSession() {

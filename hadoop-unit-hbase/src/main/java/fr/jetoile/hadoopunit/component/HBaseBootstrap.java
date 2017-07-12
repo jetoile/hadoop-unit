@@ -28,7 +28,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 
-public class HBaseBootstrap implements Bootstrap {
+public class HBaseBootstrap implements BootstrapHadoop {
     final public static String NAME = Component.HBASE.name();
 
     static final private Logger LOGGER = LoggerFactory.getLogger(HBaseBootstrap.class);

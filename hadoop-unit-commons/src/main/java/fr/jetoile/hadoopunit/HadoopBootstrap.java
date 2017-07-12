@@ -15,12 +15,9 @@ package fr.jetoile.hadoopunit;
 
 import fr.jetoile.hadoopunit.component.Bootstrap;
 import fr.jetoile.hadoopunit.exception.NotFoundServiceException;
-import org.apache.commons.configuration.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.*;
-import java.nio.charset.Charset;
 import java.util.*;
 
 import static java.util.stream.Collectors.toList;
