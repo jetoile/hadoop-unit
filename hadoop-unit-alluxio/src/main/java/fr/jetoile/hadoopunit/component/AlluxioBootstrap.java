@@ -23,7 +23,6 @@ import fr.jetoile.hadoopunit.exception.BootstrapException;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.lang.StringUtils;
-import org.apache.hadoop.conf.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -193,11 +192,5 @@ public class AlluxioBootstrap implements Bootstrap {
         }
         return this;
     }
-
-    @Override
-    public Configuration getConfiguration() {
-        throw new UnsupportedOperationException("the method getConfiguration can not be called on AlluxioBootstrap");
-    }
-
 
 }

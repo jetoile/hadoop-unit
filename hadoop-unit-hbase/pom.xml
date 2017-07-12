@@ -17,7 +17,7 @@
 
         <dependency>
             <groupId>fr.jetoile.hadoop</groupId>
-            <artifactId>hadoop-unit-commons</artifactId>
+            <artifactId>hadoop-unit-commons-hadoop</artifactId>
             <exclusions>
                 <exclusion>
                     <groupId>org.codehaus.jackson</groupId>

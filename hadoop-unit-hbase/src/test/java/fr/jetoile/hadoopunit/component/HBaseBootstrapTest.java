@@ -72,7 +72,7 @@ public class HBaseBootstrapTest {
         String colFamName = configuration.getString(HadoopUnitConfig.HBASE_TEST_COL_FAMILY_NAME_KEY);
         String colQualiferName = configuration.getString(HadoopUnitConfig.HBASE_TEST_COL_QUALIFIER_NAME_KEY);
         Integer numRowsToPut = configuration.getInt(HadoopUnitConfig.HBASE_TEST_NUM_ROWS_TO_PUT_KEY);
-        org.apache.hadoop.conf.Configuration hbaseConfiguration = HadoopBootstrap.INSTANCE.getService(Component.HBASE).getConfiguration();
+        org.apache.hadoop.conf.Configuration hbaseConfiguration = ((BootstrapHadoop)HadoopBootstrap.INSTANCE.getService(Component.HBASE)).getConfiguration();
 
         LOGGER.info("HBASE: Deleting table {}", tableName);
         deleteHbaseTable(tableName, hbaseConfiguration);
@@ -113,7 +113,7 @@ public class HBaseBootstrapTest {
         String colFamName = configuration.getString(HadoopUnitConfig.HBASE_TEST_COL_FAMILY_NAME_KEY);
         String colQualiferName = configuration.getString(HadoopUnitConfig.HBASE_TEST_COL_QUALIFIER_NAME_KEY);
         Integer numRowsToPut = configuration.getInt(HadoopUnitConfig.HBASE_TEST_NUM_ROWS_TO_PUT_KEY);
-        org.apache.hadoop.conf.Configuration hbaseConfiguration = HadoopBootstrap.INSTANCE.getService(Component.HBASE).getConfiguration();
+        org.apache.hadoop.conf.Configuration hbaseConfiguration = ((BootstrapHadoop)HadoopBootstrap.INSTANCE.getService(Component.HBASE)).getConfiguration();
 
         LOGGER.info("HBASE: Deleting table {}", tableName);
         deleteHbaseTable(tableName, hbaseConfiguration);

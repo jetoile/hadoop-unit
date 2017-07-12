@@ -15,7 +15,7 @@
     <dependencies>
         <dependency>
             <groupId>fr.jetoile.hadoop</groupId>
-            <artifactId>hadoop-unit-commons</artifactId>
+            <artifactId>hadoop-unit-commons-hadoop</artifactId>
         </dependency>
         <dependency>
             <groupId>fr.jetoile.hadoop</groupId>

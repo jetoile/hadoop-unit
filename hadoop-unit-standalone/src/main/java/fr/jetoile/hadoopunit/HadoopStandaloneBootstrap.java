@@ -18,7 +18,6 @@ import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.WriterAppender;
 import org.apache.maven.repository.internal.MavenRepositorySystemUtils;
 import org.eclipse.aether.DefaultRepositorySystemSession;
 import org.eclipse.aether.RepositorySystem;
@@ -199,10 +198,6 @@ public class HadoopStandaloneBootstrap {
 
         urls.add(HadoopStandaloneBootstrap.class.getClassLoader().getResource("log4j.xml"));
         urls.add(HadoopStandaloneBootstrap.class.getClassLoader().getResource("logback.xml"));
-
-        if ("hiveserver2".equalsIgnoreCase(c)) {
-            urls.add(WriterAppender.class.getProtectionDomain().getCodeSource().getLocation());
-        }
 
         if ("solrcloud".equalsIgnoreCase(c)) {
             urls.add(HadoopStandaloneBootstrap.class.getClassLoader().getResource("solr"));

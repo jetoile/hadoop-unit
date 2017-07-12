@@ -77,7 +77,7 @@ public class HiveMetastoreBootstrapTest {
 
         // Create a table and display it back
         try {
-            HiveMetaStoreClient hiveClient = new HiveMetaStoreClient((HiveConf) HadoopBootstrap.INSTANCE.getService(Component.HIVEMETA).getConfiguration());
+            HiveMetaStoreClient hiveClient = new HiveMetaStoreClient((HiveConf) ((BootstrapHadoop)HadoopBootstrap.INSTANCE.getService(Component.HIVEMETA)).getConfiguration());
 
             hiveClient.dropTable(configuration.getString(HadoopUnitConfig.HIVE_TEST_DATABASE_NAME_KEY),
                     configuration.getString(HadoopUnitConfig.HIVE_TEST_TABLE_NAME_KEY),

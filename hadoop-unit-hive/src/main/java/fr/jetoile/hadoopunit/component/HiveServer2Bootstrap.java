@@ -32,7 +32,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 
-public class HiveServer2Bootstrap implements Bootstrap {
+public class HiveServer2Bootstrap implements BootstrapHadoop {
     final public static String NAME = Component.HIVESERVER2.name();
 
     static final private Logger LOGGER = LoggerFactory.getLogger(HiveServer2Bootstrap.class);

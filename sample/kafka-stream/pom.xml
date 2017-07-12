@@ -27,17 +27,17 @@
         <dependency>
             <groupId>fr.jetoile.hadoop</groupId>
             <artifactId>hadoop-unit-commons</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>com.microsoft.windowsazure.storage</groupId>
-                    <artifactId>microsoft-windowsazure-storage-sdk</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
 
         <dependency>
             <groupId>fr.jetoile.hadoop</groupId>
             <artifactId>hadoop-unit-client-kafka</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.codehaus.jettison</groupId>
+            <artifactId>jettison</artifactId>
             <scope>test</scope>
         </dependency>
 

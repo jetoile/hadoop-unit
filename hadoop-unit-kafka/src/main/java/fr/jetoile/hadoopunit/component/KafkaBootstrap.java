@@ -154,9 +154,4 @@ public class KafkaBootstrap implements Bootstrap {
         return this;
 
     }
-
-    @Override
-    public org.apache.hadoop.conf.Configuration getConfiguration() {
-        throw new UnsupportedOperationException("the method getConfiguration can not be called on KafkaBootstrap");
-    }
 }

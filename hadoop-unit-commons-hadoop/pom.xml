@@ -9,21 +9,19 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>hadoop-unit-hdfs</artifactId>
-    <name>hadoop-unit-hdfs</name>
-
+    <artifactId>hadoop-unit-commons-hadoop</artifactId>
+    <name>hadoop-unit-commons-hadoop</name>
 
     <dependencies>
         <dependency>
             <groupId>fr.jetoile.hadoop</groupId>
-            <artifactId>hadoop-unit-commons-hadoop</artifactId>
+            <artifactId>hadoop-unit-commons</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>com.github.sakserv</groupId>
-            <artifactId>hadoop-mini-clusters-hdfs</artifactId>
+            <groupId>org.apache.hadoop</groupId>
+            <artifactId>hadoop-common</artifactId>
         </dependency>
-
     </dependencies>
 
 </project>

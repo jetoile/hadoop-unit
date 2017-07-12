@@ -21,10 +21,6 @@
             <artifactId>hadoop-unit-commons</artifactId>
             <exclusions>
                 <exclusion>
-                    <groupId>org.slf4j</groupId>
-                    <artifactId>log4j-over-slf4j</artifactId>
-                </exclusion>
-                <exclusion>
                     <artifactId>org.mortbay.jetty</artifactId>
                     <groupId>org.eclipse.jetty</groupId>
                 </exclusion>

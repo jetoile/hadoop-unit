@@ -15,7 +15,6 @@
 package fr.jetoile.hadoopunit;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.WriterAppender;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -217,10 +216,6 @@ public class HadoopBootstrapStarter extends AbstractMojo {
         List<URL> urls = new ArrayList();
 
         Map<String, String> properties = c.getProperties();
-
-        if ("hiveserver2".equalsIgnoreCase(componentKey)) {
-            urls.add(WriterAppender.class.getProtectionDomain().getCodeSource().getLocation());
-        }
 
         if ("solrcloud".equalsIgnoreCase(componentKey)) {
 

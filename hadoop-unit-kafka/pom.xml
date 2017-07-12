@@ -49,6 +49,12 @@
         </dependency>
 
         <dependency>
+            <groupId>org.codehaus.jettison</groupId>
+            <artifactId>jettison</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
             <groupId>fr.jetoile.hadoop</groupId>
             <artifactId>hadoop-unit-client-kafka</artifactId>
             <scope>test</scope>

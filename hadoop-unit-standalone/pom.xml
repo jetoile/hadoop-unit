@@ -120,12 +120,6 @@
             <groupId>fr.jetoile.hadoop</groupId>
             <artifactId>hadoop-unit-client-hdfs</artifactId>
             <scope>test</scope>
-            <exclusions>
-                <exclusion>
-                    <artifactId>log4j</artifactId>
-                    <groupId>log4j</groupId>
-                </exclusion>
-            </exclusions>
         </dependency>
 
         <dependency>
@@ -170,10 +164,6 @@
                 <exclusion>
                     <artifactId>hadoop-auth</artifactId>
                     <groupId>org.apache.hadoop</groupId>
-                </exclusion>
-                <exclusion>
-                    <artifactId>log4j</artifactId>
-                    <groupId>log4j</groupId>
                 </exclusion>
             </exclusions>
         </dependency>

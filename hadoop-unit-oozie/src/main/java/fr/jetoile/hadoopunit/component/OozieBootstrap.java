@@ -43,7 +43,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class OozieBootstrap implements Bootstrap {
+public class OozieBootstrap implements BootstrapHadoop {
     final public static String NAME = Component.OOZIE.name();
 
     final private Logger LOGGER = LoggerFactory.getLogger(OozieBootstrap.class);
