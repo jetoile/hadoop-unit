@@ -10,6 +10,8 @@ hadoop-unit-standalone:
 
 [![Build Status](https://travis-ci.org/jetoile/hadoop-unit.svg?branch=master)](https://travis-ci.org/jetoile/hadoop-unit)
 
+For Windows users, redis is not supported...
+
 # Build
 
 For windows users, you need to download a hadoop distribution, to unzip it and to define the system environment variable `HADOOP_HOME`. You can also define the path into files `hadoop-unit-default.properties` (warning: there are a lot...).
@@ -70,6 +72,7 @@ The available components are:
 * NEO4J
 * KNOX
 * ALLUXIO
+* REDIS
 
 ## Integration testing (will start each component present into classpath)
 With maven, add dependencies of components which are needed
@@ -377,6 +380,7 @@ Values can be:
 * NEO4J
 * KNOX
 * ALLUXIO
+* REDIS
 
 It is also possible to override configurations with a list of `properties` which accept a map (ie. `<key>value</key>` and where `key` is a property from the file `hadoop-unit-default.properties`). 
 
@@ -534,6 +538,7 @@ Values can be:
 * NEO4J
 * KNOX
 * ALLUXIO
+* REDIS
 
 hadoopUnitPath is not mandatory but system enviroment variable HADOOP_UNIT_HOME must be defined. 
 
@@ -604,12 +609,14 @@ public class HdfsBootstrapIntegrationTest {
 * ElasticSearch 5.4.3
 * Neo4j 3.2.2
 * Alluxio 1.4.0
+* Redis 4.0.0
 
 Built on:
 * [hadoop-mini-cluster-0.1.12](https://github.com/sakserv/hadoop-mini-clusters) (aka. HDP 2.6.1.0)
 * [achilles-embedded-5.2.1](https://github.com/doanduyhai/Achilles)
 * [maven resolver](https://github.com/apache/maven-resolver/)
 * [embedded-elasticsearch](https://github.com/allegro/embedded-elasticsearch)
+* [redis-unit](https://github.com/ishiis/redis-unit)
 
 Use: 
 * download and unzip hadoop

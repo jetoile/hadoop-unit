@@ -174,4 +174,14 @@ public class HadoopUnitConfig {
     public static final String KNOX_CLUSTER_KEY = "knox.cluster";
     public static final String KNOX_HOME_DIR_KEY = "knox.home.dir";
     public static final String KNOX_SERVICE_KEY = "knox.service";
+
+    //Redis
+    public static final String REDIS_PORT_KEY = "redis.port";
+    public static final String REDIS_DOWNLOAD_URL_KEY = "redis.download.url";
+    public static final String REDIS_VERSION_KEY = "redis.version";
+    public static final String REDIS_CLEANUP_INSTALLATION_KEY = "redis.cleanup.installation";
+    public static final String REDIS_TYPE_KEY = "redis.type";
+    public static final String REDIS_SLAVE_PORT_KEY = "redis.slave.ports";
+    public static final String REDIS_SENTINEL_PORT_KEY = "redis.sentinel.ports";
+    public static final String REDIS_TMP_DIR_KEY = "redis.temp.dir";
 }
