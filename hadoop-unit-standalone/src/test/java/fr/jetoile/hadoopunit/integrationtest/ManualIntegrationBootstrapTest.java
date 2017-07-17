@@ -63,6 +63,7 @@ import org.junit.*;
 import org.neo4j.driver.v1.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import redis.clients.jedis.Jedis;
 
 import javax.net.ssl.*;
 import java.io.*;
@@ -525,6 +526,15 @@ public class ManualIntegrationBootstrapTest {
             String line = response.readLine();
             assertTrue(line.contains("{ NAME=> 'hbase_test_table', IS_META => 'false', COLUMNS => [ { NAME => 'cf1', BLOOMFILTER => 'ROW'"));
         }
+    }
+
+
+    @Test
+    public void testStartAndStopServerMode() throws InterruptedException {
+        Jedis jedis = new Jedis("127.0.0.1", configuration.getInt(HadoopUnitConfig.REDIS_PORT_KEY));
+        Assert.assertNotNull(jedis.info());
+        System.out.println(jedis.info());
+        jedis.close();
     }
 
     @Test

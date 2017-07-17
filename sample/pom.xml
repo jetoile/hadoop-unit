@@ -18,6 +18,7 @@
         <module>spark-streaming-cassandra</module>
         <module>all</module>
         <module>knox-hbase-webhdfs</module>
+        <module>redis</module>
     </modules>
 
     <artifactId>sample</artifactId>

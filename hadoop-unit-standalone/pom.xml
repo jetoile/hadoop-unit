@@ -20,6 +20,7 @@
         <oozie-client.version>4.2.0.2.5.3.0-37</oozie-client.version>
         <hbase-client.version>1.2.3</hbase-client.version>
         <alluxio-core-client.version>1.4.0</alluxio-core-client.version>
+        <jedis.version>2.9.0</jedis.version>
     </properties>
 
     <dependencies>
@@ -102,6 +103,10 @@
                     <artifactId>jsr305</artifactId>
                 </exclusion>
             </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
         </dependency>
 
         <dependency>
@@ -188,10 +193,11 @@
             <version>5.4.3</version>
             <scope>test</scope>
         </dependency>
+
         <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpclient</artifactId>
-            <version>4.5.3</version>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
+            <version>${jedis.version}</version>
             <scope>test</scope>
         </dependency>
 

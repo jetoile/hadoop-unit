@@ -67,6 +67,7 @@
         <module>hadoop-unit-knox</module>
         <module>hadoop-unit-alluxio</module>
         <module>hadoop-unit-windowslibs</module>
+        <module>hadoop-unit-redis</module>
     </modules>
 
     <repositories>
@@ -159,6 +160,10 @@
         <log4j-to-slf4j.version>2.7</log4j-to-slf4j.version>
         <jettison.version>1.3.8</jettison.version>
         <apache-commons-io.version>1.3.2</apache-commons-io.version>
+        <commons-lang3.version>3.6</commons-lang3.version>
+        <ant.version>1.10.1</ant.version>
+        <redis-unit.version>1.0.3</redis-unit.version>
+        <plexus.version>2.2</plexus.version>
     </properties>
 
 
@@ -607,6 +612,12 @@
             </dependency>
 
             <dependency>
+                <groupId>net.ishiis.redis</groupId>
+                <artifactId>redis-unit</artifactId>
+                <version>${redis-unit.version}</version>
+            </dependency>
+
+            <dependency>
                 <groupId>com.lucidworks.spark</groupId>
                 <artifactId>spark-solr</artifactId>
                 <version>${spark-solr.version}</version>
@@ -716,6 +727,24 @@
                 <groupId>commons-io</groupId>
                 <artifactId>commons-io</artifactId>
                 <version>${commons-io.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>${commons-lang3.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.ant</groupId>
+                <artifactId>ant</artifactId>
+                <version>${ant.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.codehaus.plexus</groupId>
+                <artifactId>plexus-archiver</artifactId>
+                <version>${plexus.version}</version>
             </dependency>
 
             <dependency>
