@@ -63,11 +63,11 @@
         <module>hadoop-unit-mongodb</module>
         <module>hadoop-unit-elasticsearch</module>
         <module>hadoop-unit-neo4j</module>
-        <module>sample</module>
         <module>hadoop-unit-knox</module>
         <module>hadoop-unit-alluxio</module>
         <module>hadoop-unit-windowslibs</module>
         <module>hadoop-unit-redis</module>
+        <module>sample</module>
     </modules>
 
     <repositories>
