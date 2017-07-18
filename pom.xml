@@ -47,7 +47,7 @@
 
     <modules>
         <module>hadoop-unit-kafka</module>
-        <module>hadoop-unit-oozie</module>
+        <!--<module>hadoop-unit-oozie</module>-->
         <module>hadoop-unit-hive</module>
         <module>hadoop-unit-zookeeper</module>
         <module>hadoop-unit-solr</module>
@@ -63,11 +63,11 @@
         <module>hadoop-unit-mongodb</module>
         <module>hadoop-unit-elasticsearch</module>
         <module>hadoop-unit-neo4j</module>
-        <module>hadoop-unit-knox</module>
-        <module>hadoop-unit-alluxio</module>
+        <!--<module>hadoop-unit-knox</module>-->
+        <!--<module>hadoop-unit-alluxio</module>-->
         <module>hadoop-unit-windowslibs</module>
         <module>hadoop-unit-redis</module>
-        <module>sample</module>
+        <!--<module>sample</module>-->
     </modules>
 
     <repositories>
@@ -75,6 +75,10 @@
             <id>public.repo.hortonworks.com</id>
             <name>Public Hortonworks Maven Repo</name>
             <url>http://repo.hortonworks.com/content/groups/public/</url>
+        </repository>
+        <repository>
+            <id>cloudera</id>
+            <url>https://repository.cloudera.com/artifactory/cloudera-repos/</url>
         </repository>
     </repositories>
 
@@ -129,15 +133,28 @@
         <commons-configuration.version>1.10</commons-configuration.version>
         <commons-collections.version>3.2.1</commons-collections.version>
 
-        <hive.version>1.2.1000.2.6.1.0-129</hive.version>
+        <hive.version>1.1.0-cdh5.12.0</hive.version>
         <solr.version>6.1.0</solr.version>
         <hadoop-mini-clusters.version>0.1.12</hadoop-mini-clusters.version>
-        <oozie.version>4.2.0.2.6.1.0-129</oozie.version>
-        <hadoop.version>2.7.3.2.6.1.0-129</hadoop.version>
+        <oozie.version>4.1.0-cdh5.12.0</oozie.version>
+        <hadoop.version>2.6.0-cdh5.12.0</hadoop.version>
 
         <spark_2.10.version>1.6.2</spark_2.10.version>
         <spark-solr.version>1.1.2</spark-solr.version>
-        <kafka_2.10.version>0.10.1.2.6.1.0-129</kafka_2.10.version>
+        <kafka_2.10.version>0.10.2-kafka-2.2.0</kafka_2.10.version>
+
+
+        <embedded-mongo.version>2.0.0</embedded-mongo.version>
+
+        <!--<hive.version>1.2.1000.2.6.1.0-129</hive.version>-->
+        <!--<solr.version>6.1.0</solr.version>-->
+        <!--<hadoop-mini-clusters.version>0.1.12</hadoop-mini-clusters.version>-->
+        <!--<oozie.version>4.2.0.2.6.1.0-129</oozie.version>-->
+        <!--<hadoop.version>2.7.3.2.6.1.0-129</hadoop.version>-->
+
+        <!--<spark_2.10.version>1.6.2</spark_2.10.version>-->
+        <!--<spark-solr.version>1.1.2</spark-solr.version>-->
+        <!--<kafka_2.10.version>0.10.1.2.6.1.0-129</kafka_2.10.version>-->
         <knox.version>0.12.0.2.6.1.0-129</knox.version>
 
         <dbSetup.version>2.1.0</dbSetup.version>
