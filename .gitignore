@@ -13,5 +13,4 @@ rebel.xml
 **/metastore_db
 **/embedded_kafka
 **/dependency-reduced-pom.xml
-**/.*
 sample/solr-parquet-spark/src/test/resources/solr/collection1/data
