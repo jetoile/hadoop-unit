@@ -19,10 +19,15 @@ import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.fusesource.jansi.Ansi;
+import org.fusesource.jansi.AnsiConsole;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
+
+import static org.fusesource.jansi.Ansi.Color.BLUE;
+import static org.fusesource.jansi.Ansi.ansi;
 
 public enum HadoopUtils {
     INSTANCE;
@@ -73,6 +78,12 @@ public enum HadoopUtils {
         }
     }
 
+    public static void printColorLine(PrintStream out, Ansi.Color color, String line) {
+        AnsiConsole.systemInstall();
+        out.println(ansi().fg(color).a(line).reset());
+        AnsiConsole.systemUninstall();
+    }
+
     private void extractAndLoadDll(String lib) throws IOException {
         InputStream in = HadoopUtils.class.getResourceAsStream(lib);
         // always write to different location
@@ -113,7 +124,7 @@ public enum HadoopUtils {
             BufferedReader br = new BufferedReader(new InputStreamReader(banner));
             String line = null;
             while ((line = br.readLine()) != null) {
-                out.println(line);
+                printColorLine(out, BLUE, line);
             }
         } catch (Exception ex) {
             LOGGER.warn("Banner not printable", ex);

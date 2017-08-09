@@ -123,7 +123,7 @@
         <hadoop-unit.version>${project.version}</hadoop-unit.version>
 
         <slf4j.version>1.7.12</slf4j.version>
-        <logback-classic.version>1.1.3</logback-classic.version>
+        <logback-classic.version>1.2.3</logback-classic.version>
 
         <commons-io.version>2.5</commons-io.version>
         <commons-configuration.version>1.10</commons-configuration.version>
@@ -166,11 +166,23 @@
         <ant.version>1.10.1</ant.version>
         <redis-unit.version>1.0.3</redis-unit.version>
         <plexus.version>2.2</plexus.version>
+        <jansi.version>1.16</jansi.version>
     </properties>
 
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>org.fusesource.jansi</groupId>
+                <artifactId>jansi</artifactId>
+                <version>${jansi.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-classic</artifactId>
+                <version>${logback-classic.version}</version>
+            </dependency>
 
             <dependency>
                 <groupId>com.ninja-squad</groupId>

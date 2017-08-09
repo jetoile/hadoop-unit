@@ -57,6 +57,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static org.fusesource.jansi.Ansi.Color.GREEN;
+
 
 @Mojo(name = "embedded-start", defaultPhase = LifecyclePhase.PRE_INTEGRATION_TEST, threadSafe = false)
 public class HadoopBootstrapStarter extends AbstractMojo {
@@ -200,8 +202,7 @@ public class HadoopBootstrapStarter extends AbstractMojo {
                 } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
                     getLog().error("unable to reflect main", e);
                 }
-
-                System.out.println("\t\t - " + name + " " + prop);
+                HadoopUtils.printColorLine(System.out, GREEN, "\t\t - " + name + " " + prop);
             }
         });
         System.out.println();

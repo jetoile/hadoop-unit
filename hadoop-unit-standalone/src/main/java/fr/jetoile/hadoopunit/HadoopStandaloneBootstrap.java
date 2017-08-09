@@ -53,6 +53,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.fusesource.jansi.Ansi.Color.GREEN;
+
 public class HadoopStandaloneBootstrap {
 
     final private static Logger LOGGER = LoggerFactory.getLogger(HadoopStandaloneBootstrap.class);
@@ -186,8 +188,7 @@ public class HadoopStandaloneBootstrap {
                 } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
                     LOGGER.error("unable to reflect main", e);
                 }
-
-                System.out.println("\t\t - " + name + " " + prop);
+                HadoopUtils.printColorLine(System.out, GREEN, "\t\t - " + name + " " + prop);
             }
         });
         System.out.println();

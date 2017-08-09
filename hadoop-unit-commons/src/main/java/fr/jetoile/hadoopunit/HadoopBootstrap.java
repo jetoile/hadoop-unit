@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory;
 import java.util.*;
 
 import static java.util.stream.Collectors.toList;
+import static org.fusesource.jansi.Ansi.Color.GREEN;
 
 public enum HadoopBootstrap {
     INSTANCE;
@@ -101,7 +102,7 @@ public enum HadoopBootstrap {
             startService(c);
         });
         HadoopUtils.INSTANCE.printBanner(System.out);
-        componentsToStart.stream().forEach(c -> System.out.println("\t\t - " + c.getName() + " " + c.getProperties()));
+        componentsToStart.stream().forEach(c -> HadoopUtils.printColorLine(System.out, GREEN, "\t\t - " + c.getName() + " " + c.getProperties()));
         System.out.println();
     }
 

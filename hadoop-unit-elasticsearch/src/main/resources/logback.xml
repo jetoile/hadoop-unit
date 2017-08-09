@@ -1,14 +1,29 @@
 <configuration>
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <pattern>%d{HH:mm:ss.SSS} %-5level %logger{36} - %msg%n
+            <pattern>%d{HH:mm:ss.SSS} %-5level %logger{36} - %msg %n
 
             </pattern>
         </encoder>
     </appender>
 
+    <appender name="STDOUT_COLOR" class="ch.qos.logback.core.ConsoleAppender">
+        <withJansi>true</withJansi>
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} %-5level %logger{36} - %green(%msg) %n
+
+            </pattern>
+        </encoder>
+    </appender>
+
+    <logger name="BlockStateChange" level="OFF"/>
+    <logger name="BlockManager" level="OFF"/>
+
     <root level="info">
         <appender-ref ref="STDOUT" />
     </root>
 
+    <logger name="fr.jetoile.hadoopunit" level="INFO">
+        <appender-ref ref="STDOUT_COLOR" />
+    </logger>
 </configuration>
