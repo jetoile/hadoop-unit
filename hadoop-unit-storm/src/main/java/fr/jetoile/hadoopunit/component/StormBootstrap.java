@@ -160,11 +160,6 @@ public class StormBootstrap implements Bootstrap {
         return this;
     }
 
-    @Override
-    public Configuration getConfiguration() {
-        throw new UnsupportedOperationException("the method getConfiguration can not be called on StormBootstrap");
-    }
-
     public StormLocalCluster getStormLocalCluster() {
         return stormLocalCluster;
     }

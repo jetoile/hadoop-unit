@@ -19,6 +19,7 @@
         <module>all</module>
         <module>knox-hbase-webhdfs</module>
         <module>redis</module>
+        <module>storm</module>
     </modules>
 
     <artifactId>sample</artifactId>
