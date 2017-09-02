@@ -54,6 +54,7 @@
         <module>hadoop-unit-solrcloud</module>
         <module>hadoop-unit-hdfs</module>
         <module>hadoop-unit-hbase</module>
+        <module>hadoop-unit-yarn</module>
         <module>hadoop-unit-standalone</module>
         <module>hadoop-unit-commons</module>
         <module>hadoop-unit-commons-hadoop</module>

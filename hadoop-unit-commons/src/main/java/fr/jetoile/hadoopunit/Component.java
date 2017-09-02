@@ -20,6 +20,7 @@ package fr.jetoile.hadoopunit;
 public enum Component {
     HDFS("hdfs", "fr.jetoile.hadoopunit.component.HdfsBootstrap", "hdfs.artifact"),
     ZOOKEEPER("zookeeper", "fr.jetoile.hadoopunit.component.ZookeeperBootstrap", "zookeeper.artifact"),
+    YARN("yarn", "fr.jetoile.hadoopunit.component.YarnBootstrap", "yarn.artifact"),
     ALLUXIO("alluxio", "fr.jetoile.hadoopunit.component.AlluxioBootstrap", "alluxio.artifact"),
     HIVEMETA("hivemeta", "fr.jetoile.hadoopunit.component.HiveMetastoreBootstrap", "hivemeta.artifact"),
     HIVESERVER2("hiveserver2", "fr.jetoile.hadoopunit.component.HiveServer2Bootstrap", "hiveserver2.artifact"),

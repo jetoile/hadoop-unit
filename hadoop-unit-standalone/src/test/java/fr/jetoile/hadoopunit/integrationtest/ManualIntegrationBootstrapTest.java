@@ -23,9 +23,12 @@ import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.Session;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mongodb.*;
+import fr.jetoile.hadoopunit.Component;
+import fr.jetoile.hadoopunit.HadoopBootstrap;
 import fr.jetoile.hadoopunit.HadoopUnitConfig;
 import fr.jetoile.hadoopunit.exception.BootstrapException;
 import fr.jetoile.hadoopunit.exception.NotFoundServiceException;
+import fr.jetoile.hadoopunit.integrationtest.simpleyarnapp.Client;
 import fr.jetoile.hadoopunit.test.alluxio.AlluxioUtils;
 import fr.jetoile.hadoopunit.test.hdfs.HdfsUtils;
 import fr.jetoile.hadoopunit.test.kafka.KafkaConsumerUtils;
@@ -70,6 +73,9 @@ import java.io.*;
 import java.net.*;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
@@ -786,6 +792,29 @@ public class ManualIntegrationBootstrapTest {
         assertEquals("King", results.get(0).get("title").asString());
         assertEquals("Arthur", results.get(0).get("name").asString());
     }
+
+    @Test
+    public void testYarnLocalClusterIntegrationTest() {
+
+        String[] args = new String[7];
+        args[0] = "whoami";
+        args[1] = "1";
+        args[2] = getClass().getClassLoader().getResource("simple-yarn-app-1.1.0.jar").toString();
+        args[3] = configuration.getString(HadoopUnitConfig.YARN_RESOURCE_MANAGER_ADDRESS_KEY);
+        args[4] = configuration.getString(HadoopUnitConfig.YARN_RESOURCE_MANAGER_HOSTNAME_KEY);
+        args[5] = configuration.getString(HadoopUnitConfig.YARN_RESOURCE_MANAGER_SCHEDULER_ADDRESS_KEY);
+        args[6] = configuration.getString(HadoopUnitConfig.YARN_RESOURCE_MANAGER_RESOURCE_TRACKER_ADDRESS_KEY);
+
+
+        try {
+            Client.main(args);
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
 
 }
 
