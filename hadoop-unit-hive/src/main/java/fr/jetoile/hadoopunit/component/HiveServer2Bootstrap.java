@@ -151,7 +151,7 @@ public class HiveServer2Bootstrap implements BootstrapHadoop {
         WindowsLibsUtils.setHadoopHome();
 
         HiveConf hiveConf = new HiveConf();
-        hiveConf.set("fs.defaultFS", "hdfs://localhost:20112");
+        hiveConf.set("fs.defaultFS", "hdfs://" + configuration.getString(HadoopUnitConfig.HDFS_NAMENODE_HOST_KEY) + ":" + configuration.getInt(HadoopUnitConfig.HDFS_NAMENODE_PORT_KEY));
 //        hiveConf.set(HiveConf.ConfVars.HIVE_TXN_MANAGER.varname, "org.apache.hadoop.hive.ql.lockmgr.DbTxnManager");
 //        hiveConf.set(HiveConf.ConfVars.HIVE_COMPACTOR_INITIATOR_ON.varname, "true");
 //        hiveConf.set(HiveConf.ConfVars.HIVE_COMPACTOR_WORKER_THREADS.varname, "5");
