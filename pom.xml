@@ -132,7 +132,7 @@
 
         <hive.version>1.2.1000.2.6.1.0-129</hive.version>
         <solr.version>6.1.0</solr.version>
-        <hadoop-mini-clusters.version>0.1.12</hadoop-mini-clusters.version>
+        <hadoop-mini-clusters.version>0.1.13</hadoop-mini-clusters.version>
         <oozie.version>4.2.0.2.6.1.0-129</oozie.version>
         <hadoop.version>2.7.3.2.6.1.0-129</hadoop.version>
 
