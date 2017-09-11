@@ -198,6 +198,12 @@
             </dependency>
 
             <dependency>
+                <groupId>org.apache.hive.hcatalog</groupId>
+                <artifactId>hive-hcatalog-core</artifactId>
+                <version>${hive.version}</version>
+            </dependency>
+
+            <dependency>
                 <groupId>fr.jetoile.hadoop</groupId>
                 <artifactId>hadoop-unit-client-solrcloud</artifactId>
                 <version>${hadoop-unit.version}</version>
