@@ -62,8 +62,8 @@ public class YarnBootstrap implements BootstrapHadoop {
         return "[" +
                 "RM address:" + yarnRMAddress +
                 ", RM Scheduler address:" + yarnRMSchedulerAddress +
-                ", RM Resource Tracker address:" + yarnRMSchedulerAddress +
-                ", RM Webapp address:" + yarnRMSchedulerAddress +
+                ", RM Resource Tracker address:" + yarnRMResourceTrackerAddress +
+                ", RM Webapp address:" + yarnRMWebappAddress +
                 ", InJvmContainer:" + inJvmContainer +
                 "]";
     }
