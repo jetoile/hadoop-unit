@@ -67,15 +67,13 @@ public class ElasticSearchBootstrap implements Bootstrap {
 
     @Override
     public String getProperties() {
-        return "[" +
-                "clusterName:" + clusterName +
-                ", ip:" + ip +
-                ", httpPort:" + httpPort +
-                ", tcpPort:" + tcpPort +
-                ", indexName:" + indexName +
-                ", version:" + version +
-                (StringUtils.isNotEmpty(downloadUrl) ? ", downloadUrl: " + downloadUrl : "") +
-                "]";
+        return "\n \t\t\t clusterName:" + clusterName +
+                "\n \t\t\t ip:" + ip +
+                "\n \t\t\t httpPort:" + httpPort +
+                "\n \t\t\t tcpPort:" + tcpPort +
+                "\n \t\t\t indexName:" + indexName +
+                "\n \t\t\t version:" + version +
+                (StringUtils.isNotEmpty(downloadUrl) ? "\n \t\t\t downloadUrl: " + downloadUrl : "");
     }
 
     private void loadConfig() throws BootstrapException {

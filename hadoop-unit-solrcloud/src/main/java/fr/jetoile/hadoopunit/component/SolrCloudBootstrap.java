@@ -75,11 +75,9 @@ public class SolrCloudBootstrap implements Bootstrap {
 
     @Override
     public String getProperties() {
-        return "[" +
-                "zh:" + zkHostString +
-                ", port:" + solrPort +
-                ", collection:" + solrCollectionName +
-                "]";
+        return "\n \t\t\t zh:" + zkHostString +
+                "\n \t\t\t port:" + solrPort +
+                "\n \t\t\t collection:" + solrCollectionName;
     }
 
     private void build() {

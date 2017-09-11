@@ -85,13 +85,12 @@ public class RedisBootstrap implements Bootstrap {
 
     @Override
     public String getProperties() {
-        return "[" +
-                "masterPort:" + masterPort +
-                ", version:" + version +
-                ", type:" + type.name() +
-                (slavePorts.size() != 0 && type!=RedisType.SERVER ? ", slavePorts: " + slavePorts : "") +
-                (sentinelPorts.size() != 0 && type == RedisType.SENTINEL ? ", sentinelPorts: " + sentinelPorts : "") +
-                "]";
+        return
+ 			 "\n \t\t\t masterPort:" + masterPort +
+                "\n \t\t\t version:" + version +
+                "\n \t\t\t type:" + type.name() +
+                (slavePorts.size() != 0 && type!=RedisType.SERVER ? "\n \t\t\t slavePorts: " + slavePorts : "") +
+                (sentinelPorts.size() != 0 && type == RedisType.SENTINEL ? "\n \t\t\t sentinelPorts: " + sentinelPorts : "");
     }
 
     private void loadConfig() throws BootstrapException {

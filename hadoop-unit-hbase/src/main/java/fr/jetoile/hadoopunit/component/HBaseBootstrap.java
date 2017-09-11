@@ -71,10 +71,8 @@ public class HBaseBootstrap implements BootstrapHadoop {
 
     @Override
     public String getProperties() {
-        return "[" +
-                "port:" + port +
-                ", restPort:" + restPort +
-                "]";
+        return "\n \t\t\t port:" + port +
+                "\n \t\t\t restPort:" + restPort;
     }
 
     private void init() {

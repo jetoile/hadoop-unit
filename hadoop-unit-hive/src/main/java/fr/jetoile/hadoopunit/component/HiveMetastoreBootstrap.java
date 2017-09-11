@@ -65,9 +65,7 @@ public class HiveMetastoreBootstrap implements BootstrapHadoop {
 
     @Override
     public String getProperties() {
-        return "[" +
-                "port:" + port +
-                "]";
+        return "\n \t\t\t port:" + port;
     }
 
     private void loadConfig() throws BootstrapException {

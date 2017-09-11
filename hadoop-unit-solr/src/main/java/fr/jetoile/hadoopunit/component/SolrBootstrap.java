@@ -68,9 +68,7 @@ public class SolrBootstrap implements Bootstrap {
 
     @Override
     public String getProperties() {
-        return "[" +
-                "collection:" + solrCollectionInternalName +
-                "]";
+        return  "\n \t\t\t collection:" + solrCollectionInternalName;
     }
 
     private void loadConfig() throws BootstrapException {

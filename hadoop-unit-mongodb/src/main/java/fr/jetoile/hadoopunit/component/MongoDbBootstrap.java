@@ -59,10 +59,8 @@ public class MongoDbBootstrap implements Bootstrap {
 
     @Override
     public String getProperties() {
-        return "[" +
-                "ip:" + ip +
-                ", port:" + port +
-                "]";
+        return "\n \t\t\t ip:" + ip +
+                "\n \t\t\t port:" + port;
     }
 
     private void loadConfig() throws BootstrapException {

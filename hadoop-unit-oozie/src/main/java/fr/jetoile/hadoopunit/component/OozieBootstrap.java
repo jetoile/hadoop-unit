@@ -101,11 +101,9 @@ public class OozieBootstrap implements BootstrapHadoop {
 
     @Override
     public String getProperties() {
-        return "[" +
-                "host:" + oozieHost +
-                ", port:" + ooziePort +
-                ", resourceManager address: " + resourceManagerWebappAddress +
-                "]";
+        return "\n \t\t\t host:" + oozieHost +
+                "\n \t\t\t port:" + ooziePort +
+                "\n \t\t\t resourceManager address: " + resourceManagerWebappAddress;
     }
 
     private void init() {

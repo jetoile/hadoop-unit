@@ -59,13 +59,11 @@ public class YarnBootstrap implements BootstrapHadoop {
 
     @Override
     public String getProperties() {
-        return "[" +
-                "RM address:" + yarnRMAddress +
-                ", RM Scheduler address:" + yarnRMSchedulerAddress +
-                ", RM Resource Tracker address:" + yarnRMResourceTrackerAddress +
-                ", RM Webapp address:" + yarnRMWebappAddress +
-                ", InJvmContainer:" + inJvmContainer +
-                "]";
+        return "\n \t\t\t RM address:" + yarnRMAddress +
+                "\n \t\t\t RM Scheduler address:" + yarnRMSchedulerAddress +
+                "\n \t\t\t RM Resource Tracker address:" + yarnRMResourceTrackerAddress +
+                "\n \t\t\t RM Webapp address:" + yarnRMWebappAddress +
+                "\n \t\t\t InJvmContainer:" + inJvmContainer;
     }
 
     private void build() throws NotFoundServiceException {

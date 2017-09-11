@@ -67,12 +67,10 @@ public class AlluxioBootstrap implements Bootstrap {
 
     @Override
     public String getProperties() {
-        return "[" +
-                "ip:" + hostname +
-                ", port:" + masterRpcPort +
-                ", WebPort:" + masterWebPort +
-                ", RpcPort:" + masterRpcPort +
-                "]";
+        return "\n \t\t\t ip:" + hostname +
+                "\n \t\t\t port:" + masterRpcPort +
+                "\n \t\t\t WebPort:" + masterWebPort +
+                "\n \t\t\t RpcPort:" + masterRpcPort;
     }
 
     private void init() {

@@ -69,11 +69,9 @@ public class KnoxBootstrap implements Bootstrap {
 
     @Override
     public String getProperties() {
-        return "[" +
-                "port:" + port +
-                ", path:" + path +
-                ", cluster:" + clusterName +
-                "]";
+        return "\n \t\t\t port:" + port +
+                "\n \t\t\t path:" + path +
+                "\n \t\t\t cluster:" + clusterName;
     }
 
     private void init() {
