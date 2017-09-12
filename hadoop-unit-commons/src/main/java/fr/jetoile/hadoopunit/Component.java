@@ -24,6 +24,7 @@ public enum Component {
     ALLUXIO("alluxio", "fr.jetoile.hadoopunit.component.AlluxioBootstrap", "alluxio.artifact"),
     HIVEMETA("hivemeta", "fr.jetoile.hadoopunit.component.HiveMetastoreBootstrap", "hivemeta.artifact"),
     HIVESERVER2("hiveserver2", "fr.jetoile.hadoopunit.component.HiveServer2Bootstrap", "hiveserver2.artifact"),
+    WEBHCAT("webhcat", "fr.jetoile.hadoopunit.component.WebHCatBootstrap", "webhcat.artifact"),
     KAFKA("kafka", "fr.jetoile.hadoopunit.component.KafkaBootstrap", "kafka.artifact"),
     HBASE("hbase", "fr.jetoile.hadoopunit.component.HBaseBootstrap", "hbase.artifact"),
     OOZIE("oozie", "fr.jetoile.hadoopunit.component.OozieBootstrap", "oozie.artifact"),
