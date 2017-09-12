@@ -68,6 +68,7 @@
         <module>hadoop-unit-alluxio</module>
         <module>hadoop-unit-windowslibs</module>
         <module>hadoop-unit-redis</module>
+        <module>hadoop-unit-webhcat</module>
         <module>sample</module>
     </modules>
 

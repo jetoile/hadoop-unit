@@ -43,6 +43,8 @@ public class HadoopUnitConfig {
     public static final String HIVE_SERVER2_HOSTNAME_KEY = "hive.server2.hostname";
     public static final String HIVE_SERVER2_PORT_KEY = "hive.server2.port";
 
+    public static final String WEBHCAT_PORT_KEY = "webhcat.port";
+
     // Hive Test
     public static final String HIVE_TEST_DATABASE_NAME_KEY = "hive.test.database.name";
     public static final String HIVE_TEST_TABLE_NAME_KEY = "hive.test.table.name";
