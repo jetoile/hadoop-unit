@@ -21,8 +21,8 @@
             <outputDirectory>/</outputDirectory>
             <excludes>
                 <exclude>bin/hadoop-unit-standalone</exclude>
-                <exclude>bin/wrapper-linux-x86-32</exclude>
                 <exclude>bin/wrapper-linux-x86-64</exclude>
+                <exclude>bin/wrapper-macosx-universal-64</exclude>
             </excludes>
             <fileMode>640</fileMode>
             <directoryMode>750</directoryMode>
