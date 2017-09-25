@@ -72,6 +72,11 @@
         </dependency>
 
         <dependency>
+            <groupId>org.apache.knox</groupId>
+            <artifactId>gateway-service-oozie</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>fr.jetoile.hadoop</groupId>
             <artifactId>hadoop-unit-client-hdfs</artifactId>
             <scope>test</scope>

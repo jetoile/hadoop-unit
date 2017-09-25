@@ -18,7 +18,6 @@ import com.mycila.xmltool.XMLDoc;
 import com.mycila.xmltool.XMLTag;
 import fr.jetoile.hadoopunit.Component;
 import fr.jetoile.hadoopunit.HadoopUnitConfig;
-import fr.jetoile.hadoopunit.HadoopUtils;
 import fr.jetoile.hadoopunit.exception.BootstrapException;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
@@ -92,40 +91,47 @@ public class KnoxBootstrap implements Bootstrap {
     String getTopology(List<KnoxService> services) {
 
         XMLTag xmlTag = XMLDoc.newDocument(true)
-            .addRoot("topology")
+                .addRoot("topology")
                 .addTag("gateway")
-                    .addTag("provider")
-                        .addTag("role").addText("authentication")
-                        .addTag("enabled").addText("false")
-                        .gotoParent()
-                    .addTag("provider")
-                        .addTag("role").addText("identity-assertion")
-                        .addTag("enabled").addText("false")
-                    .gotoParent().gotoParent();
+                .addTag("provider")
+                .addTag("role").addText("authentication")
+                .addTag("enabled").addText("false")
+                .gotoParent()
+                .addTag("provider")
+                .addTag("role").addText("identity-assertion")
+                .addTag("enabled").addText("false")
+                .gotoParent().gotoParent();
 
         for (KnoxService service : services) {
             switch (service) {
                 case NAMENODE:
                     xmlTag
                             .addTag("service")
-                                .addTag("role").addText(service.name())
-                                .addTag("url").addText("hdfs://" + configuration.getString(HadoopUnitConfig.HDFS_NAMENODE_HOST_KEY) + ":" + configuration.getString(HadoopUnitConfig.HDFS_NAMENODE_PORT_KEY))
-                                .gotoParent();
+                            .addTag("role").addText(service.name())
+                            .addTag("url").addText("hdfs://" + configuration.getString(HadoopUnitConfig.HDFS_NAMENODE_HOST_KEY) + ":" + configuration.getString(HadoopUnitConfig.HDFS_NAMENODE_PORT_KEY))
+                            .gotoParent();
                     break;
                 case WEBHDFS:
                     xmlTag
                             .addTag("service")
-                                .addTag("role").addText(service.name())
-                                .addTag("url").addText("http://" + configuration.getString(HadoopUnitConfig.HDFS_NAMENODE_HOST_KEY) + ":" + configuration.getString(HadoopUnitConfig.HDFS_NAMENODE_HTTP_PORT_KEY) + "/webhdfs")
-                                .gotoParent();
+                            .addTag("role").addText(service.name())
+                            .addTag("url").addText("http://" + configuration.getString(HadoopUnitConfig.HDFS_NAMENODE_HOST_KEY) + ":" + configuration.getString(HadoopUnitConfig.HDFS_NAMENODE_HTTP_PORT_KEY) + "/webhdfs")
+                            .gotoParent();
                     break;
                 case WEBHBASE:
-                xmlTag
+                    xmlTag
                             .addTag("service")
-                                .addTag("role").addText(service.name())
-                                .addTag("url").addText("http://" + configuration.getString(HadoopUnitConfig.HBASE_REST_HOST_KEY) + ":" + configuration.getString(HadoopUnitConfig.HBASE_REST_PORT_KEY))
-                                .gotoParent();
-                break;
+                            .addTag("role").addText(service.name())
+                            .addTag("url").addText("http://" + configuration.getString(HadoopUnitConfig.HBASE_REST_HOST_KEY) + ":" + configuration.getString(HadoopUnitConfig.HBASE_REST_PORT_KEY))
+                            .gotoParent();
+                    break;
+                case OOZIE:
+                    xmlTag
+                            .addTag("service")
+                            .addTag("role").addText(service.name())
+                            .addTag("url").addText("http://" + configuration.getString(HadoopUnitConfig.OOZIE_HOST) + ":" + configuration.getString(HadoopUnitConfig.OOZIE_PORT) + "/oozie")
+                            .gotoParent();
+                    break;
             }
         }
 
