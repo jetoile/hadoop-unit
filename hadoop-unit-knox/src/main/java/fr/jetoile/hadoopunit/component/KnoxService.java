@@ -16,7 +16,8 @@ package fr.jetoile.hadoopunit.component;
 public enum KnoxService {
     NAMENODE("namenode"),
     WEBHDFS("webhdfs"),
-    WEBHBASE("webhbase");
+    WEBHBASE("webhbase"),
+    OOZIE("oozie");
 
     private String name;
 
