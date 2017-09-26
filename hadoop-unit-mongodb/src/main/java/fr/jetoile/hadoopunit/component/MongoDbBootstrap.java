@@ -17,6 +17,7 @@ package fr.jetoile.hadoopunit.component;
 import com.github.sakserv.minicluster.impl.MongodbLocalServer;
 import fr.jetoile.hadoopunit.Component;
 import fr.jetoile.hadoopunit.HadoopUnitConfig;
+import fr.jetoile.hadoopunit.HadoopUtils;
 import fr.jetoile.hadoopunit.exception.BootstrapException;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
@@ -25,6 +26,7 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.net.URL;
 import java.util.Map;
 
 public class MongoDbBootstrap implements Bootstrap {
@@ -44,6 +46,18 @@ public class MongoDbBootstrap implements Bootstrap {
     public MongoDbBootstrap() {
         if (mongodbLocalServer == null) {
             try {
+                configuration = HadoopUtils.INSTANCE.loadConfigFile(null);
+                loadConfig();
+            } catch (BootstrapException e) {
+                LOGGER.error("unable to load configuration", e);
+            }
+        }
+    }
+
+    public MongoDbBootstrap(URL url) {
+        if (mongodbLocalServer == null) {
+            try {
+                configuration = HadoopUtils.INSTANCE.loadConfigFile(url);
                 loadConfig();
             } catch (BootstrapException e) {
                 LOGGER.error("unable to load configuration", e);
@@ -64,12 +78,6 @@ public class MongoDbBootstrap implements Bootstrap {
     }
 
     private void loadConfig() throws BootstrapException {
-        try {
-            configuration = new PropertiesConfiguration(HadoopUnitConfig.DEFAULT_PROPS_FILE);
-        } catch (ConfigurationException e) {
-            throw new BootstrapException("bad config", e);
-        }
-
         port = configuration.getInt(HadoopUnitConfig.MONGO_PORT_KEY);
         ip = configuration.getString(HadoopUnitConfig.MONGO_IP_KEY);
     }

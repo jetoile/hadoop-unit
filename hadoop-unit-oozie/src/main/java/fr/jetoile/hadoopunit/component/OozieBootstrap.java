@@ -38,6 +38,7 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.net.URL;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -87,6 +88,18 @@ public class OozieBootstrap implements BootstrapHadoop {
     public OozieBootstrap() {
         if (oozieLocalCluster == null) {
             try {
+                configuration = HadoopUtils.INSTANCE.loadConfigFile(null);
+                loadConfig();
+            } catch (BootstrapException | NotFoundServiceException e) {
+                LOGGER.error("unable to load configuration", e);
+            }
+        }
+    }
+
+    public OozieBootstrap(URL url) {
+        if (oozieLocalCluster == null) {
+            try {
+                configuration = HadoopUtils.INSTANCE.loadConfigFile(url);
                 loadConfig();
             } catch (BootstrapException | NotFoundServiceException e) {
                 LOGGER.error("unable to load configuration", e);
@@ -157,13 +170,6 @@ public class OozieBootstrap implements BootstrapHadoop {
     }
 
     private void loadConfig() throws BootstrapException, NotFoundServiceException {
-
-        try {
-            configuration = new PropertiesConfiguration(HadoopUnitConfig.DEFAULT_PROPS_FILE);
-        } catch (ConfigurationException e) {
-            throw new BootstrapException("bad config", e);
-        }
-
         oozieTestDir = configuration.getString(HadoopUnitConfig.OOZIE_TEST_DIR_KEY);
         oozieHomeDir = configuration.getString(HadoopUnitConfig.OOZIE_HOME_DIR_KEY);
         oozieUsername = System.getProperty("user.name");

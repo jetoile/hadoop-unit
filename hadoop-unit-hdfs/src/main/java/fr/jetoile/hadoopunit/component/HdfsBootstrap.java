@@ -27,6 +27,7 @@ import org.apache.hadoop.hdfs.HdfsConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.net.URL;
 import java.util.Map;
 
 public class HdfsBootstrap implements BootstrapHadoop {
@@ -52,6 +53,18 @@ public class HdfsBootstrap implements BootstrapHadoop {
     public HdfsBootstrap() {
         if (hdfsLocalCluster == null) {
             try {
+                configuration = HadoopUtils.INSTANCE.loadConfigFile(null);
+                loadConfig();
+            } catch (BootstrapException e) {
+                LOGGER.error("unable to load configuration", e);
+            }
+        }
+    }
+
+    public HdfsBootstrap(URL url) {
+        if (hdfsLocalCluster == null) {
+            try {
+                configuration = HadoopUtils.INSTANCE.loadConfigFile(url);
                 loadConfig();
             } catch (BootstrapException e) {
                 LOGGER.error("unable to load configuration", e);
@@ -90,11 +103,6 @@ public class HdfsBootstrap implements BootstrapHadoop {
 
     private void loadConfig() throws BootstrapException {
         HadoopUtils.INSTANCE.setHadoopHome();
-        try {
-            configuration = new PropertiesConfiguration(HadoopUnitConfig.DEFAULT_PROPS_FILE);
-        } catch (ConfigurationException e) {
-            throw new BootstrapException("bad config", e);
-        }
 
         host = configuration.getString(HadoopUnitConfig.HDFS_NAMENODE_HOST_KEY);
         port = configuration.getInt(HadoopUnitConfig.HDFS_NAMENODE_PORT_KEY);

@@ -5,6 +5,7 @@ import com.github.sakserv.minicluster.util.FileUtils;
 import com.github.sakserv.minicluster.yarn.InJvmContainerExecutor;
 import fr.jetoile.hadoopunit.Component;
 import fr.jetoile.hadoopunit.HadoopUnitConfig;
+import fr.jetoile.hadoopunit.HadoopUtils;
 import fr.jetoile.hadoopunit.exception.BootstrapException;
 import fr.jetoile.hadoopunit.exception.NotFoundServiceException;
 import org.apache.commons.configuration.Configuration;
@@ -15,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.net.URL;
 import java.util.Map;
 
 public class YarnBootstrap implements BootstrapHadoop {
@@ -41,6 +43,18 @@ public class YarnBootstrap implements BootstrapHadoop {
     public YarnBootstrap() {
         if (yarnLocalCluster == null) {
             try {
+                configuration = HadoopUtils.INSTANCE.loadConfigFile(null);
+                loadConfig();
+            } catch (BootstrapException | NotFoundServiceException e) {
+                LOGGER.error("unable to load configuration", e);
+            }
+        }
+    }
+
+    public YarnBootstrap(URL url) {
+        if (yarnLocalCluster == null) {
+            try {
+                configuration = HadoopUtils.INSTANCE.loadConfigFile(url);
                 loadConfig();
             } catch (BootstrapException | NotFoundServiceException e) {
                 LOGGER.error("unable to load configuration", e);
@@ -83,13 +97,6 @@ public class YarnBootstrap implements BootstrapHadoop {
     }
 
     private void loadConfig() throws BootstrapException, NotFoundServiceException {
-
-        try {
-            configuration = new PropertiesConfiguration(HadoopUnitConfig.DEFAULT_PROPS_FILE);
-        } catch (ConfigurationException e) {
-            throw new BootstrapException("bad config", e);
-        }
-
         yarnNumNodeManagers = configuration.getInt(HadoopUnitConfig.YARN_NUM_NODE_MANAGERS_KEY);
         yarnNumLocalDirs = configuration.getInt(HadoopUnitConfig.YARN_NUM_LOCAL_DIRS_KEY);
         yarnNumLogDirs = configuration.getInt(HadoopUnitConfig.YARN_NUM_LOG_DIRS_KEY);

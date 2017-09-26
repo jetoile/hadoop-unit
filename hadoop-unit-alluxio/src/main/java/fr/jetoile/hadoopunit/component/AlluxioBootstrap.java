@@ -19,6 +19,7 @@ import alluxio.security.LoginUserTestUtils;
 import alluxio.security.authentication.AuthenticatedClientUser;
 import fr.jetoile.hadoopunit.Component;
 import fr.jetoile.hadoopunit.HadoopUnitConfig;
+import fr.jetoile.hadoopunit.HadoopUtils;
 import fr.jetoile.hadoopunit.exception.BootstrapException;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
@@ -27,6 +28,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -54,6 +56,16 @@ public class AlluxioBootstrap implements Bootstrap {
 
     public AlluxioBootstrap() {
         try {
+            configuration = HadoopUtils.INSTANCE.loadConfigFile(null);
+            loadConfig();
+        } catch (BootstrapException e) {
+            LOGGER.error("unable to load configuration", e);
+        }
+    }
+
+    public AlluxioBootstrap(URL url) {
+        try {
+            configuration = HadoopUtils.INSTANCE.loadConfigFile(url);
             loadConfig();
         } catch (BootstrapException e) {
             LOGGER.error("unable to load configuration", e);
@@ -110,12 +122,6 @@ public class AlluxioBootstrap implements Bootstrap {
     }
 
     private void loadConfig() throws BootstrapException {
-        try {
-            configuration = new PropertiesConfiguration(HadoopUnitConfig.DEFAULT_PROPS_FILE);
-        } catch (ConfigurationException e) {
-            throw new BootstrapException("bad config", e);
-        }
-
         this.workDirectory = configuration.getString(HadoopUnitConfig.ALLUXIO_WORK_DIR);
         this.hostname = configuration.getString(HadoopUnitConfig.ALLUXIO_HOSTNAME);
         this.masterRpcPort = configuration.getInt(HadoopUnitConfig.ALLUXIO_MASTER_RPC_PORT);

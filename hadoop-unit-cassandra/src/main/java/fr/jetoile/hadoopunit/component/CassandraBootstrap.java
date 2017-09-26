@@ -17,6 +17,7 @@ package fr.jetoile.hadoopunit.component;
 import com.datastax.driver.core.Session;
 import fr.jetoile.hadoopunit.Component;
 import fr.jetoile.hadoopunit.HadoopUnitConfig;
+import fr.jetoile.hadoopunit.HadoopUtils;
 import fr.jetoile.hadoopunit.exception.BootstrapException;
 import info.archinnov.achilles.embedded.CassandraEmbeddedServerBuilder;
 import info.archinnov.achilles.embedded.CassandraShutDownHook;
@@ -30,6 +31,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Map;
@@ -47,6 +49,16 @@ public class CassandraBootstrap implements Bootstrap {
 
     public CassandraBootstrap() {
         try {
+            configuration = HadoopUtils.INSTANCE.loadConfigFile(null);
+            loadConfig();
+        } catch (BootstrapException e) {
+            LOGGER.error("unable to load configuration", e);
+        }
+    }
+
+    public CassandraBootstrap(URL url) {
+        try {
+            configuration = HadoopUtils.INSTANCE.loadConfigFile(url);
             loadConfig();
         } catch (BootstrapException e) {
             LOGGER.error("unable to load configuration", e);
@@ -65,12 +77,6 @@ public class CassandraBootstrap implements Bootstrap {
     }
 
     private void loadConfig() throws BootstrapException {
-        try {
-            configuration = new PropertiesConfiguration(HadoopUnitConfig.DEFAULT_PROPS_FILE);
-        } catch (ConfigurationException e) {
-            throw new BootstrapException("bad config", e);
-        }
-
         port = configuration.getInt(HadoopUnitConfig.CASSANDRA_PORT_KEY);
         ip = configuration.getString(HadoopUnitConfig.CASSANDRA_IP_KEY);
     }

@@ -13,6 +13,7 @@
  */
 package fr.jetoile.hadoopunit;
 
+import fr.jetoile.hadoopunit.exception.BootstrapException;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
@@ -25,6 +26,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
+import java.net.URL;
 
 import static org.fusesource.jansi.Ansi.Color.BLUE;
 import static org.fusesource.jansi.Ansi.ansi;
@@ -128,6 +130,19 @@ public enum HadoopUtils {
             }
         } catch (Exception ex) {
             LOGGER.warn("Banner not printable", ex);
+        }
+    }
+
+    public Configuration loadConfigFile(URL url) throws BootstrapException {
+        try {
+            if (url == null) {
+                configuration = new PropertiesConfiguration(HadoopUnitConfig.DEFAULT_PROPS_FILE);
+            } else {
+                configuration = new PropertiesConfiguration(url);
+            }
+            return configuration;
+        } catch (ConfigurationException e) {
+            throw new BootstrapException("bad config", e);
         }
     }
 }

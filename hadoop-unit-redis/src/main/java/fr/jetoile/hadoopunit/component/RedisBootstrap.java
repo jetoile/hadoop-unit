@@ -15,6 +15,7 @@ package fr.jetoile.hadoopunit.component;
 
 import fr.jetoile.hadoopunit.Component;
 import fr.jetoile.hadoopunit.HadoopUnitConfig;
+import fr.jetoile.hadoopunit.HadoopUtils;
 import fr.jetoile.hadoopunit.exception.BootstrapException;
 import fr.jetoile.hadoopunit.redis.EmbeddedRedisInstaller;
 import fr.jetoile.hadoopunit.redis.RedisType;
@@ -36,6 +37,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -69,6 +71,21 @@ public class RedisBootstrap implements Bootstrap {
 
         if (!System.getProperty("os.name").startsWith("Windows")) {
             try {
+                configuration = HadoopUtils.INSTANCE.loadConfigFile(null);
+                loadConfig();
+            } catch (BootstrapException e) {
+                LOGGER.error("unable to load configuration", e);
+            }
+        } else {
+            throw new IllegalArgumentException("Sorry redis is not supported on windows...");
+        }
+    }
+
+    public RedisBootstrap(URL url) {
+
+        if (!System.getProperty("os.name").startsWith("Windows")) {
+            try {
+                configuration = HadoopUtils.INSTANCE.loadConfigFile(url);
                 loadConfig();
             } catch (BootstrapException e) {
                 LOGGER.error("unable to load configuration", e);
@@ -94,12 +111,6 @@ public class RedisBootstrap implements Bootstrap {
     }
 
     private void loadConfig() throws BootstrapException {
-        try {
-            configuration = new PropertiesConfiguration(HadoopUnitConfig.DEFAULT_PROPS_FILE);
-        } catch (ConfigurationException e) {
-            throw new BootstrapException("bad config", e);
-        }
-
         masterPort = configuration.getInt(HadoopUnitConfig.REDIS_PORT_KEY);
         version = configuration.getString(HadoopUnitConfig.REDIS_VERSION_KEY);
         downloadUrl = configuration.getString(HadoopUnitConfig.REDIS_DOWNLOAD_URL_KEY);

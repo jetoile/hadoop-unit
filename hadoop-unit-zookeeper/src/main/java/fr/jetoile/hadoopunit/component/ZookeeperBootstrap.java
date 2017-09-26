@@ -28,6 +28,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -51,11 +52,22 @@ public class ZookeeperBootstrap implements Bootstrap {
     public ZookeeperBootstrap() {
         if (zookeeperLocalCluster == null) {
             try {
+                configuration = HadoopUtils.INSTANCE.loadConfigFile(null);
                 loadConfig();
             } catch (BootstrapException e) {
                 LOGGER.error("unable to load configuration", e);
             }
+        }
+    }
 
+    public ZookeeperBootstrap(URL url) {
+        if (zookeeperLocalCluster == null) {
+            try {
+                configuration = HadoopUtils.INSTANCE.loadConfigFile(url);
+                loadConfig();
+            } catch (BootstrapException e) {
+                LOGGER.error("unable to load configuration", e);
+            }
         }
     }
 
@@ -71,11 +83,6 @@ public class ZookeeperBootstrap implements Bootstrap {
     }
 
     private void loadConfig() throws BootstrapException {
-        try {
-            configuration = new PropertiesConfiguration(HadoopUnitConfig.DEFAULT_PROPS_FILE);
-        } catch (ConfigurationException e) {
-            throw new BootstrapException("bad config", e);
-        }
         port = configuration.getInt(HadoopUnitConfig.ZOOKEEPER_PORT_KEY);
         localDir = configuration.getString(HadoopUnitConfig.ZOOKEEPER_TEMP_DIR_KEY);
         host = configuration.getString(HadoopUnitConfig.ZOOKEEPER_HOST_KEY);
