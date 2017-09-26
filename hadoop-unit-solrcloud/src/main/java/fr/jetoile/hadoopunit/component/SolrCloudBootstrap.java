@@ -61,6 +61,18 @@ public class SolrCloudBootstrap implements Bootstrap {
     public SolrCloudBootstrap() {
         if (solrServer == null) {
             try {
+                configuration = HadoopUtils.INSTANCE.loadConfigFile(null);
+                loadConfig();
+            } catch (BootstrapException e) {
+                LOGGER.error("unable to load configuration", e);
+            }
+        }
+    }
+
+    public SolrCloudBootstrap(URL url) {
+        if (solrServer == null) {
+            try {
+                configuration = HadoopUtils.INSTANCE.loadConfigFile(url);
                 loadConfig();
             } catch (BootstrapException e) {
                 LOGGER.error("unable to load configuration", e);
@@ -105,11 +117,6 @@ public class SolrCloudBootstrap implements Bootstrap {
     }
 
     private void loadConfig() throws BootstrapException {
-        try {
-            configuration = new PropertiesConfiguration(HadoopUnitConfig.DEFAULT_PROPS_FILE);
-        } catch (ConfigurationException e) {
-            throw new BootstrapException("bad config", e);
-        }
         solrDirectory = configuration.getString(HadoopUnitConfig.SOLR_DIR_KEY);
         solrCollectionName = configuration.getString(HadoopUnitConfig.SOLR_COLLECTION_NAME);
         solrPort = configuration.getInt(HadoopUnitConfig.SOLR_PORT);

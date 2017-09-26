@@ -30,6 +30,7 @@ import org.apache.hadoop.hive.conf.HiveConf;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.net.URL;
 import java.util.Map;
 
 public class HiveMetastoreBootstrap implements BootstrapHadoop {
@@ -51,6 +52,18 @@ public class HiveMetastoreBootstrap implements BootstrapHadoop {
     public HiveMetastoreBootstrap() {
         if (hiveLocalMetaStore == null) {
             try {
+                configuration = HadoopUtils.INSTANCE.loadConfigFile(null);
+                loadConfig();
+            } catch (BootstrapException e) {
+                LOGGER.error("unable to load configuration", e);
+            }
+        }
+    }
+
+    public HiveMetastoreBootstrap(URL url) {
+        if (hiveLocalMetaStore == null) {
+            try {
+                configuration = HadoopUtils.INSTANCE.loadConfigFile(url);
                 loadConfig();
             } catch (BootstrapException e) {
                 LOGGER.error("unable to load configuration", e);
@@ -69,11 +82,6 @@ public class HiveMetastoreBootstrap implements BootstrapHadoop {
     }
 
     private void loadConfig() throws BootstrapException {
-        try {
-            configuration = new PropertiesConfiguration(HadoopUnitConfig.DEFAULT_PROPS_FILE);
-        } catch (ConfigurationException e) {
-            throw new BootstrapException("bad config", e);
-        }
         host = configuration.getString(HadoopUnitConfig.HIVE_METASTORE_HOSTNAME_KEY);
         port = configuration.getInt(HadoopUnitConfig.HIVE_METASTORE_PORT_KEY);
         derbyDirectory = configuration.getString(HadoopUnitConfig.HIVE_METASTORE_DERBY_DB_DIR_KEY);

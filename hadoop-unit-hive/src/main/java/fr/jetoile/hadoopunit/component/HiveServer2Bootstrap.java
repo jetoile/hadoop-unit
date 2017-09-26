@@ -30,6 +30,7 @@ import org.apache.hadoop.hive.conf.HiveConf;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.net.URL;
 import java.util.Map;
 
 public class HiveServer2Bootstrap implements BootstrapHadoop {
@@ -55,6 +56,18 @@ public class HiveServer2Bootstrap implements BootstrapHadoop {
     public HiveServer2Bootstrap() {
         if (hiveLocalServer2 == null) {
             try {
+                configuration = HadoopUtils.INSTANCE.loadConfigFile(null);
+                loadConfig();
+            } catch (BootstrapException e) {
+                LOGGER.error("unable to load configuration", e);
+            }
+        }
+    }
+
+    public HiveServer2Bootstrap(URL url) {
+        if (hiveLocalServer2 == null) {
+            try {
+                configuration = HadoopUtils.INSTANCE.loadConfigFile(url);
                 loadConfig();
             } catch (BootstrapException e) {
                 LOGGER.error("unable to load configuration", e);
@@ -73,11 +86,6 @@ public class HiveServer2Bootstrap implements BootstrapHadoop {
     }
 
     private void loadConfig() throws BootstrapException {
-        try {
-            configuration = new PropertiesConfiguration(HadoopUnitConfig.DEFAULT_PROPS_FILE);
-        } catch (ConfigurationException e) {
-            throw new BootstrapException("bad config", e);
-        }
         host = configuration.getString(HadoopUnitConfig.HIVE_SERVER2_HOSTNAME_KEY);
         port = configuration.getInt(HadoopUnitConfig.HIVE_SERVER2_PORT_KEY);
         hostMetastore = configuration.getString(HadoopUnitConfig.HIVE_METASTORE_HOSTNAME_KEY);

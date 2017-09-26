@@ -27,6 +27,7 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.net.URL;
 import java.util.Map;
 import java.util.Properties;
 
@@ -50,6 +51,19 @@ public class KafkaBootstrap implements Bootstrap {
     public KafkaBootstrap() {
         if (kafkaLocalCluster == null) {
             try {
+                configuration = HadoopUtils.INSTANCE.loadConfigFile(null);
+                loadConfig();
+            } catch (BootstrapException e) {
+                LOGGER.error("unable to load configuration", e);
+            }
+
+        }
+    }
+
+    public KafkaBootstrap(URL url) {
+        if (kafkaLocalCluster == null) {
+            try {
+                configuration = HadoopUtils.INSTANCE.loadConfigFile(url);
                 loadConfig();
             } catch (BootstrapException e) {
                 LOGGER.error("unable to load configuration", e);
@@ -85,11 +99,6 @@ public class KafkaBootstrap implements Bootstrap {
     }
 
     private void loadConfig() throws BootstrapException {
-        try {
-            configuration = new PropertiesConfiguration(HadoopUnitConfig.DEFAULT_PROPS_FILE);
-        } catch (ConfigurationException e) {
-            throw new BootstrapException("bad config", e);
-        }
         host = configuration.getString(HadoopUnitConfig.KAFKA_HOSTNAME_KEY);
         port = configuration.getInt(HadoopUnitConfig.KAFKA_PORT_KEY);
         brokerId = configuration.getInt(HadoopUnitConfig.KAFKA_TEST_BROKER_ID_KEY);

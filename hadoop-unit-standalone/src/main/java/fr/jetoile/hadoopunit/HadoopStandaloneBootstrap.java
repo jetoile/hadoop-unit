@@ -168,7 +168,6 @@ public class HadoopStandaloneBootstrap {
             }
         });
 
-
         printBanner();
     }
 
@@ -229,7 +228,7 @@ public class HadoopStandaloneBootstrap {
         try {
             Thread.currentThread().setContextClassLoader(classloader);
 
-            Object o = mainClass.getConstructor().newInstance();
+            Object o = mainClass.getConstructor(URL.class).newInstance(HadoopStandaloneBootstrap.class.getClassLoader().getResource(HadoopUnitConfig.DEFAULT_PROPS_FILE));
             main = mainClass.getMethod("start");
             main.invoke(o);
             return new ComponentProperties(o, mainClass);

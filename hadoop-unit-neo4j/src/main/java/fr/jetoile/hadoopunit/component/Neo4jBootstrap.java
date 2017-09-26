@@ -17,6 +17,7 @@ package fr.jetoile.hadoopunit.component;
 
 import fr.jetoile.hadoopunit.Component;
 import fr.jetoile.hadoopunit.HadoopUnitConfig;
+import fr.jetoile.hadoopunit.HadoopUtils;
 import fr.jetoile.hadoopunit.exception.BootstrapException;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
@@ -30,6 +31,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.net.URL;
 import java.nio.file.Paths;
 import java.util.Map;
 
@@ -50,6 +52,16 @@ public class Neo4jBootstrap implements Bootstrap {
 
     public Neo4jBootstrap() {
         try {
+            configuration = HadoopUtils.INSTANCE.loadConfigFile(null);
+            loadConfig();
+        } catch (BootstrapException e) {
+            LOGGER.error("unable to load configuration", e);
+        }
+    }
+
+    public Neo4jBootstrap(URL url) {
+        try {
+            configuration = HadoopUtils.INSTANCE.loadConfigFile(url);
             loadConfig();
         } catch (BootstrapException e) {
             LOGGER.error("unable to load configuration", e);
@@ -68,12 +80,6 @@ public class Neo4jBootstrap implements Bootstrap {
     }
 
     private void loadConfig() throws BootstrapException {
-        try {
-            configuration = new PropertiesConfiguration(HadoopUnitConfig.DEFAULT_PROPS_FILE);
-        } catch (ConfigurationException e) {
-            throw new BootstrapException("bad config", e);
-        }
-
         port = configuration.getInt(HadoopUnitConfig.NEO4J_PORT_KEY);
         ip = configuration.getString(HadoopUnitConfig.NEO4J_IP_KEY);
         tmp = configuration.getString(HadoopUnitConfig.NEO4J_TEMP_DIR_KEY);

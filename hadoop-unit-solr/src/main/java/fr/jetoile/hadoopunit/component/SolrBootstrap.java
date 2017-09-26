@@ -32,6 +32,7 @@ import org.xml.sax.SAXException;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.net.URLDecoder;
 import java.nio.file.Paths;
 import java.util.Map;
@@ -54,6 +55,18 @@ public class SolrBootstrap implements Bootstrap {
     public SolrBootstrap() {
         if (solrServer == null) {
             try {
+                configuration = HadoopUtils.INSTANCE.loadConfigFile(null);
+                loadConfig();
+            } catch (BootstrapException e) {
+                LOGGER.error("unable to load configuration", e);
+            }
+        }
+    }
+
+    public SolrBootstrap(URL url) {
+        if (solrServer == null) {
+            try {
+                configuration = HadoopUtils.INSTANCE.loadConfigFile(url);
                 loadConfig();
             } catch (BootstrapException e) {
                 LOGGER.error("unable to load configuration", e);
@@ -72,11 +85,6 @@ public class SolrBootstrap implements Bootstrap {
     }
 
     private void loadConfig() throws BootstrapException {
-        try {
-            configuration = new PropertiesConfiguration(HadoopUnitConfig.DEFAULT_PROPS_FILE);
-        } catch (ConfigurationException e) {
-            throw new BootstrapException("bad config", e);
-        }
         solrDirectory = configuration.getString(SOLR_DIR_KEY);
         solrCollectionInternalName = configuration.getString(SOLR_COLLECTION_INTERNAL_NAME);
     }

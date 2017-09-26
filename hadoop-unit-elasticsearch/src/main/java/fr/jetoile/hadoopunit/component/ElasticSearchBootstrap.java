@@ -16,6 +16,7 @@ package fr.jetoile.hadoopunit.component;
 
 import fr.jetoile.hadoopunit.Component;
 import fr.jetoile.hadoopunit.HadoopUnitConfig;
+import fr.jetoile.hadoopunit.HadoopUtils;
 import fr.jetoile.hadoopunit.exception.BootstrapException;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
@@ -54,6 +55,16 @@ public class ElasticSearchBootstrap implements Bootstrap {
 
     public ElasticSearchBootstrap() {
         try {
+            configuration = HadoopUtils.INSTANCE.loadConfigFile(null);
+            loadConfig();
+        } catch (BootstrapException e) {
+            LOGGER.error("unable to load configuration", e);
+        }
+    }
+
+    public ElasticSearchBootstrap(URL url) {
+        try {
+            configuration = HadoopUtils.INSTANCE.loadConfigFile(url);
             loadConfig();
         } catch (BootstrapException e) {
             LOGGER.error("unable to load configuration", e);
@@ -77,12 +88,6 @@ public class ElasticSearchBootstrap implements Bootstrap {
     }
 
     private void loadConfig() throws BootstrapException {
-        try {
-            configuration = new PropertiesConfiguration(HadoopUnitConfig.DEFAULT_PROPS_FILE);
-        } catch (ConfigurationException e) {
-            throw new BootstrapException("bad config", e);
-        }
-
         version = configuration.getString(HadoopUnitConfig.ELASTICSEARCH_VERSION);
         httpPort = configuration.getInt(HadoopUnitConfig.ELASTICSEARCH_HTTP_PORT_KEY);
         tcpPort = configuration.getInt(HadoopUnitConfig.ELASTICSEARCH_TCP_PORT_KEY);

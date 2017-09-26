@@ -26,6 +26,7 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.net.URL;
 import java.util.Map;
 
 public class HBaseBootstrap implements BootstrapHadoop {
@@ -57,6 +58,18 @@ public class HBaseBootstrap implements BootstrapHadoop {
     public HBaseBootstrap() {
         if (hbaseLocalCluster == null) {
             try {
+                configuration = HadoopUtils.INSTANCE.loadConfigFile(null);
+                loadConfig();
+            } catch (BootstrapException e) {
+                LOGGER.error("unable to load configuration", e);
+            }
+        }
+    }
+
+    public HBaseBootstrap(URL url) {
+        if (hbaseLocalCluster == null) {
+            try {
+                configuration = HadoopUtils.INSTANCE.loadConfigFile(url);
                 loadConfig();
             } catch (BootstrapException e) {
                 LOGGER.error("unable to load configuration", e);
@@ -106,12 +119,6 @@ public class HBaseBootstrap implements BootstrapHadoop {
     }
 
     private void loadConfig() throws BootstrapException {
-        try {
-            configuration = new PropertiesConfiguration(HadoopUnitConfig.DEFAULT_PROPS_FILE);
-        } catch (ConfigurationException e) {
-            throw new BootstrapException("bad config", e);
-        }
-
         port = configuration.getInt(HadoopUnitConfig.HBASE_MASTER_PORT_KEY);
         infoPort = configuration.getInt(HadoopUnitConfig.HBASE_MASTER_INFO_PORT_KEY);
         nbRegionServer = configuration.getInt(HadoopUnitConfig.HBASE_NUM_REGION_SERVERS_KEY);
