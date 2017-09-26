@@ -26,10 +26,7 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class KnoxBootstrap implements Bootstrap {
@@ -70,7 +67,8 @@ public class KnoxBootstrap implements Bootstrap {
     public String getProperties() {
         return "\n \t\t\t port:" + port +
                 "\n \t\t\t path:" + path +
-                "\n \t\t\t cluster:" + clusterName;
+                "\n \t\t\t cluster:" + clusterName +
+                "\n \t\t\t services:" + services.stream().map(s -> s.getName()).collect(Collectors.joining(", "));
     }
 
     private void init() {
