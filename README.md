@@ -329,6 +329,13 @@ To use it, add into the pom project stuff like that:
                     </goals>
                     <phase>pre-integration-test</phase>
                 </execution>
+                <execution>
+                    <id>embedded-stop</id>
+                    <goals>
+                        <goal>embedded-stop</goal>
+                    </goals>
+                    <phase>post-integration-test</phase>
+                </execution>
             </executions>
             <configuration>
                 <components>
