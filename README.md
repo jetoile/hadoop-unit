@@ -27,6 +27,7 @@ mvn package
 
 | Hadoop Unit version  | Hadoop mini cluster version | HDP version |
 | ------------- | ------------- | ------------- |
+| 2.3 | 0.1.14 | HDP 2.6.2.0 |
 | 2.2 | 0.1.12 | HDP 2.6.1.0 |
 | 2.1 | 0.1.11 | HDP 2.5.3.0 |
 | 2.0 | 0.1.9 | HDP 2.5.3.0 |
@@ -82,7 +83,7 @@ Sample:
 <dependency>
     <groupId>fr.jetoile.hadoop</groupId>
     <artifactId>hadoop-unit-hdfs</artifactId>
-    <version>2.1</version>
+    <version>2.3</version>
     <scope>test</scope>
 </dependency>
 ```
@@ -108,7 +109,7 @@ Sample:
 <dependency>
     <groupId>fr.jetoile.hadoop</groupId>
     <artifactId>hadoop-unit-hdfs</artifactId>
-    <version>2.1</version>
+    <version>2.3</version>
     <scope>test</scope>
 </dependency>
 ```
@@ -269,21 +270,21 @@ To use it, add into the pom project stuff like that:
      <dependency>
         <groupId>fr.jetoile.hadoop</groupId>
         <artifactId>hadoop-unit-client-hdfs</artifactId>
-        <version>2.1</version>
+        <version>2.3</version>
         <scope>test</scope>
     </dependency>
 
     <dependency>
         <groupId>fr.jetoile.hadoop</groupId>
         <artifactId>hadoop-unit-client-hive</artifactId>
-        <version>2.1</version>
+        <version>2.3</version>
         <scope>test</scope>
     </dependency>
 
     <dependency>
         <groupId>fr.jetoile.hadoop</groupId>
         <artifactId>hadoop-unit-client-spark</artifactId>
-        <version>2.1</version>
+        <version>2.3</version>
         <scope>test</scope>
     </dependency>
 </dependencies>
@@ -484,7 +485,7 @@ To use it, add into the pom project stuff like that:
 <plugin>
     <artifactId>hadoop-unit-maven-plugin</artifactId>
     <groupId>fr.jetoile.hadoop</groupId>
-    <version>2.1</version>
+    <version>2.3</version>
     <executions>
         <execution>
             <id>start</id>
@@ -511,7 +512,7 @@ To use it, add into the pom project stuff like that:
 <plugin>
     <artifactId>hadoop-unit-maven-plugin</artifactId>
     <groupId>fr.jetoile.hadoop</groupId>
-    <version>2.1</version>
+    <version>2.3</version>
     <executions>
         <execution>
             <id>stop</id>
@@ -603,7 +604,7 @@ public class HdfsBootstrapIntegrationTest {
 
 # Component available
 
-* SolrCloud 6.1.0
+* SolrCloud 6.6.0
 * Kafka 
 * Hive (metastore and server2)
 * Hdfs
@@ -612,15 +613,15 @@ public class HdfsBootstrapIntegrationTest {
 * HBase
 * Knox
 * MongoDB
-* Cassandra 3.7
+* Cassandra 3.11
 * ElasticSearch 5.4.3
 * Neo4j 3.2.2
 * Alluxio 1.4.0
 * Redis 4.0.0
 
 Built on:
-* [hadoop-mini-cluster-0.1.12](https://github.com/sakserv/hadoop-mini-clusters) (aka. HDP 2.6.1.0)
-* [achilles-embedded-5.2.1](https://github.com/doanduyhai/Achilles)
+* [hadoop-mini-cluster-0.1.14](https://github.com/sakserv/hadoop-mini-clusters) (aka. HDP 2.6.2.0)
+* [achilles-embedded-5.3.1](https://github.com/doanduyhai/Achilles)
 * [maven resolver](https://github.com/apache/maven-resolver/)
 * [embedded-elasticsearch](https://github.com/allegro/embedded-elasticsearch)
 * [redis-unit](https://github.com/ishiis/redis-unit)
