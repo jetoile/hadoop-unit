@@ -11,6 +11,10 @@
 
     <artifactId>kafka-spark-streaming</artifactId>
 
+    <properties>
+        <spark-streaming-kafka_2.11.version>1.6.3</spark-streaming-kafka_2.11.version>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>fr.jetoile.hadoop</groupId>
@@ -31,8 +35,8 @@
 
         <dependency>
             <groupId>org.apache.spark</groupId>
-            <artifactId>spark-streaming-kafka_2.10</artifactId>
-            <version>${spark_2.10.version}</version>
+            <artifactId>spark-streaming-kafka_2.11</artifactId>
+            <version>${spark-streaming-kafka_2.11.version}</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.apache.kafka</groupId>
@@ -57,18 +61,18 @@
         </dependency>
 
         <dependency>
-            <artifactId>jackson-module-scala_2.10</artifactId>
+            <artifactId>jackson-module-scala_2.11</artifactId>
             <groupId>com.fasterxml.jackson.module</groupId>
         </dependency>
 
         <dependency>
             <groupId>org.apache.spark</groupId>
-            <artifactId>spark-streaming_2.10</artifactId>
-            <version>${spark_2.10.version}</version>
+            <artifactId>spark-streaming_2.11</artifactId>
+            <version>${spark_2.11.version}</version>
         </dependency>
 
-
     </dependencies>
+
 
     <profiles>
         <profile>

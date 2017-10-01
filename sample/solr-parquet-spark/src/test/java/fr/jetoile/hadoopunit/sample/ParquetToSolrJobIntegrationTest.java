@@ -26,10 +26,9 @@ import org.apache.hadoop.fs.Path;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.CloudSolrClient;
 import org.apache.solr.common.SolrDocument;
-import org.apache.spark.SparkConf;
-import org.apache.spark.api.java.JavaSparkContext;
-import org.apache.spark.sql.DataFrame;
-import org.apache.spark.sql.SQLContext;
+import org.apache.spark.sql.Dataset;
+import org.apache.spark.sql.Row;
+import org.apache.spark.sql.SparkSession;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -81,13 +80,9 @@ public class ParquetToSolrJobIntegrationTest {
     @Test
     public void spark_should_read_parquet_file_and_index_into_solr() throws IOException, SolrServerException {
         //given
-        SparkConf conf = new SparkConf()
-                .setMaster("local[*]")
-                .setAppName("test");
+        SparkSession sqlContext = SparkSession.builder().appName("test").master("local[*]").getOrCreate();
 
-        JavaSparkContext context = new JavaSparkContext(conf);
-        SQLContext sqlContext = new SQLContext(context);
-        DataFrame df = sqlContext.read()
+        Dataset<Row> df = sqlContext.read()
                 .format("com.databricks.spark.csv")
                 .option("header", "true") // Use first line of all files as header
                 .option("inferSchema", "true") // Automatically infer data types
@@ -98,12 +93,12 @@ public class ParquetToSolrJobIntegrationTest {
         FileSystem fileSystem = HdfsUtils.INSTANCE.getFileSystem();
         assertThat(fileSystem.exists(new Path("hdfs://localhost:" + configuration.getInt(HadoopUnitConfig.HDFS_NAMENODE_PORT_KEY) + "/khanh/test_parquet/file.parquet"))).isTrue();
 
-        context.close();
+        sqlContext.close();
 
         //when
-        context = new JavaSparkContext(conf);
+        sqlContext = SparkSession.builder().appName("test").master("local[*]").getOrCreate();
 
-        ParquetToSolrJob parquetToSolrJob = new ParquetToSolrJob(context);
+        ParquetToSolrJob parquetToSolrJob = new ParquetToSolrJob(sqlContext);
         parquetToSolrJob.run();
 
         String zkHostString = configuration.getString(HadoopUnitConfig.ZOOKEEPER_HOST_KEY) + ":" + configuration.getInt(HadoopUnitConfig.ZOOKEEPER_PORT_KEY);
@@ -119,7 +114,7 @@ public class ParquetToSolrJobIntegrationTest {
         client.close();
 
 
-        context.close();
+        sqlContext.close();
 
 
     }

@@ -124,7 +124,7 @@
 
         <hadoop-unit.version>${project.version}</hadoop-unit.version>
 
-        <slf4j.version>1.7.12</slf4j.version>
+        <slf4j.version>1.7.25</slf4j.version>
         <logback-classic.version>1.2.3</logback-classic.version>
 
         <commons-io.version>2.5</commons-io.version>
@@ -134,14 +134,14 @@
         <hadoop-mini-clusters.version>0.1.14</hadoop-mini-clusters.version>
 
         <hive.version>1.2.1000.2.6.2.0-205</hive.version>
-        <solr.version>6.1.0</solr.version>
+        <solr.version>6.6.1</solr.version>
         <oozie.version>4.2.0.2.6.2.0-205</oozie.version>
         <hadoop.version>2.7.3.2.6.2.0-205</hadoop.version>
         <knox.version>0.12.0.2.6.2.0-205</knox.version>
         <kafka_2.10.version>0.10.1.2.6.2.0-205</kafka_2.10.version>
 
-        <spark_2.10.version>1.6.2</spark_2.10.version>
-        <spark-solr.version>1.1.2</spark-solr.version>
+        <spark_2.11.version>2.2.0</spark_2.11.version>
+        <spark-solr.version>3.2.1</spark-solr.version>
         <gateway-service-oozie.version>0.5.0.2.2.9.26-3</gateway-service-oozie.version>
 
         <dbSetup.version>2.1.0</dbSetup.version>
@@ -149,17 +149,17 @@
         <guava.version>18.0</guava.version>
         <concurrentlinkedhashmap-lru.version>1.4</concurrentlinkedhashmap-lru.version>
         <lombok.version>1.16.6</lombok.version>
-        <jetty-util.version>9.3.10.v20160621</jetty-util.version>
+        <jetty-util.version>9.3.21.v20170918</jetty-util.version>
         <javax.servlet-api.version>3.1.0</javax.servlet-api.version>
 
         <embedded-mongo.version>2.0.0</embedded-mongo.version>
 
         <elasticsearch.version>5.4.3</elasticsearch.version>
-        <embedded-elasticsearch.version>2.2.0</embedded-elasticsearch.version>
+        <embedded-elasticsearch.version>2.4.2</embedded-elasticsearch.version>
 
         <metrics.version>3.1.2</metrics.version>
-        <achilles.version>5.2.1</achilles.version>
-        <jackson-module-scala_2.10.version>2.6.5</jackson-module-scala_2.10.version>
+        <achilles.version>5.3.1</achilles.version>
+        <jackson-module-scala_2.11.version>2.6.5</jackson-module-scala_2.11.version>
 
         <neo4j.version>3.2.2</neo4j.version>
         <alluxio.version>1.4.0</alluxio.version>
@@ -690,36 +690,36 @@
 
             <dependency>
                 <groupId>org.apache.spark</groupId>
-                <artifactId>spark-core_2.10</artifactId>
-                <version>${spark_2.10.version}</version>
+                <artifactId>spark-core_2.11</artifactId>
+                <version>${spark_2.11.version}</version>
                 <exclusions>
                     <exclusion>
                         <artifactId>hadoop-client</artifactId>
                         <groupId>org.apache.hadoop</groupId>
                     </exclusion>
                     <exclusion>
-                        <artifactId>jackson-module-scala_2.10</artifactId>
+                        <artifactId>jackson-module-scala_2.11</artifactId>
                         <groupId>com.fasterxml.jackson.module</groupId>
                     </exclusion>
                 </exclusions>
             </dependency>
 
             <dependency>
-                <artifactId>jackson-module-scala_2.10</artifactId>
+                <artifactId>jackson-module-scala_2.11</artifactId>
                 <groupId>com.fasterxml.jackson.module</groupId>
-                <version>${jackson-module-scala_2.10.version}</version>
+                <version>${jackson-module-scala_2.11.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>org.apache.spark</groupId>
-                <artifactId>spark-sql_2.10</artifactId>
-                <version>${spark_2.10.version}</version>
+                <artifactId>spark-sql_2.11</artifactId>
+                <version>${spark_2.11.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>org.apache.spark</groupId>
-                <artifactId>spark-hive_2.10</artifactId>
-                <version>${spark_2.10.version}</version>
+                <artifactId>spark-hive_2.11</artifactId>
+                <version>${spark_2.11.version}</version>
             </dependency>
 
             <dependency>

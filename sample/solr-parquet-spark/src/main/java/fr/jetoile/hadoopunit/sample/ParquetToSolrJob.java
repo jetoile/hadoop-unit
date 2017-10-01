@@ -14,36 +14,50 @@
 
 package fr.jetoile.hadoopunit.sample;
 
-import com.lucidworks.spark.SolrSupport;
-import org.apache.solr.common.SolrDocument;
-import org.apache.solr.common.SolrInputDocument;
-import org.apache.spark.api.java.JavaRDD;
-import org.apache.spark.api.java.JavaSparkContext;
-import org.apache.spark.sql.DataFrame;
+import org.apache.solr.client.solrj.impl.CloudSolrClient;
+import org.apache.spark.sql.Dataset;
+import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SQLContext;
+import org.apache.spark.sql.SparkSession;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class ParquetToSolrJob {
-    private final JavaSparkContext sc;
+    private final SparkSession sqlContext;
 
-    public ParquetToSolrJob(JavaSparkContext sc) {
-        this.sc = sc;
+    public ParquetToSolrJob(SparkSession sqlContext) {
+        this.sqlContext = sqlContext;
     }
 
     public void run() {
-        SQLContext sqlContext = new SQLContext(sc);
 
-        DataFrame file = sqlContext.read().parquet("hdfs://localhost:20112/khanh/test_parquet/file.parquet");
-        DataFrame select = file.select("id", "value");
-
-        JavaRDD<SolrInputDocument> solrInputDocument = select.toJavaRDD().map(r -> {
-            SolrInputDocument solrDoc = new SolrInputDocument();
-            solrDoc.setField("id", r.getInt(0));
-            solrDoc.setField("value_s", r.getString(1));
-            return solrDoc;
-        });
+        Dataset<Row> file = sqlContext.read().parquet("hdfs://localhost:20112/khanh/test_parquet/file.parquet");
+        Dataset<Row> select = file.select("id", "value_s");
 
         String collectionName = "collection1";
         String zkHostString = "127.0.0.1:22010";
-        SolrSupport.indexDocs(zkHostString, collectionName, 1000, solrInputDocument);
+        CloudSolrClient client = new CloudSolrClient(zkHostString);
+
+
+        Map<String, String> writeToSolrOpts = new HashMap();
+        writeToSolrOpts.put("zkhost", zkHostString);
+        writeToSolrOpts.put("collection", collectionName);
+
+//        "zkhost" -> zkhost, "collection" -> "movielens_movies"
+
+        select.write().format("solr").options(writeToSolrOpts).save();
+
+//        itemDF.write.format("solr").options(writeToSolrOpts).save
+//
+//        JavaRDD<SolrInputDocument> solrInputDocument = (JavaRDD<SolrInputDocument>) select.toJavaRDD().map(r -> {
+//            SolrInputDocument solrDoc = new SolrInputDocument("id", "value_s");
+//            solrDoc.setField("id", r.getInt(0));
+//            solrDoc.setField("value_s", r.getString(1));
+//            return solrDoc;
+//        });
+//
+//        SolrSupport.sendBatchToSolr(client, collectionName, solrInputDocument.);
+
     }
 }

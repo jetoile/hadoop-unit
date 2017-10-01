@@ -27,10 +27,9 @@ import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
-import org.apache.spark.SparkConf;
-import org.apache.spark.api.java.JavaSparkContext;
-import org.apache.spark.sql.DataFrame;
+import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
+import org.apache.spark.sql.SparkSession;
 import org.junit.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,14 +46,10 @@ import static org.fest.assertions.Assertions.assertThat;
 
 public class SparkJobIntegrationTest {
 
-    static private Logger LOGGER = LoggerFactory.getLogger(SparkJobIntegrationTest.class);
-
-
-    private static Configuration configuration;
-
     public static Operation CREATE_TABLES = null;
     public static Operation DROP_TABLES = null;
-
+    static private Logger LOGGER = LoggerFactory.getLogger(SparkJobIntegrationTest.class);
+    private static Configuration configuration;
 
     @BeforeClass
     public static void setUp() throws BootstrapException, SQLException, ClassNotFoundException, NotFoundServiceException {
@@ -117,17 +112,13 @@ public class SparkJobIntegrationTest {
 
     @Test
     public void spark_should_read_hive() throws SQLException {
-        SparkConf conf = new SparkConf()
-                .setMaster("local[*]")
-                .setAppName("test");
+        SparkSession sqlContext = SparkSession.builder().appName("test").master("local[*]").enableHiveSupport().getOrCreate();
 
-        JavaSparkContext context = new JavaSparkContext(conf);
-
-        SparkJob sparkJob = new SparkJob(context);
-        DataFrame sql = sparkJob.run();
+        SparkJob sparkJob = new SparkJob(sqlContext);
+        Dataset<Row> sql = sparkJob.run();
 
 //        sql.printSchema();
-        Row[] rows = sql.collect();
+        Row[] rows = (Row[])sql.collect();
 
         for (int i = 1; i < 4; i++) {
             Row row = rows[i - 1];
@@ -135,55 +126,47 @@ public class SparkJobIntegrationTest {
             assertThat(i).isEqualTo(row.getInt(0));
         }
 
-        context.close();
+        sqlContext.close();
     }
 
     @Test
     public void spark_should_create_a_parquet_file() throws SQLException, IOException {
-        SparkConf conf = new SparkConf()
-                .setMaster("local[*]")
-                .setAppName("test");
+        SparkSession sqlContext = SparkSession.builder().appName("test").master("local[*]").enableHiveSupport().getOrCreate();
 
-        JavaSparkContext context = new JavaSparkContext(conf);
-
-        SparkJob sparkJob = new SparkJob(context);
-        DataFrame sql = sparkJob.run();
+        SparkJob sparkJob = new SparkJob(sqlContext);
+        Dataset<Row> sql = sparkJob.run();
 
         sql.write().parquet("hdfs://localhost:" + configuration.getInt(HadoopUnitConfig.HDFS_NAMENODE_PORT_KEY) + "/khanh/test_parquet/file.parquet");
 
         FileSystem fileSystem = HdfsUtils.INSTANCE.getFileSystem();
         assertThat(fileSystem.exists(new Path("hdfs://localhost:" + configuration.getInt(HadoopUnitConfig.HDFS_NAMENODE_PORT_KEY) + "/khanh/test_parquet/file.parquet"))).isTrue();
 
-        context.close();
+        sqlContext.close();
     }
 
 
     @Test
     public void spark_should_read_parquet_file() throws IOException {
         //given
-        SparkConf conf = new SparkConf()
-                .setMaster("local[*]")
-                .setAppName("test");
+        SparkSession sqlContext = SparkSession.builder().appName("test").master("local[*]").enableHiveSupport().getOrCreate();
 
-        JavaSparkContext context = new JavaSparkContext(conf);
-
-        SparkJob sparkJob = new SparkJob(context);
-        DataFrame sql = sparkJob.run();
+        SparkJob sparkJob = new SparkJob(sqlContext);
+        Dataset<Row> sql = sparkJob.run();
         sql.write().parquet("hdfs://localhost:" + configuration.getInt(HadoopUnitConfig.HDFS_NAMENODE_PORT_KEY) + "/khanh/test_parquet/file.parquet");
 
         FileSystem fileSystem = HdfsUtils.INSTANCE.getFileSystem();
         assertThat(fileSystem.exists(new Path("hdfs://localhost:" + configuration.getInt(HadoopUnitConfig.HDFS_NAMENODE_PORT_KEY) + "/khanh/test_parquet/file.parquet"))).isTrue();
 
-        context.close();
+        sqlContext.close();
 
         //when
-        JavaSparkContext context1 = new JavaSparkContext(conf);
+        sqlContext = SparkSession.builder().appName("test").master("local[*]").enableHiveSupport().getOrCreate();
 
-        SparkJob sparkJob1 = new SparkJob(context1);
-        DataFrame sql1 = sparkJob1.run();
+        SparkJob sparkJob1 = new SparkJob(sqlContext);
+        Dataset<Row> sql1 = sparkJob1.run();
 
-        DataFrame select = sql1.select("id", "value");
-        Row[] rows = select.collect();
+        Dataset<Row> select = sql1.select("id", "value");
+        Row[] rows = (Row[]) select.collect();
 
         //then
         for (int i = 1; i < 4; i++) {
@@ -192,7 +175,7 @@ public class SparkJobIntegrationTest {
             assertThat(i).isEqualTo(row.getInt(0));
         }
 
-        context.close();
+        sqlContext.close();
 
 
     }
