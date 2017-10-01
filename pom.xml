@@ -130,17 +130,17 @@
         <commons-configuration.version>1.10</commons-configuration.version>
         <commons-collections.version>3.2.1</commons-collections.version>
 
-        <hive.version>1.2.1000.2.6.1.0-129</hive.version>
+        <hadoop-mini-clusters.version>0.1.14</hadoop-mini-clusters.version>
+
+        <hive.version>1.2.1000.2.6.2.0-205</hive.version>
         <solr.version>6.1.0</solr.version>
-        <hadoop-mini-clusters.version>0.1.13</hadoop-mini-clusters.version>
-        <oozie.version>4.2.0.2.6.1.0-129</oozie.version>
-        <hadoop.version>2.7.3.2.6.1.0-129</hadoop.version>
+        <oozie.version>4.2.0.2.6.2.0-205</oozie.version>
+        <hadoop.version>2.7.3.2.6.2.0-205</hadoop.version>
+        <knox.version>0.12.0.2.6.2.0-205</knox.version>
+        <kafka_2.10.version>0.10.1.2.6.2.0-205</kafka_2.10.version>
 
         <spark_2.10.version>1.6.2</spark_2.10.version>
         <spark-solr.version>1.1.2</spark-solr.version>
-        <kafka_2.10.version>0.10.1.2.6.1.0-129</kafka_2.10.version>
-        <knox.version>0.12.0.2.6.1.0-129</knox.version>
-
         <gateway-service-oozie.version>0.5.0.2.2.9.26-3</gateway-service-oozie.version>
 
         <dbSetup.version>2.1.0</dbSetup.version>
