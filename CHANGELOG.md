@@ -1,6 +1,8 @@
 ## Change Log
 
-### upcoming (2017/10/01 14:52 +00:00)
+### upcoming 
+
+### 2.3 (2017/10/01 14:52 +00:00)
 - [f575245](https://github.com/jetoile/hadoop-unit/commit/f575245e7a310036e48df619bee2754732781b14) upgrade achille 5.3.1, embedded-elastic 2.4.2, spark 2.2.0_2.11, solr (@jetoile)
 - [80a1ba9](https://github.com/jetoile/hadoop-unit/commit/80a1ba901127fd66bffe3a2ffd3cf0c775aea15b) update hadoop-mini-cluster-0.1.14 (@jetoile)
 - [9fed750](https://github.com/jetoile/hadoop-unit/commit/9fed750c92bb8ac7d4efd29980ee5945f704a134) add a post-integration phase to stop hadoop-unit-maven-plugin (@jetoile)
