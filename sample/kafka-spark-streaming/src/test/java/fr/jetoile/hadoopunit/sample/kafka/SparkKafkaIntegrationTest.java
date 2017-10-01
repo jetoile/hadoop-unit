@@ -51,7 +51,7 @@ public class SparkKafkaIntegrationTest implements Serializable {
 
     @Ignore
     @Test
-    public void stark_should_read_kafka() {
+    public void stark_should_read_kafka() throws InterruptedException {
 
         for (int i = 0; i < 10; i++) {
             String payload = generateMessge(i);

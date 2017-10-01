@@ -14,21 +14,19 @@
 
 package fr.jetoile.hadoopunit.sample;
 
-import org.apache.spark.api.java.JavaSparkContext;
-import org.apache.spark.sql.DataFrame;
-import org.apache.spark.sql.hive.HiveContext;
+import org.apache.spark.sql.Dataset;
+import org.apache.spark.sql.Row;
+import org.apache.spark.sql.SparkSession;
 
 public class SparkJob {
 
-    private final JavaSparkContext sc;
+    private final SparkSession sqlContext;
 
-    public SparkJob(JavaSparkContext sc) {
-        this.sc = sc;
+    public SparkJob(SparkSession sqlContext) {
+        this.sqlContext = sqlContext;
     }
 
-    public DataFrame run() {
-        HiveContext sqlContext = new HiveContext(sc);
-
+    public Dataset<Row> run() {
         return sqlContext.sql("SELECT * FROM default.test");
     }
 }

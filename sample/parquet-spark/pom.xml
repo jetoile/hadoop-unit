@@ -14,7 +14,7 @@
     <dependencies>
         <dependency>
             <groupId>org.apache.spark</groupId>
-            <artifactId>spark-core_2.10</artifactId>
+            <artifactId>spark-core_2.11</artifactId>
             <exclusions>
                 <exclusion>
                     <artifactId>jackson-databind</artifactId>
@@ -25,7 +25,7 @@
 
         <dependency>
             <groupId>org.apache.spark</groupId>
-            <artifactId>spark-sql_2.10</artifactId>
+            <artifactId>spark-sql_2.11</artifactId>
             <exclusions>
                 <exclusion>
                     <artifactId>jackson-databind</artifactId>
@@ -36,12 +36,12 @@
 
         <dependency>
             <groupId>org.apache.spark</groupId>
-            <artifactId>spark-hive_2.10</artifactId>
+            <artifactId>spark-hive_2.11</artifactId>
         </dependency>
 
         <dependency>
             <groupId>com.fasterxml.jackson.module</groupId>
-            <artifactId>jackson-module-scala_2.10</artifactId>
+            <artifactId>jackson-module-scala_2.11</artifactId>
         </dependency>
 
         <dependency>

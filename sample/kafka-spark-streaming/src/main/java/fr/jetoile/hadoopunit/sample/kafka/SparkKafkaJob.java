@@ -51,12 +51,9 @@ public class SparkKafkaJob implements Serializable {
                 topicMap);
 
         JavaDStream<String> messages = stream.map(r -> r._2());
-        messages.foreach(r -> {
-            r.foreach(t -> {
+        messages.foreachRDD(r -> {
                 System.out.println("========================");
-                System.out.println(t);
+                System.out.println(r);
             });
-            return null;
-        });
     }
 }
