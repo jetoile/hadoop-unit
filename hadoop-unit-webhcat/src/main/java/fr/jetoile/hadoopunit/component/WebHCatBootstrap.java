@@ -17,12 +17,14 @@ import com.sun.jersey.api.core.PackagesResourceConfig;
 import com.sun.jersey.spi.container.servlet.ServletContainer;
 import fr.jetoile.hadoopunit.Component;
 import fr.jetoile.hadoopunit.HadoopUnitConfig;
+import fr.jetoile.hadoopunit.HadoopUtils;
 import fr.jetoile.hadoopunit.exception.BootstrapException;
 import org.apache.commons.configuration.*;
 import org.apache.hadoop.hdfs.web.AuthFilter;
 import org.apache.hadoop.security.UserGroupInformation;
 import org.apache.hadoop.security.authentication.client.PseudoAuthenticator;
 import org.apache.hadoop.security.authentication.server.PseudoAuthenticationHandler;
+import org.apache.hive.hcatalog.templeton.AppConfig;
 import org.eclipse.jetty.rewrite.handler.RedirectPatternRule;
 import org.eclipse.jetty.rewrite.handler.RewriteHandler;
 import org.eclipse.jetty.server.Handler;
@@ -50,6 +52,8 @@ public class WebHCatBootstrap implements Bootstrap {
 
     final private static Logger LOGGER = LoggerFactory.getLogger(WebHCatBootstrap.class);
 
+    private static volatile AppConfig conf;
+
     private Configuration configuration;
 
     private State state = State.STOPPED;
@@ -58,6 +62,23 @@ public class WebHCatBootstrap implements Bootstrap {
 
     private int port = 9090;
 
+    public WebHCatBootstrap() {
+        try {
+            configuration = HadoopUtils.INSTANCE.loadConfigFile(null);
+            loadConfig();
+        } catch (BootstrapException e) {
+            LOGGER.error("unable to load configuration", e);
+        }
+    }
+
+    public WebHCatBootstrap(URL url) {
+        try {
+            configuration = HadoopUtils.INSTANCE.loadConfigFile(url);
+            loadConfig();
+        } catch (BootstrapException e) {
+            LOGGER.error("unable to load configuration", e);
+        }
+    }
 
     @Override
     public String getName() {
@@ -136,6 +157,109 @@ public class WebHCatBootstrap implements Bootstrap {
             throw new BootstrapException("bad config", e);
         }
         port = configuration.getInt(HadoopUnitConfig.WEBHCAT_PORT_KEY);
+
+        conf = new AppConfig();
+
+
+        conf.startCleanup();
+
+        conf.set("templeton.hive.properties", "hive.metastore.uris=thrift://localhost:20102,hive.metastore.sasl.enabled=false,hive.metastore.execute.setugi=true,hive.execution.engine=mr");
+        conf.set("templeton.zookeeper.hosts", "127.0.0.1:22010");
+        conf.set("hadoop.registry.zk.quorum", "127.0.0.1:22010");
+
+        /*
+jvm 1    | 16:06:27.206 INFO  AppConfig:279 - Attempting to load config file: null/webhcat-site.xml
+jvm 1    | 16:06:27.241 INFO  AppConfig:279 - Attempting to load config file: ${env.HADOOP_CONF_DIR}/core-default.xml
+jvm 1    | 16:06:27.242 INFO  AppConfig:279 - Attempting to load config file: ${env.HADOOP_CONF_DIR}/core-site.xml
+jvm 1    | 16:06:27.242 INFO  AppConfig:279 - Attempting to load config file: ${env.HADOOP_CONF_DIR}/mapred-default.xml
+jvm 1    | 16:06:27.242 INFO  AppConfig:279 - Attempting to load config file: ${env.HADOOP_CONF_DIR}/mapred-site.xml
+jvm 1    | 16:06:27.242 INFO  AppConfig:279 - Attempting to load config file: ${env.HADOOP_CONF_DIR}/hdfs-site.xml
+
+
+<property>
+    <name>templeton.streaming.jar</name>
+    <value>hdfs:///user/templeton/hadoop-streaming.jar</value>
+    <description>The hdfs path to the Hadoop streaming jar file.</description>
+  </property>
+
+  <property>
+    <name>templeton.hadoop</name>
+    <value>${env.HADOOP_PREFIX}/bin/hadoop</value>
+    <description>The path to the Hadoop executable.</description>
+  </property>
+
+  <property>
+    <name>templeton.python</name>
+    <value>${env.PYTHON_CMD}</value>
+    <description>The path to the python executable.</description>
+  </property>
+
+  <property>
+    <name>templeton.pig.archive</name>
+    <value></value>
+    <description>The path to the Pig archive.</description>
+  </property>
+
+  <property>
+    <name>templeton.pig.path</name>
+    <value>pig-0.11.1.tar.gz/pig-0.11.1/bin/pig</value>
+    <description>The path to the Pig executable.</description>
+  </property>
+
+  <property>
+    <name>templeton.hcat</name>
+    <value>${env.HCAT_PREFIX}/bin/hcat.py</value>
+    <description>The path to the hcatalog executable.</description>
+  </property>
+
+  <property>
+    <name>templeton.hive.archive</name>
+    <value></value>
+    <description>The path to the Hive archive.</description>
+  </property>
+
+  <property>
+    <name>templeton.hive.path</name>
+    <value>hive-0.11.0.tar.gz/hive-0.11.0/bin/hive</value>
+    <description>The path to the Hive executable.</description>
+  </property>
+
+  <property>
+    <name>templeton.hive.home</name>
+    <value>hive-0.14.0-SNAPSHOT-bin.tar.gz/hive-0.14.0-SNAPSHOT-bin</value>
+    <description>
+      The path to the Hive home within the tar.  This is needed if Hive is not installed on all
+      nodes in the cluster and needs to be shipped to the target node in the cluster to execute Pig
+      job which uses HCat, Hive query, etc.  Has no effect if templeton.hive.archive is not set.
+    </description>
+  </property>
+  <property>
+    <name>templeton.hcat.home</name>
+    <value>hive-0.14.0-SNAPSHOT-bin.tar.gz/hive-0.14.0-SNAPSHOT-bin/hcatalog</value>
+    <description>
+      The path to the HCat home within the tar.  This is needed if Hive is not installed on all
+      nodes in the cluster and needs to be shipped to the target node in the cluster to execute Pig
+      job which uses HCat, Hive query, etc.  Has no effect if templeton.hive.archive is not set.
+    </description>
+  </property>
+
+  <property>
+    <name>templeton.hive.properties</name>
+    <value>hive.metastore.uris=thrift://localhost:9933,hive.metastore.sasl.enabled=false</value>
+    <description>Properties to set when running hive (during job sumission).  This is expected to
+        be a comma-separated prop=value list.  If some value is itself a comma-separated list the
+        escape character is '\'</description>
+  </property>
+
+  <property>
+    <name>templeton.sqoop.path</name>
+    <value>${env.SQOOP_HOME}/bin/sqoop.cmd</value>
+    <description>The path to the Sqoop executable.</description>
+  </property>
+
+         */
+
+        LOGGER.debug("Loaded conf " + conf);
     }
 
     @Override
@@ -241,5 +365,14 @@ public class WebHCatBootstrap implements Bootstrap {
             }
             return null;
         }
+    }
+
+    /**
+     * Retrieve the config singleton.
+     */
+    public static synchronized AppConfig getAppConfigInstance() {
+        if (conf == null)
+            LOGGER.error("Bug: configuration not yet loaded");
+        return conf;
     }
 }
