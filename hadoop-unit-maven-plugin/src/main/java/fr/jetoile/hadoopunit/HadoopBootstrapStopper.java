@@ -41,6 +41,9 @@ public class HadoopBootstrapStopper extends AbstractMojo {
     @Parameter(property = "port", defaultValue = "20000", required = false)
     protected int port;
 
+    @Parameter(property = "timeout", defaultValue = "120000", required = false) //set timeout to 2 min
+    protected int timeout;
+
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
         getLog().info("is going to send a hadoop unit stop message");
@@ -48,6 +51,7 @@ public class HadoopBootstrapStopper extends AbstractMojo {
         Socket client;
         try {
             client = new Socket("localhost", port);
+            client.setSoTimeout(timeout);
             DataOutputStream outToServer = new DataOutputStream(client.getOutputStream());
             DataInputStream fromServer = new DataInputStream(client.getInputStream());
 
