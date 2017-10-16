@@ -27,6 +27,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.net.URL;
+import java.util.UUID;
 
 import static org.fusesource.jansi.Ansi.Color.BLUE;
 import static org.fusesource.jansi.Ansi.ansi;
@@ -37,6 +38,7 @@ public enum HadoopUtils {
     public static final String WINUTILS_EXE = "winutils.exe";
     public static final String HADOOP_HOME = "HADOOP_HOME";
     public static final String HADOOP_DLL = "/hadoop.dll";
+    public static final String LIBWINUTILS_LIB = "/libwinutils.lib";
     public static final String HDFS_DLL = "/hdfs.dll";
 
     private final Logger LOGGER = LoggerFactory.getLogger(HadoopUtils.class);
@@ -74,6 +76,7 @@ public enum HadoopUtils {
                 extractAndMoveWinUtils(windowsLibDir);
                 extractAndLoadDll(HADOOP_DLL);
                 extractAndLoadDll(HDFS_DLL);
+                extractAndLoadDll(LIBWINUTILS_LIB);
             } catch (IOException e) {
                 LOGGER.error("unable to load windows dll", e);
             }
@@ -89,7 +92,7 @@ public enum HadoopUtils {
     private void extractAndLoadDll(String lib) throws IOException {
         InputStream in = HadoopUtils.class.getResourceAsStream(lib);
         // always write to different location
-        File fileOut = new File(System.getProperty("java.io.tmpdir") + File.separator + lib);
+        File fileOut = new File(System.getProperty("java.io.tmpdir") + File.separator + UUID.randomUUID() + File.separator + lib);
         System.out.println("Writing dll to: " + fileOut.getAbsolutePath());
 
         OutputStream out = FileUtils.openOutputStream(fileOut);
