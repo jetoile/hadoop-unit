@@ -1,6 +1,12 @@
 ## Change Log
 
-### v2.4 (2017/10/18 11:24 +00:00)
+### v2.5 (2017/10/18 19:05 +00:00)
+- [08a2911](https://github.com/jetoile/hadoop-unit/commit/08a291117519af137f3fb63bec92fc829b5f7eb4) fix macos issue (@jetoile)
+- [715f975](https://github.com/jetoile/hadoop-unit/commit/715f9759187ee4c2be06ad22d061055dfd25b673) update doc (@jetoile)
+- [6e54bca](https://github.com/jetoile/hadoop-unit/commit/6e54bcaa84275772783e0403f3a8b448349e2c79) prepare for next dev version (@jetoile)
+
+### v2.4 (2017/10/18 12:18 +00:00)
+- [e997900](https://github.com/jetoile/hadoop-unit/commit/e997900cbe66f10a1e6d9f4db671fdb141e284ad) v2.4 (@jetoile)
 - [deefe82](https://github.com/jetoile/hadoop-unit/commit/deefe82c8a1288439063191c053b01cc53c53b0b) downgrade elastic-embedded to fix lock on windows (@jetoile)
 - [7eb217a](https://github.com/jetoile/hadoop-unit/commit/7eb217af78e8c3d193ca19c8e907ffb54fb9ca27) fix maven-plugin stop (@jetoile)
 - [0785a70](https://github.com/jetoile/hadoop-unit/commit/0785a70589bec6aa9eaf36c80874be34e640d5e0) fix dll issue for windows (@jetoile)
