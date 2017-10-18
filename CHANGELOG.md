@@ -1,8 +1,17 @@
 ## Change Log
 
-### upcoming 
+### v2.4 (2017/10/18 11:24 +00:00)
+- [deefe82](https://github.com/jetoile/hadoop-unit/commit/deefe82c8a1288439063191c053b01cc53c53b0b) downgrade elastic-embedded to fix lock on windows (@jetoile)
+- [7eb217a](https://github.com/jetoile/hadoop-unit/commit/7eb217af78e8c3d193ca19c8e907ffb54fb9ca27) fix maven-plugin stop (@jetoile)
+- [0785a70](https://github.com/jetoile/hadoop-unit/commit/0785a70589bec6aa9eaf36c80874be34e640d5e0) fix dll issue for windows (@jetoile)
+- [ea51550](https://github.com/jetoile/hadoop-unit/commit/ea5155055d0d74e3e27092c0727fc362b99e5539) add timeout for maven-plugin (@jetoile)
+- [#80](https://github.com/jetoile/hadoop-unit/pull/80) cleanup (#80) (@framiere)
+- [38d2886](https://github.com/jetoile/hadoop-unit/commit/38d28867f1ba138c7cc49d721786c3d58494e53f) update doc (@jetoile)
+- [6aad6ae](https://github.com/jetoile/hadoop-unit/commit/6aad6ae597e37179d6ebd579c909f968ca6fcc2d) prepare for next dev version (@jetoile)
 
-### 2.3 (2017/10/01 14:52 +00:00)
+### v2.3 (2017/10/01 15:08 +00:00)
+- [e01c704](https://github.com/jetoile/hadoop-unit/commit/e01c704896041768e78dd3f72d32ef55cbf6c7cf) v2.3 (@jetoile)
+- [2a7ba8e](https://github.com/jetoile/hadoop-unit/commit/2a7ba8e94a9f18ff02c3ca8c5c3e37596e21c3c6) update CHANGELOG (@jetoile)
 - [f575245](https://github.com/jetoile/hadoop-unit/commit/f575245e7a310036e48df619bee2754732781b14) upgrade achille 5.3.1, embedded-elastic 2.4.2, spark 2.2.0_2.11, solr (@jetoile)
 - [80a1ba9](https://github.com/jetoile/hadoop-unit/commit/80a1ba901127fd66bffe3a2ffd3cf0c775aea15b) update hadoop-mini-cluster-0.1.14 (@jetoile)
 - [9fed750](https://github.com/jetoile/hadoop-unit/commit/9fed750c92bb8ac7d4efd29980ee5945f704a134) add a post-integration phase to stop hadoop-unit-maven-plugin (@jetoile)
@@ -62,8 +71,8 @@
 - [20994c0](https://github.com/jetoile/hadoop-unit/commit/20994c02582033cbabe2c0c6cc19f0cf6a209520) update to hadoop-mini-cluster 0.1.9 (@jetoile)
 - [a2ffd37](https://github.com/jetoile/hadoop-unit/commit/a2ffd37b4ffaea9f052c175b6a8968f9d8c09ea3) manage travis (@jetoile)
 - [#58](https://github.com/jetoile/hadoop-unit/pull/58) update to achilles 5.1.5 (#58) (@jetoile)
-- [07bfc41](https://github.com/jetoile/hadoop-unit/commit/07bfc41db8583e3e4c7a403bd6a5fc6c2830e406) use aether to manage jar conflict (@jetoile)
 - [dd58553](https://github.com/jetoile/hadoop-unit/commit/dd58553115b4a0ac8b2f5e927cacbddbeca925c6) update README (@jetoile)
+- [07bfc41](https://github.com/jetoile/hadoop-unit/commit/07bfc41db8583e3e4c7a403bd6a5fc6c2830e406) use aether to manage jar conflict (@jetoile)
 - [a371998](https://github.com/jetoile/hadoop-unit/commit/a37199897fd113c2d5bafc8d10da37715cbf0866) Update README.md (@jetoile)
 - [b6b2acc](https://github.com/jetoile/hadoop-unit/commit/b6b2accef4d1310a840b71d0f30abc4b74b6e0ec) prepare for next dev version (@jetoile)
 
