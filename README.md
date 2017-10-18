@@ -27,6 +27,7 @@ mvn package
 
 | Hadoop Unit version  | Hadoop mini cluster version | HDP version |
 | ------------- | ------------- | ------------- |
+| 2.4 | 0.1.14 | HDP 2.6.2.0 |
 | 2.3 | 0.1.14 | HDP 2.6.2.0 |
 | 2.2 | 0.1.12 | HDP 2.6.1.0 |
 | 2.1 | 0.1.11 | HDP 2.5.3.0 |
@@ -42,7 +43,7 @@ mvn package
 When Hadoop Unit is started, it should display stuff like that:
 ```bash
            ______  __      _________                         _____  __      __________
-           ___  / / /_____ ______  /___________________      __  / / /_________(_)_  /_ 2.1
+           ___  / / /_____ ______  /___________________      __  / / /_________(_)_  /_ 2.4
            __  /_/ /_  __ `/  __  /_  __ \  __ \__  __ \     _  / / /__  __ \_  /_  __/
            _  __  / / /_/ // /_/ / / /_/ / /_/ /_  /_/ /     / /_/ / _  / / /  / / /_
            /_/ /_/  \__,_/ \__,_/  \____/\____/_  .___/      \____/  /_/ /_//_/  \__/
@@ -83,7 +84,7 @@ Sample:
 <dependency>
     <groupId>fr.jetoile.hadoop</groupId>
     <artifactId>hadoop-unit-hdfs</artifactId>
-    <version>2.3</version>
+    <version>2.4</version>
     <scope>test</scope>
 </dependency>
 ```
@@ -109,7 +110,7 @@ Sample:
 <dependency>
     <groupId>fr.jetoile.hadoop</groupId>
     <artifactId>hadoop-unit-hdfs</artifactId>
-    <version>2.3</version>
+    <version>2.4</version>
     <scope>test</scope>
 </dependency>
 ```
@@ -270,21 +271,21 @@ To use it, add into the pom project stuff like that:
      <dependency>
         <groupId>fr.jetoile.hadoop</groupId>
         <artifactId>hadoop-unit-client-hdfs</artifactId>
-        <version>2.3</version>
+        <version>2.4</version>
         <scope>test</scope>
     </dependency>
 
     <dependency>
         <groupId>fr.jetoile.hadoop</groupId>
         <artifactId>hadoop-unit-client-hive</artifactId>
-        <version>2.3</version>
+        <version>2.4</version>
         <scope>test</scope>
     </dependency>
 
     <dependency>
         <groupId>fr.jetoile.hadoop</groupId>
         <artifactId>hadoop-unit-client-spark</artifactId>
-        <version>2.3</version>
+        <version>2.4</version>
         <scope>test</scope>
     </dependency>
 </dependencies>
@@ -342,19 +343,19 @@ To use it, add into the pom project stuff like that:
                 <components>
                     <componentArtifact implementation="fr.jetoile.hadoopunit.ComponentArtifact">
                         <componentName>HDFS</componentName>
-                        <artifact>fr.jetoile.hadoop:hadoop-unit-hdfs:2.1</artifact>
+                        <artifact>fr.jetoile.hadoop:hadoop-unit-hdfs:${hadoop-unit.version}</artifact>
                     </componentArtifact>
                     <componentArtifact implementation="fr.jetoile.hadoopunit.ComponentArtifact">
                         <componentName>ZOOKEEPER</componentName>
-                        <artifact>fr.jetoile.hadoop:hadoop-unit-zookeeper:2.1</artifact>
+                        <artifact>fr.jetoile.hadoop:hadoop-unit-zookeeper:${hadoop-unit.version}</artifact>
                     </componentArtifact>
                     <componentArtifact implementation="fr.jetoile.hadoopunit.ComponentArtifact">
                         <componentName>HIVEMETA</componentName>
-                        <artifact>fr.jetoile.hadoop:hadoop-unit-hive:2.1</artifact>
+                        <artifact>fr.jetoile.hadoop:hadoop-unit-hive:${hadoop-unit.version}</artifact>
                     </componentArtifact>
                     <componentArtifact implementation="fr.jetoile.hadoopunit.ComponentArtifact">
                         <componentName>HIVESERVER2</componentName>
-                        <artifact>fr.jetoile.hadoop:hadoop-unit-hive:2.1</artifact>
+                        <artifact>fr.jetoile.hadoop:hadoop-unit-hive:${hadoop-unit.version}</artifact>
                     </componentArtifact>
                     <componentArtifact implementation="fr.jetoile.hadoopunit.ComponentArtifact">
                         <componentName>SOLRCLOUD</componentName>
@@ -485,7 +486,7 @@ To use it, add into the pom project stuff like that:
 <plugin>
     <artifactId>hadoop-unit-maven-plugin</artifactId>
     <groupId>fr.jetoile.hadoop</groupId>
-    <version>2.3</version>
+    <version>2.4</version>
     <executions>
         <execution>
             <id>start</id>
@@ -512,7 +513,7 @@ To use it, add into the pom project stuff like that:
 <plugin>
     <artifactId>hadoop-unit-maven-plugin</artifactId>
     <groupId>fr.jetoile.hadoop</groupId>
-    <version>2.3</version>
+    <version>2.4</version>
     <executions>
         <execution>
             <id>stop</id>
