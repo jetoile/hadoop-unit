@@ -27,6 +27,7 @@ mvn package
 
 | Hadoop Unit version  | Hadoop mini cluster version | HDP version |
 | ------------- | ------------- | ------------- |
+| 2.5 | 0.1.14 | HDP 2.6.2.0 |
 | 2.4 | 0.1.14 | HDP 2.6.2.0 |
 | 2.3 | 0.1.14 | HDP 2.6.2.0 |
 | 2.2 | 0.1.12 | HDP 2.6.1.0 |
@@ -42,19 +43,55 @@ mvn package
 
 When Hadoop Unit is started, it should display stuff like that:
 ```bash
-           ______  __      _________                         _____  __      __________
-           ___  / / /_____ ______  /___________________      __  / / /_________(_)_  /_ 2.4
-           __  /_/ /_  __ `/  __  /_  __ \  __ \__  __ \     _  / / /__  __ \_  /_  __/
-           _  __  / / /_/ // /_/ / / /_/ / /_/ /_  /_/ /     / /_/ / _  / / /  / / /_
-           /_/ /_/  \__,_/ \__,_/  \____/\____/_  .___/      \____/  /_/ /_//_/  \__/
-                                               /_/
- - ZOOKEEPER [host:127.0.0.1, port:22010]
- - HDFS [port:20112]
- - HIVEMETA [port:20102]
- - HIVESERVER2 [port:20103]
- - KAFKA [host:127.0.0.1, port:20111]
- - HBASE [port:25111]
- - SOLRCLOUD [zh:127.0.0.1:22010, port:8983, collection:collection1]
+                   ______  __      _________                         _____  __      __________
+                   ___  / / /_____ ______  /___________________      __  / / /_________(_)_  /_ 2.5
+                   __  /_/ /_  __ `/  __  /_  __ \  __ \__  __ \     _  / / /__  __ \_  /_  __/
+                   _  __  / / /_/ // /_/ / / /_/ / /_/ /_  /_/ /     / /_/ / _  / / /  / / /_
+                   /_/ /_/  \__,_/ \__,_/  \____/\____/_  .___/      \____/  /_/ /_//_/  \__/
+                                                       /_/
+ 		 - HDFS 
+  			 host:localhost
+  			 port:20112
+ 		 - ZOOKEEPER 
+  			 host:127.0.0.1
+  			 port:22010
+ 		 - HIVEMETA 
+  			 port:20102
+ 		 - HIVESERVER2 
+  			 port:20103
+ 		 - KAFKA 
+  			 host:127.0.0.1
+  			 port:20111
+ 		 - HBASE 
+  			 port:25111
+  			 restPort:28000
+ 		 - SOLRCLOUD 
+  			 zh:127.0.0.1:22010
+  			 port:8983
+  			 collection:collection1
+ 		 - CASSANDRA 
+  			 ip:127.0.0.1
+  			 port:13433
+ 		 - ELASTICSEARCH 
+  			 clusterName:elasticsearch
+  			 ip:127.0.0.1
+  			 httpPort:14433
+  			 tcpPort:14533
+  			 indexName:test_index
+  			 version:5.4.3
+ 		 - NEO4J 
+  			 ip:127.0.0.1
+  			 port:13533
+ 		 - KNOX 
+  			 port:8888
+  			 path:gateway
+  			 cluster:mycluster
+  			 services:namenode, webhdfs, webhbase
+ 		 - REDIS 
+  			 masterPort:6379
+  			 version:4.0.0
+  			 type:SERVER
+
 
 ```
 
@@ -84,7 +121,7 @@ Sample:
 <dependency>
     <groupId>fr.jetoile.hadoop</groupId>
     <artifactId>hadoop-unit-hdfs</artifactId>
-    <version>2.4</version>
+    <version>2.5</version>
     <scope>test</scope>
 </dependency>
 ```
@@ -110,7 +147,7 @@ Sample:
 <dependency>
     <groupId>fr.jetoile.hadoop</groupId>
     <artifactId>hadoop-unit-hdfs</artifactId>
-    <version>2.4</version>
+    <version>2.5</version>
     <scope>test</scope>
 </dependency>
 ```
@@ -271,21 +308,21 @@ To use it, add into the pom project stuff like that:
      <dependency>
         <groupId>fr.jetoile.hadoop</groupId>
         <artifactId>hadoop-unit-client-hdfs</artifactId>
-        <version>2.4</version>
+        <version>2.5</version>
         <scope>test</scope>
     </dependency>
 
     <dependency>
         <groupId>fr.jetoile.hadoop</groupId>
         <artifactId>hadoop-unit-client-hive</artifactId>
-        <version>2.4</version>
+        <version>2.5</version>
         <scope>test</scope>
     </dependency>
 
     <dependency>
         <groupId>fr.jetoile.hadoop</groupId>
         <artifactId>hadoop-unit-client-spark</artifactId>
-        <version>2.4</version>
+        <version>2.5</version>
         <scope>test</scope>
     </dependency>
 </dependencies>
@@ -486,7 +523,7 @@ To use it, add into the pom project stuff like that:
 <plugin>
     <artifactId>hadoop-unit-maven-plugin</artifactId>
     <groupId>fr.jetoile.hadoop</groupId>
-    <version>2.4</version>
+    <version>2.5</version>
     <executions>
         <execution>
             <id>start</id>
@@ -513,7 +550,7 @@ To use it, add into the pom project stuff like that:
 <plugin>
     <artifactId>hadoop-unit-maven-plugin</artifactId>
     <groupId>fr.jetoile.hadoop</groupId>
-    <version>2.4</version>
+    <version>2.5</version>
     <executions>
         <execution>
             <id>stop</id>
