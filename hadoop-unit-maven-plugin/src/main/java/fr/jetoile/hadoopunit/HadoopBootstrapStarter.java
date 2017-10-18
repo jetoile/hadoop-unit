@@ -22,13 +22,11 @@ import org.apache.maven.plugins.annotations.Parameter;
 import org.eclipse.aether.RepositorySystemSession;
 import org.eclipse.aether.repository.RemoteRepository;
 
-import java.lang.management.ManagementFactory;
-import java.lang.management.ThreadInfo;
-import java.lang.management.ThreadMXBean;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.TimeUnit;
 
 @Mojo(name = "embedded-start", defaultPhase = LifecyclePhase.PRE_INTEGRATION_TEST, threadSafe = false)
 public class HadoopBootstrapStarter extends AbstractMojo {
@@ -72,7 +70,9 @@ public class HadoopBootstrapStarter extends AbstractMojo {
         thread.start();
 
         try {
-            queue.take();
+            queue.poll(10, TimeUnit.MINUTES);
+            getLog().info("free starter");
+
         } catch (InterruptedException e) {
             getLog().error("unable to synchronize startup: " + e.getMessage());
         }

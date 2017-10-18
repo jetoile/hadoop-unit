@@ -20,20 +20,12 @@ import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
-import org.eclipse.aether.RepositorySystemSession;
-import org.eclipse.aether.repository.RemoteRepository;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.lang.management.ManagementFactory;
-import java.lang.management.ThreadInfo;
-import java.lang.management.ThreadMXBean;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingQueue;
 
 @Mojo(name = "embedded-stop", defaultPhase = LifecyclePhase.POST_INTEGRATION_TEST, threadSafe = false)
 public class HadoopBootstrapStopper extends AbstractMojo {
@@ -48,24 +40,20 @@ public class HadoopBootstrapStopper extends AbstractMojo {
     public void execute() throws MojoExecutionException, MojoFailureException {
         getLog().info("is going to send a hadoop unit stop message");
 
-        Socket client;
-        try {
-            client = new Socket("localhost", port);
+        try (Socket client = new Socket("localhost", port);
+             PrintWriter out = new PrintWriter(client.getOutputStream(), true);
+             BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()))) {
             client.setSoTimeout(timeout);
-            DataOutputStream outToServer = new DataOutputStream(client.getOutputStream());
-            DataInputStream fromServer = new DataInputStream(client.getInputStream());
 
-            outToServer.writeBytes("stop" + '\n');
+            out.println("stop");
             String responseLine;
-            if ((responseLine = fromServer.readLine()) != null) {
-                if (StringUtils.equalsIgnoreCase(responseLine, "success")) {
+            if ((responseLine = in.readLine()) != null) {
+                if (StringUtils.containsIgnoreCase(responseLine, "success")) {
                     getLog().info("hadoop unit is stopped");
                 }
             }
 
-            client.close();
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             getLog().error("unable to contact pre-integration phase: " + e.getMessage());
         }
     }

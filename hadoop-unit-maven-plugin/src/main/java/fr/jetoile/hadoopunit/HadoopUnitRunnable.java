@@ -138,24 +138,25 @@ public class HadoopUnitRunnable implements Runnable {
 
         queue.add(new Object());
 
-        try {
-            ServerSocket serverSocket = new ServerSocket(port);
-            Socket client = serverSocket.accept();
-            BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
-            PrintStream output = new PrintStream(client.getOutputStream());
+        try (ServerSocket serverSocket = new ServerSocket(port);
+             Socket client = serverSocket.accept();
+             BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
+             PrintWriter output = new PrintWriter(client.getOutputStream(), true)) {
 
 
             String line = in.readLine();
+            log.info("runner received " + line);
 
-            if (StringUtils.equalsIgnoreCase(line, "stop")) {
+            if (StringUtils.containsIgnoreCase(line, "stop")) {
                 log.info("is going to shutdown");
                 this.stopAll(componentProperties);
 
                 output.println("success");
+                log.info("success sent");
 
                 Thread.currentThread().interrupt();
 
-                serverSocket.close();
+                log.info("interrupt signal sent to hadoop unit");
             }
 
         } catch (IOException e) {
