@@ -42,5 +42,11 @@
             <outputDirectory>bin</outputDirectory>
             <fileMode>750</fileMode>
         </file>
+        <file>
+            <source>${project.build.directory}/appassembler-jsw/jsw/hadoop-unit-standalone/bin/wrapper-macosx-universal-64
+            </source>
+            <outputDirectory>bin</outputDirectory>
+            <fileMode>750</fileMode>
+        </file>
     </files>
 </assembly>
