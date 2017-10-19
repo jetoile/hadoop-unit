@@ -37,6 +37,16 @@ Welcome to the Hadoop Unit wiki!
 		 tcpPort:14533
 		 indexName:test_index
 		 version:5.4.3
+- CONFLUENT_KAFKA 
+		 kafka host:127.0.0.1
+		 kafka port:22222
+- CONFLUENT_SCHEMAREGISTRY 
+		 schemaregistry host:127.0.0.1
+		 schemaregistry port:8081
+- CONFLUENT_KAFKA_REST 
+		 rest host:127.0.0.1
+		 rest port:8082
+		 
 ...
 ```
 

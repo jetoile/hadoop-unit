@@ -68,6 +68,7 @@
         <module>hadoop-unit-alluxio</module>
         <module>hadoop-unit-windowslibs</module>
         <module>hadoop-unit-redis</module>
+        <module>hadoop-unit-confluent</module>
         <module>sample</module>
         <module>hadoop-unit-site</module>
     </modules>
@@ -77,6 +78,10 @@
             <id>public.repo.hortonworks.com</id>
             <name>Public Hortonworks Maven Repo</name>
             <url>http://repo.hortonworks.com/content/groups/public/</url>
+        </repository>
+        <repository>
+            <id>confluent</id>
+            <url>http://packages.confluent.io/maven/</url>
         </repository>
     </repositories>
 
@@ -139,6 +144,9 @@
         <hadoop.version>2.7.3.2.6.2.0-205</hadoop.version>
         <knox.version>0.12.0.2.6.2.0-205</knox.version>
         <kafka_2.10.version>0.10.1.2.6.2.0-205</kafka_2.10.version>
+
+        <confluent.version>4.0.0</confluent.version>
+        <confluent_kafka.version>1.0.0-cp1</confluent_kafka.version>
 
         <spark_2.11.version>2.2.0</spark_2.11.version>
         <spark-solr.version>3.2.1</spark-solr.version>
@@ -381,6 +389,18 @@
                 <groupId>org.elasticsearch.client</groupId>
                 <artifactId>transport</artifactId>
                 <version>${elasticsearch.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.confluent</groupId>
+                <artifactId>kafka-schema-registry</artifactId>
+                <version>${confluent.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.confluent</groupId>
+                <artifactId>kafka-rest</artifactId>
+                <version>${confluent.version}</version>
             </dependency>
 
             <dependency>

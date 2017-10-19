@@ -51,6 +51,7 @@ The available components are:
 * MONGODB
 * CASSANDRA
 * ELASTICSEARCH
+* CONFLUENT (ie. schema registry, rest gateway, kafka)
 * NEO4J
 * KNOX
 * ALLUXIO
