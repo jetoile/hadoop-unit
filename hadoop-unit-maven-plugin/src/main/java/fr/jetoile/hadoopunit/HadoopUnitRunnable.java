@@ -94,7 +94,7 @@ public class HadoopUnitRunnable implements Runnable {
 
         RepositorySystem system = newRepositorySystem();
         DefaultRepositorySystemSession session = newRepositorySystemSession(system);
-        DependencyFilter classpathFilter = DependencyFilterUtils.classpathFilter(JavaScopes.COMPILE);
+        DependencyFilter classpathFilter = DependencyFilterUtils.classpathFilter(JavaScopes.RUNTIME);
 
         components.stream().forEach(
                 c -> {
@@ -102,7 +102,7 @@ public class HadoopUnitRunnable implements Runnable {
 
                     ArtifactRequest request = new ArtifactRequest();
                     CollectRequest collectRequest = new CollectRequest();
-                    collectRequest.setRoot(new Dependency(artifact, JavaScopes.COMPILE));
+                    collectRequest.setRoot(new Dependency(artifact, JavaScopes.RUNTIME));
                     collectRequest.setRepositories(remoteRepos);
 
                     log.info("Resolving artifact " + artifact + " from " + remoteRepos.stream().map(r -> r.getId() + "-" + r.getUrl()).collect(Collectors.joining(", ")));

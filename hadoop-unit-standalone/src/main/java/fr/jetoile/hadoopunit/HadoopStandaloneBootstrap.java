@@ -40,6 +40,7 @@ import org.eclipse.aether.transport.file.FileTransporterFactory;
 import org.eclipse.aether.transport.http.HttpTransporterFactory;
 import org.eclipse.aether.util.artifact.JavaScopes;
 import org.eclipse.aether.util.filter.DependencyFilterUtils;
+import org.fusesource.jansi.AnsiConsole;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -124,12 +125,12 @@ public class HadoopStandaloneBootstrap {
 
         RepositorySystem system = newRepositorySystem();
         DefaultRepositorySystemSession session = newRepositorySystemSession(system);
-        DependencyFilter classpathFilter = DependencyFilterUtils.classpathFilter(JavaScopes.COMPILE);
+        DependencyFilter classpathFilter = DependencyFilterUtils.classpathFilter(JavaScopes.RUNTIME);
 
         componentsToStart.stream().forEach(c -> {
             Artifact artifact = new DefaultArtifact(hadoopUnitConfiguration.getString(c.getArtifactKey()));
             CollectRequest collectRequest = new CollectRequest();
-            collectRequest.setRoot(new Dependency(artifact, JavaScopes.COMPILE));
+            collectRequest.setRoot(new Dependency(artifact, JavaScopes.RUNTIME));
             collectRequest.setRepositories(newRepositories(system, session));
 
             DependencyRequest dependencyRequest = new DependencyRequest(collectRequest, classpathFilter);
