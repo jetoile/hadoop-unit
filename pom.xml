@@ -69,6 +69,7 @@
         <module>hadoop-unit-windowslibs</module>
         <module>hadoop-unit-redis</module>
         <module>sample</module>
+        <module>hadoop-unit-site</module>
     </modules>
 
     <repositories>
@@ -818,6 +819,11 @@
     <build>
         <pluginManagement>
             <plugins>
+                <plugin>
+                    <artifactId>maven-site-plugin</artifactId>
+                    <version>3.6</version>
+                </plugin>
+
                 <plugin>
                     <artifactId>maven-assembly-plugin</artifactId>
                     <version>2.4</version>

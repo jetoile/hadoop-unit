@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>hadoop-unit</artifactId>
+        <groupId>fr.jetoile.hadoop</groupId>
+        <version>2.6-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>hadoop-unit-site</artifactId>
+
+    <properties>
+        <github.global.server>github</github.global.server>
+    </properties>
+
+
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-site-plugin</artifactId>
+                <configuration>
+                    <outputEncoding>UTF-8</outputEncoding>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.apache.maven.doxia</groupId>
+                        <artifactId>doxia-module-markdown</artifactId>
+                        <version>1.7</version>
+                    </dependency>
+                </dependencies>
+                <!--<configuration>-->
+                    <!--<asciidoc>-->
+                        <!--<templateDirs>-->
+                            <!--<dir>src/site/asciidoc/templates</dir>-->
+                        <!--</templateDirs>-->
+                        <!--<requires>-->
+                            <!--<require>asciidoctor-diagram</require>-->
+                        <!--</requires>-->
+                        <!--<attributes>-->
+                            <!--<source-highlighter>coderay</source-highlighter>-->
+                            <!--<coderay-css>style</coderay-css>-->
+                        <!--</attributes>-->
+                    <!--</asciidoc>-->
+                    <!--<moduleExcludes>-->
+                        <!--<asciidoc>**/_*.adoc</asciidoc>-->
+                    <!--</moduleExcludes>-->
+                <!--</configuration>-->
+                <!--<dependencies>-->
+                    <!--<dependency>&lt;!&ndash; add Asciidoctor Doxia Parser Module &ndash;&gt;-->
+                        <!--<groupId>org.asciidoctor</groupId>-->
+                        <!--<artifactId>asciidoctor-maven-plugin</artifactId>-->
+                        <!--<version>1.5.6</version>-->
+                    <!--</dependency>-->
+                <!--</dependencies>-->
+            </plugin>
+        </plugins>
+    </build>
+
+    <profiles>
+        <profile>
+            <id>deploy-site</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+                <property>
+                    <name>deploy</name>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.github.github</groupId>
+                        <artifactId>site-maven-plugin</artifactId>
+                        <version>0.12</version>
+                        <configuration>
+                            <message>Creating site for ${project.version}</message>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>site</goal>
+                                </goals>
+                                <phase>site</phase>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+</project>

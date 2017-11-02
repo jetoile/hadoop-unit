@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="My Site Title"
+         xmlns="http://maven.apache.org/DECORATION/1.7.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/DECORATION/1.7.0 http://maven.apache.org/xsd/decoration-1.7.0.xsd">
+
+    <skin>
+        <groupId>org.apache.maven.skins</groupId>
+        <artifactId>maven-fluido-skin</artifactId>
+        <version>1.6</version>
+    </skin>
+
+    <custom>
+
+        <fluidoSkin>
+            <topBarEnabled>true</topBarEnabled>
+            <!--<topBarContainerStyle>width: 70%;padding-top:200px;</topBarContainerStyle>-->
+            <!--<topBarContainerStyle>width: 70%;</topBarContainerStyle>-->
+            <!--<navBarStyle>navbar-inverse</navBarStyle>-->
+            <sideBarEnabled>false</sideBarEnabled>
+            <googleSearch>
+                <sitesearch/>
+            </googleSearch>
+            <sourceLineNumbersEnabled>true</sourceLineNumbersEnabled>
+        </fluidoSkin>
+    </custom>
+
+    <body>
+
+        <menu name="Menu">
+            <item name="Home" href="index.html"/>
+            <item name="What is Hadoop Unit" href="what-is-hadoop-unit.html"/>
+            <item name="Why Hadoop Unit" href="why-hadoop-unit.html"/>
+            <item name="Installation">
+                <item name="Install the standalone Hadoop Unit mode" href="install-hadoop-unit-standalone.html"/>
+                <item name="Integrate Hadoop Unit in your maven project" href="maven-usage.html"/>
+            </item>
+            <item name="Use CLI to operate Hadoop Unit Standalone" href="cli.html"/>
+            <item name="How to write integration test with Hadoop Unit" href="howto-integrationtest.html"/>
+            <item name="Howto build" href="howto-build.html"/>
+            <item name="Focus" href="focus.html"/>
+            <item name="Licence" href="licence.html"/>
+        </menu>
+
+        <!--<menu name="Home" ref="index.html"/>-->
+        <!--<menu name="What is Hadoop Unit" ref="what-is-hadoop-unit.html"/>-->
+        <!--<menu name="Why Hadoop Unit" ref="why-hadoop-unit.html"/>-->
+        <!--<menu name="Installation">-->
+            <!--<item name="Install the standalone Hadoop Unit mode" href="install-hadoop-unit-standalone.html"/>-->
+            <!--<item name="Integrate Hadoop Unit in your maven project" href="maven-usage.html"/>-->
+        <!--</menu>-->
+        <!--<menu name="Use CLI to operate Hadoop Unit Standalone" ref="cli.html"/>-->
+        <!--<menu name="How to write integration test with Hadoop Unit" ref="howto-integrationtest.html"/>-->
+        <!--<menu name="Howto build" ref="howto-build.html"/>-->
+        <!--<menu name="Focus" ref="focus.html"/>-->
+        <!--<menu name="Licence" ref="licence.html"/>-->
+
+
+        <!--<links>-->
+            <!--<item name="Github" href="https://github.com/jetoile/hadoop-unit"/>-->
+            <!--<item name="Maven" href="http://search.apache.org"/>-->
+        <!--</links>-->
+
+        <!--<breadcrumbs>-->
+            <!--<item name="Home" href="index.html"/>-->
+            <!--<item name="What is Hadoop Unit" href="what-is-hadoop-unit.html"/>-->
+            <!--<item name="Why Hadoop Unit" href="why-hadoop-unit.html"/>-->
+            <!--<item name="Installation">-->
+                <!--&lt;!&ndash;<item name="Install the standalone Hadoop Unit mode" href="install-hadoop-unit-standalone.html"/>&ndash;&gt;-->
+                <!--&lt;!&ndash;<item name="Integrate Hadoop Unit in your maven project" href="maven-usage.html"/>&ndash;&gt;-->
+            <!--</item>-->
+            <!--<item name="Use CLI to operate Hadoop Unit Standalone" href="cli.html"/>-->
+            <!--<item name="How to write integration test with Hadoop Unit" href="howto-integrationtest.html"/>-->
+            <!--<item name="Howto build" href="howto-build.html"/>-->
+            <!--<item name="Focus" href="focus.html"/>-->
+            <!--<item name="Licence" href="licence.html"/>-->
+        <!--</breadcrumbs>-->
+
+        <!--<footer><![CDATA[<img src="/images/sponsors.png" alt="center" />]]></footer>-->
+
+    </body>
+
+
+
+</project>
