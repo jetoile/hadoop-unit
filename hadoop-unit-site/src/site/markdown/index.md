@@ -45,6 +45,7 @@ Welcome to the Hadoop Unit wiki!
 * [Why Hadoop Unit](why-hadoop-unit.html)
 
 * Installation
+
   * [Install the standalone Hadoop Unit mode](install-hadoop-unit-standalone.html)
   * [Integrate Hadoop Unit in your maven project](maven-usage.html)
 

@@ -1,10 +1,12 @@
 # Hadoop Unit build
 
 To build Hadoop Unit, you need:
+
 * jdk 1.8
 * maven 3.0+
 
 Run:
+
 ```bash
 mvn install -DskipTests
 ```

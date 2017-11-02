@@ -19,7 +19,7 @@ Hadoop-unit can be used with common tools such as:
 hdfs dfs -ls hdfs://localhost:20112/
 ```
 
-**For windows user, you could have some issue like `-classpath is not known`. The cause of these errors are because your `JAVA_HOME` has space into. If your `JAVA_HOME` is linked to `C:\Program File\Java\...` then declared it as `C:\Progra~1\Java\...`
+**For windows user, you could have some issue like `-classpath is not known`. The cause of these errors are because your `JAVA_HOME` has space into. If your `JAVA_HOME` is linked to `C:\Program File\Java\...` then declared it as `C:\Progra~1\Java\...`**
 
 <div id="kafka-console-command"/>
 # Kafka-console command
@@ -30,12 +30,14 @@ hdfs dfs -ls hdfs://localhost:20112/
 ```bash
 kafka-console-consumer --zookeeper localhost:22010 --topic topic
 ```
+
 <div id="hbase-shell"/>
 # HBase Shell
 
 * Download and unzip HBase
 * set variable `HBASE_HOME`
 * edit file `HBASE_HOME/conf/hbase-site.xml`:
+
 ```xml
 <configuration>
 	<property>
@@ -54,6 +56,7 @@ kafka-console-consumer --zookeeper localhost:22010 --topic topic
 ```bash
 hbase shell
 ```
+
 <div id="hive-shell"/>
 # Hive Shell
 
