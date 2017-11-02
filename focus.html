@@ -85,20 +85,41 @@
 
 <div id="focus-on-elasticsearch"></div>
 <h1>Focus on ElasticSearch</h1>
-<p>Under the hood, to run ElasticSearch, this is how it works: * ElasticSearch is downloaded * A Java Process is run to start ElasticSearch</p>
+<p>Under the hood, to run ElasticSearch, this is how it works:</p>
+
+<ul>
+  
+<li>ElasticSearch is downloaded</li>
+  
+<li>A Java Process is run to start ElasticSearch</li>
+</ul>
 <p>To know from where ElasticSearch has to be downloaded, the variable <tt>elasticsearch.download.url</tt> from the configuration file <tt>hadoop-unit-default.properties</tt> is used.</p>
 <p>To know which version of ElasticSearch has to be downloaded, the variable <tt>elasticsearch.version</tt> from the configuration file <tt>hadoop-unit-default.properties</tt> is used.</p>
 
 <div id="focus-on-redis"></div>
 <h1>Focus on Redis</h1>
-<p>Under the hood, to run Redis, this is how it works: * Redis is downloaded * An ant task is run to execute the <tt>make</tt> command</p>
+<p>Under the hood, to run Redis, this is how it works:</p>
+
+<ul>
+  
+<li>Redis is downloaded</li>
+  
+<li>An ant task is run to execute the <tt>make</tt> command</li>
+</ul>
 <p>This is why Redis is not available on Windows.</p>
 <p>To know where Redis has to be downloaded, the variable <tt>redis.download.url</tt> from the configuration file <tt>hadoop-unit-default.properties</tt> is used.</p>
 <p>To know which version of Redis has to be downloaded, the variable <tt>redis.version</tt> from the configuration file <tt>hadoop-unit-default.properties</tt> is used.</p>
 
 <div id="focus-on-oozie"></div>
 <h1>Focus on Oozie</h1>
-<p>To use oozie, you need: * to download the <a class="externalLink" href="http://s3.amazonaws.com/public-repo-1.hortonworks.com/HDP/centos6/2.x/updates/2.6.1.0/tars/oozie/oozie-4.2.0.2.6.1.0-129-distro.tar.gz">oozie&#x2019;s share libs</a> * to edit the configuration file <tt>conf/hadoop-unit-default.properties</tt> and to set the variable <tt>oozie.sharelib.path</tt> to where you downloaded the oozie&#x2019;s share libs</p>
+<p>To use oozie, you need:</p>
+
+<ul>
+  
+<li>to download the <a class="externalLink" href="http://s3.amazonaws.com/public-repo-1.hortonworks.com/HDP/centos6/2.x/updates/2.6.1.0/tars/oozie/oozie-4.2.0.2.6.1.0-129-distro.tar.gz">oozie&#x2019;s share libs</a></li>
+  
+<li>to edit the configuration file <tt>conf/hadoop-unit-default.properties</tt> and to set the variable <tt>oozie.sharelib.path</tt> to where you downloaded the oozie&#x2019;s share libs</li>
+</ul>
         </div>
     </div>
     <hr/>

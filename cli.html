@@ -103,7 +103,7 @@
 <div class="source">
 <div class="source"><pre class="prettyprint linenums">hdfs dfs -ls hdfs://localhost:20112/
 </pre></div></div>
-<p>**For windows user, you could have some issue like <tt>-classpath is not known</tt>. The cause of these errors are because your <tt>JAVA_HOME</tt> has space into. If your <tt>JAVA_HOME</tt> is linked to <tt>C:\Program File\Java\...</tt> then declared it as <tt>C:\Progra~1\Java\...</tt></p>
+<p><b>For windows user, you could have some issue like <tt>-classpath is not known</tt>. The cause of these errors are because your <tt>JAVA_HOME</tt> has space into. If your <tt>JAVA_HOME</tt> is linked to <tt>C:\Program File\Java\...</tt> then declared it as <tt>C:\Progra~1\Java\...</tt></b></p>
 
 <div id="kafka-console-command"></div>
 <h1>Kafka-console command</h1>
@@ -128,21 +128,25 @@
   
 <li>set variable <tt>HBASE_HOME</tt></li>
   
-<li>edit file <tt>HBASE_HOME/conf/hbase-site.xml</tt>: <tt>xml
-&lt;configuration&gt;
-&lt;property&gt;
-	&lt;name&gt;hbase.zookeeper.quorum&lt;/name&gt;
-	&lt;value&gt;127.0.0.1:22010&lt;/value&gt;
-&lt;/property&gt;
-&lt;property&gt;
-	&lt;name&gt;zookeeper.znode.parent&lt;/name&gt;
-	&lt;value&gt;/hbase-unsecure&lt;/value&gt;
-&lt;/property&gt;
+<li>edit file <tt>HBASE_HOME/conf/hbase-site.xml</tt>:</li>
+</ul>
+
+<div class="source">
+<div class="source"><pre class="prettyprint linenums">&lt;configuration&gt;
+	&lt;property&gt;
+		&lt;name&gt;hbase.zookeeper.quorum&lt;/name&gt;
+		&lt;value&gt;127.0.0.1:22010&lt;/value&gt;
+	&lt;/property&gt;
+	&lt;property&gt;
+		&lt;name&gt;zookeeper.znode.parent&lt;/name&gt;
+		&lt;value&gt;/hbase-unsecure&lt;/value&gt;
+	&lt;/property&gt;
 &lt;/configuration&gt;
-</tt></li>
+</pre></div></div>
+
+<ul>
   
-<li>
-<p>From directory <tt>HBASE_HOME/bin</tt>, execute command:</p></li>
+<li>From directory <tt>HBASE_HOME/bin</tt>, execute command:</li>
 </ul>
 
 <div class="source">

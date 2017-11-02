@@ -80,8 +80,10 @@
 <p>Moreover, Hadoop Unit allow users to work on their laptop which bring a better feedback that having to run jobs on a development cluster. Thus they are not bored by kerberos or security complexity.</p>
 <h1>Technical point of view</h1>
 <p>As Hadoop&#x2019;s components have not been designed to run in the same JVM, a lot of problems occurs.</p>
-<p>In fact, Hadoop Unit run each component in his own classloader to avoid classpath issues. To do this, it is using maven resolver which is the dependency engine of maven and hadoop mini cluster which allows to make integration tests for hortonworks much easier.</p>
+<p>In fact, Hadoop Unit run each component in his own classloader to avoid classpath issues (for standalone mode and maven integration plugin with mode embedded). To do this, it is using maven resolver which is the dependency engine of maven and hadoop mini cluster which allows to make integration tests for hortonworks much easier.</p>
 <p>In fact, hadoop mini cluster is using stuff like MiniDFS, LocalOozie which are available in the Hadoop world.</p>
+<p>For the mode <a href="maven-usage.html#simple-dependency-usage">Simple dependency usage</a>, a <i>service provider interface</i> is used under the hood. This is why if, for example, you need hbase, it is not provided to add zookeeper in your test dependencies since the maven dependencies transitivity is used.</p>
+<p>Moreover, Hadoop Unit manage the right order for components&#x2019; bootstrap for you. </p>
         </div>
     </div>
     <hr/>
