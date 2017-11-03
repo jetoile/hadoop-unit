@@ -3,6 +3,8 @@
          xmlns="http://maven.apache.org/DECORATION/1.7.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/DECORATION/1.7.0 http://maven.apache.org/xsd/decoration-1.7.0.xsd">
 
+    <googleAnalyticsAccountId>UA-11955429-1</googleAnalyticsAccountId>
+
     <skin>
         <groupId>org.apache.maven.skins</groupId>
         <artifactId>maven-fluido-skin</artifactId>
@@ -30,6 +32,7 @@
     </custom>
 
     <body>
+        
 
         <menu name="Menu">
             <item name="Home" href="index.html"/>
