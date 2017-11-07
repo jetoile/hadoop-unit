@@ -19,7 +19,7 @@ Sample:
 <dependency>
     <groupId>fr.jetoile.hadoop</groupId>
     <artifactId>hadoop-unit-hdfs</artifactId>
-    <version>2.5</version>
+    <version>2.6</version>
     <scope>test</scope>
 </dependency>
 ```
@@ -84,21 +84,21 @@ To use it, add into the pom project stuff like that:
      <dependency>
         <groupId>fr.jetoile.hadoop</groupId>
         <artifactId>hadoop-unit-client-hdfs</artifactId>
-        <version>2.5</version>
+        <version>2.6</version>
         <scope>test</scope>
     </dependency>
 
     <dependency>
         <groupId>fr.jetoile.hadoop</groupId>
         <artifactId>hadoop-unit-client-hive</artifactId>
-        <version>2.5</version>
+        <version>2.6</version>
         <scope>test</scope>
     </dependency>
 
     <dependency>
         <groupId>fr.jetoile.hadoop</groupId>
         <artifactId>hadoop-unit-client-spark</artifactId>
-        <version>2.5</version>
+        <version>2.6</version>
         <scope>test</scope>
     </dependency>
 </dependencies>
@@ -328,7 +328,7 @@ To use it, add into the pom project stuff like that:
 <plugin>
     <artifactId>hadoop-unit-maven-plugin</artifactId>
     <groupId>fr.jetoile.hadoop</groupId>
-    <version>2.5</version>
+    <version>2.6</version>
     <executions>
         <execution>
             <id>start</id>
@@ -355,7 +355,7 @@ To use it, add into the pom project stuff like that:
 <plugin>
     <artifactId>hadoop-unit-maven-plugin</artifactId>
     <groupId>fr.jetoile.hadoop</groupId>
-    <version>2.5</version>
+    <version>2.6</version>
     <executions>
         <execution>
             <id>stop</id>
