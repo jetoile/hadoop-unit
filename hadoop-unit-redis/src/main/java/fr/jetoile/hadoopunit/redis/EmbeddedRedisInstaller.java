@@ -13,14 +13,9 @@
  */
 package fr.jetoile.hadoopunit.redis;
 
-import lombok.Builder;
-import lombok.Data;
-
 import java.io.File;
 import java.io.IOException;
 
-@Data
-@Builder
 public class EmbeddedRedisInstaller {
 
     public static final String REDIS_DOWNLOAD_URL = "http://download.redis.io/releases/";
@@ -30,16 +25,22 @@ public class EmbeddedRedisInstaller {
     private String tmpDir;
     private boolean forceCleanupInstallationDirectory;
 
-    RedisInstaller redisInstaller;
+    RedisInstaller redisInstaller = new RedisInstaller(version, downloadUrl, forceCleanupInstallationDirectory, tmpDir);
 
-    public EmbeddedRedisInstaller install() throws IOException, InterruptedException {
-        installRedis();
-        return this;
+    EmbeddedRedisInstaller(String downloadUrl, String version, String tmpDir, boolean forceCleanupInstallationDirectory) {
+        this.downloadUrl = downloadUrl;
+        this.version = version;
+        this.tmpDir = tmpDir;
+        this.forceCleanupInstallationDirectory = forceCleanupInstallationDirectory;
     }
 
-    private void installRedis() throws IOException, InterruptedException {
-        redisInstaller = new RedisInstaller(version, downloadUrl, forceCleanupInstallationDirectory, tmpDir);
+    public static EmbeddedRedisInstallerBuilder builder() {
+        return new EmbeddedRedisInstallerBuilder();
+    }
+
+    public EmbeddedRedisInstaller install() throws IOException, InterruptedException {
         redisInstaller.install();
+        return this;
     }
 
     public File getExecutableFile() {
@@ -47,5 +48,53 @@ public class EmbeddedRedisInstaller {
     }
 
 
+    public String getDownloadUrl() {
+        return this.downloadUrl;
+    }
 
+    public String getVersion() {
+        return this.version;
+    }
+
+    public String getTmpDir() {
+        return this.tmpDir;
+    }
+
+    public boolean isForceCleanupInstallationDirectory() {
+        return this.forceCleanupInstallationDirectory;
+    }
+
+    public static class EmbeddedRedisInstallerBuilder {
+        private String downloadUrl;
+        private String version;
+        private String tmpDir;
+        private boolean forceCleanupInstallationDirectory;
+
+        EmbeddedRedisInstallerBuilder() {
+        }
+
+        public EmbeddedRedisInstaller.EmbeddedRedisInstallerBuilder downloadUrl(String downloadUrl) {
+            this.downloadUrl = downloadUrl;
+            return this;
+        }
+
+        public EmbeddedRedisInstaller.EmbeddedRedisInstallerBuilder version(String version) {
+            this.version = version;
+            return this;
+        }
+
+        public EmbeddedRedisInstaller.EmbeddedRedisInstallerBuilder tmpDir(String tmpDir) {
+            this.tmpDir = tmpDir;
+            return this;
+        }
+
+        public EmbeddedRedisInstaller.EmbeddedRedisInstallerBuilder forceCleanupInstallationDirectory(boolean forceCleanupInstallationDirectory) {
+            this.forceCleanupInstallationDirectory = forceCleanupInstallationDirectory;
+            return this;
+        }
+
+        public EmbeddedRedisInstaller build() {
+            return new EmbeddedRedisInstaller(downloadUrl, version, tmpDir, forceCleanupInstallationDirectory);
+        }
+    }
 }
