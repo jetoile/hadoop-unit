@@ -477,6 +477,12 @@
                 <groupId>org.apache.hadoop</groupId>
                 <artifactId>hadoop-common</artifactId>
                 <version>${hadoop.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <artifactId>jdk.tools</artifactId>
+                        <groupId>jdk.tools</groupId>
+                    </exclusion>
+                </exclusions>
             </dependency>
 
             <dependency>
@@ -643,6 +649,12 @@
                 <groupId>com.github.sakserv</groupId>
                 <artifactId>hadoop-mini-clusters-hbase</artifactId>
                 <version>${hadoop-mini-clusters.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <artifactId>jdk.tools</artifactId>
+                        <groupId>jdk.tools</groupId>
+                    </exclusion>
+                </exclusions>
             </dependency>
 
             <dependency>
