@@ -19,6 +19,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import static java.util.stream.Collectors.toList;
 import static org.fusesource.jansi.Ansi.Color.GREEN;
@@ -40,18 +43,16 @@ public enum HadoopBootstrap {
     HadoopBootstrap() {
         commands.clear();
         commandLoader.reload();
-        Iterator<Bootstrap> commandsIterator = commandLoader.iterator();
 
-        while (commandsIterator.hasNext()) {
-            Bootstrap command = commandsIterator.next();
-            commands.put(command.getName(), command);
-        }
+        Iterable<Bootstrap> iterable = commandLoader::iterator;
+        commands = StreamSupport.stream(iterable.spliterator(), false)
+                .collect(Collectors.toMap(Bootstrap::getName, Function.identity()));
 
-        Arrays.asList(Component.values()).stream().forEach(c -> {
-            if (commands.containsKey(c.name())) {
-                componentsToStart.add(commands.get(c.name()));
-            }
-        });
+        componentsToStart = commands.entrySet().stream()
+                .filter(entry -> Component.isComponent(entry.getKey()))
+                .sorted(Comparator.comparingInt(e -> Component.getOrdinal(e.getKey())))
+                .map(Map.Entry::getValue)
+                .collect(toList());
 
         componentsToStop = this.componentsToStart.stream().collect(toList());
         Collections.reverse(componentsToStop);
@@ -98,18 +99,15 @@ public enum HadoopBootstrap {
     }
 
     private void internalStart(List<Bootstrap> componentsToStart) {
-        componentsToStart.stream().forEach(c -> {
-            startService(c);
-        });
+        componentsToStart.forEach(this::startService);
+
         HadoopUtils.INSTANCE.printBanner(System.out);
-        componentsToStart.stream().forEach(c -> HadoopUtils.printColorLine(System.out, GREEN, "\t\t - " + c.getName() + " " + c.getProperties()));
+        componentsToStart.forEach(c -> HadoopUtils.printColorLine(System.out, GREEN, "\t\t - " + c.getName() + " " + c.getProperties()));
         System.out.println();
     }
 
     private void internalStop(List<Bootstrap> componentsToStop) {
-        componentsToStop.stream().forEach(c -> {
-            stopService(c);
-        });
+        componentsToStop.forEach(this::stopService);
     }
 
     private void startService(Bootstrap c) {

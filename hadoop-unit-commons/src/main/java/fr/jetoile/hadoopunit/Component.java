@@ -13,6 +13,8 @@
  */
 package fr.jetoile.hadoopunit;
 
+import java.util.Arrays;
+
 /**
  * List of component which can be bootstrap.
  * Warning : this list should be sorted
@@ -56,6 +58,15 @@ public enum Component {
 
     public String getArtifactKey() {
         return artifactKey;
+    }
+
+    public static boolean isComponent(String key) {
+        return Arrays.stream(values())
+                .anyMatch(enumValue -> enumValue.key.equalsIgnoreCase(key));
+    }
+
+    public static int getOrdinal(String key) {
+        return valueOf(key).ordinal();
     }
 }
 
