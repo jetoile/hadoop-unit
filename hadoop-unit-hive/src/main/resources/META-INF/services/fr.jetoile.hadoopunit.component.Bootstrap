@@ -1,2 +1,2 @@
-fr.jetoile.hadoopunit.component.HiveMetastoreBootstrap
-fr.jetoile.hadoopunit.component.HiveServer2Bootstrap
+fr.jetoile.hadoopunit.component.hive.HiveMetastoreBootstrap
+fr.jetoile.hadoopunit.component.hive.HiveServer2Bootstrap

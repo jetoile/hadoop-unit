@@ -117,10 +117,10 @@
 
     <properties>
 
-        <java.version>1.8</java.version>
+        <java.version>9</java.version>
 
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.compiler.source>9</maven.compiler.source>
+        <maven.compiler.target>9</maven.compiler.target>
 
         <hadoop-unit.version>${project.version}</hadoop-unit.version>
 
@@ -834,43 +834,8 @@
                 </plugin>
                 <plugin>
                     <artifactId>maven-compiler-plugin</artifactId>
-                    <!--<version>3.0</version>-->
-                    <!--<configuration>-->
-                        <!--<source>${java.version}</source>-->
-                        <!--<target>${java.version}</target>-->
-                    <!--</configuration>-->
                     <version>3.7.0</version>
-                    <executions>
-                        <execution>
-                            <id>default-compile</id>
-                            <configuration>
-                                <!-- compile everything to ensure module-info contains right entries -->
-                                <!-- required when JAVA_HOME is JDK 8 or below -->
-                                <jdkToolchain>
-                                    <version>9</version>
-                                </jdkToolchain>
-                                <release>9</release>
-                            </configuration>
-                        </execution>
-                        <execution>
-                            <id>base-compile</id>
-                            <goals>
-                                <goal>compile</goal>
-                            </goals>
-                            <!-- recompile everything for target VM except the module-info.java -->
-                            <configuration>
-                                <excludes>
-                                    <exclude>module-info.java</exclude>
-                                </excludes>
-                            </configuration>
-                        </execution>
-                    </executions>
-                    <!-- defaults for compile and testCompile -->
                     <configuration>
-                        <!-- jdkToolchain required when JAVA_HOME is JDK 9 or above -->
-                        <jdkToolchain>
-                            <version>[1.8,9)</version>
-                        </jdkToolchain>
                         <source>${java.version}</source>
                         <target>${java.version}</target>
                     </configuration>
@@ -902,7 +867,7 @@
                 </plugin>
                 <plugin>
                     <artifactId>maven-surefire-plugin</artifactId>
-                    <version>2.19.1</version>
+                    <version>2.20.1</version>
                 </plugin>
                 <plugin>
                     <artifactId>maven-jar-plugin</artifactId>
