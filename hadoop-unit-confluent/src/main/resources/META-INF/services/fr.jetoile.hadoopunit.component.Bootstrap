@@ -1,0 +1,3 @@
+fr.jetoile.hadoopunit.component.ConfluentKafkaBootstrap
+fr.jetoile.hadoopunit.component.ConfluentSchemaRegistryBootstrap
+fr.jetoile.hadoopunit.component.ConfluentKafkaRestBootstrap

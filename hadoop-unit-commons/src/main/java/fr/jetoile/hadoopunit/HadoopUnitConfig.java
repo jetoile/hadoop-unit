@@ -104,8 +104,7 @@ public class HadoopUnitConfig {
     public static final String YARN_RESOURCE_MANAGER_HOSTNAME_KEY = "yarn.resource.manager.hostname";
     public static final String YARN_RESOURCE_MANAGER_SCHEDULER_ADDRESS_KEY = "yarn.resource.manager.scheduler.address";
     public static final String YARN_RESOURCE_MANAGER_WEBAPP_ADDRESS_KEY = "yarn.resource.manager.webapp.address";
-    public static final String YARN_RESOURCE_MANAGER_RESOURCE_TRACKER_ADDRESS_KEY =
-            "yarn.resource.manager.resource.tracker.address";
+    public static final String YARN_RESOURCE_MANAGER_RESOURCE_TRACKER_ADDRESS_KEY = "yarn.resource.manager.resource.tracker.address";
     public static final String YARN_USE_IN_JVM_CONTAINER_EXECUTOR_KEY = "yarn.use.in.jvm.container.executor";
 
     // MR
@@ -184,4 +183,18 @@ public class HadoopUnitConfig {
     public static final String REDIS_SLAVE_PORT_KEY = "redis.slave.ports";
     public static final String REDIS_SENTINEL_PORT_KEY = "redis.sentinel.ports";
     public static final String REDIS_TMP_DIR_KEY = "redis.temp.dir";
+
+    //Confluent
+    public static final String CONFLUENT_SCHEMAREGISTRY_PORT_KEY = "confluent.schemaregistry.port";
+    public static final String CONFLUENT_SCHEMAREGISTRY_HOST_KEY = "confluent.schemaregistry.host";
+    public static final String CONFLUENT_SCHEMAREGISTRY_TOPIC_KEY = "confluent.schemaregistry.kafkastore.topic";
+    public static final String CONFLUENT_SCHEMAREGISTRY_DEBUG_KEY = "confluent.schemaregistry.debug";
+
+    public static final String CONFLUENT_KAFKA_LOG_DIR_KEY = "confluent.kafka.log.dirs";
+    public static final String CONFLUENT_KAFKA_BROKER_ID_KEY = "confluent.kafka.broker.id";
+    public static final String CONFLUENT_KAFKA_PORT_KEY = "confluent.kafka.port";
+    public static final String CONFLUENT_KAFKA_HOST_KEY = "confluent.kafka.host";
+
+    public static final String CONFLUENT_REST_HOST_KEY = "confluent.rest.host";
+    public static final String CONFLUENT_REST_PORT_KEY = "confluent.rest.port";
 }
