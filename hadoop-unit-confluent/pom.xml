@@ -44,6 +44,12 @@
         </dependency>
 
         <dependency>
+            <groupId>io.confluent.ksql</groupId>
+            <artifactId>ksql-rest-app</artifactId>
+            <version>4.1.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.apache.kafka</groupId>
             <artifactId>kafka_2.11</artifactId>
             <version>${confluent_kafka.version}</version>

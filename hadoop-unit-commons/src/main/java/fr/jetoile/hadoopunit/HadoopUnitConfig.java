@@ -197,4 +197,7 @@ public class HadoopUnitConfig {
 
     public static final String CONFLUENT_REST_HOST_KEY = "confluent.rest.host";
     public static final String CONFLUENT_REST_PORT_KEY = "confluent.rest.port";
+
+    public static final String CONFLUENT_KSQL_HOST_KEY = "confluent.ksql.host";
+    public static final String CONFLUENT_KSQL_PORT_KEY = "confluent.ksql.port";
 }
