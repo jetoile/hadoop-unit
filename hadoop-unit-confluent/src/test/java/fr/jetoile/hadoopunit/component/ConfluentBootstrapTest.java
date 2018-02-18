@@ -14,13 +14,20 @@
 
 package fr.jetoile.hadoopunit.component;
 
+import fr.jetoile.hadoopunit.Component;
 import fr.jetoile.hadoopunit.HadoopBootstrap;
 import fr.jetoile.hadoopunit.HadoopUnitConfig;
 import fr.jetoile.hadoopunit.exception.BootstrapException;
+import fr.jetoile.hadoopunit.exception.NotFoundServiceException;
+import io.confluent.ksql.rest.client.KsqlRestClient;
+import io.confluent.ksql.rest.client.RestResponse;
+import io.confluent.ksql.rest.entity.ExecutionPlan;
+import io.confluent.ksql.rest.entity.KsqlEntityList;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.junit.AfterClass;
+import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -182,5 +189,37 @@ public class ConfluentBootstrapTest {
         client.target("http://" + configuration.getString(CONFLUENT_REST_HOST_KEY) + ":" + configuration.getString(CONFLUENT_REST_PORT_KEY) + "/consumers/my_json_consumer/instances/my_consumer_instance")
                 .request("application/vnd.kafka.v2+json")
                 .delete(String.class);
+    }
+
+    @Test
+    public void kafkaKsql_should_be_ok() {
+
+        Client client = ClientBuilder.newClient();
+        String response = client.target("http://" + configuration.getString(CONFLUENT_REST_HOST_KEY) + ":" + configuration.getString(CONFLUENT_REST_PORT_KEY) + "/topics/pageviews")
+                .request("application/vnd.kafka.v2+json")
+                .accept("application/vnd.kafka.v2+json")
+                .post(Entity.entity("{\"records\":[{\"value\":{\"foo\":\"bar\"}}]}", "application/vnd.kafka.json.v2+json"), String.class);
+        assertThat(response).isEqualToIgnoringCase("{\"offsets\":[{\"partition\":0,\"offset\":0,\"error_code\":null,\"error\":null}],\"key_schema_id\":null,\"value_schema_id\":null}");
+
+
+        KsqlRestClient ksqlRestClient = new KsqlRestClient("http://localhost:" + 8083);
+
+//        RestResponse<KsqlEntityList> results = ksqlRestClient.makeKsqlRequest("CREATE STREAM vip_actions AS SELECT userid, page, action FROM clickstream c LEFT JOIN users u ON c.userid = u.user_id WHERE u.level = 'Platinum';");
+        RestResponse<KsqlEntityList> results = ksqlRestClient.makeKsqlRequest("CREATE STREAM pageviews_original (viewtime bigint, userid varchar, pageid varchar) WITH (kafka_topic='pageviews', value_format='DELIMITED');");
+        Assert.assertNotNull(results);
+        Assert.assertTrue(results.isSuccessful());
+        KsqlEntityList ksqlEntityList = results.getResponse();
+        Assert.assertTrue(ksqlEntityList.size() == 1);
+//        Assert.assertTrue(ksqlEntityList.get(0) instanceof ExecutionPlan);
+
+
+
+        results = ksqlRestClient.makeKsqlRequest("DESCRIBE pageviews_original;");
+        Assert.assertNotNull(results);
+        Assert.assertTrue(results.isSuccessful());
+        ksqlEntityList = results.getResponse();
+
+        System.out.println(ksqlEntityList);
+
     }
 }

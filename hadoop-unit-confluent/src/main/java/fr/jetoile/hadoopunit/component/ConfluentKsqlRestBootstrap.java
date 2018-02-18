@@ -17,14 +17,11 @@ package fr.jetoile.hadoopunit.component;
 import fr.jetoile.hadoopunit.Component;
 import fr.jetoile.hadoopunit.HadoopUtils;
 import fr.jetoile.hadoopunit.exception.BootstrapException;
-import io.confluent.kafkarest.KafkaRestApplication;
-import io.confluent.kafkarest.KafkaRestConfig;
 import io.confluent.ksql.rest.server.KsqlRestApplication;
 import io.confluent.ksql.rest.server.KsqlRestConfig;
 import io.confluent.ksql.version.metrics.KsqlVersionCheckerAgent;
 import io.confluent.ksql.version.metrics.collector.KsqlModuleType;
 import io.confluent.rest.RestConfigException;
-import io.confluent.support.metrics.BaseSupportConfig;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.lang.StringUtils;
 import org.apache.kafka.streams.StreamsConfig;
@@ -87,7 +84,7 @@ public class ConfluentKsqlRestBootstrap implements Bootstrap {
 //    props.put(KsqlRestConfig.PORT_CONFIG, String.valueOf(portNumber));
         ksqlConfig.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, configuration.getString(CONFLUENT_KAFKA_HOST_KEY) + ":" + configuration.getString(CONFLUENT_KAFKA_PORT_KEY));
         ksqlConfig.put(StreamsConfig.APPLICATION_ID_CONFIG, "ksql_config_test");
-        ksqlConfig.put(KsqlRestConfig.COMMAND_TOPIC_SUFFIX_CONFIG, "commands");
+//        ksqlConfig.put(KsqlRestConfig.COMMAND_TOPIC_SUFFIX, "commands");
     }
 
     @Override
@@ -112,6 +109,7 @@ public class ConfluentKsqlRestBootstrap implements Bootstrap {
             versionCheckerAgent.start(KsqlModuleType.REMOTE_CLI, versionCheckProps);
 
             restServer = KsqlRestApplication.buildApplication(config, true, versionCheckerAgent);
+            restServer.createServer();
         } catch (RestConfigException e) {
             LOGGER.error("Server configuration failed: ", e);
         } catch (Exception e) {
