@@ -44,6 +44,11 @@
         </dependency>
 
         <dependency>
+            <groupId>io.confluent.ksql</groupId>
+            <artifactId>ksql-rest-app</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>org.apache.kafka</groupId>
             <artifactId>kafka_2.11</artifactId>
             <version>${confluent_kafka.version}</version>
@@ -53,6 +58,12 @@
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-util</artifactId>
             <version>9.2.19.v20160908</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpcore</artifactId>
+            <version>4.4.6</version>
         </dependency>
     </dependencies>
 
