@@ -52,16 +52,9 @@ import org.apache.solr.client.solrj.impl.CloudSolrClient;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrInputDocument;
 import org.apache.zookeeper.KeeperException;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
-import org.elasticsearch.action.get.GetResponse;
-import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.client.RestClient;
-import org.elasticsearch.client.transport.TransportClient;
-import org.elasticsearch.common.settings.Settings;
-import org.elasticsearch.common.transport.InetSocketTransportAddress;
-import org.elasticsearch.transport.client.PreBuiltTransportClient;
 import org.junit.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -70,8 +63,8 @@ import java.io.*;
 import java.net.*;
 import java.sql.Connection;
 import java.sql.*;
-import java.util.Date;
 import java.util.*;
+import java.util.Date;
 
 import static junit.framework.TestCase.assertNotNull;
 import static org.fest.assertions.Assertions.assertThat;
@@ -175,7 +168,6 @@ public class IntegrationBootstrapTest {
             String payload = generateMessage(i);
             KafkaProducerUtils.INSTANCE.produceMessages(configuration.getString(HadoopUnitConfig.KAFKA_TEST_TOPIC_KEY), String.valueOf(i), payload);
         }
-
 
 
         // Consumer
@@ -296,11 +288,11 @@ public class IntegrationBootstrapTest {
         hdfsFsHandle.close();
 
         URL url = new URL(
-                String.format( "http://localhost:%s/webhdfs/v1?op=GETHOMEDIRECTORY&user.name=guest",
-                        configuration.getInt( HadoopUnitConfig.HDFS_NAMENODE_HTTP_PORT_KEY ) ) );
+                String.format("http://localhost:%s/webhdfs/v1?op=GETHOMEDIRECTORY&user.name=guest",
+                        configuration.getInt(HadoopUnitConfig.HDFS_NAMENODE_HTTP_PORT_KEY)));
         URLConnection connection = url.openConnection();
-        connection.setRequestProperty( "Accept-Charset", "UTF-8" );
-        BufferedReader response = new BufferedReader( new InputStreamReader( connection.getInputStream() ) );
+        connection.setRequestProperty("Accept-Charset", "UTF-8");
+        BufferedReader response = new BufferedReader(new InputStreamReader(connection.getInputStream()));
         String line = response.readLine();
         response.close();
         assertThat("{\"Path\":\"/user/guest\"}").isEqualTo(line);
@@ -346,9 +338,9 @@ public class IntegrationBootstrapTest {
         org.apache.hadoop.conf.Configuration conf = new org.apache.hadoop.conf.Configuration();
         conf.set("fs.default.name", "hdfs://127.0.0.1:" + configuration.getInt(HadoopUnitConfig.HDFS_NAMENODE_PORT_KEY));
 
-        URI uri = URI.create ("hdfs://127.0.0.1:" + configuration.getInt(HadoopUnitConfig.HDFS_NAMENODE_PORT_KEY));
+        URI uri = URI.create("hdfs://127.0.0.1:" + configuration.getInt(HadoopUnitConfig.HDFS_NAMENODE_PORT_KEY));
 
-        FileSystem hdfsFs = FileSystem.get (uri, conf);
+        FileSystem hdfsFs = FileSystem.get(uri, conf);
 
         OozieClient oozieClient = new OozieClient("http://" + configuration.getString(HadoopUnitConfig.OOZIE_HOST) + ":" + configuration.getInt(HadoopUnitConfig.OOZIE_PORT) + "/oozie");
 
@@ -395,7 +387,7 @@ public class IntegrationBootstrapTest {
         assertEquals(1, col.count());
 
         DBCursor cursor = col.find();
-        while(cursor.hasNext()) {
+        while (cursor.hasNext()) {
             LOGGER.info("MONGODB: Document output: {}", cursor.next());
         }
         cursor.close();

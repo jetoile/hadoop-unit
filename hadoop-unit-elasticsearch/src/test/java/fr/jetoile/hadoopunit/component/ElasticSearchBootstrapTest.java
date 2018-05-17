@@ -27,7 +27,8 @@ import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.settings.Settings;
-import org.elasticsearch.common.transport.InetSocketTransportAddress;
+import org.elasticsearch.common.transport.TransportAddress;
+import org.elasticsearch.common.xcontent.XContentType;
 import org.elasticsearch.transport.client.PreBuiltTransportClient;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -70,7 +71,7 @@ public class ElasticSearchBootstrapTest {
     public void elasticSearchShouldStart() throws NotFoundServiceException, IOException {
 
         TransportClient client = new PreBuiltTransportClient(Settings.EMPTY)
-                .addTransportAddress(new InetSocketTransportAddress(InetAddress.getByName(configuration.getString(HadoopUnitConfig.ELASTICSEARCH_IP_KEY)), configuration.getInt(HadoopUnitConfig.ELASTICSEARCH_TCP_PORT_KEY)));
+                .addTransportAddress(new TransportAddress(InetAddress.getByName(configuration.getString(HadoopUnitConfig.ELASTICSEARCH_IP_KEY)), configuration.getInt(HadoopUnitConfig.ELASTICSEARCH_TCP_PORT_KEY)));
 
         ObjectMapper mapper = new ObjectMapper();
 
@@ -79,12 +80,12 @@ public class ElasticSearchBootstrapTest {
         String jsonString = mapper.writeValueAsString(sample);
 
         // indexing document
-        IndexResponse ir = client.prepareIndex("test_index", "type").setSource(jsonString).setId("1").execute().actionGet();
-        client.admin().indices().prepareRefresh("test_index").execute().actionGet();
+        IndexResponse ir = client.prepareIndex("test_index", "type", "1").setSource(jsonString, XContentType.JSON).get();
+        client.admin().indices().prepareRefresh("test_index").get();
 
         assertNotNull(ir);
 
-        GetResponse gr = client.prepareGet("test_index", "type", "1").execute().actionGet();
+        GetResponse gr = client.prepareGet("test_index", "type", "1").get();
 
         assertNotNull(gr);
         assertEquals(gr.getSourceAsString(), "{\"value\":\"value\",\"size\":0.33,\"price\":3.0}");

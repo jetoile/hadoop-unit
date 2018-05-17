@@ -19,7 +19,7 @@ Sample:
 <dependency>
     <groupId>fr.jetoile.hadoop</groupId>
     <artifactId>hadoop-unit-hdfs</artifactId>
-    <version>2.6</version>
+    <version>2.7</version>
     <scope>test</scope>
 </dependency>
 ```
@@ -47,10 +47,10 @@ It is also possible to indicate which components you need.
 @BeforeClass
 public static void setup() throws NotFoundServiceException {
     HadoopBootstrap.INSTANCE
-        .start(Component.ZOOKEEPER)
-        .start(Component.HDFS)
-        .start(Component.HIVEMETA)
-        .start(Component.HIVESERVER2)
+        .add(Component.ZOOKEEPER)
+        .add(Component.HDFS)
+        .add(Component.HIVEMETA)
+        .add(Component.HIVESERVER2)
         .startAll();
 }
 
@@ -84,21 +84,21 @@ To use it, add into the pom project stuff like that:
      <dependency>
         <groupId>fr.jetoile.hadoop</groupId>
         <artifactId>hadoop-unit-client-hdfs</artifactId>
-        <version>2.6</version>
+        <version>2.7</version>
         <scope>test</scope>
     </dependency>
 
     <dependency>
         <groupId>fr.jetoile.hadoop</groupId>
         <artifactId>hadoop-unit-client-hive</artifactId>
-        <version>2.6</version>
+        <version>2.7</version>
         <scope>test</scope>
     </dependency>
 
     <dependency>
         <groupId>fr.jetoile.hadoop</groupId>
         <artifactId>hadoop-unit-client-spark</artifactId>
-        <version>2.6</version>
+        <version>2.7</version>
         <scope>test</scope>
     </dependency>
 </dependencies>
@@ -197,6 +197,10 @@ Values can be:
 * SOLRCLOUD
 * OOZIE
 * KAFKA
+* CONFLUENT_KAFKA
+* CONFLUENT_SCHEMAREGISTRY
+* CONFLUENT_KAFKA_REST
+* CONFLUENT_KSQL_REST
 * HBASE
 * MONGODB
 * CASSANDRA
@@ -328,7 +332,7 @@ To use it, add into the pom project stuff like that:
 <plugin>
     <artifactId>hadoop-unit-maven-plugin</artifactId>
     <groupId>fr.jetoile.hadoop</groupId>
-    <version>2.6</version>
+    <version>2.7</version>
     <executions>
         <execution>
             <id>start</id>
@@ -355,7 +359,7 @@ To use it, add into the pom project stuff like that:
 <plugin>
     <artifactId>hadoop-unit-maven-plugin</artifactId>
     <groupId>fr.jetoile.hadoop</groupId>
-    <version>2.6</version>
+    <version>2.7</version>
     <executions>
         <execution>
             <id>stop</id>
@@ -384,6 +388,10 @@ Values can be:
 * SOLRCLOUD
 * OOZIE
 * KAFKA
+* CONFLUENT_KAFKA
+* CONFLUENT_SCHEMAREGISTRY
+* CONFLUENT_KAFKA_REST
+* CONFLUENT_KSQL_REST
 * HBASE
 * MONGODB
 * CASSANDRA

@@ -36,7 +36,7 @@ Welcome to the Hadoop Unit wiki!
 		 httpPort:14433
 		 tcpPort:14533
 		 indexName:test_index
-		 version:5.4.3
+		 version:6.2.4
 - CONFLUENT_KAFKA 
 		 kafka host:127.0.0.1
 		 kafka port:22222

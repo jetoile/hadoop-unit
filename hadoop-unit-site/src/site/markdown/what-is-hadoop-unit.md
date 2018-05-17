@@ -1,4 +1,4 @@
-# Purpose
+``# Purpose
 The main purpose of Hadoop Unit is to allow users to test the integration of their developments in the hadoop world.
 
 Indeed, it is common to need the hadoop's ecosystem to make integration test like:
@@ -11,6 +11,7 @@ Indeed, it is common to need the hadoop's ecosystem to make integration test lik
 * mongodb
 * cassandra
 * kafka
+* kafka confluent
 * and so on...
 
 It offers different kinds of utilization:
@@ -22,6 +23,7 @@ It offers different kinds of utilization:
 
 | Hadoop Unit version  | Hadoop mini cluster version | HDP version |
 | ------------- | ------------- | ------------- |
+| 2.7 | 0.1.14 | HDP 2.6.2.0 |
 | 2.6 | 0.1.14 | HDP 2.6.2.0 |
 | 2.5 | 0.1.14 | HDP 2.6.2.0 |
 | 2.4 | 0.1.14 | HDP 2.6.2.0 |
@@ -47,6 +49,10 @@ The available components are:
 * SOLRCLOUD
 * OOZIE
 * KAFKA
+* CONFLUENT KAFKA
+* CONFLUENT KAFKA SCHEMA REGISTRY
+* CONFLUENT KAFKA REST GATEWAY
+* CONFLUENT KAFKA KSQL
 * HBASE
 * MONGODB
 * CASSANDRA
@@ -56,3 +62,4 @@ The available components are:
 * KNOX
 * ALLUXIO
 * REDIS (for linux and macOS only)
+
