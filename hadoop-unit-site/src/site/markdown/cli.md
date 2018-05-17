@@ -4,6 +4,7 @@ Hadoop-unit can be used with common tools such as:
 
 * [hdfs command](#hdfs-command)
 * [kafka-console command](#kafka-console-command)
+* [ksql-console command](#ksql-command)
 * [hbase shell](#hbase-shell)
 * [hive shell](#hive-shell)
 * [hive beeline](#hive-beeline)
@@ -29,6 +30,16 @@ hdfs dfs -ls hdfs://localhost:20112/
 
 ```bash
 kafka-console-consumer --zookeeper localhost:22010 --topic topic
+```
+
+<div id="ksql-command"/>
+# Ksql command
+
+* Download and unzip confluent
+* From directory `CONFLUENT_HOME/bin`, execute command:
+
+```bash
+./ksql http://localhost:8083
 ```
 
 <div id="hbase-shell"/>
