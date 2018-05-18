@@ -25,9 +25,10 @@ public class EmbeddedRedisInstaller {
     private String tmpDir;
     private boolean forceCleanupInstallationDirectory;
 
-    RedisInstaller redisInstaller = new RedisInstaller(version, downloadUrl, forceCleanupInstallationDirectory, tmpDir);
+    private RedisInstaller redisInstaller = null;
 
     EmbeddedRedisInstaller(String downloadUrl, String version, String tmpDir, boolean forceCleanupInstallationDirectory) {
+        redisInstaller = new RedisInstaller(version, downloadUrl, forceCleanupInstallationDirectory, tmpDir);
         this.downloadUrl = downloadUrl;
         this.version = version;
         this.tmpDir = tmpDir;
