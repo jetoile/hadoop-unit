@@ -1,6 +1,6 @@
 # Install Hadoop Unit Standalone
 
-* Download it on [search.maven.org](http://search.maven.org/remotecontent?filepath=fr/jetoile/hadoop/hadoop-unit-standalone/2.6/hadoop-unit-standalone-2.6.tar.gz)
+* Download it on [search.maven.org](http://search.maven.org/remotecontent?filepath=fr/jetoile/hadoop/hadoop-unit-standalone/2.7/hadoop-unit-standalone-2.7.tar.gz)
 * Unzip it
 * Edit files:
   * ```conf/hadoop.properties``` to activate the components you want

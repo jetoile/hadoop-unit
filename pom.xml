@@ -127,6 +127,8 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
 
+        <dependency.locations.enabled>false</dependency.locations.enabled>
+
         <hadoop-unit.version>${project.version}</hadoop-unit.version>
 
         <slf4j.version>1.7.25</slf4j.version>
