@@ -1,6 +1,17 @@
 ## Change Log
 
-### v2.6 (2017/11/07 10:49 +00:00)
+### upcoming (2018/05/20 15:48 +00:00)
+- [4e1864c](https://github.com/jetoile/hadoop-unit/commit/4e1864c3d5adbb48c5488fb0a9eb9988da7860e0) fix redis download (@jetoile)
+- [1a769de](https://github.com/jetoile/hadoop-unit/commit/1a769dea9fa93ee22487e04782df5f3988c30887) update doc for ksql (@jetoile)
+- [2d9097e](https://github.com/jetoile/hadoop-unit/commit/2d9097eca9f1a8012840993913a96292119f3cc4) add support for ES 6.2.4 (@jetoile)
+- [#82](https://github.com/jetoile/hadoop-unit/pull/82) add support for ksql (#82) (@jetoile)
+- [#81](https://github.com/jetoile/hadoop-unit/pull/81) add support for confluent (#81) (@jetoile)
+- [aedebe2](https://github.com/jetoile/hadoop-unit/commit/aedebe2a0ebf75e8621bd4829e92a00960b3d372) refactor code (@jetoile)
+- [6f3e18f](https://github.com/jetoile/hadoop-unit/commit/6f3e18f824917b3c38c3e86ebaecbc999f1d2007) suppress lombok dependency (@jetoile)
+- [04ba4e8](https://github.com/jetoile/hadoop-unit/commit/04ba4e8098d6daed1d1372da30d91949925615d9) update doc (@jetoile)
+- [325134f](https://github.com/jetoile/hadoop-unit/commit/325134fabe63e1133a20ba1541290d2423d365a3) prepare for next dev version (@jetoile)
+
+### v2.6 (2017/11/07 11:01 +00:00)
 - [ce4e4ef](https://github.com/jetoile/hadoop-unit/commit/ce4e4efa6cb71e1af5c070d6f39565df1e44e6d3) update dll to hdp 2.6.2.0 (@jetoile)
 - [d88742d](https://github.com/jetoile/hadoop-unit/commit/d88742d011739738789d8f10da6c7151664ea677) remove windows dll to replace (@jetoile)
 - [d6f50b1](https://github.com/jetoile/hadoop-unit/commit/d6f50b1a01d2581226d13ec609ea67f770653f5f) add google analytics to site (@jetoile)
@@ -156,8 +167,8 @@
 - [3c037b6](https://github.com/jetoile/hadoop-unit/commit/3c037b63ac157e16cd76ffee449e7f7be19946f3) Update README.md (@jetoile)
 - [300edc2](https://github.com/jetoile/hadoop-unit/commit/300edc2bc34618212a6c13822817964e58dc6aba) Cosmetics (@framiere)
 - [034680b](https://github.com/jetoile/hadoop-unit/commit/034680bfa6b4e9bc89a0158d64af0529f5f78c9e) update docs (@jetoile)
-- [9e85192](https://github.com/jetoile/hadoop-unit/commit/9e8519274e4751d01e8d3775b4b06f5b5207c2f8) use Config var instead default.properties (@jetoile)
 - [0b06a16](https://github.com/jetoile/hadoop-unit/commit/0b06a16276c1f00c70ba8a85c14df59089448814) add cassandra support (@jetoile)
+- [9e85192](https://github.com/jetoile/hadoop-unit/commit/9e8519274e4751d01e8d3775b4b06f5b5207c2f8) use Config var instead default.properties (@jetoile)
 - [6034598](https://github.com/jetoile/hadoop-unit/commit/6034598fca16b3f6192185407af0232a35762c0c) add mongodb support (@jetoile)
 - [379726a](https://github.com/jetoile/hadoop-unit/commit/379726ac32827b31a9204545eb2826bfa32f6f07) update docs (@jetoile)
 - [60ae8b9](https://github.com/jetoile/hadoop-unit/commit/60ae8b9bf1e499667df85c4ff0ff36cce59cc5d5) update to mini cluster 1.5.0 (@jetoile)
