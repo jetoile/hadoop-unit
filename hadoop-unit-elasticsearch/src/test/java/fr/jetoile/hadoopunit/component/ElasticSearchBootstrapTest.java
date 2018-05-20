@@ -15,9 +15,8 @@
 package fr.jetoile.hadoopunit.component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import fr.jetoile.hadoopunit.Component;
-import fr.jetoile.hadoopunit.HadoopUnitConfig;
 import fr.jetoile.hadoopunit.HadoopBootstrap;
+import fr.jetoile.hadoopunit.HadoopUnitConfig;
 import fr.jetoile.hadoopunit.exception.BootstrapException;
 import fr.jetoile.hadoopunit.exception.NotFoundServiceException;
 import org.apache.commons.configuration.Configuration;
@@ -141,7 +140,7 @@ class Sample implements Serializable {
 
         if (this.value != sample.value && this.value != null && !this.value.equals(sample.value)) return false;
 
-        if (this.size != sample.size ) return false;
+        if (this.size != sample.size) return false;
         if (this.price != sample.price) return false;
 
         return true;

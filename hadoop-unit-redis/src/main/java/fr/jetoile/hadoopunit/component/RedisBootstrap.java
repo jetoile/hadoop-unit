@@ -28,8 +28,6 @@ import net.ishiis.redis.unit.config.RedisMasterSlaveConfig;
 import net.ishiis.redis.unit.config.RedisSentinelConfig;
 import net.ishiis.redis.unit.config.RedisServerConfig;
 import org.apache.commons.configuration.Configuration;
-import org.apache.commons.configuration.ConfigurationException;
-import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -103,11 +101,11 @@ public class RedisBootstrap implements Bootstrap {
     @Override
     public String getProperties() {
         return
- 			 "\n \t\t\t masterPort:" + masterPort +
-                "\n \t\t\t version:" + version +
-                "\n \t\t\t type:" + type.name() +
-                (slavePorts.size() != 0 && type!=RedisType.SERVER ? "\n \t\t\t slavePorts: " + slavePorts : "") +
-                (sentinelPorts.size() != 0 && type == RedisType.SENTINEL ? "\n \t\t\t sentinelPorts: " + sentinelPorts : "");
+                "\n \t\t\t masterPort:" + masterPort +
+                        "\n \t\t\t version:" + version +
+                        "\n \t\t\t type:" + type.name() +
+                        (slavePorts.size() != 0 && type != RedisType.SERVER ? "\n \t\t\t slavePorts: " + slavePorts : "") +
+                        (sentinelPorts.size() != 0 && type == RedisType.SENTINEL ? "\n \t\t\t sentinelPorts: " + sentinelPorts : "");
     }
 
     private void loadConfig() throws BootstrapException {
