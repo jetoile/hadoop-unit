@@ -60,6 +60,7 @@
         <module>hadoop-unit-commons-hadoop</module>
         <module>hadoop-unit-client</module>
         <module>hadoop-unit-maven-plugin</module>
+        <module>hadoop-unit-junit</module>
         <module>hadoop-unit-cassandra</module>
         <module>hadoop-unit-mongodb</module>
         <module>hadoop-unit-elasticsearch</module>
@@ -70,8 +71,8 @@
         <module>hadoop-unit-redis</module>
         <module>hadoop-unit-confluent</module>
         <module>hadoop-unit-confluent-rest</module>
-        <module>sample</module>
         <module>hadoop-unit-site</module>
+        <module>sample</module>
     </modules>
 
     <repositories>
@@ -181,6 +182,7 @@
         <redis-unit.version>1.0.3</redis-unit.version>
         <plexus.version>2.2</plexus.version>
         <jansi.version>1.16</jansi.version>
+        <junit.version>4.12</junit.version>
     </properties>
 
 
@@ -824,7 +826,7 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.12</version>
+            <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
