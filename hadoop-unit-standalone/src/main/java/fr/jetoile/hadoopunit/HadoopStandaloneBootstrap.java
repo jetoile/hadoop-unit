@@ -88,8 +88,11 @@ public class HadoopStandaloneBootstrap {
         LocalRepository localRepo = new LocalRepository(hadoopUnitConfiguration.getString("maven.local.repo"));
         session.setLocalRepositoryManager(system.newLocalRepositoryManager(session, localRepo));
 
-//        session.setTransferListener(new ConsoleTransferListener());
-//        session.setRepositoryListener(new ConsoleRepositoryListener());
+        boolean debug = Boolean.parseBoolean(hadoopUnitConfiguration.getString("maven.debug"));
+        if (debug) {
+            session.setTransferListener(new ConsoleTransferListener());
+            session.setRepositoryListener(new ConsoleRepositoryListener());
+        }
 
         return session;
     }
