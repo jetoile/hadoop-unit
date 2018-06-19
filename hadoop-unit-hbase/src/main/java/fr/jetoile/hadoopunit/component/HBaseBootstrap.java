@@ -55,6 +55,8 @@ public class HBaseBootstrap implements BootstrapHadoop {
     private int restMaxThread;
     private int restMinThread;
 
+    private String hdfsUri;
+
     public HBaseBootstrap() {
         if (hbaseLocalCluster == null) {
             try {
@@ -95,7 +97,8 @@ public class HBaseBootstrap implements BootstrapHadoop {
     private void build() {
         org.apache.hadoop.conf.Configuration hbaseConfiguration = new org.apache.hadoop.conf.Configuration();
         hbaseConfiguration.setBoolean("hbase.table.sanity.checks", false);
-        hbaseConfiguration.set("fs.default.name", "hdfs://" + configuration.getString(HadoopUnitConfig.HDFS_NAMENODE_HOST_KEY) + ":" + configuration.getString(HadoopUnitConfig.HDFS_NAMENODE_PORT_KEY));
+        hbaseConfiguration.set("fs.default.name", hdfsUri);
+        hbaseConfiguration.set("hbase.regionserver.hlog.tolerable.lowreplication", "1");
 
         hbaseLocalCluster = new HbaseLocalCluster.Builder()
                 .setHbaseMasterPort(port)
@@ -134,6 +137,7 @@ public class HBaseBootstrap implements BootstrapHadoop {
         restReadOnly = configuration.getBoolean(HadoopUnitConfig.HBASE_REST_READONLY_KEY);
         restMaxThread = configuration.getInt(HadoopUnitConfig.HBASE_REST_THREADMAX_KEY);
         restMinThread = configuration.getInt(HadoopUnitConfig.HBASE_REST_THREADMIN_KEY);
+        hdfsUri = "hdfs://" + configuration.getString(HadoopUnitConfig.HDFS_NAMENODE_HOST_KEY) + ":" + configuration.getString(HadoopUnitConfig.HDFS_NAMENODE_PORT_KEY);
     }
 
     @Override
@@ -164,22 +168,25 @@ public class HBaseBootstrap implements BootstrapHadoop {
         }
 
         if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.HBASE_REST_HOST_KEY))) {
-            restHost = configuration.getString(HadoopUnitConfig.HBASE_REST_HOST_KEY);
+            restHost = configs.get(HadoopUnitConfig.HBASE_REST_HOST_KEY);
         }
         if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.HBASE_REST_PORT_KEY))) {
-            restPort = configuration.getInt(HadoopUnitConfig.HBASE_REST_PORT_KEY);
+            restPort = Integer.parseInt(configs.get(HadoopUnitConfig.HBASE_REST_PORT_KEY));
         }
         if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.HBASE_REST_INFO_PORT_KEY))) {
-            restInfoPort = configuration.getInt(HadoopUnitConfig.HBASE_REST_INFO_PORT_KEY);
+            restInfoPort = Integer.parseInt(configs.get(HadoopUnitConfig.HBASE_REST_INFO_PORT_KEY));
         }
         if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.HBASE_REST_READONLY_KEY))) {
-            restReadOnly = configuration.getBoolean(HadoopUnitConfig.HBASE_REST_READONLY_KEY);
+            restReadOnly = Boolean.parseBoolean(configs.get(HadoopUnitConfig.HBASE_REST_READONLY_KEY));
         }
         if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.HBASE_REST_THREADMAX_KEY))) {
-            restMaxThread = configuration.getInt(HadoopUnitConfig.HBASE_REST_THREADMAX_KEY);
+            restMaxThread = Integer.parseInt(configs.get(HadoopUnitConfig.HBASE_REST_THREADMAX_KEY));
         }
         if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.HBASE_REST_THREADMIN_KEY))) {
-            restMinThread = configuration.getInt(HadoopUnitConfig.HBASE_REST_THREADMIN_KEY);
+            restMinThread = Integer.parseInt(configs.get(HadoopUnitConfig.HBASE_REST_THREADMIN_KEY));
+        }
+        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.HDFS_NAMENODE_HOST_KEY)) && StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.HDFS_NAMENODE_PORT_KEY))) {
+            hdfsUri = "hdfs://" + configs.get(HadoopUnitConfig.HDFS_NAMENODE_HOST_KEY) + ":" + Integer.parseInt(configs.get(HadoopUnitConfig.HDFS_NAMENODE_PORT_KEY));
         }
     }
 

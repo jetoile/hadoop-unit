@@ -91,6 +91,7 @@ public class HadoopUnitConfig {
     public static final String HDFS_ENABLE_PERMISSIONS_KEY = "hdfs.enable.permissions";
     public static final String HDFS_FORMAT_KEY = "hdfs.format";
     public static final String HDFS_ENABLE_RUNNING_USER_AS_PROXY_USER = "hdfs.enable.running.user.as.proxy.user";
+    public static final String HDFS_REPLICATION_KEY = "hdfs.replication";
 
     // HDFS Test
     public static final String HDFS_TEST_FILE_KEY = "hdfs.test.file";

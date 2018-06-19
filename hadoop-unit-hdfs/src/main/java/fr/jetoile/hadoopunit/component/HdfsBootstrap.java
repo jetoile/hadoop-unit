@@ -49,6 +49,7 @@ public class HdfsBootstrap implements BootstrapHadoop {
     private boolean format;
     private int httpPort;
     private String host;
+    private Integer replication = 1;
 
     public HdfsBootstrap() {
         if (hdfsLocalCluster == null) {
@@ -89,6 +90,9 @@ public class HdfsBootstrap implements BootstrapHadoop {
     }
 
     private void build() {
+        HdfsConfiguration hdfsConfiguration = new HdfsConfiguration();
+        hdfsConfiguration.set("dfs.replication", replication.toString());
+
         hdfsLocalCluster = new HdfsLocalCluster.Builder()
                 .setHdfsNamenodePort(port)
                 .setHdfsNamenodeHttpPort(httpPort)
@@ -97,7 +101,7 @@ public class HdfsBootstrap implements BootstrapHadoop {
                 .setHdfsFormat(format)
                 .setHdfsNumDatanodes(numDatanodes)
                 .setHdfsTempDir(tempDirectory)
-                .setHdfsConfig(new HdfsConfiguration())
+                .setHdfsConfig(hdfsConfiguration)
                 .build();
     }
 
@@ -112,6 +116,7 @@ public class HdfsBootstrap implements BootstrapHadoop {
         enablePermission = configuration.getBoolean(HadoopUnitConfig.HDFS_ENABLE_PERMISSIONS_KEY);
         format = configuration.getBoolean(HadoopUnitConfig.HDFS_FORMAT_KEY);
         enableRunningUserAsProxy = configuration.getBoolean(HadoopUnitConfig.HDFS_ENABLE_RUNNING_USER_AS_PROXY_USER);
+        replication = configuration.getInt(HadoopUnitConfig.HDFS_REPLICATION_KEY, 1);
     }
 
     @Override
@@ -139,6 +144,9 @@ public class HdfsBootstrap implements BootstrapHadoop {
         }
         if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.HDFS_ENABLE_RUNNING_USER_AS_PROXY_USER))) {
             enableRunningUserAsProxy = Boolean.parseBoolean(configs.get(HadoopUnitConfig.HDFS_ENABLE_RUNNING_USER_AS_PROXY_USER));
+        }
+        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.HDFS_REPLICATION_KEY))) {
+            replication = Integer.parseInt(configs.get(HadoopUnitConfig.HDFS_REPLICATION_KEY));
         }
     }
 
