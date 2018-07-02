@@ -1,6 +1,14 @@
 ## Change Log
 
-### v2.7 (2018/05/20 15:48 +00:00)
+### v2.8 (2018/07/02 11:12 +00:00)
+- [f622b02](https://github.com/jetoile/hadoop-unit/commit/f622b022e347f73fae529c7c51c358adc1b192dc) fix maven properties for embedded maven plugin (@jetoile)
+- [f60347f](https://github.com/jetoile/hadoop-unit/commit/f60347f93d7f23ed4a69ae1ba1f1c76f043dbc69) add maven flag debugger (@jetoile)
+- [e95479e](https://github.com/jetoile/hadoop-unit/commit/e95479ed612c65c183feb29f3ce748944b21b9f5) update docs (@jetoile)
+- [73d7322](https://github.com/jetoile/hadoop-unit/commit/73d7322bb3f3b4728b1621a249a7d3e949736bb8) prepare for next dev version (@jetoile)
+
+### v2.7 (2018/05/20 16:03 +00:00)
+- [8c624cc](https://github.com/jetoile/hadoop-unit/commit/8c624ccd832d3065a6aeae4afd36a89ca9023bcd) v2.7 (@jetoile)
+- [eca5775](https://github.com/jetoile/hadoop-unit/commit/eca5775dfad567d7e2a2fa5eb2b072024462a517) clean code (@jetoile)
 - [4e1864c](https://github.com/jetoile/hadoop-unit/commit/4e1864c3d5adbb48c5488fb0a9eb9988da7860e0) fix redis download (@jetoile)
 - [1a769de](https://github.com/jetoile/hadoop-unit/commit/1a769dea9fa93ee22487e04782df5f3988c30887) update doc for ksql (@jetoile)
 - [2d9097e](https://github.com/jetoile/hadoop-unit/commit/2d9097eca9f1a8012840993913a96292119f3cc4) add support for ES 6.2.4 (@jetoile)
@@ -12,6 +20,7 @@
 - [325134f](https://github.com/jetoile/hadoop-unit/commit/325134fabe63e1133a20ba1541290d2423d365a3) prepare for next dev version (@jetoile)
 
 ### v2.6 (2017/11/07 11:01 +00:00)
+- [48c0e2f](https://github.com/jetoile/hadoop-unit/commit/48c0e2f0d22cf635c0ec75228a19572bd3030cfa) v2.6 (@jetoile)
 - [ce4e4ef](https://github.com/jetoile/hadoop-unit/commit/ce4e4efa6cb71e1af5c070d6f39565df1e44e6d3) update dll to hdp 2.6.2.0 (@jetoile)
 - [d88742d](https://github.com/jetoile/hadoop-unit/commit/d88742d011739738789d8f10da6c7151664ea677) remove windows dll to replace (@jetoile)
 - [d6f50b1](https://github.com/jetoile/hadoop-unit/commit/d6f50b1a01d2581226d13ec609ea67f770653f5f) add google analytics to site (@jetoile)
