@@ -106,9 +106,9 @@ public class ConfluentKsqlRestBootstrap implements Bootstrap {
 //            versionCheckProps.setProperty(BaseSupportConfig.CONFLUENT_SUPPORT_PROXY_CONFIG,"http://localhost:" + proxyPort);
 
             KsqlVersionCheckerAgent versionCheckerAgent = new KsqlVersionCheckerAgent();
-            versionCheckerAgent.start(KsqlModuleType.REMOTE_CLI, versionCheckProps);
+            versionCheckerAgent.start(KsqlModuleType.CLI, versionCheckProps);
 
-            restServer = KsqlRestApplication.buildApplication(config, true, versionCheckerAgent);
+            restServer = KsqlRestApplication.buildApplication(config, versionCheckerAgent);
             restServer.createServer();
         } catch (RestConfigException e) {
             LOGGER.error("Server configuration failed: ", e);

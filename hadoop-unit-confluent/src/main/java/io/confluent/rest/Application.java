@@ -1,12 +1,12 @@
 /**
  * Copyright 2014 Confluent Inc.
- * <p>
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * <p>
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * <p>
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -18,17 +18,7 @@ package io.confluent.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.jaxrs.base.JsonParseExceptionMapper;
-import io.confluent.common.config.ConfigException;
-import io.confluent.common.metrics.JmxReporter;
-import io.confluent.common.metrics.MetricConfig;
-import io.confluent.common.metrics.Metrics;
-import io.confluent.common.metrics.MetricsReporter;
-import io.confluent.rest.exceptions.ConstraintViolationExceptionMapper;
-import io.confluent.rest.exceptions.GenericExceptionMapper;
-import io.confluent.rest.exceptions.WebApplicationExceptionMapper;
-import io.confluent.rest.logging.Slf4jRequestLog;
-import io.confluent.rest.metrics.MetricsResourceMethodApplicationListener;
-import io.confluent.rest.validation.JacksonMessageBodyProvider;
+
 import org.eclipse.jetty.jaas.JAASLoginService;
 import org.eclipse.jetty.security.ConstraintMapping;
 import org.eclipse.jetty.security.ConstraintSecurityHandler;
@@ -38,19 +28,23 @@ import org.eclipse.jetty.security.authentication.BasicAuthenticator;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.NetworkTrafficServerConnector;
 import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.Slf4jRequestLog;
+import org.eclipse.jetty.server.handler.ContextHandlerCollection;
 import org.eclipse.jetty.server.handler.DefaultHandler;
 import org.eclipse.jetty.server.handler.HandlerCollection;
 import org.eclipse.jetty.server.handler.RequestLogHandler;
 import org.eclipse.jetty.server.handler.StatisticsHandler;
+import org.eclipse.jetty.server.handler.gzip.GzipHandler;
 import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.FilterHolder;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
-import org.eclipse.jetty.servlets.AsyncGzipFilter;
 import org.eclipse.jetty.servlets.CrossOriginFilter;
 import org.eclipse.jetty.util.resource.ResourceCollection;
 import org.eclipse.jetty.util.security.Constraint;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
+import org.eclipse.jetty.websocket.jsr356.server.ServerContainer;
+import org.eclipse.jetty.websocket.jsr356.server.deploy.WebSocketServerContainerInitializer;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.server.ServerProperties;
 import org.glassfish.jersey.server.validation.ValidationFeature;
@@ -58,13 +52,32 @@ import org.glassfish.jersey.servlet.ServletContainer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.servlet.DispatcherType;
-import javax.ws.rs.core.Configurable;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+
+import javax.servlet.DispatcherType;
+import javax.servlet.ServletException;
+import javax.ws.rs.core.Configurable;
+
+import io.confluent.common.config.ConfigException;
+import io.confluent.common.metrics.JmxReporter;
+import io.confluent.common.metrics.MetricConfig;
+import io.confluent.common.metrics.Metrics;
+import io.confluent.common.metrics.MetricsReporter;
+import io.confluent.rest.exceptions.ConstraintViolationExceptionMapper;
+import io.confluent.rest.exceptions.GenericExceptionMapper;
+import io.confluent.rest.exceptions.WebApplicationExceptionMapper;
+import io.confluent.rest.metrics.MetricsResourceMethodApplicationListener;
+import io.confluent.rest.validation.JacksonMessageBodyProvider;
 
 /**
  * A REST application. Extend this class and implement setupResources() to register REST
@@ -76,6 +89,7 @@ public abstract class Application<T extends RestConfig> {
     protected Server server = null;
     protected CountDownLatch shutdownLatch = new CountDownLatch(1);
     protected Metrics metrics;
+    protected final Slf4jRequestLog requestLog;
 
     private static final Logger log = LoggerFactory.getLogger(Application.class);
 
@@ -90,61 +104,33 @@ public abstract class Application<T extends RestConfig> {
                         MetricsReporter.class);
         reporters.add(new JmxReporter(config.getString(RestConfig.METRICS_JMX_PREFIX_CONFIG)));
         this.metrics = new Metrics(metricConfig, reporters, config.getTime());
+        this.requestLog = new Slf4jRequestLog();
+        this.requestLog.setLoggerName(config.getString(RestConfig.REQUEST_LOGGER_NAME_CONFIG));
+        this.requestLog.setLogLatency(true);
     }
 
-    /**
-     * Register resources or additional Providers, ExceptionMappers, and other JAX-RS components with
-     * the Jersey application. This, combined with your Configuration class, is where you can
-     * customize the behavior of the application.
-     */
     public abstract void setupResources(Configurable<?> config, T appConfig);
 
-    /**
-     * Returns a list of static resources to serve using the default servlet.
-     *
-     * <p>For example, static files can be served from class loader resources by returning
-     * {@code
-     * new ResourceCollection(Resource.newClassPathResource("static"));
-     * }
-     *
-     * <p>For those resources to get served, it is necessary to add a static resources property to the
-     * config in @link{{@link #setupResources(Configurable, RestConfig)}}, e.g. using something like
-     * {@code
-     * config.property(ServletProperties.FILTER_STATIC_CONTENT_REGEX, "/(static/.*|.*\\.html|)");
-     * }
-     *
-     * @return static resource collection
-     */
     protected ResourceCollection getStaticResources() {
         return null;
     }
 
-    /**
-     * add any servlet filters that should be called after resource
-     * handling but before falling back to the default servlet
-     */
-    protected void configurePostResourceHandling(ServletContextHandler context) {
-    }
+    protected void configurePostResourceHandling(ServletContextHandler context) {}
 
-    /**
-     * Returns a map of tag names to tag values to apply to metrics for this application.
-     *
-     * @return a Map of tags and values
-     */
-    public Map<String, String> getMetricsTags() {
+    public Map<String,String> getMetricsTags() {
         return new LinkedHashMap<String, String>();
     }
 
-    /**
-     * Configure and create the server.
-     */
-    public Server createServer() throws RestConfigException {
+    public Server createServer() throws RestConfigException, ServletException {
         // The configuration for the JAX-RS REST service
         ResourceConfig resourceConfig = new ResourceConfig();
 
-        Map<String, String> metricTags = getMetricsTags();
+        Map<String, String> configuredTags = getConfiguration().getMap(RestConfig.METRICS_TAGS_CONFIG);
 
-        configureBaseApplication(resourceConfig, metricTags);
+        Map<String, String> combinedMetricsTags = new HashMap<>(getMetricsTags());
+        combinedMetricsTags.putAll(configuredTags);
+
+        configureBaseApplication(resourceConfig, combinedMetricsTags);
         setupResources(resourceConfig, getConfiguration());
 
         // Configure the servlet container
@@ -161,13 +147,12 @@ public abstract class Application<T extends RestConfig> {
             }
         };
 
-
         //FIXME : disable JMX to avoid errors
-//    MBeanContainer mbContainer = new MBeanContainer(ManagementFactory.getPlatformMBeanServer());
-//    server.addEventListener(mbContainer);
-//    server.addBean(mbContainer);
+//        MBeanContainer mbContainer = new MBeanContainer(ManagementFactory.getPlatformMBeanServer());
+//        server.addEventListener(mbContainer);
+//        server.addBean(mbContainer);
 
-        MetricsListener metricsListener = new MetricsListener(metrics, "jetty", metricTags);
+        MetricsListener metricsListener = new MetricsListener(metrics, "jetty", combinedMetricsTags);
 
         List<URI> listeners = parseListeners(config.getList(RestConfig.LISTENERS_CONFIG),
                 config.getInt(RestConfig.PORT_CONFIG), Arrays.asList("http", "https"), "http");
@@ -195,7 +180,7 @@ public abstract class Application<T extends RestConfig> {
                     );
 
                     if (!config.getString(RestConfig.SSL_KEYMANAGER_ALGORITHM_CONFIG).isEmpty()) {
-                        sslContextFactory.setSslKeyManagerFactoryAlgorithm(
+                        sslContextFactory.setKeyManagerFactoryAlgorithm(
                                 config.getString(RestConfig.SSL_KEYMANAGER_ALGORITHM_CONFIG));
                     }
                 }
@@ -260,14 +245,6 @@ public abstract class Application<T extends RestConfig> {
             context.setBaseResource(staticResources);
         }
 
-        if (config.getBoolean(RestConfig.ENABLE_GZIP_COMPRESSION_CONFIG)) {
-            FilterHolder gzipFilter = new FilterHolder(AsyncGzipFilter.class);
-            // do not check if .gz file already exists for the requested resource
-            gzipFilter.setInitParameter("checkGzExists", "false");
-            gzipFilter.setInitParameter("methods", "GET,POST");
-            context.addFilter(gzipFilter, "/*", null);
-        }
-
         String authMethod = config.getString(RestConfig.AUTHENTICATION_METHOD_CONFIG);
         if (enableBasicAuth(authMethod)) {
             String realm = getConfiguration().getString(RestConfig.AUTHENTICATION_REALM_CONFIG);
@@ -275,6 +252,9 @@ public abstract class Application<T extends RestConfig> {
             final SecurityHandler securityHandler = createSecurityHandler(realm, roles);
             context.setSecurityHandler(securityHandler);
         }
+
+        List<String> unsecurePaths = config.getList(RestConfig.AUTHENTICATION_SKIP_PATHS);
+        setUnsecurePathConstraints(context, unsecurePaths);
 
         String allowedOrigins = getConfiguration().getString(
                 RestConfig.ACCESS_CONTROL_ALLOW_ORIGIN_CONFIG
@@ -297,9 +277,6 @@ public abstract class Application<T extends RestConfig> {
         context.addServlet(defaultHolder, "/*");
 
         RequestLogHandler requestLogHandler = new RequestLogHandler();
-        Slf4jRequestLog requestLog = new Slf4jRequestLog();
-        requestLog.setLoggerName(config.getString(RestConfig.REQUEST_LOGGER_NAME_CONFIG));
-        requestLog.setLogLatency(true);
         requestLogHandler.setRequestLog(requestLog);
 
         HandlerCollection handlers = new HandlerCollection();
@@ -309,8 +286,22 @@ public abstract class Application<T extends RestConfig> {
         StatisticsHandler statsHandler = new StatisticsHandler();
         statsHandler.setHandler(handlers);
 
-        server.setHandler(statsHandler);
+        final ServletContextHandler webSocketServletContext =
+                new ServletContextHandler(ServletContextHandler.SESSIONS);
+        webSocketServletContext.setContextPath(
+                config.getString(RestConfig.WEBSOCKET_PATH_PREFIX_CONFIG)
+        );
+        final ContextHandlerCollection contexts = new ContextHandlerCollection();
+        contexts.setHandlers(new Handler[] {
+                statsHandler,
+                webSocketServletContext
+        });
 
+        server.setHandler(wrapWithGzipHandler(contexts));
+
+        ServerContainer container =
+                WebSocketServerContainerInitializer.configureContext(webSocketServletContext);
+        registerWebSocketEndpoints(container);
         int gracefulShutdownMs = getConfiguration().getInt(RestConfig.SHUTDOWN_GRACEFUL_MS_CONFIG);
         if (gracefulShutdownMs > 0) {
             server.setStopTimeout(gracefulShutdownMs);
@@ -319,6 +310,41 @@ public abstract class Application<T extends RestConfig> {
 
         return server;
     }
+
+    public Handler wrapWithGzipHandler(Handler handler) {
+        if (config.getBoolean(RestConfig.ENABLE_GZIP_COMPRESSION_CONFIG)) {
+            GzipHandler gzip = new GzipHandler();
+            gzip.setIncludedMethods("GET", "POST");
+            gzip.setHandler(handler);
+            return gzip;
+        }
+        return handler;
+    }
+
+    protected void registerWebSocketEndpoints(ServerContainer container) {
+
+    }
+
+    static void setUnsecurePathConstraints(
+            ServletContextHandler context,
+            List<String> unsecurePaths
+    ) {
+        //we need to set unsecure path only if there is an existing security handler. Otherwise all
+        // paths are by default unsecure
+        if (context.getSecurityHandler() != null && !unsecurePaths.isEmpty()) {
+            for (String path : unsecurePaths) {
+                Constraint constraint = new Constraint();
+                constraint.setAuthenticate(false);
+                ConstraintMapping constraintMapping = new ConstraintMapping();
+                constraintMapping.setConstraint(constraint);
+                constraintMapping.setMethod("*");
+                constraintMapping.setPathSpec(path);
+                ((ConstraintSecurityHandler) context.getSecurityHandler())
+                        .addConstraintMapping(constraintMapping);
+            }
+        }
+    }
+
 
     static boolean enableBasicAuth(String authMethod) {
         return RestConfig.AUTHENTICATION_METHOD_BASIC.equals(authMethod);
@@ -406,11 +432,6 @@ public abstract class Application<T extends RestConfig> {
         configureBaseApplication(config, null);
     }
 
-    /**
-     * Register standard components for a JSON REST application on the given JAX-RS configurable,
-     * which can be either an ResourceConfig for a server or a ClientConfig for a Jersey-based REST
-     * client.
-     */
     public void configureBaseApplication(Configurable<?> config, Map<String, String> metricTags) {
         T restConfig = getConfiguration();
 
@@ -424,14 +445,6 @@ public abstract class Application<T extends RestConfig> {
         config.property(ServerProperties.BV_SEND_ERROR_IN_RESPONSE, true);
     }
 
-    /**
-     * Register a body provider and optional exception mapper for (de)serializing JSON in
-     * request/response entities.
-     * @param config The config to register the provider with
-     * @param restConfig The application's configuration
-     * @param registerExceptionMapper Whether or not to register an additional exception mapper for
-     *                                handling errors in (de)serialization
-     */
     protected void registerJsonProvider(
             Configurable<?> config,
             T restConfig,
@@ -445,20 +458,10 @@ public abstract class Application<T extends RestConfig> {
         }
     }
 
-    /**
-     * Register server features
-     * @param config The config to register the features with
-     * @param restConfig The application's configuration
-     */
     protected void registerFeatures(Configurable<?> config, T restConfig) {
         config.register(ValidationFeature.class);
     }
 
-    /**
-     * Register handlers for translating exceptions into responses.
-     * @param config The config to register the mappers with
-     * @param restConfig The application's configuration
-     */
     protected void registerExceptionMappers(Configurable<?> config, T restConfig) {
         config.register(ConstraintViolationExceptionMapper.class);
         config.register(new WebApplicationExceptionMapper(restConfig));
@@ -469,20 +472,10 @@ public abstract class Application<T extends RestConfig> {
         return this.config;
     }
 
-    /**
-     * Gets a JSON ObjectMapper to use for (de)serialization of request/response entities. Override
-     * this to configure the behavior of the serializer. One simple example of customization is to
-     * set the INDENT_OUTPUT flag to make the output more readable. The default is a default
-     * Jackson ObjectMapper.
-     */
     protected ObjectMapper getJsonMapper() {
         return new ObjectMapper();
     }
 
-    /**
-     * Start the server (creating it if necessary).
-     * @throws Exception If the application fails to start
-     */
     public void start() throws Exception {
         if (server == null) {
             createServer();
@@ -490,30 +483,15 @@ public abstract class Application<T extends RestConfig> {
         server.start();
     }
 
-    /**
-     * Wait for the server to exit, allowing existing requests to complete if graceful shutdown is
-     * enabled and invoking the shutdown hook before returning.
-     * @throws InterruptedException If the internal threadpool fails to stop
-     */
     public void join() throws InterruptedException {
         server.join();
         shutdownLatch.await();
     }
 
-    /**
-     * Request that the server shutdown.
-     * @throws Exception If the application fails to stop
-     */
     public void stop() throws Exception {
         server.stop();
     }
 
-    /**
-     * Shutdown hook that is invoked after the Jetty server has processed the shutdown request,
-     * stopped accepting new connections, and tried to gracefully finish existing requests. At this
-     * point it should be safe to clean up any resources used while processing requests.
-     */
     public void onShutdown() {
     }
 }
-

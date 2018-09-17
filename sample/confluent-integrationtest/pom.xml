@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>sample</artifactId>
+        <groupId>fr.jetoile.hadoop</groupId>
+        <version>2.9-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>confluent-integrationtest</artifactId>
+
+    <dependencies>
+        <dependency>
+            <groupId>fr.jetoile.hadoop</groupId>
+            <artifactId>hadoop-unit-commons</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.ws.rs</groupId>
+            <artifactId>javax.ws.rs-api</artifactId>
+            <version>2.1.1</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>io.confluent.ksql</groupId>
+            <artifactId>ksql-rest-app</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <profiles>
+        <profile>
+            <id>default</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+                <property>
+                    <name>!travis</name>
+                </property>
+            </activation>
+
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <configuration>
+                            <excludes>
+                                <exclude>**/*IntegrationTest.java</exclude>
+                            </excludes>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>integration-test</id>
+                                <goals>
+                                    <goal>test</goal>
+                                </goals>
+                                <phase>integration-test</phase>
+                                <configuration>
+                                    <excludes>
+                                        <exclude>none</exclude>
+                                    </excludes>
+                                    <includes>
+                                        <include>**/*IntegrationTest.java</include>
+                                    </includes>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                    <plugin>
+                        <artifactId>hadoop-unit-maven-plugin</artifactId>
+                        <groupId>fr.jetoile.hadoop</groupId>
+                        <version>${hadoop-unit.version}</version>
+                        <executions>
+                            <execution>
+                                <id>start</id>
+                                <goals>
+                                    <goal>embedded-start</goal>
+                                </goals>
+                                <phase>pre-integration-test</phase>
+                            </execution>
+                            <execution>
+                                <id>embedded-stop</id>
+                                <goals>
+                                    <goal>embedded-stop</goal>
+                                </goals>
+                                <phase>post-integration-test</phase>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <components>
+                                <componentArtifact implementation="fr.jetoile.hadoopunit.ComponentArtifact">
+                                    <componentName>ZOOKEEPER</componentName>
+                                    <artifact>fr.jetoile.hadoop:hadoop-unit-zookeeper:${hadoop-unit.version}</artifact>
+                                </componentArtifact>
+                                <componentArtifact implementation="fr.jetoile.hadoopunit.ComponentArtifact">
+                                    <componentName>CONFLUENT_KAFKA</componentName>
+                                    <artifact>fr.jetoile.hadoop:hadoop-unit-confluent:${hadoop-unit.version}</artifact>
+                                </componentArtifact>
+                                <componentArtifact implementation="fr.jetoile.hadoopunit.ComponentArtifact">
+                                    <componentName>CONFLUENT_SCHEMAREGISTRY</componentName>
+                                    <artifact>fr.jetoile.hadoop:hadoop-unit-confluent:${hadoop-unit.version}</artifact>
+                                </componentArtifact>
+                                <componentArtifact implementation="fr.jetoile.hadoopunit.ComponentArtifact">
+                                    <componentName>CONFLUENT_KSQL_REST</componentName>
+                                    <artifact>fr.jetoile.hadoop:hadoop-unit-confluent:${hadoop-unit.version}</artifact>
+                                </componentArtifact>
+                                <componentArtifact implementation="fr.jetoile.hadoopunit.ComponentArtifact">
+                                    <componentName>CONFLUENT_KAFKA_REST</componentName>
+                                    <artifact>fr.jetoile.hadoop:hadoop-unit-confluent-rest:${hadoop-unit.version}</artifact>
+                                </componentArtifact>
+                            </components>
+
+                        </configuration>
+
+                    </plugin>
+                </plugins>
+            </build>
+
+        </profile>
+        <profile>
+            <id>travis</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+                <property>
+                    <name>travis</name>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <configuration>
+                            <skipTests>true</skipTests>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
+</project>

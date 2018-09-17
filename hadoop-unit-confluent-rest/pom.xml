@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>hadoop-unit-confluent</artifactId>
+    <artifactId>hadoop-unit-confluent-rest</artifactId>
 
     <dependencies>
         <dependency>
@@ -35,29 +35,19 @@
 
         <dependency>
             <groupId>io.confluent</groupId>
-            <artifactId>kafka-schema-registry</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>io.confluent</groupId>
             <artifactId>kafka-rest</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>io.confluent.ksql</groupId>
-            <artifactId>ksql-rest-app</artifactId>
         </dependency>
 
         <dependency>
             <groupId>org.apache.kafka</groupId>
             <artifactId>kafka_2.11</artifactId>
-            <version>${confluent_kafka.version}</version>
+            <version>1.1.0</version>
         </dependency>
 
         <dependency>
             <groupId>org.apache.kafka</groupId>
             <artifactId>kafka-clients</artifactId>
-            <version>${confluent_kafka.version}</version>
+            <version>1.1.0</version>
         </dependency>
 
         <dependency>

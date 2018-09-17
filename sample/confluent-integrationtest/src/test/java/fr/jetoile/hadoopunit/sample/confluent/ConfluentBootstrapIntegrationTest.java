@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package fr.jetoile.hadoopunit.component;
+package fr.jetoile.hadoopunit.sample.confluent;
 
 import fr.jetoile.hadoopunit.HadoopBootstrap;
 import fr.jetoile.hadoopunit.HadoopUnitConfig;
@@ -37,14 +37,13 @@ import javax.ws.rs.client.Entity;
 import static fr.jetoile.hadoopunit.HadoopUnitConfig.*;
 import static org.fest.assertions.Assertions.assertThat;
 
-public class ConfluentBootstrapTest {
+public class ConfluentBootstrapIntegrationTest {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ConfluentBootstrapTest.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ConfluentBootstrapIntegrationTest.class);
     static private Configuration configuration;
 
     @BeforeClass
     public static void setup() throws BootstrapException {
-        HadoopBootstrap.INSTANCE.startAll();
 
         try {
             configuration = new PropertiesConfiguration(HadoopUnitConfig.DEFAULT_PROPS_FILE);

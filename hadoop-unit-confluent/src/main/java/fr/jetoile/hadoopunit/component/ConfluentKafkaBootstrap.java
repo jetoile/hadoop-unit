@@ -88,7 +88,7 @@ public class ConfluentKafkaBootstrap implements Bootstrap {
 //        kafkaConfig.put("advertised.listeners", "PLAINTEXT://localhost:22222");
         kafkaConfig.put("advertised.host.name", configuration.getString(CONFLUENT_KAFKA_HOST_KEY));
         kafkaConfig.put("port", configuration.getString(CONFLUENT_KAFKA_PORT_KEY));
-//        kafkaConfig.put("confluent.support.metrics.enable", "true");
+        kafkaConfig.put("confluent.support.metrics.enable", "false");
         kafkaConfig.put("offsets.topic.replication.factor", "1");
         kafkaConfig.put("num.network.threads", "3");
     }
