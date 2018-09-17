@@ -49,6 +49,8 @@
         <module>hadoop-unit-kafka</module>
         <module>hadoop-unit-oozie</module>
         <module>hadoop-unit-hive</module>
+        <module>hadoop-unit-hive2</module>
+        <!--<module>hadoop-unit-hive3</module>-->
         <module>hadoop-unit-zookeeper</module>
         <module>hadoop-unit-solr</module>
         <module>hadoop-unit-solrcloud</module>
