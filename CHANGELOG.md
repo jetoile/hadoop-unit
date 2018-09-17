@@ -1,6 +1,16 @@
 ## Change Log
 
-### v2.8 (2018/07/02 11:12 +00:00)
+### v2.9 (2018/09/17 15:32 +00:00)
+- [32b1cbb](https://github.com/jetoile/hadoop-unit/commit/32b1cbb6cedefb42517aeafc3a76e58dc6464a05) fix hive tests (@jetoile)
+- [c578ed8](https://github.com/jetoile/hadoop-unit/commit/c578ed839d2815899ca0040d37ce0214cf5baeee) doc update (@jetoile)
+- [11d3d49](https://github.com/jetoile/hadoop-unit/commit/11d3d4999ccc9b83b1821c0e9bc19f68357922d8) add support for hadoop-mini-cluster 0.1.15 (@jetoile)
+- [1ceb6c8](https://github.com/jetoile/hadoop-unit/commit/1ceb6c8935b37d3ef1d106bac65da113e76232a9) add support for confluent 5.0 (@jetoile)
+- [#84](https://github.com/jetoile/hadoop-unit/pull/84) Correct typo in version (download url) (#84) (@fcellier)
+- [da35e1c](https://github.com/jetoile/hadoop-unit/commit/da35e1c24474ab6b7361a603e84212fee50ec993) upgrade maven-site plugin (@jetoile)
+- [ea6bb1a](https://github.com/jetoile/hadoop-unit/commit/ea6bb1a631a9fab9e984962920ec664f2127899c) prepare for next dev version (@jetoile)
+
+### v2.8 (2018/07/02 11:22 +00:00)
+- [54dcf0c](https://github.com/jetoile/hadoop-unit/commit/54dcf0cc366931229297e9c3e5edacff3e264247) v2.8 (@jetoile)
 - [f622b02](https://github.com/jetoile/hadoop-unit/commit/f622b022e347f73fae529c7c51c358adc1b192dc) fix maven properties for embedded maven plugin (@jetoile)
 - [f60347f](https://github.com/jetoile/hadoop-unit/commit/f60347f93d7f23ed4a69ae1ba1f1c76f043dbc69) add maven flag debugger (@jetoile)
 - [e95479e](https://github.com/jetoile/hadoop-unit/commit/e95479ed612c65c183feb29f3ce748944b21b9f5) update docs (@jetoile)
