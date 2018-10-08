@@ -166,7 +166,8 @@
 
         <dbSetup.version>2.1.0</dbSetup.version>
         <httpclient.version>4.3.1</httpclient.version>
-        <guava.version>18.0</guava.version>
+        <guice.version>4.2.1</guice.version>
+        <guava.version>26.0-jre</guava.version>
         <concurrentlinkedhashmap-lru.version>1.4</concurrentlinkedhashmap-lru.version>
         <jetty-util.version>9.3.21.v20170918</jetty-util.version>
         <javax.servlet-api.version>3.1.0</javax.servlet-api.version>
@@ -521,6 +522,11 @@
                 <version>${hadoop.version}</version>
             </dependency>
 
+			<dependency>
+			  <groupId>com.google.inject</groupId>
+			  <artifactId>guice</artifactId>
+			  <version>${guice.version}</version>
+			</dependency>
             <dependency>
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>

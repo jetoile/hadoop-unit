@@ -13,36 +13,7 @@
  */
 package fr.jetoile.hadoopunit;
 
-import fr.jetoile.hadoopunit.exception.BootstrapException;
-import org.apache.commons.configuration.Configuration;
-import org.apache.commons.configuration.ConfigurationException;
-import org.apache.commons.configuration.PropertiesConfiguration;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.maven.repository.internal.MavenRepositorySystemUtils;
-import org.eclipse.aether.DefaultRepositorySystemSession;
-import org.eclipse.aether.RepositorySystem;
-import org.eclipse.aether.RepositorySystemSession;
-import org.eclipse.aether.artifact.Artifact;
-import org.eclipse.aether.artifact.DefaultArtifact;
-import org.eclipse.aether.collection.CollectRequest;
-import org.eclipse.aether.connector.basic.BasicRepositoryConnectorFactory;
-import org.eclipse.aether.graph.Dependency;
-import org.eclipse.aether.graph.DependencyFilter;
-import org.eclipse.aether.impl.DefaultServiceLocator;
-import org.eclipse.aether.repository.LocalRepository;
-import org.eclipse.aether.repository.RemoteRepository;
-import org.eclipse.aether.resolution.ArtifactResult;
-import org.eclipse.aether.resolution.DependencyRequest;
-import org.eclipse.aether.resolution.DependencyResolutionException;
-import org.eclipse.aether.spi.connector.RepositoryConnectorFactory;
-import org.eclipse.aether.spi.connector.transport.TransporterFactory;
-import org.eclipse.aether.transport.file.FileTransporterFactory;
-import org.eclipse.aether.transport.http.HttpTransporterFactory;
-import org.eclipse.aether.util.artifact.JavaScopes;
-import org.eclipse.aether.util.filter.DependencyFilterUtils;
-import org.fusesource.jansi.AnsiConsole;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import static org.fusesource.jansi.Ansi.Color.GREEN;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
@@ -54,7 +25,42 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.fusesource.jansi.Ansi.Color.GREEN;
+import org.apache.commons.configuration.Configuration;
+import org.apache.commons.configuration.ConfigurationException;
+import org.apache.commons.configuration.PropertiesConfiguration;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.maven.cli.logging.Slf4jLoggerManager;
+import org.apache.maven.repository.internal.MavenRepositorySystemUtils;
+import org.apache.maven.settings.Settings;
+import org.apache.maven.settings.building.DefaultSettingsBuildingRequest;
+import org.apache.maven.settings.building.SettingsBuilder;
+import org.apache.maven.settings.building.SettingsBuildingRequest;
+import org.codehaus.plexus.ContainerConfiguration;
+import org.codehaus.plexus.DefaultContainerConfiguration;
+import org.codehaus.plexus.DefaultPlexusContainer;
+import org.codehaus.plexus.PlexusConstants;
+import org.codehaus.plexus.PlexusContainer;
+import org.codehaus.plexus.classworlds.ClassWorld;
+import org.eclipse.aether.DefaultRepositorySystemSession;
+import org.eclipse.aether.RepositorySystem;
+import org.eclipse.aether.artifact.Artifact;
+import org.eclipse.aether.artifact.DefaultArtifact;
+import org.eclipse.aether.collection.CollectRequest;
+import org.eclipse.aether.graph.Dependency;
+import org.eclipse.aether.graph.DependencyFilter;
+import org.eclipse.aether.repository.LocalRepository;
+import org.eclipse.aether.resolution.ArtifactResult;
+import org.eclipse.aether.resolution.DependencyRequest;
+import org.eclipse.aether.resolution.DependencyResolutionException;
+import org.eclipse.aether.util.artifact.JavaScopes;
+import org.eclipse.aether.util.filter.DependencyFilterUtils;
+import org.slf4j.ILoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.google.inject.AbstractModule;
+
+import fr.jetoile.hadoopunit.exception.BootstrapException;
 
 public class HadoopStandaloneBootstrap {
 
@@ -63,49 +69,154 @@ public class HadoopStandaloneBootstrap {
     static private Configuration hadoopUnitConfiguration;
     static private List<Component> componentsToStart = new ArrayList<>();
     static private List<ComponentProperties> componentsToStop = new ArrayList<>();
-    static private List<ComponentProperties> componentsProperty = new ArrayList();
+    static private List<ComponentProperties> componentsProperty = new ArrayList<>();
 
+    /**
+     * code from org.apache.maven.cli.MavenCli.container(CliRequest)
+     * 
+     * cf also https://github.com/igor-suhorukov/mvn-classloader/blob/master/dropship/src/main/java/com/github/smreed/dropship/ClassLoaderBuilder.java
+     * 
+     */
+    private static PlexusContainer mvnContainer() throws Exception {
+		ILoggerFactory slf4jLoggerFactory = LoggerFactory.getILoggerFactory();
+		Slf4jLoggerManager plexusLoggerManager = new Slf4jLoggerManager();
+		
+		ClassWorld classWorld = new ClassWorld("plexus.core", Thread.currentThread().getContextClassLoader());
 
-    public static RepositorySystem newRepositorySystem() {
-        DefaultServiceLocator locator = MavenRepositorySystemUtils.newServiceLocator();
-        locator.addService(RepositoryConnectorFactory.class, BasicRepositoryConnectorFactory.class);
-        locator.addService(TransporterFactory.class, FileTransporterFactory.class);
-        locator.addService(TransporterFactory.class, HttpTransporterFactory.class);
+        DefaultPlexusContainer container = null;
 
-        locator.setErrorHandler(new DefaultServiceLocator.ErrorHandler() {
-            @Override
-            public void serviceCreationFailed(Class<?> type, Class<?> impl, Throwable exception) {
-                exception.printStackTrace();
+        ContainerConfiguration cc = new DefaultContainerConfiguration()
+            .setClassWorld(classWorld)
+            // .setRealm( setupContainerRealm( cliRequest ) )
+            .setClassPathScanning( PlexusConstants.SCANNING_INDEX )
+            .setAutoWiring( true )
+            .setName( "maven" );
+
+        container = new DefaultPlexusContainer( cc, new AbstractModule() {
+            protected void configure() {
+                bind( ILoggerFactory.class ).toInstance( slf4jLoggerFactory );
             }
         });
 
-        return locator.getService(RepositorySystem.class);
+        // NOTE: To avoid inconsistencies, we'll use the TCCL exclusively for lookups
+        container.setLookupRealm( null );
+
+        container.setLoggerManager( plexusLoggerManager );
+
+        Thread.currentThread().setContextClassLoader( container.getContainerRealm() );
+
+        return container;
     }
+    
+	public static DefaultRepositorySystemSession newRepositorySystemSession(PlexusContainer container, RepositorySystem system) throws Exception {
+		DefaultRepositorySystemSession session = MavenRepositorySystemUtils.newSession();
 
-    public static DefaultRepositorySystemSession newRepositorySystemSession(RepositorySystem system) {
-        DefaultRepositorySystemSession session = MavenRepositorySystemUtils.newSession();
+		//?? LocalRepositoryManager localRepoManager = container.lookup(LocalRepositoryManager.class);
+		//.. LocalRepository localRepo = container.lookup(LocalRepository.class);
+		//?? DefaultRepositorySystemSessionFactory sessionFactory = container.lookup(DefaultRepositorySystemSessionFactory.class);
+		//?? LocalRepositoryManagerFactory localRepoFactory = container.lookup(LocalRepositoryManagerFactory.class);
+		
+		String localRepositoryDir = hadoopUnitConfiguration.getString("maven.local.repo");
+		
+		if (localRepositoryDir != null && !new File(localRepositoryDir).exists()) {
+			LOGGER.info("maven.local.repo: " + localRepositoryDir + " NOT FOUND!! try resolving it..");
+			localRepositoryDir = null;
+		}
+		
+		if (localRepositoryDir == null) {
+			String mavenHome = System.getenv("MAVEN_HOME");
+			if (mavenHome == null) {
+				// find in PATH ..
+				String path = System.getenv("PATH");
+				String pathSep = System.getProperty("path.separator");
+				String[] pathElts = path.split(pathSep);
+				for(String pathElt : pathElts) {
+					File pathDir = new File(pathElt);
+					if (new File(pathDir, "mvn").exists()) {
+						mavenHome = pathDir.getParentFile().getAbsolutePath();
+						LOGGER.info("found mvn in PATH => " + mavenHome);
+						break;
+					}
+				}
+			}
+			File globalSettingsFile = new File(mavenHome + "/conf/settings.xml");
+			if (!globalSettingsFile.exists()) {
+				LOGGER.error("maven global settings.xml file not found : " + globalSettingsFile);
+			}
+			
+			File userSettingsFile = new File(System.getProperty("user.home") + "/.m2/settings.xml");
+			if (!userSettingsFile.exists()) {
+				LOGGER.info("maven user settings.xml override file not found : " + userSettingsFile);
+			}
+			
+			SettingsBuilder defaultSettingsBuilder = container.lookup(SettingsBuilder.class);
+			SettingsBuildingRequest settingsRequest = new DefaultSettingsBuildingRequest();
+			settingsRequest.setGlobalSettingsFile(globalSettingsFile);
+			settingsRequest.setUserSettingsFile(userSettingsFile);
+			Settings settings = defaultSettingsBuilder.build(settingsRequest).getEffectiveSettings();
+			
+			localRepositoryDir = settings.getLocalRepository();
+			if (localRepositoryDir == null) {
+				// no set .. using default!
+				localRepositoryDir = System.getProperty("user.home") + "/.m2/repository";
+			}
+			LOGGER.info("found mvn localRepository => " + localRepositoryDir);
+		}
+		
+		LocalRepository localRepo = new LocalRepository(localRepositoryDir);
+		// LocalRepository localRepo = new LocalRepository(hadoopUnitConfiguration.getString("maven.local.repo"));
+		session.setLocalRepositoryManager(system.newLocalRepositoryManager(session, localRepo));
 
-        LocalRepository localRepo = new LocalRepository(hadoopUnitConfiguration.getString("maven.local.repo"));
-        session.setLocalRepositoryManager(system.newLocalRepositoryManager(session, localRepo));
+		boolean debug = Boolean.parseBoolean(hadoopUnitConfiguration.getString("maven.debug"));
+		if (debug) {
+			session.setTransferListener(new ConsoleTransferListener());
+			session.setRepositoryListener(new ConsoleRepositoryListener());
+		}
 
-        boolean debug = Boolean.parseBoolean(hadoopUnitConfiguration.getString("maven.debug"));
-        if (debug) {
-            session.setTransferListener(new ConsoleTransferListener());
-            session.setRepositoryListener(new ConsoleRepositoryListener());
-        }
+		return session;
+	}
 
-        return session;
-    }
+    
+//    public static RepositorySystem newRepositorySystem() {
+//        DefaultServiceLocator locator = MavenRepositorySystemUtils.newServiceLocator();
+//        locator.addService(RepositoryConnectorFactory.class, BasicRepositoryConnectorFactory.class);
+//        locator.addService(TransporterFactory.class, FileTransporterFactory.class);
+//        locator.addService(TransporterFactory.class, HttpTransporterFactory.class);
+//
+//        locator.setErrorHandler(new DefaultServiceLocator.ErrorHandler() {
+//            @Override
+//            public void serviceCreationFailed(Class<?> type, Class<?> impl, Throwable exception) {
+//                exception.printStackTrace();
+//            }
+//        });
+//
+//        return locator.getService(RepositorySystem.class);
+//    }
+//
+//    public static DefaultRepositorySystemSession newRepositorySystemSession(RepositorySystem system) {
+//        DefaultRepositorySystemSession session = MavenRepositorySystemUtils.newSession();
+//
+//        LocalRepository localRepo = new LocalRepository(hadoopUnitConfiguration.getString("maven.local.repo"));
+//        session.setLocalRepositoryManager(system.newLocalRepositoryManager(session, localRepo));
+//
+//        boolean debug = Boolean.parseBoolean(hadoopUnitConfiguration.getString("maven.debug"));
+//        if (debug) {
+//            session.setTransferListener(new ConsoleTransferListener());
+//            session.setRepositoryListener(new ConsoleRepositoryListener());
+//        }
+//
+//        return session;
+//    }
+//
+//    public static List<RemoteRepository> newRepositories(RepositorySystem system, RepositorySystemSession session) {
+//        return new ArrayList<>(Arrays.asList(newCentralRepository()));
+//    }
+//
+//    private static RemoteRepository newCentralRepository() {
+//        return new RemoteRepository.Builder("central", "default", hadoopUnitConfiguration.getString("maven.central.repo")).build();
+//    }
 
-    public static List<RemoteRepository> newRepositories(RepositorySystem system, RepositorySystemSession session) {
-        return new ArrayList<>(Arrays.asList(newCentralRepository()));
-    }
-
-    private static RemoteRepository newCentralRepository() {
-        return new RemoteRepository.Builder("central", "default", hadoopUnitConfiguration.getString("maven.central.repo")).build();
-    }
-
-    public static void main(String[] args) throws BootstrapException, MalformedURLException, ClassNotFoundException, NoSuchMethodException, InvocationTargetException, IllegalAccessException, DependencyResolutionException {
+    public static void main(String[] args) throws Exception {
         String homeDirectory = ".";
         if (StringUtils.isNotEmpty(System.getenv("HADOOP_UNIT_HOME"))) {
             homeDirectory = System.getenv("HADOOP_UNIT_HOME");
@@ -126,15 +237,20 @@ public class HadoopStandaloneBootstrap {
             }
         });
 
-        RepositorySystem system = newRepositorySystem();
-        DefaultRepositorySystemSession session = newRepositorySystemSession(system);
+        PlexusContainer mvnContainer = mvnContainer();
+        RepositorySystem system = mvnContainer.lookup(RepositorySystem.class);
+        DefaultRepositorySystemSession session = newRepositorySystemSession(mvnContainer, system);
+        
+//        RepositorySystem system = newRepositorySystem();
+//        DefaultRepositorySystemSession session = newRepositorySystemSession(system);
+        
         DependencyFilter classpathFilter = DependencyFilterUtils.classpathFilter(JavaScopes.RUNTIME);
 
         componentsToStart.stream().forEach(c -> {
             Artifact artifact = new DefaultArtifact(hadoopUnitConfiguration.getString(c.getArtifactKey()));
             CollectRequest collectRequest = new CollectRequest();
             collectRequest.setRoot(new Dependency(artifact, JavaScopes.RUNTIME));
-            collectRequest.setRepositories(newRepositories(system, session));
+//            collectRequest.setRepositories(newRepositories(system, session));
 
             DependencyRequest dependencyRequest = new DependencyRequest(collectRequest, classpathFilter);
 
