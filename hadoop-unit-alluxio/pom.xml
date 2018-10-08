@@ -74,7 +74,7 @@
 
         <dependency>
             <groupId>org.alluxio</groupId>
-            <artifactId>alluxio-core-client</artifactId>
+            <artifactId>alluxio-core-client-fs</artifactId>
             <!--<exclusions>-->
                 <!--<exclusion>-->
                     <!--<groupId>org.mortbay.jetty</groupId>-->

@@ -70,7 +70,9 @@
         <module>hadoop-unit-redis</module>
         <module>hadoop-unit-confluent</module>
         <module>hadoop-unit-confluent-rest</module>
-        <module>sample</module>
+		<!-- cf profile withHadoopUnitSample
+	     <module>sample</module>
+		-->
         <module>hadoop-unit-site</module>
     </modules>
 
@@ -118,6 +120,13 @@
                     </plugin>
                 </plugins>
             </build>
+        </profile>
+        
+        <profile>
+        	<id>withHadoopUnitSample</id>
+        	<modules>
+        		<module>sample</module>
+        	</modules>
         </profile>
     </profiles>
 
@@ -172,7 +181,11 @@
         <jackson-module-scala_2.11.version>2.6.5</jackson-module-scala_2.11.version>
 
         <neo4j.version>3.2.2</neo4j.version>
-        <alluxio.version>1.4.0</alluxio.version>
+        <!-- 
+         <alluxio.version>1.4.0</alluxio.version>
+         -->
+        <alluxio.version>1.8.1</alluxio.version>
+
         <log4j-to-slf4j.version>2.7</log4j-to-slf4j.version>
         <jettison.version>1.3.8</jettison.version>
         <apache-commons-io.version>1.3.2</apache-commons-io.version>
@@ -590,9 +603,16 @@
                 <version>${alluxio.version}</version>
             </dependency>
 
+<!-- 
             <dependency>
                 <groupId>org.alluxio</groupId>
                 <artifactId>alluxio-core-client</artifactId>
+                <version>${alluxio.version}</version>
+            </dependency>
+ -->
+            <dependency>
+                <groupId>org.alluxio</groupId>
+                <artifactId>alluxio-core-client-fs</artifactId>
                 <version>${alluxio.version}</version>
             </dependency>
 
@@ -863,7 +883,7 @@
                 </plugin>
                 <plugin>
                     <artifactId>maven-source-plugin</artifactId>
-                    <version>2.1.2</version>
+                    <version>2.2.1</version>
                 </plugin>
                 <plugin>
                     <artifactId>maven-deploy-plugin</artifactId>
@@ -893,10 +913,6 @@
                 <plugin>
                     <artifactId>maven-gpg-plugin</artifactId>
                     <version>1.6</version>
-                </plugin>
-                <plugin>
-                    <artifactId>maven-source-plugin</artifactId>
-                    <version>2.2.1</version>
                 </plugin>
                 <plugin>
                     <artifactId>maven-javadoc-plugin</artifactId>
