@@ -82,7 +82,8 @@ public class HdfsBootstrap implements BootstrapHadoop {
     @Override
     public String getProperties() {
         return "\n \t\t\t host:" + host +
-                "\n \t\t\t port:" + port;
+                "\n \t\t\t port:" + port +
+                "\n \t\t\t httpPort:" + httpPort;
     }
 
     private void init() {
