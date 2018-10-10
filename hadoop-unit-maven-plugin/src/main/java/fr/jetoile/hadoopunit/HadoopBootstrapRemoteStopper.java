@@ -41,6 +41,9 @@ public class HadoopBootstrapRemoteStopper extends AbstractMojo {
     @Parameter(property = "exec")
     protected String exec;
 
+    @Parameter(property = "skip", required = false, defaultValue = "${skipTests}")
+    private boolean skipTests;
+
     @Component
     private MavenProject project;
 
@@ -53,19 +56,22 @@ public class HadoopBootstrapRemoteStopper extends AbstractMojo {
 
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
-        HadoopBootstrapRemoteUtils utils = new HadoopBootstrapRemoteUtils(project, session, pluginManager);
+        if (skipTests) {
+            getLog().info("Hadoop Unit's stop goal is skipped");
+        } else {
+            HadoopBootstrapRemoteUtils utils = new HadoopBootstrapRemoteUtils(project, session, pluginManager);
 
 
-        hadoopUnitPath = utils.getHadoopUnitPath(hadoopUnitPath, getLog());
+            hadoopUnitPath = utils.getHadoopUnitPath(hadoopUnitPath, getLog());
 
-        getLog().info("is going to stop hadoop unit with executable " + ((exec == null) ? "./hadoop-unit-standalone" : exec));
-        utils.operateRemoteHadoopUnit(hadoopUnitPath, outputFile, "stop", exec);
-        Path hadoopLogFilePath = Paths.get(hadoopUnitPath, "wrapper.log");
+            getLog().info("is going to stop hadoop unit with executable " + ((exec == null) ? "./hadoop-unit-standalone" : exec));
+            utils.operateRemoteHadoopUnit(hadoopUnitPath, outputFile, "stop", exec);
+            Path hadoopLogFilePath = Paths.get(hadoopUnitPath, "wrapper.log");
 
-        getLog().info("is going tail log file");
-        utils.tailLogFileUntilFind(hadoopLogFilePath, "<-- Wrapper Stopped", getLog());
-        getLog().info("hadoop unit stopped");
-
+            getLog().info("is going tail log file");
+            utils.tailLogFileUntilFind(hadoopLogFilePath, "<-- Wrapper Stopped", getLog());
+            getLog().info("hadoop unit stopped");
+        }
 
 
     }

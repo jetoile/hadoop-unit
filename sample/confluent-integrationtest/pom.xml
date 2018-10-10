@@ -42,33 +42,7 @@
             </activation>
 
             <build>
-                <plugins>
-                    <plugin>
-                        <artifactId>maven-surefire-plugin</artifactId>
-                        <configuration>
-                            <excludes>
-                                <exclude>**/*IntegrationTest.java</exclude>
-                            </excludes>
-                        </configuration>
-                        <executions>
-                            <execution>
-                                <id>integration-test</id>
-                                <goals>
-                                    <goal>test</goal>
-                                </goals>
-                                <phase>integration-test</phase>
-                                <configuration>
-                                    <excludes>
-                                        <exclude>none</exclude>
-                                    </excludes>
-                                    <includes>
-                                        <include>**/*IntegrationTest.java</include>
-                                    </includes>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-
+               <plugins>
                     <plugin>
                         <artifactId>hadoop-unit-maven-plugin</artifactId>
                         <groupId>fr.jetoile.hadoop</groupId>

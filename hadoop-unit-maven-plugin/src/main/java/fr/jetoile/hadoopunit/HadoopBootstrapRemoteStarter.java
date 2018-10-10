@@ -49,6 +49,9 @@ public class HadoopBootstrapRemoteStarter extends AbstractMojo {
     @Parameter(property = "exec")
     protected String exec;
 
+    @Parameter(property = "skip", required = false, defaultValue = "${skipTests}")
+    private boolean skipTests;
+
     @Component
     private MavenProject project;
 
@@ -61,26 +64,30 @@ public class HadoopBootstrapRemoteStarter extends AbstractMojo {
 
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
-        HadoopBootstrapRemoteUtils utils = new HadoopBootstrapRemoteUtils(project, session, pluginManager);
+        if (skipTests) {
+            getLog().info("Hadoop Unit's start goal is skipped");
+        } else {
+            HadoopBootstrapRemoteUtils utils = new HadoopBootstrapRemoteUtils(project, session, pluginManager);
 
-        hadoopUnitPath = utils.getHadoopUnitPath(hadoopUnitPath, getLog());
+            hadoopUnitPath = utils.getHadoopUnitPath(hadoopUnitPath, getLog());
 
-        //change hadoop.properties
-        getLog().info("is going to modifying hadoop.properties");
-        editHadoopUnitConfFile();
-        getLog().info("modifying hadoop.properties done");
+            //change hadoop.properties
+            getLog().info("is going to modifying hadoop.properties");
+            editHadoopUnitConfFile();
+            getLog().info("modifying hadoop.properties done");
 
-        //clean log file
-        Path hadoopLogFilePath = Paths.get(hadoopUnitPath, "wrapper.log");
-        deleteLogFile(hadoopLogFilePath);
+            //clean log file
+            Path hadoopLogFilePath = Paths.get(hadoopUnitPath, "wrapper.log");
+            deleteLogFile(hadoopLogFilePath);
 
-        getLog().info("is going to start hadoop unit with executable " + ((exec == null) ? "./hadoop-unit-standalone" : exec));
-        utils.operateRemoteHadoopUnit(hadoopUnitPath, outputFile, "start", exec);
+            getLog().info("is going to start hadoop unit with executable " + ((exec == null) ? "./hadoop-unit-standalone" : exec));
+            utils.operateRemoteHadoopUnit(hadoopUnitPath, outputFile, "start", exec);
 
-        //listen to log file and wait
-        getLog().info("is going tail log file");
-        utils.tailLogFileUntilFind(hadoopLogFilePath, "/_/ /_/  \\__,_/ \\__,_/  \\____/\\____/_  .___/      \\____/  /_/ /_//_/  \\__/", getLog());
-        getLog().info("hadoop unit started");
+            //listen to log file and wait
+            getLog().info("is going tail log file");
+            utils.tailLogFileUntilFind(hadoopLogFilePath, "/_/ /_/  \\__,_/ \\__,_/  \\____/\\____/_  .___/      \\____/  /_/ /_//_/  \\__/", getLog());
+            getLog().info("hadoop unit started");
+        }
 
     }
 

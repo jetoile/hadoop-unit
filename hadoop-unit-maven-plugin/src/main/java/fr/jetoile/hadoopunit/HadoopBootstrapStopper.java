@@ -36,25 +36,33 @@ public class HadoopBootstrapStopper extends AbstractMojo {
     @Parameter(property = "timeout", defaultValue = "120000", required = false) //set timeout to 2 min
     protected int timeout;
 
+    @Parameter(property = "skip", required = false, defaultValue = "${skipTests}")
+    private boolean skipTests;
+
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
-        getLog().info("is going to send a hadoop unit stop message");
+        if (skipTests) {
+            getLog().info("Hadoop Unit's embedded-stop goal is skipped");
+        } else {
 
-        try (Socket client = new Socket("localhost", port);
-             PrintWriter out = new PrintWriter(client.getOutputStream(), true);
-             BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()))) {
-            client.setSoTimeout(timeout);
+            getLog().info("is going to send a hadoop unit stop message");
 
-            out.println("stop");
-            String responseLine;
-            if ((responseLine = in.readLine()) != null) {
-                if (StringUtils.containsIgnoreCase(responseLine, "success")) {
-                    getLog().info("hadoop unit is stopped");
+            try (Socket client = new Socket("localhost", port);
+                 PrintWriter out = new PrintWriter(client.getOutputStream(), true);
+                 BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()))) {
+                client.setSoTimeout(timeout);
+
+                out.println("stop");
+                String responseLine;
+                if ((responseLine = in.readLine()) != null) {
+                    if (StringUtils.containsIgnoreCase(responseLine, "success")) {
+                        getLog().info("hadoop unit is stopped");
+                    }
                 }
-            }
 
-        } catch (IOException e) {
-            getLog().error("unable to contact pre-integration phase: " + e.getMessage());
+            } catch (IOException e) {
+                getLog().error("unable to contact pre-integration phase: " + e.getMessage());
+            }
         }
     }
 }

@@ -40,6 +40,9 @@ public class HadoopBootstrapStarter extends AbstractMojo {
     @Parameter(property = "components", required = true)
     protected List<ComponentArtifact> components;
 
+    @Parameter(property = "skip", required = false, defaultValue = "${skipTests}")
+    private boolean skipTests;
+
     /**
      * The current repository/network configuration of Maven.
      *
@@ -64,17 +67,21 @@ public class HadoopBootstrapStarter extends AbstractMojo {
 
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
-        HadoopUnitRunnable hadoopUnitRunnable = new HadoopUnitRunnable(components, queue, getLog(), port, repoSession, remoteRepos);
+        if (skipTests) {
+            getLog().info("Hadoop Unit's embedded-start goal is skipped");
+        } else {
+            HadoopUnitRunnable hadoopUnitRunnable = new HadoopUnitRunnable(components, queue, getLog(), port, repoSession, remoteRepos);
 
-        Thread thread = new Thread(hadoopUnitRunnable, "hadoop-unit-runner");
-        thread.start();
+            Thread thread = new Thread(hadoopUnitRunnable, "hadoop-unit-runner");
+            thread.start();
 
-        try {
-            queue.poll(10, TimeUnit.MINUTES);
-            getLog().info("free starter");
+            try {
+                queue.poll(10, TimeUnit.MINUTES);
+                getLog().info("free starter");
 
-        } catch (InterruptedException e) {
-            getLog().error("unable to synchronize startup: " + e.getMessage());
+            } catch (InterruptedException e) {
+                getLog().error("unable to synchronize startup: " + e.getMessage());
+            }
         }
     }
 }
