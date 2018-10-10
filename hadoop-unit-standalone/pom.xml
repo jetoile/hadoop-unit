@@ -39,21 +39,6 @@
             <artifactId>commons-lang3</artifactId>
         </dependency>
 
-        <!--<dependency>-->
-            <!--<groupId>org.eclipse.aether</groupId>-->
-            <!--<artifactId>aether-api</artifactId>-->
-            <!--<version>${aetherVersion}</version>-->
-        <!--</dependency>-->
-        <!--<dependency>-->
-            <!--<groupId>org.eclipse.aether</groupId>-->
-            <!--<artifactId>aether-spi</artifactId>-->
-            <!--<version>${aetherVersion}</version>-->
-        <!--</dependency>-->
-        <!--<dependency>-->
-            <!--<groupId>org.eclipse.aether</groupId>-->
-            <!--<artifactId>aether-util</artifactId>-->
-            <!--<version>${aetherVersion}</version>-->
-        <!--</dependency>-->
         <dependency>
             <groupId>org.apache.maven</groupId>
             <artifactId>maven-embedder</artifactId>
@@ -87,40 +72,6 @@
             <version>${mavenVersion}</version>
         </dependency>
 
-        <!--<dependency>-->
-            <!--<groupId>org.apache.maven</groupId>-->
-            <!--<artifactId>maven-aether-provider</artifactId>-->
-            <!--<version>${mavenVersion}</version>-->
-        <!--</dependency>-->
-        <!--<dependency>-->
-            <!--<groupId>org.eclipse.sisu</groupId>-->
-            <!--<artifactId>org.eclipse.sisu.plexus</artifactId>-->
-            <!--<version>0.1.1</version>-->
-            <!--<optional>true</optional>-->
-            <!--<exclusions>-->
-                <!--<exclusion>-->
-                    <!--<groupId>javax.enterprise</groupId>-->
-                    <!--<artifactId>cdi-api</artifactId>-->
-                <!--</exclusion>-->
-            <!--</exclusions>-->
-        <!--</dependency>-->
-        <!--<dependency>-->
-            <!--<groupId>org.sonatype.sisu</groupId>-->
-            <!--<artifactId>sisu-guice</artifactId>-->
-            <!--<version>3.1.6</version>-->
-            <!--<classifier>no_aop</classifier>-->
-            <!--<optional>true</optional>-->
-            <!--<exclusions>-->
-                <!--<exclusion>-->
-                    <!--<groupId>aopalliance</groupId>-->
-                    <!--<artifactId>aopalliance</artifactId>-->
-                <!--</exclusion>-->
-                <!--<exclusion>-->
-                    <!--<groupId>com.google.code.findbugs</groupId>-->
-                    <!--<artifactId>jsr305</artifactId>-->
-                <!--</exclusion>-->
-            <!--</exclusions>-->
-        <!--</dependency>-->
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
@@ -319,34 +270,6 @@
 
                 </configuration>
             </plugin>
-
-            <!--<plugin>-->
-            <!--<groupId>org.apache.maven.plugins</groupId>-->
-            <!--<artifactId>maven-dependency-plugin</artifactId>-->
-            <!--<version>2.10</version>-->
-            <!--<executions>-->
-            <!--<execution>-->
-            <!--<id>copy</id>-->
-            <!--<phase>package</phase>-->
-            <!--<goals>-->
-            <!--<goal>unpack</goal>-->
-            <!--</goals>-->
-            <!--<configuration>-->
-            <!--<artifactItems>-->
-            <!--<artifactItem>-->
-            <!--<groupId>fr.jetoile.hadoop</groupId>-->
-            <!--<artifactId>hadoop-unit-standalone-dist</artifactId>-->
-            <!--<version>${project.version}</version>-->
-            <!--<type>tar.gz</type>-->
-            <!--<overWrite>true</overWrite>-->
-            <!--<outputDirectory>${project.build.directory}/lib</outputDirectory>-->
-            <!--</artifactItem>-->
-            <!--</artifactItems>-->
-            <!--&lt;!&ndash; other configurations here &ndash;&gt;-->
-            <!--</configuration>-->
-            <!--</execution>-->
-            <!--</executions>-->
-            <!--</plugin>-->
 
             <plugin>
                 <!-- Packaging -->
