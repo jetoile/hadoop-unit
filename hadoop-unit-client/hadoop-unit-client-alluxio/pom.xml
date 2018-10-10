@@ -60,6 +60,13 @@
         </dependency>
 
         <dependency>
+            <groupId>org.glassfish</groupId>
+            <artifactId>javax.el</artifactId>
+            <version>3.0.1-b10</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
             <groupId>org.alluxio</groupId>
             <artifactId>alluxio-minicluster</artifactId>
             <scope>test</scope>
