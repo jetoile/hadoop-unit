@@ -156,7 +156,7 @@
         <gateway-service-oozie.version>0.5.0.2.2.9.26-3</gateway-service-oozie.version>
 
         <dbSetup.version>2.1.0</dbSetup.version>
-        <httpclient.version>4.3.1</httpclient.version>
+        <httpclient.version>4.4.1</httpclient.version>
         <guava.version>18.0</guava.version>
         <concurrentlinkedhashmap-lru.version>1.4</concurrentlinkedhashmap-lru.version>
         <jetty-util.version>9.3.21.v20170918</jetty-util.version>

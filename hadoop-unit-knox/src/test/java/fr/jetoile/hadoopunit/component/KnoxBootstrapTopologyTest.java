@@ -64,7 +64,7 @@ public class KnoxBootstrapTopologyTest {
                 "    </service>\n" +
                 "    <service>\n" +
                 "        <role>WEBHDFS</role>\n" +
-                "        <url>http://" + configuration.getString(HadoopUnitConfig.HDFS_NAMENODE_HOST_KEY) + ":50070/webhdfs</url>\n" +
+                "        <url>http://" + configuration.getString(HadoopUnitConfig.HDFS_NAMENODE_HOST_KEY) + ":20112/webhdfs</url>\n" +
                 "    </service>\n" +
                 "    <service>\n" +
                 "        <role>WEBHBASE</role>\n" +
