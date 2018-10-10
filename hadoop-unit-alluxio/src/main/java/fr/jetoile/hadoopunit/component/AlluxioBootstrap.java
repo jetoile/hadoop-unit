@@ -15,6 +15,7 @@ package fr.jetoile.hadoopunit.component;
 
 import alluxio.PropertyKey;
 import alluxio.master.LocalAlluxioCluster;
+import alluxio.multi.process.MultiProcessCluster;
 import alluxio.security.LoginUserTestUtils;
 import alluxio.security.authentication.AuthenticatedClientUser;
 import fr.jetoile.hadoopunit.Component;
@@ -24,10 +25,13 @@ import fr.jetoile.hadoopunit.exception.BootstrapException;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.lang.StringUtils;
+import org.apache.hadoop.fs.FileSystem;
+import org.apache.hadoop.fs.Path;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.net.URI;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;

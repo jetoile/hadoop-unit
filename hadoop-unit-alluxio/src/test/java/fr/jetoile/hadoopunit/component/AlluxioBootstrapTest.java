@@ -19,11 +19,14 @@ import alluxio.client.file.FileSystem;
 import alluxio.client.file.FileSystemMasterClient;
 import alluxio.client.file.URIStatus;
 import alluxio.client.file.options.CreateFileOptions;
+import alluxio.client.file.options.GetStatusOptions;
 import alluxio.exception.AlluxioException;
+import alluxio.exception.status.NotFoundException;
+import alluxio.master.MasterClientConfig;
+import alluxio.master.SingleMasterInquireClient;
 import fr.jetoile.hadoopunit.HadoopBootstrap;
 import fr.jetoile.hadoopunit.HadoopUnitConfig;
 import fr.jetoile.hadoopunit.exception.BootstrapException;
-import fr.jetoile.hadoopunit.exception.NotFoundServiceException;
 import fr.jetoile.hadoopunit.test.alluxio.AlluxioUtils;
 import fr.jetoile.hadoopunit.test.hdfs.HdfsUtils;
 import org.apache.commons.configuration.Configuration;
@@ -66,33 +69,33 @@ public class AlluxioBootstrapTest {
 
 
     @AfterClass
-    public static void tearDown() throws BootstrapException {
+    public static void tearDown() {
         HadoopBootstrap.INSTANCE.stopAll();
     }
 
     @Test
-    public void alluxioShouldStart() throws NotFoundServiceException, IOException, AlluxioException {
-        FileSystemMasterClient fsMasterClient = new FileSystemMasterClient(new InetSocketAddress(configuration.getString(HadoopUnitConfig.ALLUXIO_HOSTNAME), configuration.getInt(HadoopUnitConfig.ALLUXIO_MASTER_RPC_PORT)));
+    public void alluxioShouldStart() throws IOException {
+        FileSystemMasterClient fsMasterClient = buildFsMasterClient();
 
         AlluxioURI file = new AlluxioURI("/file");
         Assert.assertFalse(fsMasterClient.isConnected());
         fsMasterClient.connect();
         assertTrue(fsMasterClient.isConnected());
         fsMasterClient.createFile(file, CreateFileOptions.defaults());
-        Assert.assertNotNull(fsMasterClient.getStatus(file));
+        Assert.assertNotNull(fsMasterClient.getStatus(file, GetStatusOptions.defaults()));
         fsMasterClient.disconnect();
         Assert.assertFalse(fsMasterClient.isConnected());
         fsMasterClient.connect();
         assertTrue(fsMasterClient.isConnected());
-        Assert.assertNotNull(fsMasterClient.getStatus(file));
+        Assert.assertNotNull(fsMasterClient.getStatus(file, GetStatusOptions.defaults()));
         fsMasterClient.close();
     }
 
-    @Test(timeout = 3000, expected = AlluxioException.class)
-    public void getFileInfoReturnsOnError() throws IOException, AlluxioException {
-        FileSystemMasterClient fsMasterClient = new FileSystemMasterClient(new InetSocketAddress(configuration.getString(HadoopUnitConfig.ALLUXIO_HOSTNAME), configuration.getInt(HadoopUnitConfig.ALLUXIO_MASTER_RPC_PORT)));
+    @Test(timeout = 3000, expected = NotFoundException.class)
+    public void getFileInfoReturnsOnError() throws IOException {
+        FileSystemMasterClient fsMasterClient = buildFsMasterClient();
 
-        fsMasterClient.getStatus(new AlluxioURI("/doesNotExist"));
+        fsMasterClient.getStatus(new AlluxioURI("/doesNotExist"), GetStatusOptions.defaults());
         fsMasterClient.close();
     }
 
@@ -121,6 +124,16 @@ public class AlluxioBootstrapTest {
             is.close();
         }
         return pass;
+    }
+
+    private FileSystemMasterClient buildFsMasterClient() {
+        MasterClientConfig masterClientConfig = new MasterClientConfig()
+                .withMasterInquireClient(new SingleMasterInquireClient(
+                        new InetSocketAddress(configuration.getString(HadoopUnitConfig.ALLUXIO_HOSTNAME), configuration.getInt(HadoopUnitConfig.ALLUXIO_MASTER_RPC_PORT)))
+                );
+
+        FileSystemMasterClient fsMasterClient = FileSystemMasterClient.Factory.create(masterClientConfig);
+        return fsMasterClient;
     }
 
     private void writeFile(FileSystem fs) throws IOException, AlluxioException {

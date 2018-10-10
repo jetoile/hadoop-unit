@@ -15,8 +15,6 @@ package fr.jetoile.hadoopunit.test.alluxio;
 
 import alluxio.PropertyKey;
 import alluxio.client.file.FileSystem;
-import alluxio.client.file.options.CreateFileOptions;
-import alluxio.client.file.policy.SpecificHostPolicy;
 import fr.jetoile.hadoopunit.HadoopUnitConfig;
 import fr.jetoile.hadoopunit.exception.BootstrapException;
 import org.apache.commons.configuration.ConfigurationException;
