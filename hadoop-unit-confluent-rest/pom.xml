@@ -19,11 +19,6 @@
 
         <dependency>
             <groupId>fr.jetoile.hadoop</groupId>
-            <artifactId>hadoop-unit-commons</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>fr.jetoile.hadoop</groupId>
             <artifactId>hadoop-unit-zookeeper</artifactId>
             <exclusions>
                 <exclusion>
