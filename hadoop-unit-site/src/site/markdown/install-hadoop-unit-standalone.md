@@ -2,8 +2,12 @@
 
 * Download it on [search.maven.org](http://search.maven.org/remotecontent?filepath=fr/jetoile/hadoop/hadoop-unit-standalone/2.9/hadoop-unit-standalone-2.9.tar.gz)
 * Unzip it
-* Edit files:
+* Edit file:
   * ```conf/hadoop.properties``` to activate the components you want
+  
+  If maven is already installed and configured, you have no more file to modify
+  
+  If maven is not installed, edit file:   
   * ```conf/hadoop-unit-default.properties``` to set your variables:
     * ```maven.local.repo```: set the location to your maven local repository (ex: `~/<user>/.m2/repository` for linux user or `C:/Users/<user>/.m2/repository`
     * ```maven.central.repo```: if you have a maven repository manager, set your repository
