@@ -21,6 +21,7 @@ import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.maven.cli.logging.Slf4jLoggerManager;
 import org.apache.maven.repository.internal.MavenRepositorySystemUtils;
+import org.apache.maven.settings.Mirror;
 import org.apache.maven.settings.Settings;
 import org.apache.maven.settings.building.DefaultSettingsBuildingRequest;
 import org.apache.maven.settings.building.SettingsBuilder;
@@ -62,6 +63,7 @@ import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static fr.jetoile.hadoopunit.HadoopUnitConfig.DEFAULT_PROPS_FILE;
 import static org.fusesource.jansi.Ansi.Color.GREEN;
@@ -74,6 +76,8 @@ public class HadoopStandaloneBootstrap {
     static private List<Component> componentsToStart = new ArrayList<>();
     static private List<ComponentProperties> componentsToStop = new ArrayList<>();
     static private List<ComponentProperties> componentsProperty = new ArrayList();
+
+    static private Settings settings = null;
 
     /**
      * code from org.apache.maven.cli.MavenCli.container(CliRequest)
@@ -139,6 +143,33 @@ public class HadoopStandaloneBootstrap {
         if (StringUtils.isNotEmpty(mavenHome)) {
             //if MAVEN_HOME or M2_HOME are defined, will read maven's configuration throught settings.xml
             LOGGER.info("is going to use the local maven configuration: {}", mavenHome);
+            Settings settings = getLocalSettings(mavenHome);
+
+            localRepositoryDir = settings.getLocalRepository();
+            if (localRepositoryDir == null) {
+                LOGGER.debug("is going to use default maven local repository");
+                localRepositoryDir = System.getProperty("user.home") + "/.m2/repository";
+            }
+            LOGGER.debug("is going to use {} repository" + localRepositoryDir);
+        } else {
+            LOGGER.debug("is going to use the maven repository from {} with key {}", DEFAULT_PROPS_FILE, "maven.local.repo");
+            localRepositoryDir = hadoopUnitConfiguration.getString("maven.local.repo");
+        }
+
+        LocalRepository localRepo = new LocalRepository(localRepositoryDir);
+        session.setLocalRepositoryManager(system.newLocalRepositoryManager(session, localRepo));
+
+        boolean debug = Boolean.parseBoolean(hadoopUnitConfiguration.getString("maven.debug"));
+        if (debug) {
+            session.setTransferListener(new ConsoleTransferListener());
+            session.setRepositoryListener(new ConsoleRepositoryListener());
+        }
+
+        return session;
+    }
+
+    private static Settings getLocalSettings(String mavenHome) {
+        if (settings == null) {
             File globalSettingsFile = new File(mavenHome + "/conf/settings.xml");
             if (!globalSettingsFile.exists()) {
                 LOGGER.error("maven global settings.xml file not found : " + globalSettingsFile);
@@ -160,34 +191,13 @@ public class HadoopStandaloneBootstrap {
             SettingsBuildingRequest settingsRequest = new DefaultSettingsBuildingRequest();
             settingsRequest.setGlobalSettingsFile(globalSettingsFile);
             settingsRequest.setUserSettingsFile(userSettingsFile);
-            Settings settings = null;
             try {
                 settings = defaultSettingsBuilder.build(settingsRequest).getEffectiveSettings();
             } catch (SettingsBuildingException e) {
                 LOGGER.error("unable to get settings", e);
             }
-
-            localRepositoryDir = settings.getLocalRepository();
-            if (localRepositoryDir == null) {
-                LOGGER.debug("is going to use default maven local repository");
-                localRepositoryDir = System.getProperty("user.home") + "/.m2/repository";
-            }
-            LOGGER.debug("is going to use {} repository" + localRepositoryDir);
-        } else {
-            LOGGER.debug("is going to use the maven repository from {} with key {}", DEFAULT_PROPS_FILE, "maven.central.repo");
-            localRepositoryDir = hadoopUnitConfiguration.getString("maven.local.repo");
         }
-
-        LocalRepository localRepo = new LocalRepository(localRepositoryDir);
-        session.setLocalRepositoryManager(system.newLocalRepositoryManager(session, localRepo));
-
-        boolean debug = Boolean.parseBoolean(hadoopUnitConfiguration.getString("maven.debug"));
-        if (debug) {
-            session.setTransferListener(new ConsoleTransferListener());
-            session.setRepositoryListener(new ConsoleRepositoryListener());
-        }
-
-        return session;
+        return settings;
     }
 
     private static String getInstalledMavenHome() {
@@ -258,10 +268,7 @@ public class HadoopStandaloneBootstrap {
             Artifact artifact = new DefaultArtifact(hadoopUnitConfiguration.getString(c.getArtifactKey()));
             CollectRequest collectRequest = new CollectRequest();
             collectRequest.setRoot(new Dependency(artifact, JavaScopes.RUNTIME));
-
-            if (StringUtils.isNotEmpty(getInstalledMavenHome())) {
-                collectRequest.setRepositories(newRepositories());
-            }
+            collectRequest.setRepositories(getRemoteRepositories());
 
             DependencyRequest dependencyRequest = new DependencyRequest(collectRequest, classpathFilter);
 
@@ -300,6 +307,16 @@ public class HadoopStandaloneBootstrap {
         });
 
         printBanner();
+    }
+
+    private static List<RemoteRepository> getRemoteRepositories() {
+        if (!StringUtils.isNotEmpty(getInstalledMavenHome())) {
+            return newRepositories();
+        } else {
+            List<Mirror> mirrors = getLocalSettings(getInstalledMavenHome()).getMirrors();
+            List<RemoteRepository> remoteRepositories = mirrors.stream().map(mirror -> new RemoteRepository.Builder(mirror.getId(), "default", mirror.getUrl()).build()).collect(Collectors.toList());
+            return remoteRepositories;
+        }
     }
 
     private static void printBanner() {
