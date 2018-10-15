@@ -310,7 +310,7 @@ public class HadoopStandaloneBootstrap {
     }
 
     private static List<RemoteRepository> getRemoteRepositories() {
-        if (!StringUtils.isNotEmpty(getInstalledMavenHome())) {
+        if (StringUtils.isEmpty(getInstalledMavenHome())) {
             return newRepositories();
         } else {
             List<Mirror> mirrors = getLocalSettings(getInstalledMavenHome()).getMirrors();

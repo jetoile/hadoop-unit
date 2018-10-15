@@ -168,7 +168,7 @@ public class KnoxBootstrap implements Bootstrap {
         services = Arrays.asList(KnoxService.values()).stream().filter(s -> servicesList.contains(s.getName())).collect(Collectors.toList());
 
         namenodeUri = "hdfs://" + configuration.getString(HadoopUnitConfig.HDFS_NAMENODE_HOST_KEY) + ":" + configuration.getString(HadoopUnitConfig.HDFS_NAMENODE_PORT_KEY);
-        webHdfsUri = "http://" + configuration.getString(HadoopUnitConfig.HDFS_NAMENODE_HOST_KEY) + ":" + configuration.getString(HadoopUnitConfig.HDFS_NAMENODE_PORT_KEY) + "/webhdfs";
+        webHdfsUri = "http://" + configuration.getString(HadoopUnitConfig.HDFS_NAMENODE_HOST_KEY) + ":" + configuration.getString(HadoopUnitConfig.HDFS_NAMENODE_HTTP_PORT_KEY) + "/webhdfs";
         webHBaseUri = "http://" + configuration.getString(HadoopUnitConfig.HBASE_REST_HOST_KEY) + ":" + configuration.getString(HadoopUnitConfig.HBASE_REST_PORT_KEY);
         oozieUri = "http://" + configuration.getString(HadoopUnitConfig.OOZIE_HOST) + ":" + configuration.getString(HadoopUnitConfig.OOZIE_PORT) + "/oozie";
 
@@ -197,7 +197,9 @@ public class KnoxBootstrap implements Bootstrap {
         }
         if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.HDFS_NAMENODE_HOST_KEY)) && StringUtils.isNotEmpty(HadoopUnitConfig.HDFS_NAMENODE_PORT_KEY)) {
             namenodeUri = "hdfs://" + configs.get(HadoopUnitConfig.HDFS_NAMENODE_HOST_KEY) + ":" + configs.get(HadoopUnitConfig.HDFS_NAMENODE_PORT_KEY);
-            webHdfsUri = "http://" + configs.get(HadoopUnitConfig.HDFS_NAMENODE_HOST_KEY) + ":" + configs.get(HadoopUnitConfig.HDFS_NAMENODE_PORT_KEY) + "/webhdfs";
+        }
+        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.HDFS_NAMENODE_HOST_KEY)) && StringUtils.isNotEmpty(HadoopUnitConfig.HDFS_NAMENODE_HTTP_PORT_KEY)) {
+            webHdfsUri = "http://" + configs.get(HadoopUnitConfig.HDFS_NAMENODE_HOST_KEY) + ":" + configs.get(HadoopUnitConfig.HDFS_NAMENODE_HTTP_PORT_KEY) + "/webhdfs";
         }
         if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.HBASE_REST_HOST_KEY)) && StringUtils.isNotEmpty(HadoopUnitConfig.HBASE_REST_PORT_KEY)) {
             webHBaseUri = "http://" + configs.get(HadoopUnitConfig.HBASE_REST_HOST_KEY) + ":" + configs.get(HadoopUnitConfig.HBASE_REST_PORT_KEY);
