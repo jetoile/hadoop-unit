@@ -148,4 +148,11 @@ public enum HadoopUtils {
             throw new BootstrapException("bad config", e);
         }
     }
+    
+    public static String resolveDir(String dir) {
+    	if (dir != null && dir.startsWith("~")) {
+    		dir = System.getProperty("user.home") + dir.substring(1);
+    	}
+    	return dir;
+    }
 }
