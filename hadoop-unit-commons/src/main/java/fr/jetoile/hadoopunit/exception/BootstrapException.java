@@ -13,10 +13,8 @@
  */
 package fr.jetoile.hadoopunit.exception;
 
-import org.apache.commons.configuration.ConfigurationException;
-
 public class BootstrapException extends Exception {
-    public BootstrapException(String s, ConfigurationException e) {
+    public BootstrapException(String s, Exception e) {
         super(s, e);
     }
 

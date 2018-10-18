@@ -195,7 +195,7 @@ public class OozieBootstrap implements BootstrapHadoop {
         ooziePort = configuration.getInt(HadoopUnitConfig.OOZIE_PORT);
         oozieHost = configuration.getString(HadoopUnitConfig.OOZIE_HOST);
 
-        oozieShareLibPath = configuration.getString(HadoopUnitConfig.OOZIE_SHARELIB_PATH_KEY);
+        oozieShareLibPath = HadoopUtils.resolveDir(configuration.getString(HadoopUnitConfig.OOZIE_SHARELIB_PATH_KEY));
         oozieShareLibName = configuration.getString(HadoopUnitConfig.OOZIE_SHARELIB_NAME_KEY);
 
         List<Object> frameworks = configuration.getList(HadoopUnitConfig.OOZIE_SHARE_LIB_COMPONENT_KEY);
@@ -266,7 +266,7 @@ public class OozieBootstrap implements BootstrapHadoop {
         }
 
         if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.OOZIE_SHARELIB_PATH_KEY))) {
-            oozieShareLibPath = configs.get(HadoopUnitConfig.OOZIE_SHARELIB_PATH_KEY);
+            oozieShareLibPath = HadoopUtils.resolveDir(configs.get(HadoopUnitConfig.OOZIE_SHARELIB_PATH_KEY));
         }
         if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.OOZIE_SHARELIB_NAME_KEY))) {
             oozieShareLibName = configs.get(HadoopUnitConfig.OOZIE_SHARELIB_NAME_KEY);

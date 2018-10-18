@@ -75,7 +75,7 @@ public class HadoopStandaloneBootstrap {
     static private Configuration hadoopUnitConfiguration;
     static private List<Component> componentsToStart = new ArrayList<>();
     static private List<ComponentProperties> componentsToStop = new ArrayList<>();
-    static private List<ComponentProperties> componentsProperty = new ArrayList();
+    static private List<ComponentProperties> componentsProperty = new ArrayList<>();
 
     static private Settings settings = null;
 
@@ -133,14 +133,15 @@ public class HadoopStandaloneBootstrap {
         return locator.getService(RepositorySystem.class);
     }
 
-    public static DefaultRepositorySystemSession newRepositorySystemSession(RepositorySystem system) {
+    public static DefaultRepositorySystemSession newRepositorySystemSession(RepositorySystem system) throws BootstrapException {
         DefaultRepositorySystemSession session = MavenRepositorySystemUtils.newSession();
         String localRepositoryDir = "";
 
 
         String mavenHome = getInstalledMavenHome();
 
-        if (StringUtils.isNotEmpty(mavenHome)) {
+        String userHome = System.getProperty("user.home");
+		if (StringUtils.isNotEmpty(mavenHome)) {
             //if MAVEN_HOME or M2_HOME are defined, will read maven's configuration throught settings.xml
             LOGGER.info("is going to use the local maven configuration: {}", mavenHome);
             Settings settings = getLocalSettings(mavenHome);
@@ -148,12 +149,17 @@ public class HadoopStandaloneBootstrap {
             localRepositoryDir = settings.getLocalRepository();
             if (localRepositoryDir == null) {
                 LOGGER.debug("is going to use default maven local repository");
-                localRepositoryDir = System.getProperty("user.home") + "/.m2/repository";
+                localRepositoryDir = userHome + "/.m2/repository";
             }
             LOGGER.debug("is going to use {} repository" + localRepositoryDir);
         } else {
-            LOGGER.debug("is going to use the maven repository from {} with key {}", DEFAULT_PROPS_FILE, "maven.local.repo");
-            localRepositoryDir = hadoopUnitConfiguration.getString("maven.local.repo");
+        	localRepositoryDir = hadoopUnitConfiguration.getString("maven.local.repo");
+        	if (localRepositoryDir != null) {
+	        	LOGGER.debug("is going to use the maven repository from {} with key {}", DEFAULT_PROPS_FILE, "maven.local.repo");
+	            localRepositoryDir = HadoopUtils.resolveDir(localRepositoryDir);
+        	} else {
+                throw new BootstrapException("unable to find M2_HOME/MAVEN_HOME or the configuration key maven.local.repo from "+ DEFAULT_PROPS_FILE);
+        	}
         }
 
         LocalRepository localRepo = new LocalRepository(localRepositoryDir);
@@ -201,17 +207,18 @@ public class HadoopStandaloneBootstrap {
     }
 
     private static String getInstalledMavenHome() {
-        String maven_home = System.getenv("MAVEN_HOME");
+        String mavenHome = null;
         String m2_home = System.getenv("M2_HOME");
-
-        String mavenHome = "";
-        if (StringUtils.isNotEmpty(maven_home)) {
-            LOGGER.debug("is going to use MAVEN_HOME to read configuration");
-            mavenHome = maven_home;
-        }
         if (StringUtils.isNotEmpty(m2_home)) {
-            LOGGER.debug("is going to use M2_HOME to read configuration");
-            mavenHome = m2_home;
+        	LOGGER.debug("is going to use M2_HOME to read configuration");
+        	mavenHome = m2_home;
+        } 
+        if (mavenHome == null) {
+        	String maven_home = System.getenv("MAVEN_HOME"); // legacy, for maven 1
+        	if (StringUtils.isNotEmpty(maven_home)) {
+	            LOGGER.debug("is going to use MAVEN_HOME to read configuration");
+	            mavenHome = maven_home;
+        	}
         }
         return mavenHome;
     }
@@ -254,17 +261,16 @@ public class HadoopStandaloneBootstrap {
             }
         });
 
-        RepositorySystem system = null;
+        RepositorySystem repositorySystem;
         try {
-            system = getRepositorySystem();
+            repositorySystem = getRepositorySystem();
         } catch (ComponentLookupException e) {
-            LOGGER.error("unable to get RepositoySystem from external maven", e);
+        	throw new BootstrapException("unable to get RepositoySystem from external maven", e);
         }
-        DefaultRepositorySystemSession session = newRepositorySystemSession(system);
+        DefaultRepositorySystemSession session = newRepositorySystemSession(repositorySystem);
         DependencyFilter classpathFilter = DependencyFilterUtils.classpathFilter(JavaScopes.RUNTIME);
 
-        RepositorySystem finalSystem = system;
-        componentsToStart.stream().forEach(c -> {
+        for(Component c : componentsToStart) {
             Artifact artifact = new DefaultArtifact(hadoopUnitConfiguration.getString(c.getArtifactKey()));
             CollectRequest collectRequest = new CollectRequest();
             collectRequest.setRoot(new Dependency(artifact, JavaScopes.RUNTIME));
@@ -272,11 +278,11 @@ public class HadoopStandaloneBootstrap {
 
             DependencyRequest dependencyRequest = new DependencyRequest(collectRequest, classpathFilter);
 
-            List<ArtifactResult> artifactResults = null;
+            List<ArtifactResult> artifactResults;
             try {
-                artifactResults = finalSystem.resolveDependencies(session, dependencyRequest).getArtifactResults();
+                artifactResults = repositorySystem.resolveDependencies(session, dependencyRequest).getArtifactResults();
             } catch (DependencyResolutionException e) {
-                e.printStackTrace();
+                throw new BootstrapException("failed to resolve dependency artifact " + artifact, e);
             }
 
             List<File> artifacts = new ArrayList<>();
@@ -287,7 +293,7 @@ public class HadoopStandaloneBootstrap {
 
             componentsProperty.add(componentProperties);
             componentsToStop.add(0, componentProperties);
-        });
+        }
 
 
         Runtime.getRuntime().addShutdownHook(new Thread() {
@@ -310,10 +316,11 @@ public class HadoopStandaloneBootstrap {
     }
 
     private static List<RemoteRepository> getRemoteRepositories() {
-        if (StringUtils.isEmpty(getInstalledMavenHome())) {
+        String mavenHome = getInstalledMavenHome();
+		if (StringUtils.isEmpty(mavenHome)) {
             return newRepositories();
         } else {
-            List<Mirror> mirrors = getLocalSettings(getInstalledMavenHome()).getMirrors();
+            List<Mirror> mirrors = getLocalSettings(mavenHome).getMirrors();
             List<RemoteRepository> remoteRepositories = mirrors.stream().map(mirror -> new RemoteRepository.Builder(mirror.getId(), "default", mirror.getUrl()).build()).collect(Collectors.toList());
             return remoteRepositories;
         }
@@ -341,8 +348,9 @@ public class HadoopStandaloneBootstrap {
         System.out.println();
     }
 
-    private static ComponentProperties loadAndRun(String c, String className, List<File> artifacts) {
-        List<URL> urls = new ArrayList();
+    @SuppressWarnings("resource")
+	private static ComponentProperties loadAndRun(String c, String className, List<File> artifacts) {
+        List<URL> urls = new ArrayList<>();
 
         urls.add(HadoopStandaloneBootstrap.class.getClassLoader().getResource("log4j.xml"));
         urls.add(HadoopStandaloneBootstrap.class.getClassLoader().getResource("logback.xml"));
@@ -364,20 +372,20 @@ public class HadoopStandaloneBootstrap {
                 ClassLoader.getSystemClassLoader().getParent());
 
         // relative to that classloader, find the main class
-        Class mainClass = null;
+        Class<?> mainClass;
         try {
             mainClass = classloader.loadClass(className);
         } catch (ClassNotFoundException e) {
             LOGGER.error("unable to load class", e);
+            return null;
         }
-        Method main = null;
 
 
         try {
             Thread.currentThread().setContextClassLoader(classloader);
 
             Object o = mainClass.getConstructor(URL.class).newInstance(HadoopStandaloneBootstrap.class.getClassLoader().getResource(DEFAULT_PROPS_FILE));
-            main = mainClass.getMethod("start");
+            Method main = mainClass.getMethod("start");
             main.invoke(o);
             return new ComponentProperties(o, mainClass);
         } catch (NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException e) {
@@ -388,9 +396,9 @@ public class HadoopStandaloneBootstrap {
 
     private static class ComponentProperties {
         private Object instance;
-        private Class mainClass;
+        private Class<?> mainClass;
 
-        public ComponentProperties(Object instance, Class mainClass) {
+        public ComponentProperties(Object instance, Class<?> mainClass) {
             this.instance = instance;
             this.mainClass = mainClass;
         }
@@ -399,7 +407,7 @@ public class HadoopStandaloneBootstrap {
             return instance;
         }
 
-        public Class getMainClass() {
+        public Class<?> getMainClass() {
             return mainClass;
         }
     }
