@@ -133,7 +133,7 @@ public class HadoopStandaloneBootstrap {
         return locator.getService(RepositorySystem.class);
     }
 
-    public static DefaultRepositorySystemSession newRepositorySystemSession(RepositorySystem system) {
+    public static DefaultRepositorySystemSession newRepositorySystemSession(RepositorySystem system) throws BootstrapException {
         DefaultRepositorySystemSession session = MavenRepositorySystemUtils.newSession();
         String localRepositoryDir = "";
 
@@ -158,8 +158,7 @@ public class HadoopStandaloneBootstrap {
 	        	LOGGER.debug("is going to use the maven repository from {} with key {}", DEFAULT_PROPS_FILE, "maven.local.repo");
 	            localRepositoryDir = HadoopUtils.resolveDir(localRepositoryDir);
         	} else {
-        		// using default
-        		localRepositoryDir = userHome + "/.m2/repository";
+                throw new BootstrapException("unable to find M2_HOME/MAVEN_HOME or the configuration key maven.local.repo from "+ DEFAULT_PROPS_FILE);
         	}
         }
 
@@ -220,20 +219,6 @@ public class HadoopStandaloneBootstrap {
 	            LOGGER.debug("is going to use MAVEN_HOME to read configuration");
 	            mavenHome = maven_home;
         	}
-        }
-        if (mavenHome == null) {
-        	// try to detect mvn executable from $PATH !! (cf maven distrib bin/mvn.cmd, or bin/mvn: setting M2_HOME if not set)
-        	String path = System.getenv("PATH");
-			String pathSep = System.getProperty("path.separator");
-			String[] pathElts = path.split(pathSep);
-			for(String pathElt : pathElts) {
-				File pathDir = new File(pathElt);
-				if (new File(pathDir, "mvn").exists()) {
-					mavenHome = pathDir.getParentFile().getAbsolutePath();
-					LOGGER.debug("found mvn in PATH => " + mavenHome);
-					break;
-				}
-			}
         }
         return mavenHome;
     }
@@ -297,8 +282,7 @@ public class HadoopStandaloneBootstrap {
             try {
                 artifactResults = repositorySystem.resolveDependencies(session, dependencyRequest).getArtifactResults();
             } catch (DependencyResolutionException e) {
-            	LOGGER.error("Failed to resolve dependency artifact " + artifact + " .. ignore from classpath!", e);
-            	continue;
+                throw new BootstrapException("failed to resolve dependency artifact " + artifact, e);
             }
 
             List<File> artifacts = new ArrayList<>();
