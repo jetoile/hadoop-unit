@@ -148,14 +148,14 @@ public class HadoopStandaloneBootstrap {
 
             localRepositoryDir = settings.getLocalRepository();
             if (localRepositoryDir == null) {
-                LOGGER.debug("is going to use default maven local repository");
+                LOGGER.info("is going to use default maven local repository");
                 localRepositoryDir = userHome + "/.m2/repository";
             }
-            LOGGER.debug("is going to use {} repository" + localRepositoryDir);
+            LOGGER.info("is going to use {} repository", localRepositoryDir);
         } else {
         	localRepositoryDir = hadoopUnitConfiguration.getString("maven.local.repo");
         	if (localRepositoryDir != null) {
-	        	LOGGER.debug("is going to use the maven repository from {} with key {}", DEFAULT_PROPS_FILE, "maven.local.repo");
+	        	LOGGER.info("is going to use the maven repository from {} with key {}", DEFAULT_PROPS_FILE, "maven.local.repo");
 	            localRepositoryDir = HadoopUtils.resolveDir(localRepositoryDir);
         	} else {
                 throw new BootstrapException("unable to find M2_HOME/MAVEN_HOME or the configuration key maven.local.repo from "+ DEFAULT_PROPS_FILE);
@@ -178,12 +178,12 @@ public class HadoopStandaloneBootstrap {
         if (settings == null) {
             File globalSettingsFile = new File(mavenHome + "/conf/settings.xml");
             if (!globalSettingsFile.exists()) {
-                LOGGER.error("maven global settings.xml file not found : " + globalSettingsFile);
+                LOGGER.error("maven global settings.xml file not found : {}", globalSettingsFile);
             }
 
             File userSettingsFile = new File(System.getProperty("user.home") + "/.m2/settings.xml");
             if (!userSettingsFile.exists()) {
-                LOGGER.info("maven user settings.xml override file not found : " + userSettingsFile);
+                LOGGER.info("maven user settings.xml override file not found : {}", userSettingsFile);
             }
 
             PlexusContainer container = mvnContainer();
@@ -210,13 +210,13 @@ public class HadoopStandaloneBootstrap {
         String mavenHome = null;
         String m2_home = System.getenv("M2_HOME");
         if (StringUtils.isNotEmpty(m2_home)) {
-        	LOGGER.debug("is going to use M2_HOME to read configuration");
+        	LOGGER.info("is going to use M2_HOME to read configuration");
         	mavenHome = m2_home;
         } 
         if (mavenHome == null) {
         	String maven_home = System.getenv("MAVEN_HOME"); // legacy, for maven 1
         	if (StringUtils.isNotEmpty(maven_home)) {
-	            LOGGER.debug("is going to use MAVEN_HOME to read configuration");
+	            LOGGER.info("is going to use MAVEN_HOME to read configuration");
 	            mavenHome = maven_home;
         	}
         }
@@ -245,7 +245,7 @@ public class HadoopStandaloneBootstrap {
         if (StringUtils.isNotEmpty(System.getenv("HADOOP_UNIT_HOME"))) {
             homeDirectory = System.getenv("HADOOP_UNIT_HOME");
         }
-        LOGGER.debug("is using {} for local directory", homeDirectory);
+        LOGGER.info("is using {} for local directory", homeDirectory);
 
 
         try {
