@@ -120,7 +120,7 @@ public class HiveMetastore2BootstrapTest {
             tbl.setViewOriginalText("");
             tbl.setViewExpandedText("");
             tbl.setTableType(TableType.EXTERNAL_TABLE.name());
-            List<FieldSchema> partitions = new ArrayList<FieldSchema>();
+            List<FieldSchema> partitions = new ArrayList<>();
             partitions.add(new FieldSchema("dt", serdeConstants.STRING_TYPE_NAME, ""));
             tbl.setPartitionKeys(partitions);
 

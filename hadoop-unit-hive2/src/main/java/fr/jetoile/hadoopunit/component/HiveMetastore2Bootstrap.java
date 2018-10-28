@@ -130,7 +130,7 @@ public class HiveMetastore2Bootstrap implements BootstrapHadoop {
 
         HiveConf hiveConf = new HiveConf();
         hiveConf.set("fs.defaultFS", "hdfs://" + configuration.getString(HadoopUnitConfig.HDFS_NAMENODE_HOST_KEY) + ":" + configuration.getInt(HadoopUnitConfig.HDFS_NAMENODE_PORT_KEY));
-        hiveConf.set("datanucleus.autoCreateSchema", "true");
+        hiveConf.set("datanucleus.schema.autoCreateTables", "true");
         hiveConf.set("hive.metastore.schema.verification", "false");
 
 //        hiveConf.set(HiveConf.ConfVars.HIVE_TXN_MANAGER.varname, "org.apache.hadoop.hive.ql.lockmgr.DbTxnManager");
