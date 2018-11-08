@@ -20,6 +20,7 @@
         <module>knox-hbase-webhdfs</module>
         <module>redis</module>
         <module>confluent-integrationtest</module>
+        <module>junit-sample</module>
     </modules>
 
     <artifactId>sample</artifactId>

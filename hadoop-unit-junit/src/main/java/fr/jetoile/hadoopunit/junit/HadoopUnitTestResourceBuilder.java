@@ -14,14 +14,16 @@
 
 package fr.jetoile.hadoopunit.junit;
 
-import fr.jetoile.hadoopunit.Component;
+import org.junit.rules.TestRule;
+import org.junit.runner.Description;
+import org.junit.runners.model.Statement;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.List;
+import java.util.Map;
 
-public class HadoopUnitTestResourceBuilder {
+public class HadoopUnitTestResourceBuilder implements TestRule {
     private Map<String, String> properties = new HashMap<>();
     private List<ComponentArtifact> components = new ArrayList<>();
     private String path;
@@ -53,6 +55,29 @@ public class HadoopUnitTestResourceBuilder {
     }
 
     public HadoopUnitTestResource build() {
-        return new HadoopUnitTestResource(repositoryManager, path, components);
+        HadoopUnitTestResource hadoopUnitTestResource = new HadoopUnitTestResource(repositoryManager, path, components);
+        try {
+            hadoopUnitTestResource.start();
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
+        }
+        return hadoopUnitTestResource;
+
+    }
+
+    @Override
+    public Statement apply(Statement base, Description description) {
+        return new Statement() {
+            @Override
+            public void evaluate() throws Throwable {
+                HadoopUnitTestResource hadoopUnitTestResource = new HadoopUnitTestResource(repositoryManager, path, components);
+
+                hadoopUnitTestResource.start();
+
+                base.evaluate();
+
+                hadoopUnitTestResource.stop();
+            }
+        };
     }
 }

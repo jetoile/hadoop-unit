@@ -17,6 +17,7 @@ package fr.jetoile.hadoopunit.junit;
 import fr.jetoile.hadoopunit.Component;
 import fr.jetoile.hadoopunit.HadoopUnitConfig;
 import fr.jetoile.hadoopunit.HadoopUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.maven.repository.internal.MavenRepositorySystemUtils;
 import org.eclipse.aether.DefaultRepositorySystemSession;
@@ -40,7 +41,6 @@ import org.eclipse.aether.transport.file.FileTransporterFactory;
 import org.eclipse.aether.transport.http.HttpTransporterFactory;
 import org.eclipse.aether.util.artifact.JavaScopes;
 import org.eclipse.aether.util.filter.DependencyFilterUtils;
-import org.junit.rules.ExternalResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -56,7 +56,7 @@ import java.util.List;
 
 import static org.fusesource.jansi.Ansi.Color.GREEN;
 
-public class HadoopUnitTestResource extends ExternalResource {
+public class HadoopUnitTestResource {
     final private static Logger LOGGER = LoggerFactory.getLogger(HadoopUnitTestResource.class);
 
     private final List<ComponentArtifact> componentArtifacts;
@@ -74,8 +74,21 @@ public class HadoopUnitTestResource extends ExternalResource {
     }
 
 
-    @Override
-    protected void before() throws Throwable {
+    public void stop() {
+        LOGGER.info("All services are going to be stopped");
+        componentsToStop.stream().forEach(c -> {
+            if (c != null) {
+                try {
+                    Method main = c.getMainClass().getMethod("stop");
+                    main.invoke(c.getInstance());
+                } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+                    LOGGER.error("unable to reflect main", e);
+                }
+            }
+        });
+    }
+
+    public void start() throws Throwable {
         String homeDirectory = ".";
         if (StringUtils.isNotEmpty(System.getenv("HADOOP_UNIT_HOME"))) {
             homeDirectory = System.getenv("HADOOP_UNIT_HOME");
@@ -126,29 +139,29 @@ public class HadoopUnitTestResource extends ExternalResource {
         });
 
 
-        Runtime.getRuntime().addShutdownHook(new Thread() {
-            public void run() {
-                LOGGER.info("All services are going to be stopped");
-                componentsToStop.stream().forEach(c -> {
-                    if (c != null) {
-                        try {
-                            Method main = c.getMainClass().getMethod("stop");
-                            main.invoke(c.getInstance());
-                        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-                            LOGGER.error("unable to reflect main", e);
-                        }
-                    }
-                });
-            }
-        });
+//        Runtime.getRuntime().addShutdownHook(new Thread() {
+//            public void run() {
+//                LOGGER.info("All services are going to be stopped");
+//                componentsToStop.stream().forEach(c -> {
+//                    if (c != null) {
+//                        try {
+//                            Method main = c.getMainClass().getMethod("stop");
+//                            main.invoke(c.getInstance());
+//                        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+//                            LOGGER.error("unable to reflect main", e);
+//                        }
+//                    }
+//                });
+//            }
+//        });
 
-        printBanner();
+//        printBanner();
     }
 
-    @Override
-    protected void after() {
-        // do nothing
-    }
+//    @Override
+//    protected void after() {
+//        // do nothing
+//    }
 
 
     private static void printBanner() {
@@ -173,6 +186,22 @@ public class HadoopUnitTestResource extends ExternalResource {
         System.out.println();
     }
 
+    public static class TestClassLoader extends URLClassLoader {
+        public TestClassLoader(URL[] urls) {
+            super(ArrayUtils.addAll(urls, ((URLClassLoader) getSystemClassLoader()).getURLs()));
+        }
+
+        @Override
+        public Class<?> loadClass(String name) throws ClassNotFoundException {
+//            if (name.startsWith("fr.jetoile.hadoopunit.component.ZookeeperBootstrap")) {
+//                return super.findClass(name);
+//            }
+            return super.loadClass(name);
+//            return super.findLoadedClass(name);
+//            return super.findClass(name);
+        }
+    }
+
     private static ComponentProperties loadAndRun(String c, String className, List<File> artifacts) {
         List<URL> urls = new ArrayList();
 
@@ -191,14 +220,17 @@ public class HadoopUnitTestResource extends ExternalResource {
             }
         });
 
-        ClassLoader classloader = new URLClassLoader(
-                (URL[]) urls.toArray(new URL[0]),
-                ClassLoader.getSystemClassLoader().getParent());
+        TestClassLoader classloader = new TestClassLoader((URL[]) urls.toArray(new URL[0]));
+
+//        ClassLoader classloader = new URLClassLoader(
+//                (URL[]) urls.toArray(new URL[0]),
+//                Thread.currentThread().getContextClassLoader());
 
         // relative to that classloader, find the main class
         Class mainClass = null;
         try {
             mainClass = classloader.loadClass(className);
+//            mainClass = Class.forName(className, true, classloader);
         } catch (ClassNotFoundException e) {
             LOGGER.error("unable to load class", e);
         }
