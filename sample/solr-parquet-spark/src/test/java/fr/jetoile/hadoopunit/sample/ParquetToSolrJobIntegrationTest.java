@@ -15,6 +15,7 @@
 package fr.jetoile.hadoopunit.sample;
 
 import fr.jetoile.hadoopunit.HadoopUnitConfig;
+import fr.jetoile.hadoopunit.client.commons.HadoopUnitClientConfig;
 import fr.jetoile.hadoopunit.exception.BootstrapException;
 import fr.jetoile.hadoopunit.exception.NotFoundServiceException;
 import fr.jetoile.hadoopunit.test.hdfs.HdfsUtils;
@@ -52,7 +53,7 @@ public class ParquetToSolrJobIntegrationTest {
 
 
     @BeforeClass
-    public static void setUp() throws BootstrapException, SQLException, ClassNotFoundException, NotFoundServiceException {
+    public static void setUp() throws BootstrapException {
         try {
             configuration = new PropertiesConfiguration(HadoopUnitConfig.DEFAULT_PROPS_FILE);
         } catch (ConfigurationException e) {
@@ -86,12 +87,12 @@ public class ParquetToSolrJobIntegrationTest {
                 .format("com.databricks.spark.csv")
                 .option("header", "true") // Use first line of all files as header
                 .option("inferSchema", "true") // Automatically infer data types
-                .load("hdfs://localhost:" + configuration.getInt(HadoopUnitConfig.HDFS_NAMENODE_PORT_KEY) + "/khanh/test/test.csv");
+                .load("hdfs://localhost:" + configuration.getInt(HadoopUnitClientConfig.HDFS_NAMENODE_PORT_KEY) + "/khanh/test/test.csv");
 
-        df.write().parquet("hdfs://localhost:" + configuration.getInt(HadoopUnitConfig.HDFS_NAMENODE_PORT_KEY) + "/khanh/test_parquet/file.parquet");
+        df.write().parquet("hdfs://localhost:" + configuration.getInt(HadoopUnitClientConfig.HDFS_NAMENODE_PORT_KEY) + "/khanh/test_parquet/file.parquet");
 
         FileSystem fileSystem = HdfsUtils.INSTANCE.getFileSystem();
-        assertThat(fileSystem.exists(new Path("hdfs://localhost:" + configuration.getInt(HadoopUnitConfig.HDFS_NAMENODE_PORT_KEY) + "/khanh/test_parquet/file.parquet"))).isTrue();
+        assertThat(fileSystem.exists(new Path("hdfs://localhost:" + configuration.getInt(HadoopUnitClientConfig.HDFS_NAMENODE_PORT_KEY) + "/khanh/test_parquet/file.parquet"))).isTrue();
 
         sqlContext.close();
 
@@ -101,7 +102,7 @@ public class ParquetToSolrJobIntegrationTest {
         ParquetToSolrJob parquetToSolrJob = new ParquetToSolrJob(sqlContext);
         parquetToSolrJob.run();
 
-        String zkHostString = configuration.getString(HadoopUnitConfig.ZOOKEEPER_HOST_KEY) + ":" + configuration.getInt(HadoopUnitConfig.ZOOKEEPER_PORT_KEY);
+        String zkHostString = configuration.getString("zookeeper.host") + ":" + configuration.getInt("zookeeper.port");
 
         //then
         CloudSolrClient client = new CloudSolrClient(zkHostString);

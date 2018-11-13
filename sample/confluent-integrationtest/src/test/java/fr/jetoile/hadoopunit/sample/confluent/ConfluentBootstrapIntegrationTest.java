@@ -15,7 +15,6 @@
 package fr.jetoile.hadoopunit.sample.confluent;
 
 import fr.jetoile.hadoopunit.HadoopBootstrap;
-import fr.jetoile.hadoopunit.HadoopUnitConfig;
 import fr.jetoile.hadoopunit.exception.BootstrapException;
 import io.confluent.ksql.rest.client.KsqlRestClient;
 import io.confluent.ksql.rest.client.RestResponse;
@@ -34,7 +33,7 @@ import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 
-import static fr.jetoile.hadoopunit.HadoopUnitConfig.*;
+import static fr.jetoile.hadoopunit.client.commons.HadoopUnitClientConfig.*;
 import static org.fest.assertions.Assertions.assertThat;
 
 public class ConfluentBootstrapIntegrationTest {
@@ -46,7 +45,7 @@ public class ConfluentBootstrapIntegrationTest {
     public static void setup() throws BootstrapException {
 
         try {
-            configuration = new PropertiesConfiguration(HadoopUnitConfig.DEFAULT_PROPS_FILE);
+            configuration = new PropertiesConfiguration(DEFAULT_PROPS_FILE);
         } catch (ConfigurationException e) {
             throw new BootstrapException("bad config", e);
         }

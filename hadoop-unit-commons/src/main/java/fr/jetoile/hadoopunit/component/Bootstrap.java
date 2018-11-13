@@ -15,14 +15,14 @@
 package fr.jetoile.hadoopunit.component;
 
 
+import fr.jetoile.hadoopunit.ComponentMetadata;
+
 import java.util.Map;
 
 public interface Bootstrap {
     Bootstrap start();
 
     Bootstrap stop();
-
-    String getName();
 
     String getProperties();
 
@@ -32,5 +32,11 @@ public interface Bootstrap {
      * @param configs
      */
     void loadConfig(Map<String, String> configs);
+
+    ComponentMetadata getMetadata();
+
+    default String getName() {
+        return getMetadata().getName();
+    }
 
 }

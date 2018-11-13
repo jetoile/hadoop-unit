@@ -14,7 +14,7 @@
 
 package fr.jetoile.hadoopunit.component;
 
-import fr.jetoile.hadoopunit.Component;
+import fr.jetoile.hadoopunit.ComponentMetadata;
 import fr.jetoile.hadoopunit.HadoopUtils;
 import fr.jetoile.hadoopunit.exception.BootstrapException;
 import io.confluent.kafka.schemaregistry.rest.SchemaRegistryConfig;
@@ -26,16 +26,11 @@ import org.eclipse.jetty.server.Server;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.Map;
 import java.util.Properties;
 
-import static fr.jetoile.hadoopunit.HadoopUnitConfig.*;
-
 public class ConfluentSchemaRegistryBootstrap implements Bootstrap {
-    final public static String NAME = Component.CONFLUENT_SCHEMAREGISTRY.name();
-
     static final private Logger LOGGER = LoggerFactory.getLogger(ConfluentSchemaRegistryBootstrap.class);
 
     private State state = State.STOPPED;
@@ -66,37 +61,37 @@ public class ConfluentSchemaRegistryBootstrap implements Bootstrap {
     }
 
     @Override
-    public String getName() {
-        return NAME;
+    public ComponentMetadata getMetadata() {
+        return new ConfluentSchemaRegistryMetadata();
     }
 
 
     @Override
     public String getProperties() {
-        return "\n \t\t\t schemaregistry host:" + configuration.getString(CONFLUENT_SCHEMAREGISTRY_HOST_KEY) +
-                "\n \t\t\t schemaregistry port:" + configuration.getString(CONFLUENT_SCHEMAREGISTRY_PORT_KEY);
+        return "\n \t\t\t schemaregistry host:" + configuration.getString(ConfluentConfig.CONFLUENT_SCHEMAREGISTRY_HOST_KEY) +
+                "\n \t\t\t schemaregistry port:" + configuration.getString(ConfluentConfig.CONFLUENT_SCHEMAREGISTRY_PORT_KEY);
     }
 
     public void loadConfig() {
-        schemaRegistryConfig.put("debug", configuration.getString(CONFLUENT_SCHEMAREGISTRY_DEBUG_KEY));
-        schemaRegistryConfig.put("listeners", "http://" + configuration.getString(CONFLUENT_SCHEMAREGISTRY_HOST_KEY) + ":" + configuration.getString(CONFLUENT_SCHEMAREGISTRY_PORT_KEY));
-        schemaRegistryConfig.put("kafkastore.topic", configuration.getString(CONFLUENT_SCHEMAREGISTRY_TOPIC_KEY));
-        schemaRegistryConfig.put("kafkastore.connection.url", configuration.getString(ZOOKEEPER_HOST_KEY) + ":" + configuration.getString(ZOOKEEPER_PORT_KEY));
+        schemaRegistryConfig.put("debug", configuration.getString(ConfluentConfig.CONFLUENT_SCHEMAREGISTRY_DEBUG_KEY));
+        schemaRegistryConfig.put("listeners", "http://" + configuration.getString(ConfluentConfig.CONFLUENT_SCHEMAREGISTRY_HOST_KEY) + ":" + configuration.getString(ConfluentConfig.CONFLUENT_SCHEMAREGISTRY_PORT_KEY));
+        schemaRegistryConfig.put("kafkastore.topic", configuration.getString(ConfluentConfig.CONFLUENT_SCHEMAREGISTRY_TOPIC_KEY));
+        schemaRegistryConfig.put("kafkastore.connection.url", configuration.getString(ZookeeperConfig.ZOOKEEPER_HOST_KEY) + ":" + configuration.getString(ZookeeperConfig.ZOOKEEPER_PORT_KEY));
     }
 
     @Override
     public void loadConfig(Map<String, String> configs) {
-        if (StringUtils.isNotEmpty(configs.get(CONFLUENT_SCHEMAREGISTRY_DEBUG_KEY))) {
-            schemaRegistryConfig.put("debug", configs.get(CONFLUENT_SCHEMAREGISTRY_DEBUG_KEY));
+        if (StringUtils.isNotEmpty(configs.get(ConfluentConfig.CONFLUENT_SCHEMAREGISTRY_DEBUG_KEY))) {
+            schemaRegistryConfig.put("debug", configs.get(ConfluentConfig.CONFLUENT_SCHEMAREGISTRY_DEBUG_KEY));
         }
-        if (StringUtils.isNotEmpty(configs.get(CONFLUENT_SCHEMAREGISTRY_HOST_KEY)) && StringUtils.isNotEmpty(configs.get(CONFLUENT_SCHEMAREGISTRY_PORT_KEY))) {
-            schemaRegistryConfig.put("listeners", "http://" + configs.get(CONFLUENT_SCHEMAREGISTRY_HOST_KEY) + ":" + configs.get(CONFLUENT_SCHEMAREGISTRY_PORT_KEY));
+        if (StringUtils.isNotEmpty(configs.get(ConfluentConfig.CONFLUENT_SCHEMAREGISTRY_HOST_KEY)) && StringUtils.isNotEmpty(configs.get(ConfluentConfig.CONFLUENT_SCHEMAREGISTRY_PORT_KEY))) {
+            schemaRegistryConfig.put("listeners", "http://" + configs.get(ConfluentConfig.CONFLUENT_SCHEMAREGISTRY_HOST_KEY) + ":" + configs.get(ConfluentConfig.CONFLUENT_SCHEMAREGISTRY_PORT_KEY));
         }
-        if (StringUtils.isNotEmpty(configs.get(CONFLUENT_SCHEMAREGISTRY_TOPIC_KEY))) {
-            schemaRegistryConfig.put("kafkastore.topic", configs.get(CONFLUENT_SCHEMAREGISTRY_TOPIC_KEY));
+        if (StringUtils.isNotEmpty(configs.get(ConfluentConfig.CONFLUENT_SCHEMAREGISTRY_TOPIC_KEY))) {
+            schemaRegistryConfig.put("kafkastore.topic", configs.get(ConfluentConfig.CONFLUENT_SCHEMAREGISTRY_TOPIC_KEY));
         }
-        if (StringUtils.isNotEmpty(configs.get(ZOOKEEPER_HOST_KEY)) && StringUtils.isNotEmpty(configs.get(ZOOKEEPER_PORT_KEY))) {
-            schemaRegistryConfig.put("kafkastore.connection.url", configs.get(ZOOKEEPER_HOST_KEY) + ":" + configs.get(ZOOKEEPER_PORT_KEY));
+        if (StringUtils.isNotEmpty(configs.get(ZookeeperConfig.ZOOKEEPER_HOST_KEY)) && StringUtils.isNotEmpty(configs.get(ZookeeperConfig.ZOOKEEPER_PORT_KEY))) {
+            schemaRegistryConfig.put("kafkastore.connection.url", configs.get(ZookeeperConfig.ZOOKEEPER_HOST_KEY) + ":" + configs.get(ZookeeperConfig.ZOOKEEPER_PORT_KEY));
         }
     }
 

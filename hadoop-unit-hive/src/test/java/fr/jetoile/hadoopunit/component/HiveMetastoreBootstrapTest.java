@@ -15,9 +15,8 @@
 package fr.jetoile.hadoopunit.component;
 
 
-import fr.jetoile.hadoopunit.Component;
-import fr.jetoile.hadoopunit.HadoopUnitConfig;
 import fr.jetoile.hadoopunit.HadoopBootstrap;
+import fr.jetoile.hadoopunit.HadoopUnitConfig;
 import fr.jetoile.hadoopunit.Utils;
 import fr.jetoile.hadoopunit.exception.BootstrapException;
 import fr.jetoile.hadoopunit.exception.NotFoundServiceException;
@@ -34,7 +33,6 @@ import org.apache.thrift.TException;
 import org.fest.assertions.Assertions;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.File;
@@ -45,7 +43,6 @@ import java.util.Map;
 
 import static org.fest.assertions.Assertions.assertThat;
 
-@Ignore
 public class HiveMetastoreBootstrapTest {
 
     private static Configuration configuration;
@@ -77,10 +74,10 @@ public class HiveMetastoreBootstrapTest {
 
         // Create a table and display it back
         try {
-            HiveMetaStoreClient hiveClient = new HiveMetaStoreClient((HiveConf) ((BootstrapHadoop)HadoopBootstrap.INSTANCE.getService(Component.HIVEMETA)).getConfiguration());
+            HiveMetaStoreClient hiveClient = new HiveMetaStoreClient((HiveConf) ((BootstrapHadoop) HadoopBootstrap.INSTANCE.getService("HIVEMETA")).getConfiguration());
 
-            hiveClient.dropTable(configuration.getString(HadoopUnitConfig.HIVE_TEST_DATABASE_NAME_KEY),
-                    configuration.getString(HadoopUnitConfig.HIVE_TEST_TABLE_NAME_KEY),
+            hiveClient.dropTable(configuration.getString(HiveConfig.HIVE_TEST_DATABASE_NAME_KEY),
+                    configuration.getString(HiveConfig.HIVE_TEST_TABLE_NAME_KEY),
                     true,
                     true);
 
@@ -90,7 +87,7 @@ public class HiveMetastoreBootstrapTest {
             cols.add(new FieldSchema("msg", serdeConstants.STRING_TYPE_NAME, ""));
 
             // Values for the StorageDescriptor
-            String location = new File(configuration.getString(HadoopUnitConfig.HIVE_TEST_TABLE_NAME_KEY)).getAbsolutePath();
+            String location = new File(configuration.getString(HiveConfig.HIVE_TEST_TABLE_NAME_KEY)).getAbsolutePath();
             String inputFormat = "org.apache.hadoop.hive.ql.io.orc.OrcInputFormat";
             String outputFormat = "org.apache.hadoop.hive.ql.io.orc.OrcOutputFormat";
             int numBuckets = 16;
@@ -114,8 +111,8 @@ public class HiveMetastoreBootstrapTest {
 
             // Define the table
             Table tbl = new Table();
-            tbl.setDbName(configuration.getString(HadoopUnitConfig.HIVE_TEST_DATABASE_NAME_KEY));
-            tbl.setTableName(configuration.getString(HadoopUnitConfig.HIVE_TEST_TABLE_NAME_KEY));
+            tbl.setDbName(configuration.getString(HiveConfig.HIVE_TEST_DATABASE_NAME_KEY));
+            tbl.setTableName(configuration.getString(HiveConfig.HIVE_TEST_TABLE_NAME_KEY));
             tbl.setSd(sd);
             tbl.setOwner(System.getProperty("user.name"));
             tbl.setParameters(new HashMap<>());
@@ -131,9 +128,9 @@ public class HiveMetastoreBootstrapTest {
 
             // Describe the table
             Table createdTable = hiveClient.getTable(
-                    configuration.getString(HadoopUnitConfig.HIVE_TEST_DATABASE_NAME_KEY),
-                    configuration.getString(HadoopUnitConfig.HIVE_TEST_TABLE_NAME_KEY));
-            assertThat(createdTable.toString()).contains(configuration.getString(HadoopUnitConfig.HIVE_TEST_TABLE_NAME_KEY));
+                    configuration.getString(HiveConfig.HIVE_TEST_DATABASE_NAME_KEY),
+                    configuration.getString(HiveConfig.HIVE_TEST_TABLE_NAME_KEY));
+            assertThat(createdTable.toString()).contains(configuration.getString(HiveConfig.HIVE_TEST_TABLE_NAME_KEY));
 
         } catch (MetaException e) {
             e.printStackTrace();

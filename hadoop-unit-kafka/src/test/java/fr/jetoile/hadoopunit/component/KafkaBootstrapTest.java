@@ -62,17 +62,17 @@ public class KafkaBootstrapTest {
         // Producer
         for (int i = 0; i < 10; i++) {
             String payload = generateMessage(i);
-            KafkaProducerUtils.INSTANCE.produceMessages(configuration.getString(HadoopUnitConfig.KAFKA_TEST_TOPIC_KEY), String.valueOf(i), payload);
+            KafkaProducerUtils.INSTANCE.produceMessages(configuration.getString(KafkaConfig.KAFKA_TEST_TOPIC_KEY), String.valueOf(i), payload);
         }
 
 
 
         // Consumer
 //        KafkaConsumerUtils.INSTANCE.consumeMessagesWithOldApi(configuration.getString(HadoopUnitConfig.KAFKA_TEST_TOPIC_KEY), 10);
-        KafkaConsumerUtils.INSTANCE.consumeMessagesWithNewApi(configuration.getString(HadoopUnitConfig.KAFKA_TEST_TOPIC_KEY), 10);
+        KafkaConsumerUtils.INSTANCE.consumeMessagesWithNewApi(configuration.getString(KafkaConfig.KAFKA_TEST_TOPIC_KEY), 10);
 
         // Assert num of messages produced = num of message consumed
-        Assert.assertEquals(configuration.getLong(HadoopUnitConfig.KAFKA_TEST_MESSAGE_COUNT_KEY), KafkaConsumerUtils.INSTANCE.getNumRead());
+        Assert.assertEquals(configuration.getLong(KafkaConfig.KAFKA_TEST_MESSAGE_COUNT_KEY), KafkaConsumerUtils.INSTANCE.getNumRead());
     }
 
     private String generateMessage(int i) {

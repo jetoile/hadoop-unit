@@ -13,8 +13,7 @@
  */
 package fr.jetoile.hadoopunit.component;
 
-import fr.jetoile.hadoopunit.Component;
-import fr.jetoile.hadoopunit.HadoopUnitConfig;
+import fr.jetoile.hadoopunit.ComponentMetadata;
 import fr.jetoile.hadoopunit.HadoopUtils;
 import fr.jetoile.hadoopunit.exception.BootstrapException;
 import fr.jetoile.hadoopunit.redis.EmbeddedRedisInstaller;
@@ -43,8 +42,6 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class RedisBootstrap implements Bootstrap {
-    final public static String NAME = Component.REDIS.name();
-
     final private Logger LOGGER = LoggerFactory.getLogger(RedisBootstrap.class);
 
     private int masterPort;
@@ -94,8 +91,8 @@ public class RedisBootstrap implements Bootstrap {
     }
 
     @Override
-    public String getName() {
-        return NAME;
+    public ComponentMetadata getMetadata() {
+        return new RedisMetadata();
     }
 
     @Override
@@ -108,51 +105,51 @@ public class RedisBootstrap implements Bootstrap {
                         (sentinelPorts.size() != 0 && type == RedisType.SENTINEL ? "\n \t\t\t sentinelPorts: " + sentinelPorts : "");
     }
 
-    private void loadConfig() throws BootstrapException {
-        masterPort = configuration.getInt(HadoopUnitConfig.REDIS_PORT_KEY);
-        version = configuration.getString(HadoopUnitConfig.REDIS_VERSION_KEY);
-        downloadUrl = configuration.getString(HadoopUnitConfig.REDIS_DOWNLOAD_URL_KEY);
-        cleanupInstallation = configuration.getBoolean(HadoopUnitConfig.REDIS_CLEANUP_INSTALLATION_KEY);
-        type = RedisType.valueOf(configuration.getString(HadoopUnitConfig.REDIS_TYPE_KEY, RedisType.SERVER.name()));
-        tmpDir = configuration.getString(HadoopUnitConfig.REDIS_TMP_DIR_KEY);
+    private void loadConfig() {
+        masterPort = configuration.getInt(RedisConfig.REDIS_PORT_KEY);
+        version = configuration.getString(RedisConfig.REDIS_VERSION_KEY);
+        downloadUrl = configuration.getString(RedisConfig.REDIS_DOWNLOAD_URL_KEY);
+        cleanupInstallation = configuration.getBoolean(RedisConfig.REDIS_CLEANUP_INSTALLATION_KEY);
+        type = RedisType.valueOf(configuration.getString(RedisConfig.REDIS_TYPE_KEY, RedisType.SERVER.name()));
+        tmpDir = configuration.getString(RedisConfig.REDIS_TMP_DIR_KEY);
 
-        if (configuration.containsKey(HadoopUnitConfig.REDIS_SLAVE_PORT_KEY)) {
-            slavePorts = configuration.getList(HadoopUnitConfig.REDIS_SLAVE_PORT_KEY).stream().map(s -> Integer.valueOf(((String) s).trim())).collect(Collectors.toList());
+        if (configuration.containsKey(RedisConfig.REDIS_SLAVE_PORT_KEY)) {
+            slavePorts = configuration.getList(RedisConfig.REDIS_SLAVE_PORT_KEY).stream().map(s -> Integer.valueOf(((String) s).trim())).collect(Collectors.toList());
         }
-        if (configuration.containsKey(HadoopUnitConfig.REDIS_SENTINEL_PORT_KEY)) {
-            sentinelPorts = configuration.getList(HadoopUnitConfig.REDIS_SENTINEL_PORT_KEY).stream().map(s -> Integer.valueOf(((String) s).trim())).collect(Collectors.toList());
+        if (configuration.containsKey(RedisConfig.REDIS_SENTINEL_PORT_KEY)) {
+            sentinelPorts = configuration.getList(RedisConfig.REDIS_SENTINEL_PORT_KEY).stream().map(s -> Integer.valueOf(((String) s).trim())).collect(Collectors.toList());
         }
 
     }
 
     @Override
     public void loadConfig(Map<String, String> configs) {
-        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.REDIS_PORT_KEY))) {
-            masterPort = Integer.parseInt(configs.get(HadoopUnitConfig.REDIS_PORT_KEY));
+        if (StringUtils.isNotEmpty(configs.get(RedisConfig.REDIS_PORT_KEY))) {
+            masterPort = Integer.parseInt(configs.get(RedisConfig.REDIS_PORT_KEY));
         }
 
 
-        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.REDIS_PORT_KEY))) {
-            version = configs.get(HadoopUnitConfig.REDIS_VERSION_KEY);
+        if (StringUtils.isNotEmpty(configs.get(RedisConfig.REDIS_PORT_KEY))) {
+            version = configs.get(RedisConfig.REDIS_VERSION_KEY);
         }
-        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.REDIS_DOWNLOAD_URL_KEY))) {
-            downloadUrl = configs.get(HadoopUnitConfig.REDIS_DOWNLOAD_URL_KEY);
+        if (StringUtils.isNotEmpty(configs.get(RedisConfig.REDIS_DOWNLOAD_URL_KEY))) {
+            downloadUrl = configs.get(RedisConfig.REDIS_DOWNLOAD_URL_KEY);
         }
-        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.REDIS_CLEANUP_INSTALLATION_KEY))) {
-            cleanupInstallation = Boolean.parseBoolean(configs.get(HadoopUnitConfig.REDIS_CLEANUP_INSTALLATION_KEY));
+        if (StringUtils.isNotEmpty(configs.get(RedisConfig.REDIS_CLEANUP_INSTALLATION_KEY))) {
+            cleanupInstallation = Boolean.parseBoolean(configs.get(RedisConfig.REDIS_CLEANUP_INSTALLATION_KEY));
         }
-        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.REDIS_TYPE_KEY))) {
-            type = RedisType.valueOf(configs.get(HadoopUnitConfig.REDIS_TYPE_KEY));
+        if (StringUtils.isNotEmpty(configs.get(RedisConfig.REDIS_TYPE_KEY))) {
+            type = RedisType.valueOf(configs.get(RedisConfig.REDIS_TYPE_KEY));
         }
-        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.REDIS_TMP_DIR_KEY))) {
-            tmpDir = configs.get(HadoopUnitConfig.REDIS_TMP_DIR_KEY);
+        if (StringUtils.isNotEmpty(configs.get(RedisConfig.REDIS_TMP_DIR_KEY))) {
+            tmpDir = configs.get(RedisConfig.REDIS_TMP_DIR_KEY);
         }
-        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.REDIS_SLAVE_PORT_KEY))) {
-            List<String> ports = Arrays.asList(configs.get(HadoopUnitConfig.REDIS_SLAVE_PORT_KEY).split(","));
+        if (StringUtils.isNotEmpty(configs.get(RedisConfig.REDIS_SLAVE_PORT_KEY))) {
+            List<String> ports = Arrays.asList(configs.get(RedisConfig.REDIS_SLAVE_PORT_KEY).split(","));
             slavePorts = ports.stream().map(s -> Integer.valueOf(s.trim())).collect(Collectors.toList());
         }
-        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.REDIS_SENTINEL_PORT_KEY))) {
-            List<String> ports = Arrays.asList(configs.get(HadoopUnitConfig.REDIS_SENTINEL_PORT_KEY).split(","));
+        if (StringUtils.isNotEmpty(configs.get(RedisConfig.REDIS_SENTINEL_PORT_KEY))) {
+            List<String> ports = Arrays.asList(configs.get(RedisConfig.REDIS_SENTINEL_PORT_KEY).split(","));
             sentinelPorts = ports.stream().map(s -> Integer.valueOf(s.trim())).collect(Collectors.toList());
         }
     }

@@ -41,6 +41,10 @@ public enum KafkaConsumerUtils {
     // Logger
     private static final Logger LOG = LoggerFactory.getLogger(KafkaConsumerUtils.class);
 
+    private static final String KAFKA_HOSTNAME_KEY = "kafka.hostname";
+    private static final String KAFKA_PORT_KEY = "kafka.port";
+
+
     private String kafkaHostname;
     private Integer kafkaPort;
 
@@ -122,8 +126,8 @@ public enum KafkaConsumerUtils {
             throw new ConfigException("bad config", e);
         }
 
-        kafkaHostname = configuration.getString(HadoopUnitConfig.KAFKA_HOSTNAME_KEY);
-        kafkaPort = configuration.getInt(HadoopUnitConfig.KAFKA_PORT_KEY);
+        kafkaHostname = configuration.getString(KAFKA_HOSTNAME_KEY);
+        kafkaPort = configuration.getInt(KAFKA_PORT_KEY);
     }
 
 }

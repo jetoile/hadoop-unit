@@ -13,20 +13,15 @@
  */
 package fr.jetoile.hadoopunit.component;
 
-import com.github.sakserv.minicluster.config.ConfigVars;
 import com.github.sakserv.minicluster.impl.MRLocalCluster;
 import com.github.sakserv.minicluster.impl.OozieLocalServer;
 import com.github.sakserv.minicluster.oozie.sharelib.Framework;
 import com.github.sakserv.minicluster.util.FileUtils;
-import com.google.common.collect.Lists;
-import fr.jetoile.hadoopunit.Component;
-import fr.jetoile.hadoopunit.HadoopUnitConfig;
+import fr.jetoile.hadoopunit.ComponentMetadata;
 import fr.jetoile.hadoopunit.HadoopUtils;
 import fr.jetoile.hadoopunit.exception.BootstrapException;
 import fr.jetoile.hadoopunit.exception.NotFoundServiceException;
 import org.apache.commons.configuration.Configuration;
-import org.apache.commons.configuration.ConfigurationException;
-import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.lang.StringUtils;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.FileUtil;
@@ -45,8 +40,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class OozieBootstrap implements BootstrapHadoop {
-    final public static String NAME = Component.OOZIE.name();
-
     final private Logger LOGGER = LoggerFactory.getLogger(OozieBootstrap.class);
 
     private static final String SHARE_LIB_LOCAL_TEMP_PREFIX = "oozie_share_lib_tmp";
@@ -108,8 +101,8 @@ public class OozieBootstrap implements BootstrapHadoop {
     }
 
     @Override
-    public String getName() {
-        return NAME;
+    public ComponentMetadata getMetadata() {
+        return new OozieMetadata();
     }
 
     @Override
@@ -131,8 +124,8 @@ public class OozieBootstrap implements BootstrapHadoop {
         hadoopConf.set("oozie.service.WorkflowAppService.system.libpath", hdfsDefaultFs + "/" + oozieHdfsShareLibDir);
         hadoopConf.set("oozie.use.system.libpath", "true");
 
-        hadoopConf.set("fs.defaultFS", "hdfs://" + configuration.getString(HadoopUnitConfig.HDFS_NAMENODE_HOST_KEY) + ":" + configuration.getString(HadoopUnitConfig.HDFS_NAMENODE_PORT_KEY));
-        hdfsDefaultFs = "hdfs://" + configuration.getString(HadoopUnitConfig.HDFS_NAMENODE_HOST_KEY) + ":" + configuration.getString(HadoopUnitConfig.HDFS_NAMENODE_PORT_KEY);
+        hadoopConf.set("fs.defaultFS", "hdfs://" + configuration.getString(HdfsConfig.HDFS_NAMENODE_HOST_KEY) + ":" + configuration.getString(HdfsConfig.HDFS_NAMENODE_PORT_KEY));
+        hdfsDefaultFs = "hdfs://" + configuration.getString(HdfsConfig.HDFS_NAMENODE_HOST_KEY) + ":" + configuration.getString(HdfsConfig.HDFS_NAMENODE_PORT_KEY);
 
         mrLocalCluster = new MRLocalCluster.Builder()
                 .setNumNodeManagers(numNodeManagers)
@@ -170,109 +163,109 @@ public class OozieBootstrap implements BootstrapHadoop {
     }
 
     private void loadConfig() throws BootstrapException, NotFoundServiceException {
-        oozieTestDir = configuration.getString(HadoopUnitConfig.OOZIE_TEST_DIR_KEY);
-        oozieHomeDir = configuration.getString(HadoopUnitConfig.OOZIE_HOME_DIR_KEY);
+        oozieTestDir = configuration.getString(OozieConfig.OOZIE_TEST_DIR_KEY);
+        oozieHomeDir = configuration.getString(OozieConfig.OOZIE_HOME_DIR_KEY);
         oozieUsername = System.getProperty("user.name");
-        oozieGroupname = configuration.getString(HadoopUnitConfig.OOZIE_GROUPNAME_KEY);
-        oozieYarnResourceManagerAddress = configuration.getString(HadoopUnitConfig.YARN_RESOURCE_MANAGER_ADDRESS_KEY);
+        oozieGroupname = configuration.getString(OozieConfig.OOZIE_GROUPNAME_KEY);
+        oozieYarnResourceManagerAddress = configuration.getString(YarnConfig.YARN_RESOURCE_MANAGER_ADDRESS_KEY);
 
-        oozieHdfsShareLibDir = configuration.getString(HadoopUnitConfig.OOZIE_HDFS_SHARE_LIB_DIR_KEY);
-        oozieShareLibCreate = configuration.getBoolean(HadoopUnitConfig.OOZIE_SHARE_LIB_CREATE_KEY);
-        oozieLocalShareLibCacheDir = configuration.getString(HadoopUnitConfig.OOZIE_LOCAL_SHARE_LIB_CACHE_DIR_KEY);
-        ooziePurgeLocalShareLibCache = configuration.getBoolean(HadoopUnitConfig.OOZIE_PURGE_LOCAL_SHARE_LIB_CACHE_KEY);
+        oozieHdfsShareLibDir = configuration.getString(OozieConfig.OOZIE_HDFS_SHARE_LIB_DIR_KEY);
+        oozieShareLibCreate = configuration.getBoolean(OozieConfig.OOZIE_SHARE_LIB_CREATE_KEY);
+        oozieLocalShareLibCacheDir = configuration.getString(OozieConfig.OOZIE_LOCAL_SHARE_LIB_CACHE_DIR_KEY);
+        ooziePurgeLocalShareLibCache = configuration.getBoolean(OozieConfig.OOZIE_PURGE_LOCAL_SHARE_LIB_CACHE_KEY);
 
-        oozieTmpDir = configuration.getString(HadoopUnitConfig.OOZIE_TMP_DIR_KEY);
+        oozieTmpDir = configuration.getString(OozieConfig.OOZIE_TMP_DIR_KEY);
 
-        numNodeManagers = Integer.parseInt(configuration.getString(HadoopUnitConfig.YARN_NUM_NODE_MANAGERS_KEY));
-        jobHistoryAddress = configuration.getString(HadoopUnitConfig.MR_JOB_HISTORY_ADDRESS_KEY);
-        resourceManagerAddress = configuration.getString(HadoopUnitConfig.YARN_RESOURCE_MANAGER_ADDRESS_KEY);
-        resourceManagerHostname = configuration.getString(HadoopUnitConfig.YARN_RESOURCE_MANAGER_HOSTNAME_KEY);
-        resourceManagerSchedulerAddress = configuration.getString(HadoopUnitConfig.YARN_RESOURCE_MANAGER_SCHEDULER_ADDRESS_KEY);
-        resourceManagerResourceTrackerAddress = configuration.getString(HadoopUnitConfig.YARN_RESOURCE_MANAGER_RESOURCE_TRACKER_ADDRESS_KEY);
-        resourceManagerWebappAddress = configuration.getString(HadoopUnitConfig.YARN_RESOURCE_MANAGER_WEBAPP_ADDRESS_KEY);
-        useInJvmContainerExecutor = configuration.getBoolean(HadoopUnitConfig.YARN_USE_IN_JVM_CONTAINER_EXECUTOR_KEY);
+        numNodeManagers = Integer.parseInt(configuration.getString(YarnConfig.YARN_NUM_NODE_MANAGERS_KEY));
+        jobHistoryAddress = configuration.getString(YarnConfig.MR_JOB_HISTORY_ADDRESS_KEY);
+        resourceManagerAddress = configuration.getString(YarnConfig.YARN_RESOURCE_MANAGER_ADDRESS_KEY);
+        resourceManagerHostname = configuration.getString(YarnConfig.YARN_RESOURCE_MANAGER_HOSTNAME_KEY);
+        resourceManagerSchedulerAddress = configuration.getString(YarnConfig.YARN_RESOURCE_MANAGER_SCHEDULER_ADDRESS_KEY);
+        resourceManagerResourceTrackerAddress = configuration.getString(YarnConfig.YARN_RESOURCE_MANAGER_RESOURCE_TRACKER_ADDRESS_KEY);
+        resourceManagerWebappAddress = configuration.getString(YarnConfig.YARN_RESOURCE_MANAGER_WEBAPP_ADDRESS_KEY);
+        useInJvmContainerExecutor = configuration.getBoolean(YarnConfig.YARN_USE_IN_JVM_CONTAINER_EXECUTOR_KEY);
 
-        ooziePort = configuration.getInt(HadoopUnitConfig.OOZIE_PORT);
-        oozieHost = configuration.getString(HadoopUnitConfig.OOZIE_HOST);
+        ooziePort = configuration.getInt(OozieConfig.OOZIE_PORT);
+        oozieHost = configuration.getString(OozieConfig.OOZIE_HOST);
 
-        oozieShareLibPath = HadoopUtils.resolveDir(configuration.getString(HadoopUnitConfig.OOZIE_SHARELIB_PATH_KEY));
-        oozieShareLibName = configuration.getString(HadoopUnitConfig.OOZIE_SHARELIB_NAME_KEY);
+        oozieShareLibPath = HadoopUtils.resolveDir(configuration.getString(OozieConfig.OOZIE_SHARELIB_PATH_KEY));
+        oozieShareLibName = configuration.getString(OozieConfig.OOZIE_SHARELIB_NAME_KEY);
 
-        List<Object> frameworks = configuration.getList(HadoopUnitConfig.OOZIE_SHARE_LIB_COMPONENT_KEY);
+        List<Object> frameworks = configuration.getList(OozieConfig.OOZIE_SHARE_LIB_COMPONENT_KEY);
         oozieShareLibFrameworks = frameworks.stream().map(f -> Framework.valueOf(f.toString())).collect(Collectors.toList());
     }
 
     @Override
     public void loadConfig(Map<String, String> configs) {
-        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.OOZIE_TEST_DIR_KEY))) {
-            oozieTestDir = configs.get(HadoopUnitConfig.OOZIE_TEST_DIR_KEY);
+        if (StringUtils.isNotEmpty(configs.get(OozieConfig.OOZIE_TEST_DIR_KEY))) {
+            oozieTestDir = configs.get(OozieConfig.OOZIE_TEST_DIR_KEY);
         }
-        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.OOZIE_HOME_DIR_KEY))) {
-            oozieHomeDir = configs.get(HadoopUnitConfig.OOZIE_HOME_DIR_KEY);
+        if (StringUtils.isNotEmpty(configs.get(OozieConfig.OOZIE_HOME_DIR_KEY))) {
+            oozieHomeDir = configs.get(OozieConfig.OOZIE_HOME_DIR_KEY);
         }
-        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.OOZIE_GROUPNAME_KEY))) {
-            oozieGroupname = configs.get(HadoopUnitConfig.OOZIE_GROUPNAME_KEY);
+        if (StringUtils.isNotEmpty(configs.get(OozieConfig.OOZIE_GROUPNAME_KEY))) {
+            oozieGroupname = configs.get(OozieConfig.OOZIE_GROUPNAME_KEY);
         }
-        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.YARN_RESOURCE_MANAGER_ADDRESS_KEY))) {
-            oozieYarnResourceManagerAddress = configs.get(HadoopUnitConfig.YARN_RESOURCE_MANAGER_ADDRESS_KEY);
+        if (StringUtils.isNotEmpty(configs.get(YarnConfig.YARN_RESOURCE_MANAGER_ADDRESS_KEY))) {
+            oozieYarnResourceManagerAddress = configs.get(YarnConfig.YARN_RESOURCE_MANAGER_ADDRESS_KEY);
         }
-        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.OOZIE_HDFS_SHARE_LIB_DIR_KEY))) {
-            oozieHdfsShareLibDir = configs.get(HadoopUnitConfig.OOZIE_HDFS_SHARE_LIB_DIR_KEY);
+        if (StringUtils.isNotEmpty(configs.get(OozieConfig.OOZIE_HDFS_SHARE_LIB_DIR_KEY))) {
+            oozieHdfsShareLibDir = configs.get(OozieConfig.OOZIE_HDFS_SHARE_LIB_DIR_KEY);
         }
-        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.OOZIE_SHARE_LIB_CREATE_KEY))) {
-            oozieShareLibCreate = Boolean.parseBoolean(configs.get(HadoopUnitConfig.OOZIE_SHARE_LIB_CREATE_KEY));
+        if (StringUtils.isNotEmpty(configs.get(OozieConfig.OOZIE_SHARE_LIB_CREATE_KEY))) {
+            oozieShareLibCreate = Boolean.parseBoolean(configs.get(OozieConfig.OOZIE_SHARE_LIB_CREATE_KEY));
         }
-        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.OOZIE_LOCAL_SHARE_LIB_CACHE_DIR_KEY))) {
-            oozieLocalShareLibCacheDir = configs.get(HadoopUnitConfig.OOZIE_LOCAL_SHARE_LIB_CACHE_DIR_KEY);
+        if (StringUtils.isNotEmpty(configs.get(OozieConfig.OOZIE_LOCAL_SHARE_LIB_CACHE_DIR_KEY))) {
+            oozieLocalShareLibCacheDir = configs.get(OozieConfig.OOZIE_LOCAL_SHARE_LIB_CACHE_DIR_KEY);
         }
-        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.OOZIE_PURGE_LOCAL_SHARE_LIB_CACHE_KEY))) {
-            ooziePurgeLocalShareLibCache = Boolean.parseBoolean(configs.get(HadoopUnitConfig.OOZIE_PURGE_LOCAL_SHARE_LIB_CACHE_KEY));
-        }
-
-        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.OOZIE_TMP_DIR_KEY))) {
-            oozieTmpDir = configs.get(HadoopUnitConfig.OOZIE_TMP_DIR_KEY);
+        if (StringUtils.isNotEmpty(configs.get(OozieConfig.OOZIE_PURGE_LOCAL_SHARE_LIB_CACHE_KEY))) {
+            ooziePurgeLocalShareLibCache = Boolean.parseBoolean(configs.get(OozieConfig.OOZIE_PURGE_LOCAL_SHARE_LIB_CACHE_KEY));
         }
 
-        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.YARN_NUM_NODE_MANAGERS_KEY))) {
-            numNodeManagers = Integer.parseInt(configs.get(HadoopUnitConfig.YARN_NUM_NODE_MANAGERS_KEY));
-        }
-        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.MR_JOB_HISTORY_ADDRESS_KEY))) {
-            jobHistoryAddress = configs.get(HadoopUnitConfig.MR_JOB_HISTORY_ADDRESS_KEY);
-        }
-        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.YARN_RESOURCE_MANAGER_ADDRESS_KEY))) {
-            resourceManagerAddress = configs.get(HadoopUnitConfig.YARN_RESOURCE_MANAGER_ADDRESS_KEY);
-        }
-        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.YARN_RESOURCE_MANAGER_HOSTNAME_KEY))) {
-            resourceManagerHostname = configs.get(HadoopUnitConfig.YARN_RESOURCE_MANAGER_HOSTNAME_KEY);
-        }
-        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.YARN_RESOURCE_MANAGER_SCHEDULER_ADDRESS_KEY))) {
-            resourceManagerSchedulerAddress = configs.get(HadoopUnitConfig.YARN_RESOURCE_MANAGER_SCHEDULER_ADDRESS_KEY);
-        }
-        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.YARN_RESOURCE_MANAGER_RESOURCE_TRACKER_ADDRESS_KEY))) {
-            resourceManagerResourceTrackerAddress = configs.get(HadoopUnitConfig.YARN_RESOURCE_MANAGER_RESOURCE_TRACKER_ADDRESS_KEY);
-        }
-        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.YARN_RESOURCE_MANAGER_WEBAPP_ADDRESS_KEY))) {
-            resourceManagerWebappAddress = configs.get(HadoopUnitConfig.YARN_RESOURCE_MANAGER_WEBAPP_ADDRESS_KEY);
-        }
-        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.YARN_USE_IN_JVM_CONTAINER_EXECUTOR_KEY))) {
-            useInJvmContainerExecutor = Boolean.parseBoolean(configs.get(HadoopUnitConfig.YARN_USE_IN_JVM_CONTAINER_EXECUTOR_KEY));
+        if (StringUtils.isNotEmpty(configs.get(OozieConfig.OOZIE_TMP_DIR_KEY))) {
+            oozieTmpDir = configs.get(OozieConfig.OOZIE_TMP_DIR_KEY);
         }
 
-        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.OOZIE_PORT))) {
-            ooziePort = Integer.parseInt(configs.get(HadoopUnitConfig.OOZIE_PORT));
+        if (StringUtils.isNotEmpty(configs.get(YarnConfig.YARN_NUM_NODE_MANAGERS_KEY))) {
+            numNodeManagers = Integer.parseInt(configs.get(YarnConfig.YARN_NUM_NODE_MANAGERS_KEY));
         }
-        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.OOZIE_HOST))) {
-            oozieHost = configs.get(HadoopUnitConfig.OOZIE_HOST);
+        if (StringUtils.isNotEmpty(configs.get(YarnConfig.MR_JOB_HISTORY_ADDRESS_KEY))) {
+            jobHistoryAddress = configs.get(YarnConfig.MR_JOB_HISTORY_ADDRESS_KEY);
+        }
+        if (StringUtils.isNotEmpty(configs.get(YarnConfig.YARN_RESOURCE_MANAGER_ADDRESS_KEY))) {
+            resourceManagerAddress = configs.get(YarnConfig.YARN_RESOURCE_MANAGER_ADDRESS_KEY);
+        }
+        if (StringUtils.isNotEmpty(configs.get(YarnConfig.YARN_RESOURCE_MANAGER_HOSTNAME_KEY))) {
+            resourceManagerHostname = configs.get(YarnConfig.YARN_RESOURCE_MANAGER_HOSTNAME_KEY);
+        }
+        if (StringUtils.isNotEmpty(configs.get(YarnConfig.YARN_RESOURCE_MANAGER_SCHEDULER_ADDRESS_KEY))) {
+            resourceManagerSchedulerAddress = configs.get(YarnConfig.YARN_RESOURCE_MANAGER_SCHEDULER_ADDRESS_KEY);
+        }
+        if (StringUtils.isNotEmpty(configs.get(YarnConfig.YARN_RESOURCE_MANAGER_RESOURCE_TRACKER_ADDRESS_KEY))) {
+            resourceManagerResourceTrackerAddress = configs.get(YarnConfig.YARN_RESOURCE_MANAGER_RESOURCE_TRACKER_ADDRESS_KEY);
+        }
+        if (StringUtils.isNotEmpty(configs.get(YarnConfig.YARN_RESOURCE_MANAGER_WEBAPP_ADDRESS_KEY))) {
+            resourceManagerWebappAddress = configs.get(YarnConfig.YARN_RESOURCE_MANAGER_WEBAPP_ADDRESS_KEY);
+        }
+        if (StringUtils.isNotEmpty(configs.get(YarnConfig.YARN_USE_IN_JVM_CONTAINER_EXECUTOR_KEY))) {
+            useInJvmContainerExecutor = Boolean.parseBoolean(configs.get(YarnConfig.YARN_USE_IN_JVM_CONTAINER_EXECUTOR_KEY));
         }
 
-        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.OOZIE_SHARELIB_PATH_KEY))) {
-            oozieShareLibPath = HadoopUtils.resolveDir(configs.get(HadoopUnitConfig.OOZIE_SHARELIB_PATH_KEY));
+        if (StringUtils.isNotEmpty(configs.get(OozieConfig.OOZIE_PORT))) {
+            ooziePort = Integer.parseInt(configs.get(OozieConfig.OOZIE_PORT));
         }
-        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.OOZIE_SHARELIB_NAME_KEY))) {
-            oozieShareLibName = configs.get(HadoopUnitConfig.OOZIE_SHARELIB_NAME_KEY);
+        if (StringUtils.isNotEmpty(configs.get(OozieConfig.OOZIE_HOST))) {
+            oozieHost = configs.get(OozieConfig.OOZIE_HOST);
         }
-        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.OOZIE_SHARE_LIB_COMPONENT_KEY))) {
-            List<String> frameworks = Arrays.asList(configs.get(HadoopUnitConfig.OOZIE_SHARE_LIB_COMPONENT_KEY).split(","));
+
+        if (StringUtils.isNotEmpty(configs.get(OozieConfig.OOZIE_SHARELIB_PATH_KEY))) {
+            oozieShareLibPath = HadoopUtils.resolveDir(configs.get(OozieConfig.OOZIE_SHARELIB_PATH_KEY));
+        }
+        if (StringUtils.isNotEmpty(configs.get(OozieConfig.OOZIE_SHARELIB_NAME_KEY))) {
+            oozieShareLibName = configs.get(OozieConfig.OOZIE_SHARELIB_NAME_KEY);
+        }
+        if (StringUtils.isNotEmpty(configs.get(OozieConfig.OOZIE_SHARE_LIB_COMPONENT_KEY))) {
+            List<String> frameworks = Arrays.asList(configs.get(OozieConfig.OOZIE_SHARE_LIB_COMPONENT_KEY).split(","));
             oozieShareLibFrameworks = frameworks.stream().map(f -> Framework.valueOf(f)).collect(Collectors.toList());
         }
     }
@@ -334,7 +327,6 @@ public class OozieBootstrap implements BootstrapHadoop {
     }
 
 
-
     // Main driver that downloads, extracts, and deploys the oozie sharelib
     public void createShareLib() {
 
@@ -360,8 +352,8 @@ public class OozieBootstrap implements BootstrapHadoop {
 
                 FileSystem hdfsFileSystem = null;
                 org.apache.hadoop.conf.Configuration conf = new org.apache.hadoop.conf.Configuration();
-                conf.set("fs.default.name", "hdfs://" + configuration.getString(HadoopUnitConfig.HDFS_NAMENODE_HOST_KEY) + ":" + configuration.getInt(HadoopUnitConfig.HDFS_NAMENODE_PORT_KEY));
-                URI uri = URI.create("hdfs://" + configuration.getString(HadoopUnitConfig.HDFS_NAMENODE_HOST_KEY) + ":" + configuration.getInt(HadoopUnitConfig.HDFS_NAMENODE_PORT_KEY));
+                conf.set("fs.default.name", "hdfs://" + configuration.getString(HdfsConfig.HDFS_NAMENODE_HOST_KEY) + ":" + configuration.getInt(HdfsConfig.HDFS_NAMENODE_PORT_KEY));
+                URI uri = URI.create("hdfs://" + configuration.getString(HdfsConfig.HDFS_NAMENODE_HOST_KEY) + ":" + configuration.getInt(HdfsConfig.HDFS_NAMENODE_PORT_KEY));
                 try {
                     hdfsFileSystem = FileSystem.get(uri, conf);
                 } catch (IOException e) {
@@ -409,7 +401,7 @@ public class OozieBootstrap implements BootstrapHadoop {
 
 
     public String extractOozieTarFileToTempDir(File fullOozieTarFilePath) throws IOException {
-        File tempDir = File.createTempFile(HadoopUnitConfig.SHARE_LIB_LOCAL_TEMP_PREFIX, "", Paths.get(oozieTmpDir).toFile());
+        File tempDir = File.createTempFile(OozieConfig.SHARE_LIB_LOCAL_TEMP_PREFIX, "", Paths.get(oozieTmpDir).toFile());
         tempDir.delete();
         tempDir.mkdir();
         tempDir.deleteOnExit();

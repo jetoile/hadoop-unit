@@ -60,15 +60,15 @@ public class KnoxBootstrapTopologyTest {
                 "    </gateway>\n" +
                 "    <service>\n" +
                 "        <role>NAMENODE</role>\n" +
-                "        <url>hdfs://" + configuration.getString(HadoopUnitConfig.HDFS_NAMENODE_HOST_KEY) + ":20112</url>\n" +
+                "        <url>hdfs://" + configuration.getString(KnoxConfig.HDFS_NAMENODE_HOST_KEY) + ":20112</url>\n" +
                 "    </service>\n" +
                 "    <service>\n" +
                 "        <role>WEBHDFS</role>\n" +
-                "        <url>http://" + configuration.getString(HadoopUnitConfig.HDFS_NAMENODE_HOST_KEY) + ":50070/webhdfs</url>\n" +
+                "        <url>http://" + configuration.getString(KnoxConfig.HDFS_NAMENODE_HOST_KEY) + ":50070/webhdfs</url>\n" +
                 "    </service>\n" +
                 "    <service>\n" +
                 "        <role>WEBHBASE</role>\n" +
-                "        <url>http://" + configuration.getString(HadoopUnitConfig.HBASE_REST_HOST_KEY) + ":28000</url>\n" +
+                "        <url>http://" + configuration.getString(KnoxConfig.HBASE_REST_HOST_KEY) + ":28000</url>\n" +
                 "    </service>\n" +
                 "</topology>");
     }
@@ -93,7 +93,7 @@ public class KnoxBootstrapTopologyTest {
                 "    </gateway>\n" +
                 "    <service>\n" +
                 "        <role>WEBHBASE</role>\n" +
-                "        <url>http://" + configuration.getString(HadoopUnitConfig.HBASE_REST_HOST_KEY) + ":28000</url>\n" +
+                "        <url>http://" + configuration.getString(KnoxConfig.HBASE_REST_HOST_KEY) + ":28000</url>\n" +
                 "    </service>\n" +
                 "</topology>");
     }

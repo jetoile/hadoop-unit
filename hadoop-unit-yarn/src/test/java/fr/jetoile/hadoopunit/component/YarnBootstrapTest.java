@@ -1,6 +1,5 @@
 package fr.jetoile.hadoopunit.component;
 
-import fr.jetoile.hadoopunit.Component;
 import fr.jetoile.hadoopunit.HadoopBootstrap;
 import fr.jetoile.hadoopunit.HadoopUnitConfig;
 import fr.jetoile.hadoopunit.component.simpleyarnapp.Client;
@@ -19,7 +18,7 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class YarnBootstrapTest {
 
@@ -48,15 +47,15 @@ public class YarnBootstrapTest {
         args[0] = "whoami";
         args[1] = "1";
         args[2] = getClass().getClassLoader().getResource("simple-yarn-app-1.1.0.jar").toString();
-        args[3] = configuration.getString(HadoopUnitConfig.YARN_RESOURCE_MANAGER_ADDRESS_KEY);
-        args[4] = configuration.getString(HadoopUnitConfig.YARN_RESOURCE_MANAGER_HOSTNAME_KEY);
-        args[5] = configuration.getString(HadoopUnitConfig.YARN_RESOURCE_MANAGER_SCHEDULER_ADDRESS_KEY);
-        args[6] = configuration.getString(HadoopUnitConfig.YARN_RESOURCE_MANAGER_RESOURCE_TRACKER_ADDRESS_KEY);
+        args[3] = configuration.getString(YarnConfig.YARN_RESOURCE_MANAGER_ADDRESS_KEY);
+        args[4] = configuration.getString(YarnConfig.YARN_RESOURCE_MANAGER_HOSTNAME_KEY);
+        args[5] = configuration.getString(YarnConfig.YARN_RESOURCE_MANAGER_SCHEDULER_ADDRESS_KEY);
+        args[6] = configuration.getString(YarnConfig.YARN_RESOURCE_MANAGER_RESOURCE_TRACKER_ADDRESS_KEY);
 
 
         try {
             Client.main(args);
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -80,19 +79,19 @@ public class YarnBootstrapTest {
     }
 
     public String getStdoutPath() throws NotFoundServiceException {
-        BootstrapHadoop yarn = (BootstrapHadoop) HadoopBootstrap.INSTANCE.getService(Component.YARN);
+        BootstrapHadoop yarn = (BootstrapHadoop) HadoopBootstrap.INSTANCE.getService("YARN");
         String yarnName = ((YarnBootstrap) yarn).getTestName();
 
         File dir = new File("./target/" + yarnName);
         String[] nmDirs = dir.list();
-        for (String nmDir: nmDirs) {
+        for (String nmDir : nmDirs) {
             if (nmDir.contains("logDir")) {
                 String[] appDirs = new File(dir.toString() + "/" + nmDir).list();
-                for (String appDir: appDirs) {
+                for (String appDir : appDirs) {
                     if (appDir.contains("0001")) {
                         String[] containerDirs = new File(dir.toString() + "/" + nmDir + "/" + appDir).list();
-                        for (String containerDir: containerDirs) {
-                            if(containerDir.contains("000002")) {
+                        for (String containerDir : containerDirs) {
+                            if (containerDir.contains("000002")) {
                                 return dir.toString() + "/" + nmDir + "/" + appDir + "/" + containerDir + "/stdout";
                             }
                         }

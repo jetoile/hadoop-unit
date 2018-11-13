@@ -23,13 +23,14 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
+import static fr.jetoile.hadoopunit.client.commons.HadoopUnitClientConfig.*;
+
 public class SparkKafkaIntegrationIntegrationTest {
 
     private static Configuration configuration;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SparkKafkaIntegrationIntegrationTest.class);
     private static final FastDateFormat DATE_FORMATTER = FastDateFormat.getInstance("MM/dd/yyyy HH:mm:ss.SSS");
-
 
     @BeforeClass
     public static void setup() throws NotFoundServiceException, ConfigurationException {
@@ -43,7 +44,7 @@ public class SparkKafkaIntegrationIntegrationTest {
     @Before
     public void setUp() throws NotFoundServiceException {
         Cluster cluster = Cluster.builder()
-                .addContactPoints(configuration.getString(HadoopUnitConfig.CASSANDRA_IP_KEY)).withPort(configuration.getInt(HadoopUnitConfig.CASSANDRA_PORT_KEY)).build();
+                .addContactPoints(configuration.getString(CASSANDRA_IP_KEY)).withPort(configuration.getInt(CASSANDRA_PORT_KEY)).build();
         Session session = cluster.connect();
 
         session.execute("create KEYSPACE IF NOT EXISTS test WITH replication = {'class': 'SimpleStrategy' , 'replication_factor': '1' }");
@@ -55,7 +56,7 @@ public class SparkKafkaIntegrationIntegrationTest {
     @After
     public void teardown() throws NotFoundServiceException {
         Cluster cluster = Cluster.builder()
-                .addContactPoints(configuration.getString(HadoopUnitConfig.CASSANDRA_IP_KEY)).withPort(configuration.getInt(HadoopUnitConfig.CASSANDRA_PORT_KEY)).build();
+                .addContactPoints(configuration.getString(CASSANDRA_IP_KEY)).withPort(configuration.getInt(CASSANDRA_PORT_KEY)).build();
         Session session = cluster.connect();
 
         session.execute("drop table test.orders");
@@ -70,15 +71,15 @@ public class SparkKafkaIntegrationIntegrationTest {
 
         SparkConf sparkConf = new SparkConf()
                 .setMaster("local[*]")
-                .set("spark.cassandra.connection.host", configuration.getString(HadoopUnitConfig.CASSANDRA_IP_KEY))
-                .set("spark.cassandra.connection.port", configuration.getString(HadoopUnitConfig.CASSANDRA_PORT_KEY))
+                .set("spark.cassandra.connection.host", configuration.getString(CASSANDRA_IP_KEY))
+                .set("spark.cassandra.connection.port", configuration.getString(CASSANDRA_PORT_KEY))
                 .setAppName("Integration Test");
 
         JavaStreamingContext scc = new JavaStreamingContext(sparkConf, Durations.seconds(1));
 
         SparkKafkaJob sparkKafkaJob = new SparkKafkaJob(scc);
         sparkKafkaJob.setTopic("testtopic");
-        sparkKafkaJob.setZkString(configuration.getString(HadoopUnitConfig.ZOOKEEPER_HOST_KEY) + ":" + configuration.getInt(HadoopUnitConfig.ZOOKEEPER_PORT_KEY));
+        sparkKafkaJob.setZkString(configuration.getString(ZOOKEEPER_HOST_KEY) + ":" + configuration.getInt(ZOOKEEPER_PORT_KEY));
         sparkKafkaJob.run();
         scc.start();
 
@@ -94,7 +95,7 @@ public class SparkKafkaIntegrationIntegrationTest {
                         String payload = generateMessage(i);
                         LOGGER.debug("Payload from producer: " + payload);
 
-                        KafkaProducerUtils.INSTANCE.produceMessages(configuration.getString(HadoopUnitConfig.KAFKA_TEST_TOPIC_KEY), String.valueOf(i), payload);
+                        KafkaProducerUtils.INSTANCE.produceMessages(configuration.getString(KAFKA_TEST_TOPIC_KEY), String.valueOf(i), payload);
                     }
                 });
 
@@ -104,7 +105,7 @@ public class SparkKafkaIntegrationIntegrationTest {
         scc.awaitTerminationOrTimeout(5000);
 
         Cluster cluster = Cluster.builder()
-                .addContactPoints(configuration.getString(HadoopUnitConfig.CASSANDRA_IP_KEY)).withPort(configuration.getInt(HadoopUnitConfig.CASSANDRA_PORT_KEY)).build();
+                .addContactPoints(configuration.getString(CASSANDRA_IP_KEY)).withPort(configuration.getInt(CASSANDRA_PORT_KEY)).build();
         Session session = cluster.connect();
 
         System.out.println("===================================");

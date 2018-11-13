@@ -66,6 +66,7 @@ import java.sql.*;
 import java.util.*;
 import java.util.Date;
 
+import static fr.jetoile.hadoopunit.client.commons.HadoopUnitClientConfig.*;
 import static junit.framework.TestCase.assertNotNull;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
@@ -81,7 +82,7 @@ public class IntegrationBootstrapTest {
     @BeforeClass
     public static void setup() throws BootstrapException {
         try {
-            configuration = new PropertiesConfiguration(HadoopUnitConfig.DEFAULT_PROPS_FILE);
+            configuration = new PropertiesConfiguration(DEFAULT_PROPS_FILE);
         } catch (ConfigurationException e) {
             throw new BootstrapException("bad config", e);
         }
@@ -98,9 +99,9 @@ public class IntegrationBootstrapTest {
     @Test
     public void solrCloudShouldStart() throws IOException, SolrServerException, KeeperException, InterruptedException {
 
-        String collectionName = configuration.getString(HadoopUnitConfig.SOLR_COLLECTION_NAME);
+        String collectionName = configuration.getString(SOLR_COLLECTION_NAME);
 
-        String zkHostString = configuration.getString(HadoopUnitConfig.ZOOKEEPER_HOST_KEY) + ":" + configuration.getInt(HadoopUnitConfig.ZOOKEEPER_PORT_KEY);
+        String zkHostString = configuration.getString(ZOOKEEPER_HOST_KEY) + ":" + configuration.getInt(ZOOKEEPER_PORT_KEY);
         CloudSolrClient client = new CloudSolrClient(zkHostString);
 
         for (int i = 0; i < 1000; ++i) {
@@ -127,7 +128,7 @@ public class IntegrationBootstrapTest {
     public void elasticSearchShouldStart() throws NotFoundServiceException, IOException, JSONException {
 
         RestClient restClient = RestClient.builder(
-                new HttpHost(configuration.getString(HadoopUnitConfig.ELASTICSEARCH_IP_KEY), configuration.getInt(HadoopUnitConfig.ELASTICSEARCH_HTTP_PORT_KEY), "http")).build();
+                new HttpHost(configuration.getString(ELASTICSEARCH_IP_KEY), configuration.getInt(ELASTICSEARCH_HTTP_PORT_KEY), "http")).build();
 
         org.elasticsearch.client.Response response = restClient.performRequest("GET", "/",
                 Collections.singletonMap("pretty", "true"));
@@ -166,15 +167,15 @@ public class IntegrationBootstrapTest {
         // Producer
         for (int i = 0; i < 10; i++) {
             String payload = generateMessage(i);
-            KafkaProducerUtils.INSTANCE.produceMessages(configuration.getString(HadoopUnitConfig.KAFKA_TEST_TOPIC_KEY), String.valueOf(i), payload);
+            KafkaProducerUtils.INSTANCE.produceMessages(configuration.getString(KAFKA_TEST_TOPIC_KEY), String.valueOf(i), payload);
         }
 
 
         // Consumer
-        KafkaConsumerUtils.INSTANCE.consumeMessagesWithNewApi(configuration.getString(HadoopUnitConfig.KAFKA_TEST_TOPIC_KEY), 10);
+        KafkaConsumerUtils.INSTANCE.consumeMessagesWithNewApi(configuration.getString(KAFKA_TEST_TOPIC_KEY), 10);
 
         // Assert num of messages produced = num of message consumed
-        Assert.assertEquals(configuration.getLong(HadoopUnitConfig.KAFKA_TEST_MESSAGE_COUNT_KEY), KafkaConsumerUtils.INSTANCE.getNumRead());
+        Assert.assertEquals(configuration.getLong(KAFKA_TEST_MESSAGE_COUNT_KEY), KafkaConsumerUtils.INSTANCE.getNumRead());
     }
 
     private String generateMessage(int i) {
@@ -203,9 +204,9 @@ public class IntegrationBootstrapTest {
         //
         // Get the connection
         Connection con = DriverManager.getConnection("jdbc:hive2://" +
-                        configuration.getString(HadoopUnitConfig.HIVE_SERVER2_HOSTNAME_KEY) + ":" +
-                        configuration.getInt(HadoopUnitConfig.HIVE_SERVER2_PORT_KEY) + "/" +
-                        configuration.getString(HadoopUnitConfig.HIVE_TEST_DATABASE_NAME_KEY),
+                        configuration.getString(HIVE_SERVER2_HOSTNAME_KEY) + ":" +
+                        configuration.getInt(HIVE_SERVER2_PORT_KEY) + "/" +
+                        configuration.getString(HIVE_TEST_DATABASE_NAME_KEY),
                 "user",
                 "pass");
 
@@ -213,7 +214,7 @@ public class IntegrationBootstrapTest {
         Statement stmt;
         try {
             String createDbDdl = "CREATE DATABASE IF NOT EXISTS " +
-                    configuration.getString(HadoopUnitConfig.HIVE_TEST_DATABASE_NAME_KEY);
+                    configuration.getString(HIVE_TEST_DATABASE_NAME_KEY);
             stmt = con.createStatement();
             LOGGER.info("HIVE: Running Create Database Statement: {}", createDbDdl);
             stmt.execute(createDbDdl);
@@ -222,16 +223,16 @@ public class IntegrationBootstrapTest {
         }
 
         // Drop the table incase it still exists
-        String dropDdl = "DROP TABLE " + configuration.getString(HadoopUnitConfig.HIVE_TEST_DATABASE_NAME_KEY) + "." +
-                configuration.getString(HadoopUnitConfig.HIVE_TEST_TABLE_NAME_KEY);
+        String dropDdl = "DROP TABLE " + configuration.getString(HIVE_TEST_DATABASE_NAME_KEY) + "." +
+                configuration.getString(HIVE_TEST_TABLE_NAME_KEY);
         stmt = con.createStatement();
         LOGGER.info("HIVE: Running Drop Table Statement: {}", dropDdl);
         stmt.execute(dropDdl);
 
         // Create the ORC table
         String createDdl = "CREATE TABLE IF NOT EXISTS " +
-                configuration.getString(HadoopUnitConfig.HIVE_TEST_DATABASE_NAME_KEY) + "." +
-                configuration.getString(HadoopUnitConfig.HIVE_TEST_TABLE_NAME_KEY) + " (id INT, msg STRING) " +
+                configuration.getString(HIVE_TEST_DATABASE_NAME_KEY) + "." +
+                configuration.getString(HIVE_TEST_TABLE_NAME_KEY) + " (id INT, msg STRING) " +
                 "PARTITIONED BY (dt STRING) " +
                 "CLUSTERED BY (id) INTO 16 BUCKETS " +
                 "STORED AS ORC tblproperties(\"orc.compress\"=\"NONE\")";
@@ -242,7 +243,7 @@ public class IntegrationBootstrapTest {
         // Issue a describe on the new table and display the output
         LOGGER.info("HIVE: Validating Table was Created: ");
         ResultSet resultSet = stmt.executeQuery("DESCRIBE FORMATTED " +
-                configuration.getString(HadoopUnitConfig.HIVE_TEST_TABLE_NAME_KEY));
+                configuration.getString(HIVE_TEST_TABLE_NAME_KEY));
         int count = 0;
         while (resultSet.next()) {
             ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
@@ -255,8 +256,8 @@ public class IntegrationBootstrapTest {
         assertEquals(33, count);
 
         // Drop the table
-        dropDdl = "DROP TABLE " + configuration.getString(HadoopUnitConfig.HIVE_TEST_DATABASE_NAME_KEY) + "." +
-                configuration.getString(HadoopUnitConfig.HIVE_TEST_TABLE_NAME_KEY);
+        dropDdl = "DROP TABLE " + configuration.getString(HIVE_TEST_DATABASE_NAME_KEY) + "." +
+                configuration.getString(HIVE_TEST_TABLE_NAME_KEY);
         stmt = con.createStatement();
         LOGGER.info("HIVE: Running Drop Table Statement: {}", dropDdl);
         stmt.execute(dropDdl);
@@ -266,7 +267,7 @@ public class IntegrationBootstrapTest {
     @Test
     public void hdfsShouldStart() throws Exception {
 
-        assertThat(Utils.available("127.0.0.1", configuration.getInt(HadoopUnitConfig.HDFS_NAMENODE_HTTP_PORT_KEY))).isFalse();
+        assertThat(Utils.available("127.0.0.1", configuration.getInt(HDFS_NAMENODE_HTTP_PORT_KEY))).isFalse();
 
 //        org.apache.hadoop.conf.Configuration conf = new org.apache.hadoop.conf.Configuration();
 //        conf.set("fs.default.name", "hdfs://127.0.0.1:" + configuration.getInt(Config.HDFS_NAMENODE_PORT_KEY));
@@ -277,19 +278,19 @@ public class IntegrationBootstrapTest {
         FileSystem hdfsFsHandle = HdfsUtils.INSTANCE.getFileSystem();
 
 
-        FSDataOutputStream writer = hdfsFsHandle.create(new Path(configuration.getString(HadoopUnitConfig.HDFS_TEST_FILE_KEY)));
-        writer.writeUTF(configuration.getString(HadoopUnitConfig.HDFS_TEST_STRING_KEY));
+        FSDataOutputStream writer = hdfsFsHandle.create(new Path(configuration.getString(HDFS_TEST_FILE_KEY)));
+        writer.writeUTF(configuration.getString(HDFS_TEST_STRING_KEY));
         writer.close();
 
         // Read the file and compare to test string
-        FSDataInputStream reader = hdfsFsHandle.open(new Path(configuration.getString(HadoopUnitConfig.HDFS_TEST_FILE_KEY)));
-        assertEquals(reader.readUTF(), configuration.getString(HadoopUnitConfig.HDFS_TEST_STRING_KEY));
+        FSDataInputStream reader = hdfsFsHandle.open(new Path(configuration.getString(HDFS_TEST_FILE_KEY)));
+        assertEquals(reader.readUTF(), configuration.getString(HDFS_TEST_STRING_KEY));
         reader.close();
         hdfsFsHandle.close();
 
         URL url = new URL(
                 String.format("http://localhost:%s/webhdfs/v1?op=GETHOMEDIRECTORY&user.name=guest",
-                        configuration.getInt(HadoopUnitConfig.HDFS_NAMENODE_HTTP_PORT_KEY)));
+                        configuration.getInt(HDFS_NAMENODE_HTTP_PORT_KEY)));
         URLConnection connection = url.openConnection();
         connection.setRequestProperty("Accept-Charset", "UTF-8");
         BufferedReader response = new BufferedReader(new InputStreamReader(connection.getInputStream()));
@@ -303,16 +304,16 @@ public class IntegrationBootstrapTest {
     @Test
     public void hBaseShouldStart() throws Exception {
 
-        String tableName = configuration.getString(HadoopUnitConfig.HBASE_TEST_TABLE_NAME_KEY);
-        String colFamName = configuration.getString(HadoopUnitConfig.HBASE_TEST_COL_FAMILY_NAME_KEY);
-        String colQualiferName = configuration.getString(HadoopUnitConfig.HBASE_TEST_COL_QUALIFIER_NAME_KEY);
-        Integer numRowsToPut = configuration.getInt(HadoopUnitConfig.HBASE_TEST_NUM_ROWS_TO_PUT_KEY);
+        String tableName = configuration.getString(HBASE_TEST_TABLE_NAME_KEY);
+        String colFamName = configuration.getString(HBASE_TEST_COL_FAMILY_NAME_KEY);
+        String colQualiferName = configuration.getString(HBASE_TEST_COL_QUALIFIER_NAME_KEY);
+        Integer numRowsToPut = configuration.getInt(HBASE_TEST_NUM_ROWS_TO_PUT_KEY);
 
         org.apache.hadoop.conf.Configuration hbaseConfiguration = HBaseConfiguration.create();
-        hbaseConfiguration.set("hbase.zookeeper.quorum", configuration.getString(HadoopUnitConfig.ZOOKEEPER_HOST_KEY));
-        hbaseConfiguration.setInt("hbase.zookeeper.property.clientPort", configuration.getInt(HadoopUnitConfig.ZOOKEEPER_PORT_KEY));
-        hbaseConfiguration.set("hbase.master", "127.0.0.1:" + configuration.getInt(HadoopUnitConfig.HBASE_MASTER_PORT_KEY));
-        hbaseConfiguration.set("zookeeper.znode.parent", configuration.getString(HadoopUnitConfig.HBASE_ZNODE_PARENT_KEY));
+        hbaseConfiguration.set("hbase.zookeeper.quorum", configuration.getString(ZOOKEEPER_HOST_KEY));
+        hbaseConfiguration.setInt("hbase.zookeeper.property.clientPort", configuration.getInt(ZOOKEEPER_PORT_KEY));
+        hbaseConfiguration.set("hbase.master", "127.0.0.1:" + configuration.getInt(HBASE_MASTER_PORT_KEY));
+        hbaseConfiguration.set("zookeeper.znode.parent", configuration.getString(HBASE_ZNODE_PARENT_KEY));
 
 
         LOGGER.info("HBASE: Creating table {} with column family {}", tableName, colFamName);
@@ -336,13 +337,13 @@ public class IntegrationBootstrapTest {
         LOGGER.info("OOZIE: Test Submit Workflow Start");
 
         org.apache.hadoop.conf.Configuration conf = new org.apache.hadoop.conf.Configuration();
-        conf.set("fs.default.name", "hdfs://127.0.0.1:" + configuration.getInt(HadoopUnitConfig.HDFS_NAMENODE_PORT_KEY));
+        conf.set("fs.default.name", "hdfs://127.0.0.1:" + configuration.getInt(HDFS_NAMENODE_PORT_KEY));
 
-        URI uri = URI.create("hdfs://127.0.0.1:" + configuration.getInt(HadoopUnitConfig.HDFS_NAMENODE_PORT_KEY));
+        URI uri = URI.create("hdfs://127.0.0.1:" + configuration.getInt(HDFS_NAMENODE_PORT_KEY));
 
         FileSystem hdfsFs = FileSystem.get(uri, conf);
 
-        OozieClient oozieClient = new OozieClient("http://" + configuration.getString(HadoopUnitConfig.OOZIE_HOST) + ":" + configuration.getInt(HadoopUnitConfig.OOZIE_PORT) + "/oozie");
+        OozieClient oozieClient = new OozieClient("http://" + configuration.getString(OOZIE_HOST) + ":" + configuration.getInt(OOZIE_PORT) + "/oozie");
 
         Path appPath = new Path(hdfsFs.getHomeDirectory(), "testApp");
         hdfsFs.mkdirs(new Path(appPath, "lib"));
@@ -376,10 +377,10 @@ public class IntegrationBootstrapTest {
 
     @Test
     public void mongodbShouldStart() throws UnknownHostException {
-        MongoClient mongo = new MongoClient(configuration.getString(HadoopUnitConfig.MONGO_IP_KEY), configuration.getInt(HadoopUnitConfig.MONGO_PORT_KEY));
+        MongoClient mongo = new MongoClient(configuration.getString(MONGO_IP_KEY), configuration.getInt(MONGO_PORT_KEY));
 
-        DB db = mongo.getDB(configuration.getString(HadoopUnitConfig.MONGO_DATABASE_NAME_KEY));
-        DBCollection col = db.createCollection(configuration.getString(HadoopUnitConfig.MONGO_COLLECTION_NAME_KEY),
+        DB db = mongo.getDB(configuration.getString(MONGO_DATABASE_NAME_KEY));
+        DBCollection col = db.createCollection(configuration.getString(MONGO_COLLECTION_NAME_KEY),
                 new BasicDBObject());
 
         col.save(new BasicDBObject("testDoc", new Date()));
@@ -396,7 +397,7 @@ public class IntegrationBootstrapTest {
     @Test
     public void cassandraShouldStart() throws NotFoundServiceException {
         Cluster cluster = Cluster.builder()
-                .addContactPoints(configuration.getString(HadoopUnitConfig.CASSANDRA_IP_KEY)).withPort(configuration.getInt(HadoopUnitConfig.CASSANDRA_PORT_KEY)).build();
+                .addContactPoints(configuration.getString(CASSANDRA_IP_KEY)).withPort(configuration.getInt(CASSANDRA_PORT_KEY)).build();
         Session session = cluster.connect();
 
         session.execute("create KEYSPACE test WITH replication = {'class': 'SimpleStrategy' , 'replication_factor': '1' }");

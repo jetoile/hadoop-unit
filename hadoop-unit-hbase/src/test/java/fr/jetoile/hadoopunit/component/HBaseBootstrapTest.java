@@ -15,7 +15,6 @@
 package fr.jetoile.hadoopunit.component;
 
 
-import fr.jetoile.hadoopunit.Component;
 import fr.jetoile.hadoopunit.HadoopBootstrap;
 import fr.jetoile.hadoopunit.HadoopUnitConfig;
 import fr.jetoile.hadoopunit.exception.BootstrapException;
@@ -68,11 +67,11 @@ public class HBaseBootstrapTest {
     @Test
     public void hBaseShouldStart() throws Exception {
 
-        String tableName = configuration.getString(HadoopUnitConfig.HBASE_TEST_TABLE_NAME_KEY);
-        String colFamName = configuration.getString(HadoopUnitConfig.HBASE_TEST_COL_FAMILY_NAME_KEY);
-        String colQualiferName = configuration.getString(HadoopUnitConfig.HBASE_TEST_COL_QUALIFIER_NAME_KEY);
-        Integer numRowsToPut = configuration.getInt(HadoopUnitConfig.HBASE_TEST_NUM_ROWS_TO_PUT_KEY);
-        org.apache.hadoop.conf.Configuration hbaseConfiguration = ((BootstrapHadoop)HadoopBootstrap.INSTANCE.getService(Component.HBASE)).getConfiguration();
+        String tableName = configuration.getString(HBaseConfig.HBASE_TEST_TABLE_NAME_KEY);
+        String colFamName = configuration.getString(HBaseConfig.HBASE_TEST_COL_FAMILY_NAME_KEY);
+        String colQualiferName = configuration.getString(HBaseConfig.HBASE_TEST_COL_QUALIFIER_NAME_KEY);
+        Integer numRowsToPut = configuration.getInt(HBaseConfig.HBASE_TEST_NUM_ROWS_TO_PUT_KEY);
+        org.apache.hadoop.conf.Configuration hbaseConfiguration = ((BootstrapHadoop) HadoopBootstrap.INSTANCE.getService("HBASE")).getConfiguration();
 
         LOGGER.info("HBASE: Deleting table {}", tableName);
         deleteHbaseTable(tableName, hbaseConfiguration);
@@ -97,7 +96,7 @@ public class HBaseBootstrapTest {
     public void testHbaseRestLocalCluster() throws Exception {
         URL url = new URL(
                 String.format("http://localhost:%s/status/cluster/",
-                        configuration.getInt(HadoopUnitConfig.HBASE_REST_PORT_KEY)));
+                        configuration.getInt(HBaseConfig.HBASE_REST_PORT_KEY)));
         URLConnection connection = url.openConnection();
         connection.setRequestProperty("Accept-Charset", "UTF-8");
         try (BufferedReader response = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
@@ -109,11 +108,11 @@ public class HBaseBootstrapTest {
 
     @Test
     public void testHbaseRestLocalClusterWithSchemaRequest() throws Exception {
-        String tableName = configuration.getString(HadoopUnitConfig.HBASE_TEST_TABLE_NAME_KEY);
-        String colFamName = configuration.getString(HadoopUnitConfig.HBASE_TEST_COL_FAMILY_NAME_KEY);
-        String colQualiferName = configuration.getString(HadoopUnitConfig.HBASE_TEST_COL_QUALIFIER_NAME_KEY);
-        Integer numRowsToPut = configuration.getInt(HadoopUnitConfig.HBASE_TEST_NUM_ROWS_TO_PUT_KEY);
-        org.apache.hadoop.conf.Configuration hbaseConfiguration = ((BootstrapHadoop)HadoopBootstrap.INSTANCE.getService(Component.HBASE)).getConfiguration();
+        String tableName = configuration.getString(HBaseConfig.HBASE_TEST_TABLE_NAME_KEY);
+        String colFamName = configuration.getString(HBaseConfig.HBASE_TEST_COL_FAMILY_NAME_KEY);
+        String colQualiferName = configuration.getString(HBaseConfig.HBASE_TEST_COL_QUALIFIER_NAME_KEY);
+        Integer numRowsToPut = configuration.getInt(HBaseConfig.HBASE_TEST_NUM_ROWS_TO_PUT_KEY);
+        org.apache.hadoop.conf.Configuration hbaseConfiguration = ((BootstrapHadoop) HadoopBootstrap.INSTANCE.getService("HBASE")).getConfiguration();
 
         LOGGER.info("HBASE: Deleting table {}", tableName);
         deleteHbaseTable(tableName, hbaseConfiguration);
@@ -127,7 +126,7 @@ public class HBaseBootstrapTest {
         }
 
         URL url = new URL(String.format("http://localhost:%s/",
-                configuration.getInt(HadoopUnitConfig.HBASE_REST_PORT_KEY)));
+                configuration.getInt(HBaseConfig.HBASE_REST_PORT_KEY)));
         URLConnection connection = url.openConnection();
         connection.setRequestProperty("Accept-Charset", "UTF-8");
         try (BufferedReader response = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
@@ -136,7 +135,7 @@ public class HBaseBootstrapTest {
         }
 
         url = new URL(String.format("http://localhost:%s/%s/schema",
-                configuration.getInt(HadoopUnitConfig.HBASE_REST_PORT_KEY),
+                configuration.getInt(HBaseConfig.HBASE_REST_PORT_KEY),
                 tableName));
         connection = url.openConnection();
         connection.setRequestProperty("Accept-Charset", "UTF-8");

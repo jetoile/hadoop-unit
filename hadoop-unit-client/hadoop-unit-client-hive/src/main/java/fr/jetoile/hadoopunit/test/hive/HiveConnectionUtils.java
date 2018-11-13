@@ -35,6 +35,11 @@ public enum HiveConnectionUtils {
 
     final private Logger LOGGER = LoggerFactory.getLogger(HiveConnectionUtils.class);
 
+    private static final String HIVE_SERVER2_HOSTNAME_KEY = "hive.server2.hostname";
+    private static final String HIVE_SERVER2_PORT_KEY = "hive.server2.port";
+    private static final String HIVE_TEST_DATABASE_NAME_KEY = "hive.test.database.name";
+
+
     private DriverManagerDestination driverManagerDestination;
     private Configuration configuration;
     private String databaseName;
@@ -60,9 +65,9 @@ public enum HiveConnectionUtils {
             throw new ConfigException("bad config", e);
         }
 
-        port = configuration.getInt(HadoopUnitConfig.HIVE_SERVER2_PORT_KEY);
-        host = configuration.getString(HadoopUnitConfig.HIVE_SERVER2_HOSTNAME_KEY);
-        databaseName = configuration.getString(HadoopUnitConfig.HIVE_TEST_DATABASE_NAME_KEY);
+        port = configuration.getInt(HIVE_SERVER2_PORT_KEY);
+        host = configuration.getString(HIVE_SERVER2_HOSTNAME_KEY);
+        databaseName = configuration.getString(HIVE_TEST_DATABASE_NAME_KEY);
     }
 
     public Destination getDestination() {

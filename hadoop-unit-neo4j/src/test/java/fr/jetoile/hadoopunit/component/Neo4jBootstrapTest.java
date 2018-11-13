@@ -14,7 +14,6 @@
 
 package fr.jetoile.hadoopunit.component;
 
-import fr.jetoile.hadoopunit.Component;
 import fr.jetoile.hadoopunit.HadoopBootstrap;
 import fr.jetoile.hadoopunit.HadoopUnitConfig;
 import fr.jetoile.hadoopunit.exception.BootstrapException;
@@ -70,7 +69,7 @@ public class Neo4jBootstrapTest {
 
     @Before
     public void setUp() throws NotFoundServiceException {
-        Bootstrap neo4j = HadoopBootstrap.INSTANCE.getService(Component.NEO4J);
+        Bootstrap neo4j = HadoopBootstrap.INSTANCE.getService("NEO4J");
         graphDb = ((Neo4jBootstrap) neo4j).getNeo4jGraph();
     }
 

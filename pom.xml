@@ -6,7 +6,7 @@
     <groupId>fr.jetoile.hadoop</groupId>
     <artifactId>hadoop-unit</artifactId>
     <packaging>pom</packaging>
-    <version>2.11-SNAPSHOT</version>
+    <version>3.0-SNAPSHOT</version>
     <name>hadoop-unit</name>
     <url>https://github.com/jetoile/hadoop-unit</url>
 
@@ -232,6 +232,13 @@
 
             <dependency>
                 <groupId>fr.jetoile.hadoop</groupId>
+                <artifactId>hadoop-unit-client-commons</artifactId>
+                <version>${hadoop-unit.version}</version>
+                <scope>test</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>fr.jetoile.hadoop</groupId>
                 <artifactId>hadoop-unit-client-hdfs</artifactId>
                 <version>${hadoop-unit.version}</version>
                 <scope>test</scope>
@@ -294,6 +301,18 @@
 
             <dependency>
                 <groupId>fr.jetoile.hadoop</groupId>
+                <artifactId>hadoop-unit-confluent</artifactId>
+                <version>${hadoop-unit.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>fr.jetoile.hadoop</groupId>
+                <artifactId>hadoop-unit-confluent-rest</artifactId>
+                <version>${hadoop-unit.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>fr.jetoile.hadoop</groupId>
                 <artifactId>hadoop-unit-hdfs</artifactId>
                 <version>${hadoop-unit.version}</version>
             </dependency>
@@ -313,6 +332,12 @@
             <dependency>
                 <groupId>fr.jetoile.hadoop</groupId>
                 <artifactId>hadoop-unit-hbase</artifactId>
+                <version>${hadoop-unit.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>fr.jetoile.hadoop</groupId>
+                <artifactId>hadoop-unit-yarn</artifactId>
                 <version>${hadoop-unit.version}</version>
             </dependency>
 

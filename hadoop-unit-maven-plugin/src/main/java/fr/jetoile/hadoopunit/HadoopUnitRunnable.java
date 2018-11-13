@@ -28,7 +28,6 @@ import org.eclipse.aether.graph.DependencyFilter;
 import org.eclipse.aether.impl.DefaultServiceLocator;
 import org.eclipse.aether.repository.LocalRepository;
 import org.eclipse.aether.repository.RemoteRepository;
-import org.eclipse.aether.resolution.ArtifactRequest;
 import org.eclipse.aether.resolution.ArtifactResult;
 import org.eclipse.aether.resolution.DependencyRequest;
 import org.eclipse.aether.resolution.DependencyResolutionException;
@@ -98,9 +97,8 @@ public class HadoopUnitRunnable implements Runnable {
 
         components.stream().forEach(
                 c -> {
-                    Artifact artifact = new DefaultArtifact(c.getArtifact());
+                    Artifact artifact = new DefaultArtifact(c.getGroupId(), c.getArtifactId(), "", "jar", c.getVersion());
 
-                    ArtifactRequest request = new ArtifactRequest();
                     CollectRequest collectRequest = new CollectRequest();
                     collectRequest.setRoot(new Dependency(artifact, JavaScopes.RUNTIME));
                     collectRequest.setRepositories(remoteRepos);
@@ -213,23 +211,22 @@ public class HadoopUnitRunnable implements Runnable {
         System.out.println();
     }
 
-    private ComponentProperties loadAndRun(ComponentArtifact c, List<File> artifacts) {
-        Component component = Component.valueOf(c.getComponentName());
-        String componentKey = component.getKey();
-        String className = component.getMainClass();
+    private ComponentProperties loadAndRun(ComponentArtifact componentArtifact, List<File> artifacts) {
+        String componentName = componentArtifact.getComponentName();
+        String className = componentArtifact.getMainClass();
 
         List<URL> urls = new ArrayList();
 
-        Map<String, String> properties = c.getProperties();
+        Map<String, String> properties = componentArtifact.getProperties();
 
-        if ("solrcloud".equalsIgnoreCase(componentKey)) {
+        if ("solrcloud".equalsIgnoreCase(componentName)) {
 
             String solrDir = properties.get("solr.dir");
             if (StringUtils.isEmpty(solrDir)) {
                 log.warn("unable to find solr.dir property");
             }
         }
-        if ("alluxio".equalsIgnoreCase(componentKey)) {
+        if ("alluxio".equalsIgnoreCase(componentName)) {
 
             String alluxioWebappDir = properties.get("alluxio.webapp.directory");
             if (StringUtils.isEmpty(alluxioWebappDir)) {

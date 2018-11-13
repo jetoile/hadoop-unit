@@ -14,10 +14,7 @@
 package fr.jetoile.hadoopunit.component;
 
 import com.github.sakserv.minicluster.impl.KafkaLocalBroker;
-import fr.jetoile.hadoopunit.Component;
-import fr.jetoile.hadoopunit.HadoopBootstrap;
-import fr.jetoile.hadoopunit.HadoopUnitConfig;
-import fr.jetoile.hadoopunit.HadoopUtils;
+import fr.jetoile.hadoopunit.*;
 import fr.jetoile.hadoopunit.exception.BootstrapException;
 import fr.jetoile.hadoopunit.exception.NotFoundServiceException;
 import org.apache.commons.configuration.Configuration;
@@ -32,8 +29,6 @@ import java.util.Map;
 import java.util.Properties;
 
 public class KafkaBootstrap implements Bootstrap {
-    final public static String NAME = Component.KAFKA.name();
-
     static final private Logger LOGGER = LoggerFactory.getLogger(KafkaBootstrap.class);
 
     private KafkaLocalBroker kafkaLocalCluster;
@@ -73,8 +68,8 @@ public class KafkaBootstrap implements Bootstrap {
     }
 
     @Override
-    public String getName() {
-        return NAME;
+    public ComponentMetadata getMetadata() {
+        return new KafkaMetadata();
     }
 
     @Override
@@ -102,30 +97,30 @@ public class KafkaBootstrap implements Bootstrap {
         kafkaProperties.put("offsets.topic.replication.factor", "1");
     }
 
-    private void loadConfig() throws BootstrapException {
-        host = configuration.getString(HadoopUnitConfig.KAFKA_HOSTNAME_KEY);
-        port = configuration.getInt(HadoopUnitConfig.KAFKA_PORT_KEY);
-        brokerId = configuration.getInt(HadoopUnitConfig.KAFKA_TEST_BROKER_ID_KEY);
-        tmpDirectory = configuration.getString(HadoopUnitConfig.KAFKA_TEST_TEMP_DIR_KEY);
-        zookeeperConnectionString = configuration.getString(HadoopUnitConfig.ZOOKEEPER_HOST_KEY) + ":" + configuration.getInt(HadoopUnitConfig.ZOOKEEPER_PORT_KEY);
+    private void loadConfig() {
+        host = configuration.getString(KafkaConfig.KAFKA_HOSTNAME_KEY);
+        port = configuration.getInt(KafkaConfig.KAFKA_PORT_KEY);
+        brokerId = configuration.getInt(KafkaConfig.KAFKA_TEST_BROKER_ID_KEY);
+        tmpDirectory = configuration.getString(KafkaConfig.KAFKA_TEST_TEMP_DIR_KEY);
+        zookeeperConnectionString = configuration.getString(ZookeeperConfig.ZOOKEEPER_HOST_KEY) + ":" + configuration.getInt(ZookeeperConfig.ZOOKEEPER_PORT_KEY);
     }
 
     @Override
     public void loadConfig(Map<String, String> configs) {
-        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.KAFKA_HOSTNAME_KEY))) {
-            host = configs.get(HadoopUnitConfig.KAFKA_HOSTNAME_KEY);
+        if (StringUtils.isNotEmpty(configs.get(KafkaConfig.KAFKA_HOSTNAME_KEY))) {
+            host = configs.get(KafkaConfig.KAFKA_HOSTNAME_KEY);
         }
-        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.KAFKA_PORT_KEY))) {
-            port = Integer.parseInt(configs.get(HadoopUnitConfig.KAFKA_PORT_KEY));
+        if (StringUtils.isNotEmpty(configs.get(KafkaConfig.KAFKA_PORT_KEY))) {
+            port = Integer.parseInt(configs.get(KafkaConfig.KAFKA_PORT_KEY));
         }
-        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.KAFKA_TEST_BROKER_ID_KEY))) {
-            brokerId = Integer.parseInt(configs.get(HadoopUnitConfig.KAFKA_TEST_BROKER_ID_KEY));
+        if (StringUtils.isNotEmpty(configs.get(KafkaConfig.KAFKA_TEST_BROKER_ID_KEY))) {
+            brokerId = Integer.parseInt(configs.get(KafkaConfig.KAFKA_TEST_BROKER_ID_KEY));
         }
-        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.KAFKA_TEST_TEMP_DIR_KEY))) {
-            tmpDirectory = configs.get(HadoopUnitConfig.KAFKA_TEST_TEMP_DIR_KEY);
+        if (StringUtils.isNotEmpty(configs.get(KafkaConfig.KAFKA_TEST_TEMP_DIR_KEY))) {
+            tmpDirectory = configs.get(KafkaConfig.KAFKA_TEST_TEMP_DIR_KEY);
         }
-        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.ZOOKEEPER_HOST_KEY)) && StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.ZOOKEEPER_PORT_KEY))) {
-            zookeeperConnectionString = configs.get(HadoopUnitConfig.ZOOKEEPER_HOST_KEY) + ":" + configs.get(HadoopUnitConfig.ZOOKEEPER_PORT_KEY);
+        if (StringUtils.isNotEmpty(configs.get(ZookeeperConfig.ZOOKEEPER_HOST_KEY)) && StringUtils.isNotEmpty(configs.get(ZookeeperConfig.ZOOKEEPER_PORT_KEY))) {
+            zookeeperConnectionString = configs.get(ZookeeperConfig.ZOOKEEPER_HOST_KEY) + ":" + configs.get(ZookeeperConfig.ZOOKEEPER_PORT_KEY);
         }
     }
 

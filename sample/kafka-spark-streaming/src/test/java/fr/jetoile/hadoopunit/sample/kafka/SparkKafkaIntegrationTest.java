@@ -14,31 +14,22 @@
 
 package fr.jetoile.hadoopunit.sample.kafka;
 
-import fr.jetoile.hadoopunit.HadoopUnitConfig;
 import fr.jetoile.hadoopunit.test.kafka.KafkaProducerUtils;
-import kafka.serializer.StringDecoder;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.spark.SparkConf;
-import org.apache.spark.api.java.JavaRDD;
-import org.apache.spark.api.java.function.FlatMapFunction;
-import org.apache.spark.api.java.function.Function;
-import org.apache.spark.api.java.function.Function2;
-import org.apache.spark.api.java.function.PairFunction;
 import org.apache.spark.streaming.Durations;
-import org.apache.spark.streaming.api.java.*;
-import org.apache.spark.streaming.kafka.KafkaUtils;
+import org.apache.spark.streaming.api.java.JavaStreamingContext;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
-import scala.Tuple2;
 
 import java.io.Serializable;
-import java.util.*;
-import java.util.regex.Pattern;
+
+import static fr.jetoile.hadoopunit.client.commons.HadoopUnitClientConfig.*;
 
 public class SparkKafkaIntegrationTest implements Serializable {
 
@@ -46,7 +37,7 @@ public class SparkKafkaIntegrationTest implements Serializable {
 
     @BeforeClass
     public static void setUp() throws ConfigurationException {
-        configuration = new PropertiesConfiguration(HadoopUnitConfig.DEFAULT_PROPS_FILE);
+        configuration = new PropertiesConfiguration(DEFAULT_PROPS_FILE);
     }
 
     @Ignore
@@ -55,7 +46,7 @@ public class SparkKafkaIntegrationTest implements Serializable {
 
         for (int i = 0; i < 10; i++) {
             String payload = generateMessge(i);
-            KafkaProducerUtils.INSTANCE.produceMessages(configuration.getString(HadoopUnitConfig.KAFKA_TEST_TOPIC_KEY), String.valueOf(i), payload);
+            KafkaProducerUtils.INSTANCE.produceMessages(configuration.getString(KAFKA_TEST_TOPIC_KEY), String.valueOf(i), payload);
         }
 
         SparkConf sparkConf = new SparkConf().setMaster("local[*]").setAppName("test");
@@ -63,7 +54,7 @@ public class SparkKafkaIntegrationTest implements Serializable {
 
         SparkKafkaJob sparkKafkaJob = new SparkKafkaJob(scc);
         sparkKafkaJob.setTopic("testtopic");
-        sparkKafkaJob.setZkString(configuration.getString(HadoopUnitConfig.ZOOKEEPER_HOST_KEY) + ":" + configuration.getInt(HadoopUnitConfig.ZOOKEEPER_PORT_KEY));
+        sparkKafkaJob.setZkString(configuration.getString(ZOOKEEPER_HOST_KEY) + ":" + configuration.getInt(ZOOKEEPER_PORT_KEY));
 
         sparkKafkaJob.run();
 

@@ -15,30 +15,21 @@ package fr.jetoile.hadoopunit.component;
 
 import alluxio.PropertyKey;
 import alluxio.master.LocalAlluxioCluster;
-import alluxio.multi.process.MultiProcessCluster;
 import alluxio.security.LoginUserTestUtils;
 import alluxio.security.authentication.AuthenticatedClientUser;
-import fr.jetoile.hadoopunit.Component;
-import fr.jetoile.hadoopunit.HadoopUnitConfig;
+import fr.jetoile.hadoopunit.ComponentMetadata;
 import fr.jetoile.hadoopunit.HadoopUtils;
 import fr.jetoile.hadoopunit.exception.BootstrapException;
-import org.apache.commons.configuration.ConfigurationException;
-import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.lang.StringUtils;
-import org.apache.hadoop.fs.FileSystem;
-import org.apache.hadoop.fs.Path;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.net.URI;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
 public class AlluxioBootstrap implements Bootstrap {
-    final public static String NAME = Component.ALLUXIO.name();
-
     static final private Logger LOGGER = LoggerFactory.getLogger(AlluxioBootstrap.class);
 
     private LocalAlluxioCluster alluxioLocalCluster;
@@ -77,8 +68,8 @@ public class AlluxioBootstrap implements Bootstrap {
     }
 
     @Override
-    public String getName() {
-        return NAME;
+    public ComponentMetadata getMetadata() {
+        return new AlluxioMetadata();
     }
 
     @Override
@@ -126,45 +117,45 @@ public class AlluxioBootstrap implements Bootstrap {
     }
 
     private void loadConfig() throws BootstrapException {
-        this.workDirectory = configuration.getString(HadoopUnitConfig.ALLUXIO_WORK_DIR);
-        this.hostname = configuration.getString(HadoopUnitConfig.ALLUXIO_HOSTNAME);
-        this.masterRpcPort = configuration.getInt(HadoopUnitConfig.ALLUXIO_MASTER_RPC_PORT);
-        this.masterWebPort = configuration.getInt(HadoopUnitConfig.ALLUXIO_MASTER_WEB_PORT);
-        this.proxyWebPort = configuration.getInt(HadoopUnitConfig.ALLUXIO_PROXY_WEB_PORT);
-        this.workerRpcPort = configuration.getInt(HadoopUnitConfig.ALLUXIO_WORKER_RPC_PORT);
-        this.workerDataPort = configuration.getInt(HadoopUnitConfig.ALLUXIO_WORKER_DATA_PORT);
-        this.workerWebPort = configuration.getInt(HadoopUnitConfig.ALLUXIO_WORKER_WEB_PORT);
-        this.webappDirectory = configuration.getString(HadoopUnitConfig.ALLUXIO_WEBAPP_DIRECTORY);
+        this.workDirectory = configuration.getString(AlluxioConfig.ALLUXIO_WORK_DIR);
+        this.hostname = configuration.getString(AlluxioConfig.ALLUXIO_HOSTNAME);
+        this.masterRpcPort = configuration.getInt(AlluxioConfig.ALLUXIO_MASTER_RPC_PORT);
+        this.masterWebPort = configuration.getInt(AlluxioConfig.ALLUXIO_MASTER_WEB_PORT);
+        this.proxyWebPort = configuration.getInt(AlluxioConfig.ALLUXIO_PROXY_WEB_PORT);
+        this.workerRpcPort = configuration.getInt(AlluxioConfig.ALLUXIO_WORKER_RPC_PORT);
+        this.workerDataPort = configuration.getInt(AlluxioConfig.ALLUXIO_WORKER_DATA_PORT);
+        this.workerWebPort = configuration.getInt(AlluxioConfig.ALLUXIO_WORKER_WEB_PORT);
+        this.webappDirectory = configuration.getString(AlluxioConfig.ALLUXIO_WEBAPP_DIRECTORY);
     }
 
     @Override
     public void loadConfig(Map<String, String> configs) {
-        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.ALLUXIO_WORK_DIR))) {
-            this.workDirectory = configuration.getString(HadoopUnitConfig.ALLUXIO_WORK_DIR);
+        if (StringUtils.isNotEmpty(configs.get(AlluxioConfig.ALLUXIO_WORK_DIR))) {
+            this.workDirectory = configuration.getString(AlluxioConfig.ALLUXIO_WORK_DIR);
         }
-        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.ALLUXIO_HOSTNAME))) {
-            this.hostname = configuration.getString(HadoopUnitConfig.ALLUXIO_HOSTNAME);
+        if (StringUtils.isNotEmpty(configs.get(AlluxioConfig.ALLUXIO_HOSTNAME))) {
+            this.hostname = configuration.getString(AlluxioConfig.ALLUXIO_HOSTNAME);
         }
-        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.ALLUXIO_MASTER_RPC_PORT))) {
-            this.masterRpcPort = configuration.getInt(HadoopUnitConfig.ALLUXIO_MASTER_RPC_PORT);
+        if (StringUtils.isNotEmpty(configs.get(AlluxioConfig.ALLUXIO_MASTER_RPC_PORT))) {
+            this.masterRpcPort = configuration.getInt(AlluxioConfig.ALLUXIO_MASTER_RPC_PORT);
         }
-        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.ALLUXIO_MASTER_WEB_PORT))) {
-            this.masterWebPort = configuration.getInt(HadoopUnitConfig.ALLUXIO_MASTER_WEB_PORT);
+        if (StringUtils.isNotEmpty(configs.get(AlluxioConfig.ALLUXIO_MASTER_WEB_PORT))) {
+            this.masterWebPort = configuration.getInt(AlluxioConfig.ALLUXIO_MASTER_WEB_PORT);
         }
-        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.ALLUXIO_PROXY_WEB_PORT))) {
-            this.proxyWebPort = configuration.getInt(HadoopUnitConfig.ALLUXIO_PROXY_WEB_PORT);
+        if (StringUtils.isNotEmpty(configs.get(AlluxioConfig.ALLUXIO_PROXY_WEB_PORT))) {
+            this.proxyWebPort = configuration.getInt(AlluxioConfig.ALLUXIO_PROXY_WEB_PORT);
         }
-        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.ALLUXIO_WORKER_RPC_PORT))) {
-            this.workerRpcPort = configuration.getInt(HadoopUnitConfig.ALLUXIO_WORKER_RPC_PORT);
+        if (StringUtils.isNotEmpty(configs.get(AlluxioConfig.ALLUXIO_WORKER_RPC_PORT))) {
+            this.workerRpcPort = configuration.getInt(AlluxioConfig.ALLUXIO_WORKER_RPC_PORT);
         }
-        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.ALLUXIO_WORKER_DATA_PORT))) {
-            this.workerDataPort = configuration.getInt(HadoopUnitConfig.ALLUXIO_WORKER_DATA_PORT);
+        if (StringUtils.isNotEmpty(configs.get(AlluxioConfig.ALLUXIO_WORKER_DATA_PORT))) {
+            this.workerDataPort = configuration.getInt(AlluxioConfig.ALLUXIO_WORKER_DATA_PORT);
         }
-        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.ALLUXIO_WORKER_WEB_PORT))) {
-            this.workerWebPort = configuration.getInt(HadoopUnitConfig.ALLUXIO_WORKER_WEB_PORT);
+        if (StringUtils.isNotEmpty(configs.get(AlluxioConfig.ALLUXIO_WORKER_WEB_PORT))) {
+            this.workerWebPort = configuration.getInt(AlluxioConfig.ALLUXIO_WORKER_WEB_PORT);
         }
-        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.ALLUXIO_HOSTNAME))) {
-            this.webappDirectory = configuration.getString(HadoopUnitConfig.ALLUXIO_WEBAPP_DIRECTORY);
+        if (StringUtils.isNotEmpty(configs.get(AlluxioConfig.ALLUXIO_HOSTNAME))) {
+            this.webappDirectory = configuration.getString(AlluxioConfig.ALLUXIO_WEBAPP_DIRECTORY);
         }
     }
 

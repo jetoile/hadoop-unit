@@ -70,7 +70,7 @@ public class ElasticSearchBootstrapTest {
     public void elasticSearchShouldStart() throws NotFoundServiceException, IOException {
 
         TransportClient client = new PreBuiltTransportClient(Settings.EMPTY)
-                .addTransportAddress(new TransportAddress(InetAddress.getByName(configuration.getString(HadoopUnitConfig.ELASTICSEARCH_IP_KEY)), configuration.getInt(HadoopUnitConfig.ELASTICSEARCH_TCP_PORT_KEY)));
+                .addTransportAddress(new TransportAddress(InetAddress.getByName(configuration.getString(ElasticSearchConfig.ELASTICSEARCH_IP_KEY)), configuration.getInt(ElasticSearchConfig.ELASTICSEARCH_TCP_PORT_KEY)));
 
         ObjectMapper mapper = new ObjectMapper();
 

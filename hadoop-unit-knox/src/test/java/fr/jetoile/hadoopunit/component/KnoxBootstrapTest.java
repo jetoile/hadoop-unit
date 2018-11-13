@@ -13,7 +13,6 @@
  */
 package fr.jetoile.hadoopunit.component;
 
-import fr.jetoile.hadoopunit.Component;
 import fr.jetoile.hadoopunit.HadoopBootstrap;
 import fr.jetoile.hadoopunit.HadoopUnitConfig;
 import fr.jetoile.hadoopunit.exception.BootstrapException;
@@ -79,23 +78,23 @@ public class KnoxBootstrapTest {
     @Test
     public void testKnoxWithWebhbase() throws Exception {
 
-        String tableName = configuration.getString(HadoopUnitConfig.HBASE_TEST_TABLE_NAME_KEY);
-        String colFamName = configuration.getString(HadoopUnitConfig.HBASE_TEST_COL_FAMILY_NAME_KEY);
-        String colQualiferName = configuration.getString(HadoopUnitConfig.HBASE_TEST_COL_QUALIFIER_NAME_KEY);
-        Integer numRowsToPut = configuration.getInt(HadoopUnitConfig.HBASE_TEST_NUM_ROWS_TO_PUT_KEY);
-        org.apache.hadoop.conf.Configuration hbaseConfiguration = ((BootstrapHadoop)HadoopBootstrap.INSTANCE.getService(Component.HBASE)).getConfiguration();
+        String tableName = configuration.getString(KnoxConfig.HBASE_TEST_TABLE_NAME_KEY);
+        String colFamName = configuration.getString(KnoxConfig.HBASE_TEST_COL_FAMILY_NAME_KEY);
+        String colQualiferName = configuration.getString(KnoxConfig.HBASE_TEST_COL_QUALIFIER_NAME_KEY);
+        Integer numRowsToPut = configuration.getInt(KnoxConfig.HBASE_TEST_NUM_ROWS_TO_PUT_KEY);
+        org.apache.hadoop.conf.Configuration hbaseConfiguration = ((BootstrapHadoop) HadoopBootstrap.INSTANCE.getService("HBASE")).getConfiguration();
 
         LOGGER.info("HBASE: Creating table {} with column family {}", tableName, colFamName);
         createHbaseTable(tableName, colFamName, hbaseConfiguration);
 
         LOGGER.info("HBASE: Populate the table with {} rows.", numRowsToPut);
-        for (int i=0; i<numRowsToPut; i++) {
+        for (int i = 0; i < numRowsToPut; i++) {
             putRow(tableName, colFamName, String.valueOf(i), colQualiferName, "row_" + i, hbaseConfiguration);
         }
 
         URL url = new URL(String.format("http://%s:%s/",
-                configuration.getString(HadoopUnitConfig.KNOX_HOST_KEY),
-                configuration.getString(HadoopUnitConfig.HBASE_REST_PORT_KEY)));
+                configuration.getString(KnoxConfig.KNOX_HOST_KEY),
+                configuration.getString(KnoxConfig.HBASE_REST_PORT_KEY)));
         URLConnection connection = url.openConnection();
         connection.setRequestProperty("Accept-Charset", "UTF-8");
         try (BufferedReader response = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
@@ -104,8 +103,8 @@ public class KnoxBootstrapTest {
         }
 
         url = new URL(String.format("http://%s:%s/%s/schema",
-                configuration.getString(HadoopUnitConfig.KNOX_HOST_KEY),
-                configuration.getString(HadoopUnitConfig.HBASE_REST_PORT_KEY),
+                configuration.getString(KnoxConfig.KNOX_HOST_KEY),
+                configuration.getString(KnoxConfig.HBASE_REST_PORT_KEY),
                 tableName));
         connection = url.openConnection();
         connection.setRequestProperty("Accept-Charset", "UTF-8");
@@ -119,8 +118,8 @@ public class KnoxBootstrapTest {
 
         // Read the hbase throught Knox
         url = new URL(String.format("https://%s:%s/gateway/mycluster/hbase",
-                configuration.getString(HadoopUnitConfig.KNOX_HOST_KEY),
-                configuration.getString(HadoopUnitConfig.KNOX_PORT_KEY)));
+                configuration.getString(KnoxConfig.KNOX_HOST_KEY),
+                configuration.getString(KnoxConfig.KNOX_PORT_KEY)));
         connection = url.openConnection();
         connection.setRequestProperty("Accept-Charset", "UTF-8");
         try (BufferedReader response = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
@@ -129,8 +128,8 @@ public class KnoxBootstrapTest {
         }
 
         url = new URL(String.format("https://%s:%s/gateway/mycluster/hbase/%s/schema",
-                configuration.getString(HadoopUnitConfig.KNOX_HOST_KEY),
-                configuration.getString(HadoopUnitConfig.KNOX_PORT_KEY),
+                configuration.getString(KnoxConfig.KNOX_HOST_KEY),
+                configuration.getString(KnoxConfig.KNOX_PORT_KEY),
                 tableName));
         connection = url.openConnection();
         connection.setRequestProperty("Accept-Charset", "UTF-8");
@@ -146,16 +145,16 @@ public class KnoxBootstrapTest {
         // Write a file to HDFS containing the test string
         FileSystem hdfsFsHandle = HdfsUtils.INSTANCE.getFileSystem();
         try (FSDataOutputStream writer = hdfsFsHandle.create(
-                new Path(configuration.getString(HadoopUnitConfig.HDFS_TEST_FILE_KEY)))) {
-            writer.write(configuration.getString(HadoopUnitConfig.HDFS_TEST_STRING_KEY).getBytes("UTF-8"));
+                new Path(configuration.getString(KnoxConfig.HDFS_TEST_FILE_KEY)))) {
+            writer.write(configuration.getString(KnoxConfig.HDFS_TEST_STRING_KEY).getBytes("UTF-8"));
             writer.flush();
         }
 
         // Read the file throught webhdfs
         URL url = new URL(
                 String.format("http://%s:%s/webhdfs/v1?op=GETHOMEDIRECTORY",
-                        configuration.getString(HadoopUnitConfig.KNOX_HOST_KEY),
-                        configuration.getString(HadoopUnitConfig.HDFS_NAMENODE_HTTP_PORT_KEY)));
+                        configuration.getString(KnoxConfig.KNOX_HOST_KEY),
+                        configuration.getString(KnoxConfig.HDFS_NAMENODE_HTTP_PORT_KEY)));
         URLConnection connection = url.openConnection();
         connection.setRequestProperty("Accept-Charset", "UTF-8");
         try (BufferedReader response = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
@@ -165,15 +164,15 @@ public class KnoxBootstrapTest {
 
         url = new URL(
                 String.format("http://%s:%s/webhdfs/v1%s?op=OPEN",
-                        configuration.getString(HadoopUnitConfig.KNOX_HOST_KEY),
-                        configuration.getString(HadoopUnitConfig.HDFS_NAMENODE_HTTP_PORT_KEY),
-                        configuration.getString(HadoopUnitConfig.HDFS_TEST_FILE_KEY)));
+                        configuration.getString(KnoxConfig.KNOX_HOST_KEY),
+                        configuration.getString(KnoxConfig.HDFS_NAMENODE_HTTP_PORT_KEY),
+                        configuration.getString(KnoxConfig.HDFS_TEST_FILE_KEY)));
         connection = url.openConnection();
         connection.setRequestProperty("Accept-Charset", "UTF-8");
         try (BufferedReader response = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
             String line = response.readLine();
             response.close();
-            assertEquals(configuration.getString(HadoopUnitConfig.HDFS_TEST_STRING_KEY), line);
+            assertEquals(configuration.getString(KnoxConfig.HDFS_TEST_STRING_KEY), line);
         }
 
         // Knox clients need self trusted certificates in tests
@@ -182,8 +181,8 @@ public class KnoxBootstrapTest {
         // Read the file throught Knox
         url = new URL(
                 String.format("https://%s:%s/gateway/mycluster/webhdfs/v1?op=GETHOMEDIRECTORY",
-                        configuration.getString(HadoopUnitConfig.KNOX_HOST_KEY),
-                        configuration.getString(HadoopUnitConfig.KNOX_PORT_KEY)));
+                        configuration.getString(KnoxConfig.KNOX_HOST_KEY),
+                        configuration.getString(KnoxConfig.KNOX_PORT_KEY)));
         connection = url.openConnection();
         connection.setRequestProperty("Accept-Charset", "UTF-8");
         try (BufferedReader response = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
@@ -193,15 +192,15 @@ public class KnoxBootstrapTest {
 
         url = new URL(
                 String.format("https://%s:%s/gateway/mycluster/webhdfs/v1/%s?op=OPEN",
-                        configuration.getString(HadoopUnitConfig.KNOX_HOST_KEY),
-                        configuration.getString(HadoopUnitConfig.KNOX_PORT_KEY),
-                        configuration.getString(HadoopUnitConfig.HDFS_TEST_FILE_KEY)));
+                        configuration.getString(KnoxConfig.KNOX_HOST_KEY),
+                        configuration.getString(KnoxConfig.KNOX_PORT_KEY),
+                        configuration.getString(KnoxConfig.HDFS_TEST_FILE_KEY)));
         connection = url.openConnection();
         connection.setRequestProperty("Accept-Charset", "UTF-8");
         try (BufferedReader response = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
             String line = response.readLine();
             response.close();
-            assertEquals(configuration.getString(HadoopUnitConfig.HDFS_TEST_STRING_KEY), line);
+            assertEquals(configuration.getString(KnoxConfig.HDFS_TEST_STRING_KEY), line);
         }
     }
 

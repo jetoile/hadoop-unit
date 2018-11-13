@@ -15,6 +15,11 @@ package fr.jetoile.hadoopunit;
 
 import fr.jetoile.hadoopunit.component.Bootstrap;
 import fr.jetoile.hadoopunit.exception.NotFoundServiceException;
+import org.jgrapht.Graph;
+import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.SimpleDirectedGraph;
+import org.jgrapht.traverse.DepthFirstIterator;
+import org.jgrapht.traverse.GraphIterator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,6 +45,29 @@ public enum HadoopBootstrap {
     private Map<String, Bootstrap> commands = new HashMap<>();
 
 
+    Graph<String, DefaultEdge> generateGraph(Map<String, Bootstrap> commands) {
+        Graph<String, DefaultEdge> graph = new SimpleDirectedGraph<>(DefaultEdge.class);
+
+        commands.keySet().stream().forEach(
+                c -> graph.addVertex(c)
+        );
+
+        commands.entrySet().stream().forEach(entry -> {
+                    String key = entry.getKey();
+                    entry.getValue().getMetadata().getDependencies().stream().forEach(dependency -> {
+                        try {
+                            graph.addEdge(key, dependency);
+                        } catch (IllegalArgumentException e) {
+                            //ignore it : if a dependency is declared in metadata but is not present on runtime
+                            LOGGER.warn("{} is not declared into the component's dependencies {}", key, dependency);
+                        }
+                    });
+                }
+        );
+
+        return graph;
+    }
+
     HadoopBootstrap() {
         commands.clear();
         commandLoader.reload();
@@ -48,13 +76,11 @@ public enum HadoopBootstrap {
         commands = StreamSupport.stream(iterable.spliterator(), false)
                 .collect(Collectors.toMap(Bootstrap::getName, Function.identity()));
 
-        componentsToStart = commands.entrySet().stream()
-                .filter(entry -> Component.isComponent(entry.getKey()))
-                .sorted(Comparator.comparingInt(e -> Component.getOrdinal(e.getKey())))
-                .map(Map.Entry::getValue)
-                .collect(toList());
+        List<String> componentsNameToStart = computeStartingOrder();
 
-        componentsToStop = this.componentsToStart.stream().collect(toList());
+        componentsToStart = componentsNameToStart.stream().map(c -> commands.get(c)).collect(Collectors.toList());
+
+        componentsToStop = new ArrayList<>(componentsToStart);
         Collections.reverse(componentsToStop);
 
         Runtime.getRuntime().addShutdownHook(new Thread() {
@@ -65,13 +91,20 @@ public enum HadoopBootstrap {
         });
     }
 
-    public Bootstrap getService(Component c) throws NotFoundServiceException {
-        if (commands.containsKey(c.name())) {
-            return commands.get(c.name());
-        } else {
-            throw new NotFoundServiceException("unable to find service " + c.name());
-        }
+    private List<String> computeStartingOrder() {
+        Graph<String, DefaultEdge> dependenciesGraph = generateGraph(commands);
+        Map<String, List<String>> dependenciesMapByComponent = commands.values().stream().collect(Collectors.toMap(Bootstrap::getName, c -> DependenciesCalculator.calculateParents(dependenciesGraph, c.getName())));
+        Map<String, List<String>> transitiveDependenciesMapByComponent = DependenciesCalculator.findTransitiveDependenciesByComponent(dependenciesMapByComponent);
+        return DependenciesCalculator.dryRunToDefineCorrectOrder(transitiveDependenciesMapByComponent);
+    }
 
+
+    public Bootstrap getService(String componentName) throws NotFoundServiceException {
+        if (commands.containsKey(componentName)) {
+            return commands.get(componentName);
+        } else {
+            throw new NotFoundServiceException("unable to find service " + componentName);
+        }
     }
 
     public void startAll() {
@@ -81,7 +114,6 @@ public enum HadoopBootstrap {
             internalStart(manualComponentsToStart);
         }
     }
-
 
     public void stopAll() {
         if (manualComponentsToStop.isEmpty()) {
@@ -93,8 +125,8 @@ public enum HadoopBootstrap {
         }
     }
 
-    public HadoopBootstrap add(Component component) throws NotFoundServiceException {
-        manualComponentsToStart.add(getService(component));
+    public HadoopBootstrap add(String componentName) throws NotFoundServiceException {
+        manualComponentsToStart.add(getService(componentName));
         return this;
     }
 

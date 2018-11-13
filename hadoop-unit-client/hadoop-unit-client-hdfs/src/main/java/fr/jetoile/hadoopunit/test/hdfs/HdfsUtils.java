@@ -32,6 +32,10 @@ public enum HdfsUtils {
 
     private final Logger LOGGER = LoggerFactory.getLogger(HdfsUtils.class);
 
+    private static final String HDFS_NAMENODE_HOST_KEY = "hdfs.namenode.host";
+    private static final String HDFS_NAMENODE_PORT_KEY = "hdfs.namenode.port";
+    private static final String HDFS_NAMENODE_HTTP_PORT_KEY = "hdfs.namenode.http.port";
+
     private FileSystem fileSystem = null;
 
     private Configuration configuration;
@@ -45,9 +49,9 @@ public enum HdfsUtils {
             System.exit(-1);
         }
         org.apache.hadoop.conf.Configuration conf = new org.apache.hadoop.conf.Configuration();
-        conf.set("fs.default.name", "hdfs://" + configuration.getString(HadoopUnitConfig.HDFS_NAMENODE_HOST_KEY) + ":" + configuration.getInt(HadoopUnitConfig.HDFS_NAMENODE_PORT_KEY));
+        conf.set("fs.default.name", "hdfs://" + configuration.getString(HDFS_NAMENODE_HOST_KEY) + ":" + configuration.getInt(HDFS_NAMENODE_PORT_KEY));
 
-        URI uri = URI.create("hdfs://" + configuration.getString(HadoopUnitConfig.HDFS_NAMENODE_HOST_KEY) + ":" + configuration.getInt(HadoopUnitConfig.HDFS_NAMENODE_PORT_KEY));
+        URI uri = URI.create("hdfs://" + configuration.getString(HDFS_NAMENODE_HOST_KEY) + ":" + configuration.getInt(HDFS_NAMENODE_PORT_KEY));
 
         try {
             fileSystem = FileSystem.get(uri, conf);
@@ -63,8 +67,8 @@ public enum HdfsUtils {
             throw new ConfigException("bad config", e);
         }
 
-        port = configuration.getInt(HadoopUnitConfig.HDFS_NAMENODE_PORT_KEY);
-        httpPort = configuration.getInt(HadoopUnitConfig.HDFS_NAMENODE_HTTP_PORT_KEY);
+        port = configuration.getInt(HDFS_NAMENODE_PORT_KEY);
+        httpPort = configuration.getInt(HDFS_NAMENODE_HTTP_PORT_KEY);
     }
 
 

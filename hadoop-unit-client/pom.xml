@@ -4,7 +4,7 @@
     <parent>
         <artifactId>hadoop-unit</artifactId>
         <groupId>fr.jetoile.hadoop</groupId>
-        <version>2.11-SNAPSHOT</version>
+        <version>3.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -13,6 +13,7 @@
     <name>hadoop-unit-client</name>
 
     <modules>
+        <module>hadoop-unit-client-commons</module>
         <module>hadoop-unit-client-hive</module>
         <module>hadoop-unit-client-hdfs</module>
         <module>hadoop-unit-client-solrcloud</module>

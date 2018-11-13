@@ -28,42 +28,42 @@ import java.security.NoSuchAlgorithmException;
 
 public class KnoxJob {
 
-    public void createHdfsDirectory(Hadoop hadoop) throws ConfigurationException, URISyntaxException, KeyManagementException, NoSuchAlgorithmException, IOException {
+    public void createHdfsDirectory(Hadoop hadoop) {
         Hdfs.mkdir(hadoop).dir("/hdfs/test").now();
     }
 
-    public void createFileOnHdfs(Hadoop hadoop) throws ConfigurationException, URISyntaxException, KeyManagementException, NoSuchAlgorithmException, IOException {
+    public void createFileOnHdfs(Hadoop hadoop) {
         Hdfs.put(hadoop).text("TEST").to("/hdfs/test/sample.txt").now();
     }
 
-    public String getFileOnHdfs(Hadoop hadoop) throws ConfigurationException, URISyntaxException, KeyManagementException, NoSuchAlgorithmException, IOException {
+    public String getFileOnHdfs(Hadoop hadoop) throws IOException {
         InputStream inputStream = Hdfs.get(hadoop).from("/hdfs/test/sample.txt").now().getStream();
         return IOUtils.toString(inputStream, StandardCharsets.UTF_8);
     }
 
-    public String getHBaseStatus(Hadoop hadoop) throws ConfigurationException, URISyntaxException, KeyManagementException, NoSuchAlgorithmException, IOException {
+    public String getHBaseStatus(Hadoop hadoop) throws IOException {
         InputStream inputStream = HBase.session(hadoop).status().now().getStream();
         return IOUtils.toString(inputStream, StandardCharsets.UTF_8);
     }
 
-    public void createHBaseTable(Hadoop hadoop) throws ConfigurationException, URISyntaxException, KeyManagementException, NoSuchAlgorithmException, IOException {
+    public void createHBaseTable(Hadoop hadoop) {
         HBase.session(hadoop).table("test").create().family("family1").endFamilyDef().now();
     }
 
 
-    public String getHBaseTableSchema(Hadoop hadoop) throws ConfigurationException, URISyntaxException, KeyManagementException, NoSuchAlgorithmException, IOException {
+    public String getHBaseTableSchema(Hadoop hadoop) throws IOException {
         InputStream inputStream = HBase.session(hadoop).table("test").schema().now().getStream();
         return IOUtils.toString(inputStream, StandardCharsets.UTF_8);
     }
 
 
-    public void putHBaseData(Hadoop hadoop) throws ConfigurationException, URISyntaxException, KeyManagementException, NoSuchAlgorithmException, IOException {
+    public void putHBaseData(Hadoop hadoop) {
         HBase.session(hadoop).table("test").row("row_id_1").store()
                 .column("family1", "col1", "col_value1")
                 .now();
     }
 
-    public String readHBaseData(Hadoop hadoop) throws ConfigurationException, URISyntaxException, KeyManagementException, NoSuchAlgorithmException, IOException {
+    public String readHBaseData(Hadoop hadoop) throws IOException {
         InputStream inputStream = HBase.session(hadoop).table("test").row("row_id_1")
                 .query()
                 .now().getStream();

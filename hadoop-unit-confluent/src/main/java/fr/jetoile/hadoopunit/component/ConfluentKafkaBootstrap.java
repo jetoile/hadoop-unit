@@ -14,7 +14,7 @@
 
 package fr.jetoile.hadoopunit.component;
 
-import fr.jetoile.hadoopunit.Component;
+import fr.jetoile.hadoopunit.ComponentMetadata;
 import fr.jetoile.hadoopunit.HadoopUnitConfig;
 import fr.jetoile.hadoopunit.HadoopUtils;
 import fr.jetoile.hadoopunit.exception.BootstrapException;
@@ -36,11 +36,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import static fr.jetoile.hadoopunit.HadoopUnitConfig.*;
-
 public class ConfluentKafkaBootstrap implements Bootstrap {
-    final public static String NAME = Component.CONFLUENT_KAFKA.name();
-
     static final private Logger LOGGER = LoggerFactory.getLogger(ConfluentKafkaBootstrap.class);
 
     private State state = State.STOPPED;
@@ -71,23 +67,23 @@ public class ConfluentKafkaBootstrap implements Bootstrap {
     }
 
     @Override
-    public String getName() {
-        return NAME;
+    public ComponentMetadata getMetadata() {
+        return new ConfluentKafkaMetadata();
     }
 
     @Override
     public String getProperties() {
-        return "\n \t\t\t kafka host:" + configuration.getString(CONFLUENT_KAFKA_HOST_KEY) +
-                "\n \t\t\t kafka port:" + configuration.getString(CONFLUENT_KAFKA_PORT_KEY);
+        return "\n \t\t\t kafka host:" + configuration.getString(ConfluentConfig.CONFLUENT_KAFKA_HOST_KEY) +
+                "\n \t\t\t kafka port:" + configuration.getString(ConfluentConfig.CONFLUENT_KAFKA_PORT_KEY);
     }
 
     public void loadConfig() {
-        kafkaConfig.put("zookeeper.connect", configuration.getString(ZOOKEEPER_HOST_KEY) + ":" + configuration.getString(ZOOKEEPER_PORT_KEY));
-        kafkaConfig.put("log.dirs", configuration.getString(CONFLUENT_KAFKA_LOG_DIR_KEY));
-        kafkaConfig.put("broker.id", configuration.getString(CONFLUENT_KAFKA_BROKER_ID_KEY));
+        kafkaConfig.put("zookeeper.connect", configuration.getString(ZookeeperConfig.ZOOKEEPER_HOST_KEY) + ":" + configuration.getString(ZookeeperConfig.ZOOKEEPER_PORT_KEY));
+        kafkaConfig.put("log.dirs", configuration.getString(ConfluentConfig.CONFLUENT_KAFKA_LOG_DIR_KEY));
+        kafkaConfig.put("broker.id", configuration.getString(ConfluentConfig.CONFLUENT_KAFKA_BROKER_ID_KEY));
 //        kafkaConfig.put("advertised.listeners", "PLAINTEXT://localhost:22222");
-        kafkaConfig.put("advertised.host.name", configuration.getString(CONFLUENT_KAFKA_HOST_KEY));
-        kafkaConfig.put("port", configuration.getString(CONFLUENT_KAFKA_PORT_KEY));
+        kafkaConfig.put("advertised.host.name", configuration.getString(ConfluentConfig.CONFLUENT_KAFKA_HOST_KEY));
+        kafkaConfig.put("port", configuration.getString(ConfluentConfig.CONFLUENT_KAFKA_PORT_KEY));
         kafkaConfig.put("confluent.support.metrics.enable", "false");
         kafkaConfig.put("offsets.topic.replication.factor", "1");
         kafkaConfig.put("num.network.threads", "3");
@@ -95,20 +91,20 @@ public class ConfluentKafkaBootstrap implements Bootstrap {
 
     @Override
     public void loadConfig(Map<String, String> configs) {
-        if (StringUtils.isNotEmpty(configs.get(ZOOKEEPER_HOST_KEY)) && StringUtils.isNotEmpty(configs.get(ZOOKEEPER_PORT_KEY))) {
-            kafkaConfig.put("zookeeper.connect", configs.get(ZOOKEEPER_HOST_KEY) + ":" + configs.get(ZOOKEEPER_PORT_KEY));
+        if (StringUtils.isNotEmpty(configs.get(ZookeeperConfig.ZOOKEEPER_HOST_KEY)) && StringUtils.isNotEmpty(configs.get(ZookeeperConfig.ZOOKEEPER_PORT_KEY))) {
+            kafkaConfig.put("zookeeper.connect", configs.get(ZookeeperConfig.ZOOKEEPER_HOST_KEY) + ":" + configs.get(ZookeeperConfig.ZOOKEEPER_PORT_KEY));
         }
-        if (StringUtils.isNotEmpty(configs.get(CONFLUENT_KAFKA_LOG_DIR_KEY))) {
-            kafkaConfig.put("log.dirs", configs.get(CONFLUENT_KAFKA_LOG_DIR_KEY));
+        if (StringUtils.isNotEmpty(configs.get(ConfluentConfig.CONFLUENT_KAFKA_LOG_DIR_KEY))) {
+            kafkaConfig.put("log.dirs", configs.get(ConfluentConfig.CONFLUENT_KAFKA_LOG_DIR_KEY));
         }
-        if (StringUtils.isNotEmpty(configs.get(CONFLUENT_KAFKA_BROKER_ID_KEY))) {
-            kafkaConfig.put("broker.id", configs.get(CONFLUENT_KAFKA_BROKER_ID_KEY));
+        if (StringUtils.isNotEmpty(configs.get(ConfluentConfig.CONFLUENT_KAFKA_BROKER_ID_KEY))) {
+            kafkaConfig.put("broker.id", configs.get(ConfluentConfig.CONFLUENT_KAFKA_BROKER_ID_KEY));
         }
-        if (StringUtils.isNotEmpty(configs.get(CONFLUENT_KAFKA_HOST_KEY))) {
-            kafkaConfig.put("advertised.host.name", configs.get(CONFLUENT_KAFKA_HOST_KEY));
+        if (StringUtils.isNotEmpty(configs.get(ConfluentConfig.CONFLUENT_KAFKA_HOST_KEY))) {
+            kafkaConfig.put("advertised.host.name", configs.get(ConfluentConfig.CONFLUENT_KAFKA_HOST_KEY));
         }
-        if (StringUtils.isNotEmpty(configs.get(CONFLUENT_KAFKA_PORT_KEY))) {
-            kafkaConfig.put("port", configs.get(CONFLUENT_KAFKA_PORT_KEY));
+        if (StringUtils.isNotEmpty(configs.get(ConfluentConfig.CONFLUENT_KAFKA_PORT_KEY))) {
+            kafkaConfig.put("port", configs.get(ConfluentConfig.CONFLUENT_KAFKA_PORT_KEY));
         }
     }
 
@@ -156,9 +152,9 @@ public class ConfluentKafkaBootstrap implements Bootstrap {
 
     private void cleanup() {
         try {
-            FileUtils.deleteDirectory(Paths.get(configuration.getString(HadoopUnitConfig.CONFLUENT_KAFKA_LOG_DIR_KEY)).toFile());
+            FileUtils.deleteDirectory(Paths.get(configuration.getString(ConfluentConfig.CONFLUENT_KAFKA_LOG_DIR_KEY)).toFile());
         } catch (IOException e) {
-            LOGGER.error("unable to delete {}", configuration.getString(HadoopUnitConfig.CONFLUENT_KAFKA_LOG_DIR_KEY), e);
+            LOGGER.error("unable to delete {}", configuration.getString(ConfluentConfig.CONFLUENT_KAFKA_LOG_DIR_KEY), e);
         }
     }
 }
