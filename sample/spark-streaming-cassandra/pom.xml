@@ -14,7 +14,7 @@
     <properties>
         <datastax.driver.core.version>3.3.0</datastax.driver.core.version>
         <spark-cassandra-connector.version>2.0.5</spark-cassandra-connector.version>
-        <spark-streaming-kafka_2.10.version>1.6.3</spark-streaming-kafka_2.10.version>
+        <spark-streaming-kafka_2.11.version>1.6.3</spark-streaming-kafka_2.11.version>
     </properties>
 
     <dependencies>

@@ -139,14 +139,14 @@
         <commons-configuration.version>1.10</commons-configuration.version>
         <commons-collections.version>3.2.1</commons-collections.version>
 
-        <hadoop-mini-clusters.version>0.1.15</hadoop-mini-clusters.version>
+        <hadoop-mini-clusters.version>0.1.16</hadoop-mini-clusters.version>
 
-        <hive.version>1.2.1000.2.6.3.0-235</hive.version>
+        <hive.version>1.2.1000.2.6.5.0-292</hive.version>
         <solr.version>6.6.1</solr.version>
-        <oozie.version>4.2.0.2.6.3.0-235</oozie.version>
-        <hadoop.version>2.7.3.2.6.3.0-235</hadoop.version>
-        <knox.version>0.12.0.2.6.3.0-235</knox.version>
-        <kafka_2.10.version>0.10.1.2.6.3.0-235</kafka_2.10.version>
+        <oozie.version>4.2.0.2.6.5.0-292</oozie.version>
+        <hadoop.version>2.7.3.2.6.5.0-292</hadoop.version>
+        <knox.version>0.12.0.2.6.5.0-292</knox.version>
+        <kafka_2.11.version>1.0.0.2.6.5.0-292</kafka_2.11.version>
 
         <confluent.version>5.0.0</confluent.version>
         <confluent_kafka.version>2.0.0-cp1</confluent_kafka.version>
@@ -652,8 +652,8 @@
 
             <dependency>
                 <groupId>org.apache.kafka</groupId>
-                <artifactId>kafka_2.10</artifactId>
-                <version>${kafka_2.10.version}</version>
+                <artifactId>kafka_2.11</artifactId>
+                <version>${kafka_2.11.version}</version>
             </dependency>
 
             <dependency>

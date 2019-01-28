@@ -96,6 +96,10 @@ public class KafkaBootstrap implements Bootstrap {
                 .setKafkaTempDir(tmpDirectory)
                 .setZookeeperConnectionString(zookeeperConnectionString)
                 .build();
+
+        Properties kafkaProperties = kafkaLocalCluster.getKafkaProperties();
+        kafkaProperties.put("default.replication.factor", "1");
+        kafkaProperties.put("offsets.topic.replication.factor", "1");
     }
 
     private void loadConfig() throws BootstrapException {
