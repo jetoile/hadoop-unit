@@ -57,10 +57,10 @@ public class MongoDbBootstrapTest {
 
     @Test
     public void mongodbShouldStart() throws UnknownHostException {
-        MongoClient mongo = new MongoClient(configuration.getString(HadoopUnitConfig.MONGO_IP_KEY), configuration.getInt(HadoopUnitConfig.MONGO_PORT_KEY));
+        MongoClient mongo = new MongoClient(configuration.getString(MongoDbConfig.MONGO_IP_KEY), configuration.getInt(MongoDbConfig.MONGO_PORT_KEY));
 
-        DB db = mongo.getDB(configuration.getString(HadoopUnitConfig.MONGO_DATABASE_NAME_KEY));
-        DBCollection col = db.createCollection(configuration.getString(HadoopUnitConfig.MONGO_COLLECTION_NAME_KEY),
+        DB db = mongo.getDB(configuration.getString(MongoDbConfig.MONGO_DATABASE_NAME_KEY));
+        DBCollection col = db.createCollection(configuration.getString(MongoDbConfig.MONGO_COLLECTION_NAME_KEY),
                 new BasicDBObject());
 
         col.save(new BasicDBObject("testDoc", new Date()));

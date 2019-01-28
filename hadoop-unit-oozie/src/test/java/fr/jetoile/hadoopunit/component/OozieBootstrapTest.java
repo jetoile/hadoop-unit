@@ -15,7 +15,6 @@
 package fr.jetoile.hadoopunit.component;
 
 
-import fr.jetoile.hadoopunit.Component;
 import fr.jetoile.hadoopunit.HadoopBootstrap;
 import fr.jetoile.hadoopunit.HadoopUnitConfig;
 import fr.jetoile.hadoopunit.exception.BootstrapException;
@@ -70,8 +69,8 @@ public class OozieBootstrapTest {
 
         LOGGER.info("OOZIE: Test Submit Workflow Start");
 
-        FileSystem hdfsFs = ((HdfsBootstrap) HadoopBootstrap.INSTANCE.getService(Component.HDFS)).getHdfsFileSystemHandle();
-        OozieClient oozieClient = ((OozieBootstrap) HadoopBootstrap.INSTANCE.getService(Component.OOZIE)).getOozieClient();
+        FileSystem hdfsFs = ((HdfsBootstrap) HadoopBootstrap.INSTANCE.getService("HDFS")).getHdfsFileSystemHandle();
+        OozieClient oozieClient = ((OozieBootstrap) HadoopBootstrap.INSTANCE.getService("OOZIE")).getOozieClient();
 
         Path appPath = new Path(hdfsFs.getHomeDirectory(), "testApp");
         hdfsFs.mkdirs(new Path(appPath, "lib"));

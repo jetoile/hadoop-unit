@@ -16,6 +16,7 @@ package fr.jetoile.hadoopunit.sample.kafka;
 
 import fr.jetoile.hadoopunit.HadoopBootstrap;
 import fr.jetoile.hadoopunit.HadoopUnitConfig;
+import fr.jetoile.hadoopunit.component.KafkaConfig;
 import fr.jetoile.hadoopunit.test.kafka.KafkaConsumerUtils;
 import fr.jetoile.hadoopunit.test.kafka.KafkaProducerUtils;
 import org.apache.commons.configuration.Configuration;
@@ -25,6 +26,10 @@ import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 import org.junit.*;
 
+import static fr.jetoile.hadoopunit.client.commons.HadoopUnitClientConfig.DEFAULT_PROPS_FILE;
+import static fr.jetoile.hadoopunit.client.commons.HadoopUnitClientConfig.KAFKA_HOSTNAME_KEY;
+import static fr.jetoile.hadoopunit.client.commons.HadoopUnitClientConfig.KAFKA_PORT_KEY;
+
 @Ignore
 public class KafkaStreamsPipelineJobWithUnitTest {
 
@@ -32,7 +37,7 @@ public class KafkaStreamsPipelineJobWithUnitTest {
 
     @BeforeClass
     public static void setUp() throws ConfigurationException {
-        configuration = new PropertiesConfiguration(HadoopUnitConfig.DEFAULT_PROPS_FILE);
+        configuration = new PropertiesConfiguration(DEFAULT_PROPS_FILE);
         HadoopBootstrap.INSTANCE.startAll();
     }
 
@@ -50,7 +55,7 @@ public class KafkaStreamsPipelineJobWithUnitTest {
         }
 
         KafkaStreamsPipelineJob kafkaStreamJob = new KafkaStreamsPipelineJob();
-        kafkaStreamJob.setBroker(configuration.getString(HadoopUnitConfig.KAFKA_HOSTNAME_KEY) + ":" + configuration.getString(HadoopUnitConfig.KAFKA_PORT_KEY));
+        kafkaStreamJob.setBroker(configuration.getString(KAFKA_HOSTNAME_KEY) + ":" + configuration.getString(KAFKA_PORT_KEY));
         kafkaStreamJob.setInputTopic("testtopic");
         kafkaStreamJob.setOutputTopic("output");
 

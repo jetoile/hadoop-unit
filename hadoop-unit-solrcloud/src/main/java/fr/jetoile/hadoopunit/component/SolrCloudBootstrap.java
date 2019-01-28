@@ -13,10 +13,7 @@
  */
 package fr.jetoile.hadoopunit.component;
 
-import fr.jetoile.hadoopunit.Component;
-import fr.jetoile.hadoopunit.HadoopBootstrap;
-import fr.jetoile.hadoopunit.HadoopUnitConfig;
-import fr.jetoile.hadoopunit.HadoopUtils;
+import fr.jetoile.hadoopunit.*;
 import fr.jetoile.hadoopunit.exception.BootstrapException;
 import fr.jetoile.hadoopunit.exception.NotFoundServiceException;
 import org.apache.commons.configuration.*;
@@ -42,8 +39,6 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
 public class SolrCloudBootstrap implements Bootstrap {
-    final public static String NAME = Component.SOLRCLOUD.name();
-
     final private static Logger LOGGER = LoggerFactory.getLogger(SolrCloudBootstrap.class);
 
     public static final int TIMEOUT = 10000;
@@ -81,8 +76,8 @@ public class SolrCloudBootstrap implements Bootstrap {
     }
 
     @Override
-    public String getName() {
-        return NAME;
+    public ComponentMetadata getMetadata() {
+        return new SolrCloudMetadata();
     }
 
     @Override
@@ -117,25 +112,25 @@ public class SolrCloudBootstrap implements Bootstrap {
     }
 
     private void loadConfig() throws BootstrapException {
-        solrDirectory = configuration.getString(HadoopUnitConfig.SOLR_DIR_KEY);
-        solrCollectionName = configuration.getString(HadoopUnitConfig.SOLR_COLLECTION_NAME);
-        solrPort = configuration.getInt(HadoopUnitConfig.SOLR_PORT);
-        zkHostString = configuration.getString(HadoopUnitConfig.ZOOKEEPER_HOST_KEY) + ":" + configuration.getInt(HadoopUnitConfig.ZOOKEEPER_PORT_KEY);
+        solrDirectory = configuration.getString(SolrCloudConfig.SOLR_DIR_KEY);
+        solrCollectionName = configuration.getString(SolrCloudConfig.SOLR_COLLECTION_NAME);
+        solrPort = configuration.getInt(SolrCloudConfig.SOLR_PORT);
+        zkHostString = configuration.getString(ZookeeperConfig.ZOOKEEPER_HOST_KEY) + ":" + configuration.getInt(ZookeeperConfig.ZOOKEEPER_PORT_KEY);
     }
 
     @Override
     public void loadConfig(Map<String, String> configs) {
-        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.SOLR_DIR_KEY))) {
-            solrDirectory = configs.get(HadoopUnitConfig.SOLR_DIR_KEY);
+        if (StringUtils.isNotEmpty(configs.get(SolrCloudConfig.SOLR_DIR_KEY))) {
+            solrDirectory = configs.get(SolrCloudConfig.SOLR_DIR_KEY);
         }
-        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.SOLR_COLLECTION_NAME))) {
-            solrCollectionName = configs.get(HadoopUnitConfig.SOLR_COLLECTION_NAME);
+        if (StringUtils.isNotEmpty(configs.get(SolrCloudConfig.SOLR_COLLECTION_NAME))) {
+            solrCollectionName = configs.get(SolrCloudConfig.SOLR_COLLECTION_NAME);
         }
-        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.SOLR_PORT))) {
-            solrPort = Integer.parseInt(configs.get(HadoopUnitConfig.SOLR_PORT));
+        if (StringUtils.isNotEmpty(configs.get(SolrCloudConfig.SOLR_PORT))) {
+            solrPort = Integer.parseInt(configs.get(SolrCloudConfig.SOLR_PORT));
         }
-        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.ZOOKEEPER_HOST_KEY)) && StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.ZOOKEEPER_PORT_KEY))) {
-            zkHostString = configs.get(HadoopUnitConfig.ZOOKEEPER_HOST_KEY) + ":" + configs.get(HadoopUnitConfig.ZOOKEEPER_PORT_KEY);
+        if (StringUtils.isNotEmpty(configs.get(ZookeeperConfig.ZOOKEEPER_HOST_KEY)) && StringUtils.isNotEmpty(configs.get(ZookeeperConfig.ZOOKEEPER_PORT_KEY))) {
+            zkHostString = configs.get(ZookeeperConfig.ZOOKEEPER_HOST_KEY) + ":" + configs.get(ZookeeperConfig.ZOOKEEPER_PORT_KEY);
         }
     }
 

@@ -42,6 +42,7 @@ import java.sql.Statement;
 
 import static com.ninja_squad.dbsetup.Operations.sequenceOf;
 import static com.ninja_squad.dbsetup.Operations.sql;
+import static fr.jetoile.hadoopunit.client.commons.HadoopUnitClientConfig.HDFS_NAMENODE_PORT_KEY;
 import static org.fest.assertions.Assertions.assertThat;
 
 public class SparkJobIntegrationTest {
@@ -52,7 +53,7 @@ public class SparkJobIntegrationTest {
     private static Configuration configuration;
 
     @BeforeClass
-    public static void setUp() throws BootstrapException, SQLException, ClassNotFoundException, NotFoundServiceException {
+    public static void setUp() throws BootstrapException {
         try {
             configuration = new PropertiesConfiguration(HadoopUnitConfig.DEFAULT_PROPS_FILE);
         } catch (ConfigurationException e) {
@@ -63,11 +64,11 @@ public class SparkJobIntegrationTest {
                 sequenceOf(sql("CREATE EXTERNAL TABLE IF NOT EXISTS default.test(id INT, value STRING) " +
                                 " ROW FORMAT DELIMITED FIELDS TERMINATED BY ';'" +
                                 " STORED AS TEXTFILE" +
-                                " LOCATION 'hdfs://localhost:" + configuration.getInt(HadoopUnitConfig.HDFS_NAMENODE_PORT_KEY) + "/khanh/test'"),
+                                " LOCATION 'hdfs://localhost:" + configuration.getInt(HDFS_NAMENODE_PORT_KEY) + "/khanh/test'"),
                         sql("CREATE EXTERNAL TABLE IF NOT EXISTS default.test_parquet(id INT, value STRING) " +
                                 " ROW FORMAT DELIMITED FIELDS TERMINATED BY ';'" +
                                 " STORED AS PARQUET" +
-                                " LOCATION 'hdfs://localhost:" + configuration.getInt(HadoopUnitConfig.HDFS_NAMENODE_PORT_KEY) + "/khanh/test_parquet'"));
+                                " LOCATION 'hdfs://localhost:" + configuration.getInt(HDFS_NAMENODE_PORT_KEY) + "/khanh/test_parquet'"));
 
         DROP_TABLES =
                 sequenceOf(sql("DROP TABLE IF EXISTS default.test"),
@@ -136,10 +137,10 @@ public class SparkJobIntegrationTest {
         SparkJob sparkJob = new SparkJob(sqlContext);
         Dataset<Row> sql = sparkJob.run();
 
-        sql.write().parquet("hdfs://localhost:" + configuration.getInt(HadoopUnitConfig.HDFS_NAMENODE_PORT_KEY) + "/khanh/test_parquet/file.parquet");
+        sql.write().parquet("hdfs://localhost:" + configuration.getInt(HDFS_NAMENODE_PORT_KEY) + "/khanh/test_parquet/file.parquet");
 
         FileSystem fileSystem = HdfsUtils.INSTANCE.getFileSystem();
-        assertThat(fileSystem.exists(new Path("hdfs://localhost:" + configuration.getInt(HadoopUnitConfig.HDFS_NAMENODE_PORT_KEY) + "/khanh/test_parquet/file.parquet"))).isTrue();
+        assertThat(fileSystem.exists(new Path("hdfs://localhost:" + configuration.getInt(HDFS_NAMENODE_PORT_KEY) + "/khanh/test_parquet/file.parquet"))).isTrue();
 
         sqlContext.close();
     }
@@ -152,10 +153,10 @@ public class SparkJobIntegrationTest {
 
         SparkJob sparkJob = new SparkJob(sqlContext);
         Dataset<Row> sql = sparkJob.run();
-        sql.write().parquet("hdfs://localhost:" + configuration.getInt(HadoopUnitConfig.HDFS_NAMENODE_PORT_KEY) + "/khanh/test_parquet/file.parquet");
+        sql.write().parquet("hdfs://localhost:" + configuration.getInt(HDFS_NAMENODE_PORT_KEY) + "/khanh/test_parquet/file.parquet");
 
         FileSystem fileSystem = HdfsUtils.INSTANCE.getFileSystem();
-        assertThat(fileSystem.exists(new Path("hdfs://localhost:" + configuration.getInt(HadoopUnitConfig.HDFS_NAMENODE_PORT_KEY) + "/khanh/test_parquet/file.parquet"))).isTrue();
+        assertThat(fileSystem.exists(new Path("hdfs://localhost:" + configuration.getInt(HDFS_NAMENODE_PORT_KEY) + "/khanh/test_parquet/file.parquet"))).isTrue();
 
         sqlContext.close();
 

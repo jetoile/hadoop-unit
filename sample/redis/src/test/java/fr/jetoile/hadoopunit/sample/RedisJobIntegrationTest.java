@@ -14,6 +14,7 @@
 package fr.jetoile.hadoopunit.sample;
 
 import fr.jetoile.hadoopunit.HadoopUnitConfig;
+import fr.jetoile.hadoopunit.client.commons.HadoopUnitClientConfig;
 import fr.jetoile.hadoopunit.exception.BootstrapException;
 import fr.jetoile.hadoopunit.exception.NotFoundServiceException;
 import org.apache.commons.configuration.Configuration;
@@ -24,15 +25,17 @@ import org.junit.Test;
 
 import java.sql.SQLException;
 
+import static fr.jetoile.hadoopunit.client.commons.HadoopUnitClientConfig.REDIS_PORT_KEY;
+
 public class RedisJobIntegrationTest {
 
     private static Configuration configuration;
 
 
     @BeforeClass
-    public static void setUp() throws BootstrapException, SQLException, ClassNotFoundException, NotFoundServiceException {
+    public static void setUp() throws BootstrapException {
         try {
-            configuration = new PropertiesConfiguration(HadoopUnitConfig.DEFAULT_PROPS_FILE);
+            configuration = new PropertiesConfiguration(HadoopUnitClientConfig.DEFAULT_PROPS_FILE);
         } catch (ConfigurationException e) {
             throw new BootstrapException("bad config", e);
         }
@@ -43,6 +46,6 @@ public class RedisJobIntegrationTest {
     public void testRedis() {
         RedisJob redisJob = new RedisJob();
 
-        redisJob.runRedisStuff(configuration.getInt(HadoopUnitConfig.REDIS_PORT_KEY));
+        redisJob.runRedisStuff(configuration.getInt(REDIS_PORT_KEY));
     }
 }

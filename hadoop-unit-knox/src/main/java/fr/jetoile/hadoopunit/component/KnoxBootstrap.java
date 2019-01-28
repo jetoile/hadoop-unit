@@ -16,8 +16,7 @@ package fr.jetoile.hadoopunit.component;
 import com.github.sakserv.minicluster.impl.KnoxLocalCluster;
 import com.mycila.xmltool.XMLDoc;
 import com.mycila.xmltool.XMLTag;
-import fr.jetoile.hadoopunit.Component;
-import fr.jetoile.hadoopunit.HadoopUnitConfig;
+import fr.jetoile.hadoopunit.ComponentMetadata;
 import fr.jetoile.hadoopunit.HadoopUtils;
 import fr.jetoile.hadoopunit.exception.BootstrapException;
 import org.apache.commons.configuration.Configuration;
@@ -33,8 +32,6 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class KnoxBootstrap implements Bootstrap {
-    final public static String NAME = Component.KNOX.name();
-
     static final private Logger LOGGER = LoggerFactory.getLogger(KnoxBootstrap.class);
 
     private KnoxLocalCluster knoxLocalCluster;
@@ -80,8 +77,8 @@ public class KnoxBootstrap implements Bootstrap {
 
 
     @Override
-    public String getName() {
-        return NAME;
+    public ComponentMetadata getMetadata() {
+        return new KnoxMetadata();
     }
 
     @Override
@@ -157,55 +154,55 @@ public class KnoxBootstrap implements Bootstrap {
         return xmlTag.toString();
     }
 
-    private void loadConfig() throws BootstrapException {
-        port = configuration.getInt(HadoopUnitConfig.KNOX_PORT_KEY);
-        host = configuration.getString(HadoopUnitConfig.KNOX_HOST_KEY);
-        path = configuration.getString(HadoopUnitConfig.KNOX_PATH_KEY);
-        clusterName = configuration.getString(HadoopUnitConfig.KNOX_CLUSTER_KEY);
-        tempDirectory = configuration.getString(HadoopUnitConfig.KNOX_HOME_DIR_KEY);
+    private void loadConfig() {
+        port = configuration.getInt(KnoxConfig.KNOX_PORT_KEY);
+        host = configuration.getString(KnoxConfig.KNOX_HOST_KEY);
+        path = configuration.getString(KnoxConfig.KNOX_PATH_KEY);
+        clusterName = configuration.getString(KnoxConfig.KNOX_CLUSTER_KEY);
+        tempDirectory = configuration.getString(KnoxConfig.KNOX_HOME_DIR_KEY);
 
-        List<String> servicesList = Arrays.asList(configuration.getStringArray(HadoopUnitConfig.KNOX_SERVICE_KEY));
+        List<String> servicesList = Arrays.asList(configuration.getStringArray(KnoxConfig.KNOX_SERVICE_KEY));
         services = Arrays.asList(KnoxService.values()).stream().filter(s -> servicesList.contains(s.getName())).collect(Collectors.toList());
 
-        namenodeUri = "hdfs://" + configuration.getString(HadoopUnitConfig.HDFS_NAMENODE_HOST_KEY) + ":" + configuration.getString(HadoopUnitConfig.HDFS_NAMENODE_PORT_KEY);
-        webHdfsUri = "http://" + configuration.getString(HadoopUnitConfig.HDFS_NAMENODE_HOST_KEY) + ":" + configuration.getString(HadoopUnitConfig.HDFS_NAMENODE_HTTP_PORT_KEY) + "/webhdfs";
-        webHBaseUri = "http://" + configuration.getString(HadoopUnitConfig.HBASE_REST_HOST_KEY) + ":" + configuration.getString(HadoopUnitConfig.HBASE_REST_PORT_KEY);
-        oozieUri = "http://" + configuration.getString(HadoopUnitConfig.OOZIE_HOST) + ":" + configuration.getString(HadoopUnitConfig.OOZIE_PORT) + "/oozie";
+        namenodeUri = "hdfs://" + configuration.getString(KnoxConfig.HDFS_NAMENODE_HOST_KEY) + ":" + configuration.getString(KnoxConfig.HDFS_NAMENODE_PORT_KEY);
+        webHdfsUri = "http://" + configuration.getString(KnoxConfig.HDFS_NAMENODE_HOST_KEY) + ":" + configuration.getString(KnoxConfig.HDFS_NAMENODE_HTTP_PORT_KEY) + "/webhdfs";
+        webHBaseUri = "http://" + configuration.getString(KnoxConfig.HBASE_REST_HOST_KEY) + ":" + configuration.getString(KnoxConfig.HBASE_REST_PORT_KEY);
+        oozieUri = "http://" + configuration.getString(KnoxConfig.OOZIE_HOST) + ":" + configuration.getString(KnoxConfig.OOZIE_PORT) + "/oozie";
 
     }
 
     @Override
     public void loadConfig(Map<String, String> configs) {
-        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.KNOX_PORT_KEY))) {
-            port = Integer.parseInt(configs.get(HadoopUnitConfig.KNOX_PORT_KEY));
+        if (StringUtils.isNotEmpty(configs.get(KnoxConfig.KNOX_PORT_KEY))) {
+            port = Integer.parseInt(configs.get(KnoxConfig.KNOX_PORT_KEY));
         }
-        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.KNOX_HOST_KEY))) {
-            host = configs.get(HadoopUnitConfig.KNOX_HOST_KEY);
+        if (StringUtils.isNotEmpty(configs.get(KnoxConfig.KNOX_HOST_KEY))) {
+            host = configs.get(KnoxConfig.KNOX_HOST_KEY);
         }
-        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.KNOX_PATH_KEY))) {
-            path = configs.get(HadoopUnitConfig.KNOX_PATH_KEY);
+        if (StringUtils.isNotEmpty(configs.get(KnoxConfig.KNOX_PATH_KEY))) {
+            path = configs.get(KnoxConfig.KNOX_PATH_KEY);
         }
-        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.KNOX_CLUSTER_KEY))) {
-            clusterName = configs.get(HadoopUnitConfig.KNOX_CLUSTER_KEY);
+        if (StringUtils.isNotEmpty(configs.get(KnoxConfig.KNOX_CLUSTER_KEY))) {
+            clusterName = configs.get(KnoxConfig.KNOX_CLUSTER_KEY);
         }
-        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.KNOX_HOME_DIR_KEY))) {
-            tempDirectory = configs.get(HadoopUnitConfig.KNOX_HOME_DIR_KEY);
+        if (StringUtils.isNotEmpty(configs.get(KnoxConfig.KNOX_HOME_DIR_KEY))) {
+            tempDirectory = configs.get(KnoxConfig.KNOX_HOME_DIR_KEY);
         }
-        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.KNOX_SERVICE_KEY))) {
-            List<String> servicesList = Arrays.asList(configuration.getStringArray(HadoopUnitConfig.KNOX_SERVICE_KEY));
+        if (StringUtils.isNotEmpty(configs.get(KnoxConfig.KNOX_SERVICE_KEY))) {
+            List<String> servicesList = Arrays.asList(configuration.getStringArray(KnoxConfig.KNOX_SERVICE_KEY));
             services = Arrays.asList(KnoxService.values()).stream().filter(s -> servicesList.contains(s.getName())).collect(Collectors.toList());
         }
-        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.HDFS_NAMENODE_HOST_KEY)) && StringUtils.isNotEmpty(HadoopUnitConfig.HDFS_NAMENODE_PORT_KEY)) {
-            namenodeUri = "hdfs://" + configs.get(HadoopUnitConfig.HDFS_NAMENODE_HOST_KEY) + ":" + configs.get(HadoopUnitConfig.HDFS_NAMENODE_PORT_KEY);
+        if (StringUtils.isNotEmpty(configs.get(KnoxConfig.HDFS_NAMENODE_HOST_KEY)) && StringUtils.isNotEmpty(KnoxConfig.HDFS_NAMENODE_PORT_KEY)) {
+            namenodeUri = "hdfs://" + configs.get(KnoxConfig.HDFS_NAMENODE_HOST_KEY) + ":" + configs.get(KnoxConfig.HDFS_NAMENODE_PORT_KEY);
         }
-        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.HDFS_NAMENODE_HOST_KEY)) && StringUtils.isNotEmpty(HadoopUnitConfig.HDFS_NAMENODE_HTTP_PORT_KEY)) {
-            webHdfsUri = "http://" + configs.get(HadoopUnitConfig.HDFS_NAMENODE_HOST_KEY) + ":" + configs.get(HadoopUnitConfig.HDFS_NAMENODE_HTTP_PORT_KEY) + "/webhdfs";
+        if (StringUtils.isNotEmpty(configs.get(KnoxConfig.HDFS_NAMENODE_HOST_KEY)) && StringUtils.isNotEmpty(KnoxConfig.HDFS_NAMENODE_HTTP_PORT_KEY)) {
+            webHdfsUri = "http://" + configs.get(KnoxConfig.HDFS_NAMENODE_HOST_KEY) + ":" + configs.get(KnoxConfig.HDFS_NAMENODE_HTTP_PORT_KEY) + "/webhdfs";
         }
-        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.HBASE_REST_HOST_KEY)) && StringUtils.isNotEmpty(HadoopUnitConfig.HBASE_REST_PORT_KEY)) {
-            webHBaseUri = "http://" + configs.get(HadoopUnitConfig.HBASE_REST_HOST_KEY) + ":" + configs.get(HadoopUnitConfig.HBASE_REST_PORT_KEY);
+        if (StringUtils.isNotEmpty(configs.get(KnoxConfig.HBASE_REST_HOST_KEY)) && StringUtils.isNotEmpty(KnoxConfig.HBASE_REST_PORT_KEY)) {
+            webHBaseUri = "http://" + configs.get(KnoxConfig.HBASE_REST_HOST_KEY) + ":" + configs.get(KnoxConfig.HBASE_REST_PORT_KEY);
         }
-        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.OOZIE_HOST)) && StringUtils.isNotEmpty(HadoopUnitConfig.OOZIE_PORT)) {
-            webHBaseUri = "http://" + configs.get(HadoopUnitConfig.OOZIE_HOST) + ":" + configs.get(HadoopUnitConfig.OOZIE_PORT);
+        if (StringUtils.isNotEmpty(configs.get(KnoxConfig.OOZIE_HOST)) && StringUtils.isNotEmpty(KnoxConfig.OOZIE_PORT)) {
+            webHBaseUri = "http://" + configs.get(KnoxConfig.OOZIE_HOST) + ":" + configs.get(KnoxConfig.OOZIE_PORT);
         }
     }
 

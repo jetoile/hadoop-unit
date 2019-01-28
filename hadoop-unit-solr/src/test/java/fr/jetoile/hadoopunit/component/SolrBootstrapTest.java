@@ -15,9 +15,8 @@
 package fr.jetoile.hadoopunit.component;
 
 
-import fr.jetoile.hadoopunit.Component;
-import fr.jetoile.hadoopunit.HadoopUnitConfig;
 import fr.jetoile.hadoopunit.HadoopBootstrap;
+import fr.jetoile.hadoopunit.HadoopUnitConfig;
 import fr.jetoile.hadoopunit.exception.BootstrapException;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
@@ -64,7 +63,7 @@ public class SolrBootstrapTest {
     @Test
     public void solrShouldStart() throws Exception {
 
-        EmbeddedSolrServer client = ((SolrBootstrap) HadoopBootstrap.INSTANCE.getService(Component.SOLR)).getClient();
+        EmbeddedSolrServer client = ((SolrBootstrap) HadoopBootstrap.INSTANCE.getService("SOLR")).getClient();
 
         injectIntoSolr(client);
 

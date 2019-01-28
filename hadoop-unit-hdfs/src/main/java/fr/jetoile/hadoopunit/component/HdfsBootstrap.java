@@ -14,13 +14,10 @@
 package fr.jetoile.hadoopunit.component;
 
 import com.github.sakserv.minicluster.impl.HdfsLocalCluster;
-import fr.jetoile.hadoopunit.Component;
-import fr.jetoile.hadoopunit.HadoopUnitConfig;
+import fr.jetoile.hadoopunit.ComponentMetadata;
 import fr.jetoile.hadoopunit.HadoopUtils;
 import fr.jetoile.hadoopunit.exception.BootstrapException;
 import org.apache.commons.configuration.Configuration;
-import org.apache.commons.configuration.ConfigurationException;
-import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.lang.StringUtils;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.hdfs.HdfsConfiguration;
@@ -31,8 +28,6 @@ import java.net.URL;
 import java.util.Map;
 
 public class HdfsBootstrap implements BootstrapHadoop {
-    final public static String NAME = Component.HDFS.name();
-
     static final private Logger LOGGER = LoggerFactory.getLogger(HdfsBootstrap.class);
 
     private HdfsLocalCluster hdfsLocalCluster;
@@ -75,19 +70,15 @@ public class HdfsBootstrap implements BootstrapHadoop {
 
 
     @Override
-    public String getName() {
-        return NAME;
-    }
-
-    @Override
     public String getProperties() {
         return "\n \t\t\t host:" + host +
                 "\n \t\t\t port:" + port +
                 "\n \t\t\t httpPort:" + httpPort;
     }
 
-    private void init() {
-
+    @Override
+    public ComponentMetadata getMetadata() {
+        return new HdfsMetadata();
     }
 
     private void build() {
@@ -109,45 +100,45 @@ public class HdfsBootstrap implements BootstrapHadoop {
     private void loadConfig() throws BootstrapException {
         HadoopUtils.INSTANCE.setHadoopHome();
 
-        host = configuration.getString(HadoopUnitConfig.HDFS_NAMENODE_HOST_KEY);
-        port = configuration.getInt(HadoopUnitConfig.HDFS_NAMENODE_PORT_KEY);
-        httpPort = configuration.getInt(HadoopUnitConfig.HDFS_NAMENODE_HTTP_PORT_KEY);
-        tempDirectory = configuration.getString(HadoopUnitConfig.HDFS_TEMP_DIR_KEY);
-        numDatanodes = configuration.getInt(HadoopUnitConfig.HDFS_NUM_DATANODES_KEY);
-        enablePermission = configuration.getBoolean(HadoopUnitConfig.HDFS_ENABLE_PERMISSIONS_KEY);
-        format = configuration.getBoolean(HadoopUnitConfig.HDFS_FORMAT_KEY);
-        enableRunningUserAsProxy = configuration.getBoolean(HadoopUnitConfig.HDFS_ENABLE_RUNNING_USER_AS_PROXY_USER);
-        replication = configuration.getInt(HadoopUnitConfig.HDFS_REPLICATION_KEY, 1);
+        host = configuration.getString(HdfsConfig.HDFS_NAMENODE_HOST_KEY);
+        port = configuration.getInt(HdfsConfig.HDFS_NAMENODE_PORT_KEY);
+        httpPort = configuration.getInt(HdfsConfig.HDFS_NAMENODE_HTTP_PORT_KEY);
+        tempDirectory = configuration.getString(HdfsConfig.HDFS_TEMP_DIR_KEY);
+        numDatanodes = configuration.getInt(HdfsConfig.HDFS_NUM_DATANODES_KEY);
+        enablePermission = configuration.getBoolean(HdfsConfig.HDFS_ENABLE_PERMISSIONS_KEY);
+        format = configuration.getBoolean(HdfsConfig.HDFS_FORMAT_KEY);
+        enableRunningUserAsProxy = configuration.getBoolean(HdfsConfig.HDFS_ENABLE_RUNNING_USER_AS_PROXY_USER);
+        replication = configuration.getInt(HdfsConfig.HDFS_REPLICATION_KEY, 1);
     }
 
     @Override
     public void loadConfig(Map<String, String> configs) {
-        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.HDFS_NAMENODE_HOST_KEY))) {
-            host = configs.get(HadoopUnitConfig.HDFS_NAMENODE_HOST_KEY);
+        if (StringUtils.isNotEmpty(configs.get(HdfsConfig.HDFS_NAMENODE_HOST_KEY))) {
+            host = configs.get(HdfsConfig.HDFS_NAMENODE_HOST_KEY);
         }
-        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.HDFS_NAMENODE_PORT_KEY))) {
-            port = Integer.parseInt(configs.get(HadoopUnitConfig.HDFS_NAMENODE_PORT_KEY));
+        if (StringUtils.isNotEmpty(configs.get(HdfsConfig.HDFS_NAMENODE_PORT_KEY))) {
+            port = Integer.parseInt(configs.get(HdfsConfig.HDFS_NAMENODE_PORT_KEY));
         }
-        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.HDFS_NAMENODE_HTTP_PORT_KEY))) {
-            httpPort = Integer.parseInt(configs.get(HadoopUnitConfig.HDFS_NAMENODE_HTTP_PORT_KEY));
+        if (StringUtils.isNotEmpty(configs.get(HdfsConfig.HDFS_NAMENODE_HTTP_PORT_KEY))) {
+            httpPort = Integer.parseInt(configs.get(HdfsConfig.HDFS_NAMENODE_HTTP_PORT_KEY));
         }
-        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.HDFS_TEMP_DIR_KEY))) {
-            tempDirectory = configs.get(HadoopUnitConfig.HDFS_TEMP_DIR_KEY);
+        if (StringUtils.isNotEmpty(configs.get(HdfsConfig.HDFS_TEMP_DIR_KEY))) {
+            tempDirectory = configs.get(HdfsConfig.HDFS_TEMP_DIR_KEY);
         }
-        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.HDFS_NUM_DATANODES_KEY))) {
-            numDatanodes = Integer.parseInt(configs.get(HadoopUnitConfig.HDFS_NUM_DATANODES_KEY));
+        if (StringUtils.isNotEmpty(configs.get(HdfsConfig.HDFS_NUM_DATANODES_KEY))) {
+            numDatanodes = Integer.parseInt(configs.get(HdfsConfig.HDFS_NUM_DATANODES_KEY));
         }
-        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.HDFS_ENABLE_PERMISSIONS_KEY))) {
-            enablePermission = Boolean.parseBoolean(configs.get(HadoopUnitConfig.HDFS_ENABLE_PERMISSIONS_KEY));
+        if (StringUtils.isNotEmpty(configs.get(HdfsConfig.HDFS_ENABLE_PERMISSIONS_KEY))) {
+            enablePermission = Boolean.parseBoolean(configs.get(HdfsConfig.HDFS_ENABLE_PERMISSIONS_KEY));
         }
-        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.HDFS_FORMAT_KEY))) {
-            format = Boolean.parseBoolean(configs.get(HadoopUnitConfig.HDFS_FORMAT_KEY));
+        if (StringUtils.isNotEmpty(configs.get(HdfsConfig.HDFS_FORMAT_KEY))) {
+            format = Boolean.parseBoolean(configs.get(HdfsConfig.HDFS_FORMAT_KEY));
         }
-        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.HDFS_ENABLE_RUNNING_USER_AS_PROXY_USER))) {
-            enableRunningUserAsProxy = Boolean.parseBoolean(configs.get(HadoopUnitConfig.HDFS_ENABLE_RUNNING_USER_AS_PROXY_USER));
+        if (StringUtils.isNotEmpty(configs.get(HdfsConfig.HDFS_ENABLE_RUNNING_USER_AS_PROXY_USER))) {
+            enableRunningUserAsProxy = Boolean.parseBoolean(configs.get(HdfsConfig.HDFS_ENABLE_RUNNING_USER_AS_PROXY_USER));
         }
-        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.HDFS_REPLICATION_KEY))) {
-            replication = Integer.parseInt(configs.get(HadoopUnitConfig.HDFS_REPLICATION_KEY));
+        if (StringUtils.isNotEmpty(configs.get(HdfsConfig.HDFS_REPLICATION_KEY))) {
+            replication = Integer.parseInt(configs.get(HdfsConfig.HDFS_REPLICATION_KEY));
         }
     }
 
@@ -157,7 +148,6 @@ public class HdfsBootstrap implements BootstrapHadoop {
         if (state == State.STOPPED) {
             state = State.STARTING;
             LOGGER.info("{} is starting", this.getClass().getName());
-            init();
             build();
             try {
                 hdfsLocalCluster.start();

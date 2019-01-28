@@ -1,16 +1,26 @@
+/*
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package fr.jetoile.hadoopunit.component;
 
 import com.github.sakserv.minicluster.impl.YarnLocalCluster;
 import com.github.sakserv.minicluster.util.FileUtils;
 import com.github.sakserv.minicluster.yarn.InJvmContainerExecutor;
-import fr.jetoile.hadoopunit.Component;
-import fr.jetoile.hadoopunit.HadoopUnitConfig;
+import fr.jetoile.hadoopunit.ComponentMetadata;
 import fr.jetoile.hadoopunit.HadoopUtils;
 import fr.jetoile.hadoopunit.exception.BootstrapException;
 import fr.jetoile.hadoopunit.exception.NotFoundServiceException;
 import org.apache.commons.configuration.Configuration;
-import org.apache.commons.configuration.ConfigurationException;
-import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,8 +30,6 @@ import java.net.URL;
 import java.util.Map;
 
 public class YarnBootstrap implements BootstrapHadoop {
-    final public static String NAME = Component.YARN.name();
-
     final private Logger LOGGER = LoggerFactory.getLogger(YarnBootstrap.class);
 
     private State state = State.STOPPED;
@@ -67,8 +75,8 @@ public class YarnBootstrap implements BootstrapHadoop {
     }
 
     @Override
-    public String getName() {
-        return NAME;
+    public ComponentMetadata getMetadata() {
+        return new YarnMetadata();
     }
 
     @Override
@@ -97,45 +105,45 @@ public class YarnBootstrap implements BootstrapHadoop {
     }
 
     private void loadConfig() throws BootstrapException, NotFoundServiceException {
-        yarnNumNodeManagers = configuration.getInt(HadoopUnitConfig.YARN_NUM_NODE_MANAGERS_KEY);
-        yarnNumLocalDirs = configuration.getInt(HadoopUnitConfig.YARN_NUM_LOCAL_DIRS_KEY);
-        yarnNumLogDirs = configuration.getInt(HadoopUnitConfig.YARN_NUM_LOG_DIRS_KEY);
-        yarnRMAddress = configuration.getString(HadoopUnitConfig.YARN_RESOURCE_MANAGER_ADDRESS_KEY);
-        yarnRMHostname = configuration.getString(HadoopUnitConfig.YARN_RESOURCE_MANAGER_HOSTNAME_KEY);
-        yarnRMSchedulerAddress = configuration.getString(HadoopUnitConfig.YARN_RESOURCE_MANAGER_SCHEDULER_ADDRESS_KEY);
-        yarnRMResourceTrackerAddress = configuration.getString(HadoopUnitConfig.YARN_RESOURCE_MANAGER_RESOURCE_TRACKER_ADDRESS_KEY);
-        yarnRMWebappAddress = configuration.getString(HadoopUnitConfig.YARN_RESOURCE_MANAGER_WEBAPP_ADDRESS_KEY);
-        inJvmContainer = configuration.getBoolean(HadoopUnitConfig.YARN_USE_IN_JVM_CONTAINER_EXECUTOR_KEY);
+        yarnNumNodeManagers = configuration.getInt(YarnConfig.YARN_NUM_NODE_MANAGERS_KEY);
+        yarnNumLocalDirs = configuration.getInt(YarnConfig.YARN_NUM_LOCAL_DIRS_KEY);
+        yarnNumLogDirs = configuration.getInt(YarnConfig.YARN_NUM_LOG_DIRS_KEY);
+        yarnRMAddress = configuration.getString(YarnConfig.YARN_RESOURCE_MANAGER_ADDRESS_KEY);
+        yarnRMHostname = configuration.getString(YarnConfig.YARN_RESOURCE_MANAGER_HOSTNAME_KEY);
+        yarnRMSchedulerAddress = configuration.getString(YarnConfig.YARN_RESOURCE_MANAGER_SCHEDULER_ADDRESS_KEY);
+        yarnRMResourceTrackerAddress = configuration.getString(YarnConfig.YARN_RESOURCE_MANAGER_RESOURCE_TRACKER_ADDRESS_KEY);
+        yarnRMWebappAddress = configuration.getString(YarnConfig.YARN_RESOURCE_MANAGER_WEBAPP_ADDRESS_KEY);
+        inJvmContainer = configuration.getBoolean(YarnConfig.YARN_USE_IN_JVM_CONTAINER_EXECUTOR_KEY);
     }
 
     @Override
     public void loadConfig(Map<String, String> configs) {
-        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.YARN_NUM_NODE_MANAGERS_KEY))) {
-            yarnNumNodeManagers = Integer.parseInt(configs.get(HadoopUnitConfig.YARN_NUM_NODE_MANAGERS_KEY));
+        if (StringUtils.isNotEmpty(configs.get(YarnConfig.YARN_NUM_NODE_MANAGERS_KEY))) {
+            yarnNumNodeManagers = Integer.parseInt(configs.get(YarnConfig.YARN_NUM_NODE_MANAGERS_KEY));
         }
-        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.YARN_NUM_LOCAL_DIRS_KEY))) {
-            yarnNumLocalDirs = Integer.parseInt(configs.get(HadoopUnitConfig.YARN_NUM_LOCAL_DIRS_KEY));
+        if (StringUtils.isNotEmpty(configs.get(YarnConfig.YARN_NUM_LOCAL_DIRS_KEY))) {
+            yarnNumLocalDirs = Integer.parseInt(configs.get(YarnConfig.YARN_NUM_LOCAL_DIRS_KEY));
         }
-        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.YARN_NUM_LOG_DIRS_KEY))) {
-            yarnNumLogDirs = Integer.parseInt(configs.get(HadoopUnitConfig.YARN_NUM_LOG_DIRS_KEY));
+        if (StringUtils.isNotEmpty(configs.get(YarnConfig.YARN_NUM_LOG_DIRS_KEY))) {
+            yarnNumLogDirs = Integer.parseInt(configs.get(YarnConfig.YARN_NUM_LOG_DIRS_KEY));
         }
-        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.YARN_RESOURCE_MANAGER_ADDRESS_KEY))) {
-            yarnRMAddress = configs.get(HadoopUnitConfig.YARN_RESOURCE_MANAGER_ADDRESS_KEY);
+        if (StringUtils.isNotEmpty(configs.get(YarnConfig.YARN_RESOURCE_MANAGER_ADDRESS_KEY))) {
+            yarnRMAddress = configs.get(YarnConfig.YARN_RESOURCE_MANAGER_ADDRESS_KEY);
         }
-        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.YARN_RESOURCE_MANAGER_HOSTNAME_KEY))) {
-            yarnRMHostname = configs.get(HadoopUnitConfig.YARN_RESOURCE_MANAGER_HOSTNAME_KEY);
+        if (StringUtils.isNotEmpty(configs.get(YarnConfig.YARN_RESOURCE_MANAGER_HOSTNAME_KEY))) {
+            yarnRMHostname = configs.get(YarnConfig.YARN_RESOURCE_MANAGER_HOSTNAME_KEY);
         }
-        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.YARN_RESOURCE_MANAGER_SCHEDULER_ADDRESS_KEY))) {
-            yarnRMSchedulerAddress = configs.get(HadoopUnitConfig.YARN_RESOURCE_MANAGER_SCHEDULER_ADDRESS_KEY);
+        if (StringUtils.isNotEmpty(configs.get(YarnConfig.YARN_RESOURCE_MANAGER_SCHEDULER_ADDRESS_KEY))) {
+            yarnRMSchedulerAddress = configs.get(YarnConfig.YARN_RESOURCE_MANAGER_SCHEDULER_ADDRESS_KEY);
         }
-        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.YARN_RESOURCE_MANAGER_RESOURCE_TRACKER_ADDRESS_KEY))) {
-            yarnRMResourceTrackerAddress = configs.get(HadoopUnitConfig.YARN_RESOURCE_MANAGER_RESOURCE_TRACKER_ADDRESS_KEY);
+        if (StringUtils.isNotEmpty(configs.get(YarnConfig.YARN_RESOURCE_MANAGER_RESOURCE_TRACKER_ADDRESS_KEY))) {
+            yarnRMResourceTrackerAddress = configs.get(YarnConfig.YARN_RESOURCE_MANAGER_RESOURCE_TRACKER_ADDRESS_KEY);
         }
-        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.YARN_RESOURCE_MANAGER_WEBAPP_ADDRESS_KEY))) {
-            yarnRMWebappAddress = configs.get(HadoopUnitConfig.YARN_RESOURCE_MANAGER_WEBAPP_ADDRESS_KEY);
+        if (StringUtils.isNotEmpty(configs.get(YarnConfig.YARN_RESOURCE_MANAGER_WEBAPP_ADDRESS_KEY))) {
+            yarnRMWebappAddress = configs.get(YarnConfig.YARN_RESOURCE_MANAGER_WEBAPP_ADDRESS_KEY);
         }
-        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.YARN_USE_IN_JVM_CONTAINER_EXECUTOR_KEY))) {
-            inJvmContainer = Boolean.parseBoolean(configs.get(HadoopUnitConfig.YARN_USE_IN_JVM_CONTAINER_EXECUTOR_KEY));
+        if (StringUtils.isNotEmpty(configs.get(YarnConfig.YARN_USE_IN_JVM_CONTAINER_EXECUTOR_KEY))) {
+            inJvmContainer = Boolean.parseBoolean(configs.get(YarnConfig.YARN_USE_IN_JVM_CONTAINER_EXECUTOR_KEY));
         }
     }
 

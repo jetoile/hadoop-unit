@@ -5,7 +5,7 @@
     <parent>
         <artifactId>sample</artifactId>
         <groupId>fr.jetoile.hadoop</groupId>
-        <version>2.11-SNAPSHOT</version>
+        <version>3.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -27,6 +27,12 @@
         <dependency>
             <groupId>io.confluent.ksql</groupId>
             <artifactId>ksql-rest-app</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>fr.jetoile.hadoop</groupId>
+            <artifactId>hadoop-unit-client-commons</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -67,23 +73,38 @@
                             <components>
                                 <componentArtifact implementation="fr.jetoile.hadoopunit.ComponentArtifact">
                                     <componentName>ZOOKEEPER</componentName>
-                                    <artifact>fr.jetoile.hadoop:hadoop-unit-zookeeper:${hadoop-unit.version}</artifact>
+                                    <artifactId>hadoop-unit-zookeeper</artifactId>
+                                    <groupId>fr.jetoile.hadoop</groupId>
+                                    <version>${hadoop-unit.version}</version>
+                                    <mainClass>fr.jetoile.hadoopunit.component.ZookeeperBootstrap</mainClass>
                                 </componentArtifact>
                                 <componentArtifact implementation="fr.jetoile.hadoopunit.ComponentArtifact">
                                     <componentName>CONFLUENT_KAFKA</componentName>
-                                    <artifact>fr.jetoile.hadoop:hadoop-unit-confluent:${hadoop-unit.version}</artifact>
+                                    <artifactId>hadoop-unit-confluent</artifactId>
+                                    <groupId>fr.jetoile.hadoop</groupId>
+                                    <version>${hadoop-unit.version}</version>
+                                    <mainClass>fr.jetoile.hadoopunit.component.ConfluentKafkaBootstrap</mainClass>
                                 </componentArtifact>
                                 <componentArtifact implementation="fr.jetoile.hadoopunit.ComponentArtifact">
                                     <componentName>CONFLUENT_SCHEMAREGISTRY</componentName>
-                                    <artifact>fr.jetoile.hadoop:hadoop-unit-confluent:${hadoop-unit.version}</artifact>
+                                    <artifactId>hadoop-unit-confluent</artifactId>
+                                    <groupId>fr.jetoile.hadoop</groupId>
+                                    <version>${hadoop-unit.version}</version>
+                                    <mainClass>fr.jetoile.hadoopunit.component.ConfluentSchemaRegistryBootstrap</mainClass>
                                 </componentArtifact>
                                 <componentArtifact implementation="fr.jetoile.hadoopunit.ComponentArtifact">
                                     <componentName>CONFLUENT_KSQL_REST</componentName>
-                                    <artifact>fr.jetoile.hadoop:hadoop-unit-confluent:${hadoop-unit.version}</artifact>
+                                    <artifactId>hadoop-unit-confluent</artifactId>
+                                    <groupId>fr.jetoile.hadoop</groupId>
+                                    <version>${hadoop-unit.version}</version>
+                                    <mainClass>fr.jetoile.hadoopunit.component.ConfluentKsqlRestBootstrap</mainClass>
                                 </componentArtifact>
                                 <componentArtifact implementation="fr.jetoile.hadoopunit.ComponentArtifact">
                                     <componentName>CONFLUENT_KAFKA_REST</componentName>
-                                    <artifact>fr.jetoile.hadoop:hadoop-unit-confluent-rest:${hadoop-unit.version}</artifact>
+                                    <artifactId>hadoop-unit-confluent-rest</artifactId>
+                                    <groupId>fr.jetoile.hadoop</groupId>
+                                    <version>${hadoop-unit.version}</version>
+                                    <mainClass>fr.jetoile.hadoopunit.component.ConfluentKafkaRestBootstrap</mainClass>
                                 </componentArtifact>
                             </components>
 

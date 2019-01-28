@@ -5,7 +5,7 @@
     <parent>
         <artifactId>sample</artifactId>
         <groupId>fr.jetoile.hadoop</groupId>
-        <version>2.11-SNAPSHOT</version>
+        <version>3.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -61,6 +61,12 @@
             <artifactId>hadoop-unit-client-hive</artifactId>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>fr.jetoile.hadoop</groupId>
+            <artifactId>hadoop-unit-client-commons</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
 
@@ -99,20 +105,28 @@
                             <components>
                                 <componentArtifact implementation="fr.jetoile.hadoopunit.ComponentArtifact">
                                     <componentName>HDFS</componentName>
-                                    <artifact>fr.jetoile.hadoop:hadoop-unit-hdfs:${hadoop-unit.version}</artifact>
-                                </componentArtifact>
+                                    <artifactId>hadoop-unit-hdfs</artifactId>
+                                    <groupId>fr.jetoile.hadoop</groupId>
+                                    <version>${hadoop-unit.version}</version>
+                                    <mainClass>fr.jetoile.hadoopunit.component.HdfsBootstrap</mainClass></componentArtifact>
                                 <componentArtifact implementation="fr.jetoile.hadoopunit.ComponentArtifact">
                                     <componentName>ZOOKEEPER</componentName>
-                                    <artifact>fr.jetoile.hadoop:hadoop-unit-zookeeper:${hadoop-unit.version}</artifact>
-                                </componentArtifact>
+                                    <artifactId>hadoop-unit-zookeeper</artifactId>
+                                    <groupId>fr.jetoile.hadoop</groupId>
+                                    <version>${hadoop-unit.version}</version>
+                                    <mainClass>fr.jetoile.hadoopunit.component.ZookeeperBootstrap</mainClass></componentArtifact>
                                 <componentArtifact implementation="fr.jetoile.hadoopunit.ComponentArtifact">
                                     <componentName>HIVEMETA</componentName>
-                                    <artifact>fr.jetoile.hadoop:hadoop-unit-hive:${hadoop-unit.version}</artifact>
-                                </componentArtifact>
+                                    <artifactId>hadoop-unit-hive</artifactId>
+                                    <groupId>fr.jetoile.hadoop</groupId>
+                                    <version>${hadoop-unit.version}</version>
+                                    <mainClass>fr.jetoile.hadoopunit.component.HiveMetastoreBootstrap</mainClass></componentArtifact>
                                 <componentArtifact implementation="fr.jetoile.hadoopunit.ComponentArtifact">
                                     <componentName>HIVESERVER2</componentName>
-                                    <artifact>fr.jetoile.hadoop:hadoop-unit-hive:${hadoop-unit.version}</artifact>
-                                </componentArtifact>
+                                    <artifactId>hadoop-unit-hive</artifactId>
+                                    <groupId>fr.jetoile.hadoop</groupId>
+                                    <version>${hadoop-unit.version}</version>
+                                    <mainClass>fr.jetoile.hadoopunit.component.HiveServer2Bootstrap</mainClass></componentArtifact>
                             </components>
 
                         </configuration>

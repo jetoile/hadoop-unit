@@ -16,15 +16,10 @@ package fr.jetoile.hadoopunit.component;
 import com.github.sakserv.minicluster.impl.HiveLocalMetaStore;
 import com.github.sakserv.minicluster.util.FileUtils;
 import com.github.sakserv.minicluster.util.WindowsLibsUtils;
-import fr.jetoile.hadoopunit.Component;
-import fr.jetoile.hadoopunit.HadoopBootstrap;
-import fr.jetoile.hadoopunit.HadoopUnitConfig;
+import fr.jetoile.hadoopunit.ComponentMetadata;
 import fr.jetoile.hadoopunit.HadoopUtils;
 import fr.jetoile.hadoopunit.exception.BootstrapException;
-import fr.jetoile.hadoopunit.exception.NotFoundServiceException;
 import org.apache.commons.configuration.Configuration;
-import org.apache.commons.configuration.ConfigurationException;
-import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.lang.StringUtils;
 import org.apache.hadoop.hive.conf.HiveConf;
 import org.slf4j.Logger;
@@ -34,8 +29,6 @@ import java.net.URL;
 import java.util.Map;
 
 public class HiveMetastoreBootstrap implements BootstrapHadoop {
-    final public static String NAME = Component.HIVEMETA.name();
-
     final static private Logger LOGGER = LoggerFactory.getLogger(HiveMetastoreBootstrap.class);
 
     private HiveLocalMetaStore hiveLocalMetaStore;
@@ -72,8 +65,8 @@ public class HiveMetastoreBootstrap implements BootstrapHadoop {
     }
 
     @Override
-    public String getName() {
-        return NAME;
+    public ComponentMetadata getMetadata() {
+        return new HiveMetastoreMetadata();
     }
 
     @Override
@@ -82,29 +75,29 @@ public class HiveMetastoreBootstrap implements BootstrapHadoop {
     }
 
     private void loadConfig() throws BootstrapException {
-        host = configuration.getString(HadoopUnitConfig.HIVE_METASTORE_HOSTNAME_KEY);
-        port = configuration.getInt(HadoopUnitConfig.HIVE_METASTORE_PORT_KEY);
-        derbyDirectory = configuration.getString(HadoopUnitConfig.HIVE_METASTORE_DERBY_DB_DIR_KEY);
-        scratchDirectory = configuration.getString(HadoopUnitConfig.HIVE_SCRATCH_DIR_KEY);
-        warehouseDirectory = configuration.getString(HadoopUnitConfig.HIVE_WAREHOUSE_DIR_KEY);
+        host = configuration.getString(HiveConfig.HIVE_METASTORE_HOSTNAME_KEY);
+        port = configuration.getInt(HiveConfig.HIVE_METASTORE_PORT_KEY);
+        derbyDirectory = configuration.getString(HiveConfig.HIVE_METASTORE_DERBY_DB_DIR_KEY);
+        scratchDirectory = configuration.getString(HiveConfig.HIVE_SCRATCH_DIR_KEY);
+        warehouseDirectory = configuration.getString(HiveConfig.HIVE_WAREHOUSE_DIR_KEY);
     }
 
     @Override
     public void loadConfig(Map<String, String> configs) {
-        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.HIVE_METASTORE_HOSTNAME_KEY))) {
-            host = configs.get(HadoopUnitConfig.HIVE_METASTORE_HOSTNAME_KEY);
+        if (StringUtils.isNotEmpty(configs.get(HiveConfig.HIVE_METASTORE_HOSTNAME_KEY))) {
+            host = configs.get(HiveConfig.HIVE_METASTORE_HOSTNAME_KEY);
         }
-        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.HIVE_METASTORE_PORT_KEY))) {
-            port = Integer.parseInt(configs.get(HadoopUnitConfig.HIVE_METASTORE_PORT_KEY));
+        if (StringUtils.isNotEmpty(configs.get(HiveConfig.HIVE_METASTORE_PORT_KEY))) {
+            port = Integer.parseInt(configs.get(HiveConfig.HIVE_METASTORE_PORT_KEY));
         }
-        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.HIVE_METASTORE_DERBY_DB_DIR_KEY))) {
-            derbyDirectory = configs.get(HadoopUnitConfig.HIVE_METASTORE_DERBY_DB_DIR_KEY);
+        if (StringUtils.isNotEmpty(configs.get(HiveConfig.HIVE_METASTORE_DERBY_DB_DIR_KEY))) {
+            derbyDirectory = configs.get(HiveConfig.HIVE_METASTORE_DERBY_DB_DIR_KEY);
         }
-        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.HIVE_SCRATCH_DIR_KEY))) {
-            scratchDirectory = configs.get(HadoopUnitConfig.HIVE_SCRATCH_DIR_KEY);
+        if (StringUtils.isNotEmpty(configs.get(HiveConfig.HIVE_SCRATCH_DIR_KEY))) {
+            scratchDirectory = configs.get(HiveConfig.HIVE_SCRATCH_DIR_KEY);
         }
-        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.HIVE_WAREHOUSE_DIR_KEY))) {
-            warehouseDirectory = configs.get(HadoopUnitConfig.HIVE_WAREHOUSE_DIR_KEY);
+        if (StringUtils.isNotEmpty(configs.get(HiveConfig.HIVE_WAREHOUSE_DIR_KEY))) {
+            warehouseDirectory = configs.get(HiveConfig.HIVE_WAREHOUSE_DIR_KEY);
         }
     }
 
@@ -130,7 +123,7 @@ public class HiveMetastoreBootstrap implements BootstrapHadoop {
         WindowsLibsUtils.setHadoopHome();
 
         HiveConf hiveConf = new HiveConf();
-        hiveConf.set("fs.defaultFS", "hdfs://" + configuration.getString(HadoopUnitConfig.HDFS_NAMENODE_HOST_KEY) + ":" + configuration.getInt(HadoopUnitConfig.HDFS_NAMENODE_PORT_KEY));
+        hiveConf.set("fs.defaultFS", "hdfs://" + configuration.getString(HdfsConfig.HDFS_NAMENODE_HOST_KEY) + ":" + configuration.getInt(HdfsConfig.HDFS_NAMENODE_PORT_KEY));
 //        hiveConf.set(HiveConf.ConfVars.HIVE_TXN_MANAGER.varname, "org.apache.hadoop.hive.ql.lockmgr.DbTxnManager");
 //        hiveConf.set(HiveConf.ConfVars.HIVE_COMPACTOR_INITIATOR_ON.varname, "true");
 //        hiveConf.set(HiveConf.ConfVars.HIVE_COMPACTOR_WORKER_THREADS.varname, "5");

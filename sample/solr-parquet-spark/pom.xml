@@ -5,7 +5,7 @@
     <parent>
         <artifactId>sample</artifactId>
         <groupId>fr.jetoile.hadoop</groupId>
-        <version>2.11-SNAPSHOT</version>
+        <version>3.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -66,6 +66,12 @@
             <scope>test</scope>
         </dependency>
 
+        <dependency>
+            <groupId>fr.jetoile.hadoop</groupId>
+            <artifactId>hadoop-unit-client-commons</artifactId>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
 
@@ -104,16 +110,24 @@
                             <components>
                                 <componentArtifact implementation="fr.jetoile.hadoopunit.ComponentArtifact">
                                     <componentName>ZOOKEEPER</componentName>
-                                    <artifact>fr.jetoile.hadoop:hadoop-unit-zookeeper:${hadoop-unit.version}</artifact>
+                                    <artifactId>hadoop-unit-zookeeper</artifactId>
+                                    <groupId>fr.jetoile.hadoop</groupId>
+                                    <version>${hadoop-unit.version}</version>
+                                    <mainClass>fr.jetoile.hadoopunit.component.ZookeeperBootstrap</mainClass>
                                 </componentArtifact>
                                 <componentArtifact implementation="fr.jetoile.hadoopunit.ComponentArtifact">
                                     <componentName>HDFS</componentName>
-                                    <artifact>fr.jetoile.hadoop:hadoop-unit-hdfs:${hadoop-unit.version}</artifact>
+                                    <artifactId>hadoop-unit-hdfs</artifactId>
+                                    <groupId>fr.jetoile.hadoop</groupId>
+                                    <version>${hadoop-unit.version}</version>
+                                    <mainClass>fr.jetoile.hadoopunit.component.HdfsBootstrap</mainClass>
                                 </componentArtifact>
                                 <componentArtifact implementation="fr.jetoile.hadoopunit.ComponentArtifact">
                                     <componentName>SOLRCLOUD</componentName>
-                                    <artifact>fr.jetoile.hadoop:hadoop-unit-solrcloud:${hadoop-unit.version}</artifact>
-                                    <properties>
+                                    <artifactId>hadoop-unit-solrcloud</artifactId>
+                                    <groupId>fr.jetoile.hadoop</groupId>
+                                    <version>${hadoop-unit.version}</version>
+                                    <mainClass>fr.jetoile.hadoopunit.component.SolrCloudBootstrap</mainClass><properties>
                                         <solr.dir>file://${project.basedir}/src/test/resources/solr</solr.dir>
                                     </properties>
                                 </componentArtifact>

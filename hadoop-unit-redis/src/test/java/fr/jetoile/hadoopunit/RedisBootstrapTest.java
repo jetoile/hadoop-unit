@@ -1,5 +1,6 @@
 package fr.jetoile.hadoopunit;
 
+import fr.jetoile.hadoopunit.component.RedisConfig;
 import fr.jetoile.hadoopunit.exception.BootstrapException;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
@@ -43,7 +44,7 @@ public class RedisBootstrapTest {
 
     @Test
     public void testStartAndStopServerMode() throws InterruptedException {
-        Jedis jedis = new Jedis("127.0.0.1", configuration.getInt(HadoopUnitConfig.REDIS_PORT_KEY));
+        Jedis jedis = new Jedis("127.0.0.1", configuration.getInt(RedisConfig.REDIS_PORT_KEY));
         Assert.assertNotNull(jedis.info());
         System.out.println(jedis.info());
         jedis.close();
@@ -52,7 +53,7 @@ public class RedisBootstrapTest {
     @Test
     @Ignore
     public void testStartAndStopClusterMode() throws InterruptedException {
-        Jedis jedis = new Jedis("127.0.0.1", configuration.getInt(HadoopUnitConfig.REDIS_PORT_KEY));
+        Jedis jedis = new Jedis("127.0.0.1", configuration.getInt(RedisConfig.REDIS_PORT_KEY));
 
         Assert.assertNotNull(jedis.clusterInfo());
         Assert.assertNotNull(jedis.clusterInfo().contains("cluster_state:ok"));
@@ -66,16 +67,16 @@ public class RedisBootstrapTest {
     @Ignore
     public void testStartAndStopMasterSlaveMode() throws InterruptedException {
 
-        Jedis master = new Jedis("127.0.0.1", configuration.getInt(HadoopUnitConfig.REDIS_PORT_KEY));
+        Jedis master = new Jedis("127.0.0.1", configuration.getInt(RedisConfig.REDIS_PORT_KEY));
         Assert.assertTrue(master.info("Replication").contains("role:master"));
         master.close();
 
-        configuration.getList(HadoopUnitConfig.REDIS_SLAVE_PORT_KEY).stream().forEach(s -> {
+        configuration.getList(RedisConfig.REDIS_SLAVE_PORT_KEY).stream().forEach(s -> {
 
             Jedis slave = new Jedis("127.0.0.1", Integer.valueOf((String) s));
             Assert.assertTrue(slave.info("Replication").contains("role:slave"));
             Assert.assertTrue(slave.info("Replication").contains("master_host:127.0.0.1"));
-            Assert.assertTrue(slave.info("Replication").contains("master_port:" + configuration.getInt(HadoopUnitConfig.REDIS_PORT_KEY)));
+            Assert.assertTrue(slave.info("Replication").contains("master_port:" + configuration.getInt(RedisConfig.REDIS_PORT_KEY)));
             slave.close();
         });
     }
@@ -86,7 +87,7 @@ public class RedisBootstrapTest {
 
         Set<String> sentinels = new HashSet<>();
 
-        List<Object> sentinelPorts = configuration.getList(HadoopUnitConfig.REDIS_SENTINEL_PORT_KEY);
+        List<Object> sentinelPorts = configuration.getList(RedisConfig.REDIS_SENTINEL_PORT_KEY);
         sentinelPorts.stream().forEach(s -> {
             sentinels.add(new HostAndPort("127.0.0.1", Integer.valueOf((String) s)).toString());
         });

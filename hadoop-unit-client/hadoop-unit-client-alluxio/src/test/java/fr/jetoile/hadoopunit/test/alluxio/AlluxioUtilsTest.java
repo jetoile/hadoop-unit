@@ -67,15 +67,15 @@ public class AlluxioUtilsTest {
             throw new BootstrapException("bad config", e);
         }
 
-        String workDirectory = configuration.getString(HadoopUnitConfig.ALLUXIO_WORK_DIR);
-        String hostname = configuration.getString(HadoopUnitConfig.ALLUXIO_HOSTNAME);
-        int masterRpcPort = configuration.getInt(HadoopUnitConfig.ALLUXIO_MASTER_RPC_PORT);
-        int masterWebPort = configuration.getInt(HadoopUnitConfig.ALLUXIO_MASTER_WEB_PORT);
-        int proxyWebPort = configuration.getInt(HadoopUnitConfig.ALLUXIO_PROXY_WEB_PORT);
-        int workerRpcPort = configuration.getInt(HadoopUnitConfig.ALLUXIO_WORKER_RPC_PORT);
-        int workerDataPort = configuration.getInt(HadoopUnitConfig.ALLUXIO_WORKER_DATA_PORT);
-        int workerWebPort = configuration.getInt(HadoopUnitConfig.ALLUXIO_WORKER_WEB_PORT);
-        String webappDirectory = configuration.getString(HadoopUnitConfig.ALLUXIO_WEBAPP_DIRECTORY);
+        String workDirectory = configuration.getString(AlluxioUtils.ALLUXIO_WORK_DIR);
+        String hostname = configuration.getString(AlluxioUtils.ALLUXIO_HOSTNAME);
+        int masterRpcPort = configuration.getInt(AlluxioUtils.ALLUXIO_MASTER_RPC_PORT);
+        int masterWebPort = configuration.getInt(AlluxioUtils.ALLUXIO_MASTER_WEB_PORT);
+        int proxyWebPort = configuration.getInt(AlluxioUtils.ALLUXIO_PROXY_WEB_PORT);
+        int workerRpcPort = configuration.getInt(AlluxioUtils.ALLUXIO_WORKER_RPC_PORT);
+        int workerDataPort = configuration.getInt(AlluxioUtils.ALLUXIO_WORKER_DATA_PORT);
+        int workerWebPort = configuration.getInt(AlluxioUtils.ALLUXIO_WORKER_WEB_PORT);
+        String webappDirectory = configuration.getString(AlluxioUtils.ALLUXIO_WEBAPP_DIRECTORY);
 
         configMap.put(PropertyKey.WORK_DIR, workDirectory);
         configMap.put(PropertyKey.MASTER_HOSTNAME, hostname);

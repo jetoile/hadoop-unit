@@ -38,7 +38,7 @@ public static void tearDown() {
 }
 ```
 
-> **Note that because Hadoop Unit use, in this mode, the mecanism of maven dependency transitivity, if you just need, for example Hbase, you just need to indicate the dependency on the artifact ```hadoop-unit-hbase```. Automaticaly, Hadoop Unit will start Zookeeper and Hdfs under the hood and it will start then in the right order.**
+> **Note that because Hadoop Unit use, in this mode, the mecanism of maven dependency transitivity, if you just need, for example Hbase, you just need to indicate the dependency on the artifactId ```hadoop-unit-hbase```. Automaticaly, Hadoop Unit will start Zookeeper and Hdfs under the hood and it will start then in the right order.**
 
 
 It is also possible to indicate which components you need.
@@ -156,23 +156,23 @@ To use it, add into the pom project stuff like that:
                 <components>
                     <componentArtifact implementation="fr.jetoile.hadoopunit.ComponentArtifact">
                         <componentName>HDFS</componentName>
-                        <artifact>fr.jetoile.hadoop:hadoop-unit-hdfs:${hadoop-unit.version}</artifact>
+                        <artifactId>fr.jetoile.hadoop:hadoop-unit-hdfs:${hadoop-unit.version}</artifactId>
                     </componentArtifact>
                     <componentArtifact implementation="fr.jetoile.hadoopunit.ComponentArtifact">
                         <componentName>ZOOKEEPER</componentName>
-                        <artifact>fr.jetoile.hadoop:hadoop-unit-zookeeper:${hadoop-unit.version}</artifact>
+                        <artifactId>fr.jetoile.hadoop:hadoop-unit-zookeeper:${hadoop-unit.version}</artifactId>
                     </componentArtifact>
                     <componentArtifact implementation="fr.jetoile.hadoopunit.ComponentArtifact">
                         <componentName>HIVEMETA</componentName>
-                        <artifact>fr.jetoile.hadoop:hadoop-unit-hive:${hadoop-unit.version}</artifact>
+                        <artifactId>fr.jetoile.hadoop:hadoop-unit-hive:${hadoop-unit.version}</artifactId>
                     </componentArtifact>
                     <componentArtifact implementation="fr.jetoile.hadoopunit.ComponentArtifact">
                         <componentName>HIVESERVER2</componentName>
-                        <artifact>fr.jetoile.hadoop:hadoop-unit-hive:${hadoop-unit.version}</artifact>
+                        <artifactId>fr.jetoile.hadoop:hadoop-unit-hive:${hadoop-unit.version}</artifactId>
                     </componentArtifact>
                     <componentArtifact implementation="fr.jetoile.hadoopunit.ComponentArtifact">
                         <componentName>SOLRCLOUD</componentName>
-                        <artifact>fr.jetoile.hadoop:hadoop-unit-solrcloud:${hadoop-unit.version}</artifact>
+                        <artifactId>fr.jetoile.hadoop:hadoop-unit-solrcloud:${hadoop-unit.version}</artifactId>
                         <properties>
                             <solr.dir>file://${project.basedir}/src/test/resources/solr</solr.dir>
                         </properties>
@@ -217,7 +217,7 @@ For solrcloud, it is mandatory to indicate where is the solr config:
 ```xml
     <componentArtifact implementation="fr.jetoile.hadoopunit.ComponentArtifact">
         <componentName>SOLRCLOUD</componentName>
-        <artifact>fr.jetoile.hadoop:hadoop-unit-solrcloud:${hadoop-unit.version}</artifact>
+        <artifactId>fr.jetoile.hadoop:hadoop-unit-solrcloud:${hadoop-unit.version}</artifactId>
         <properties>
             <solr.dir>file://${project.basedir}/src/test/resources/solr</solr.dir>
         </properties>
@@ -280,14 +280,14 @@ sample:
 ```xml
 <componentArtifact implementation="fr.jetoile.hadoopunit.ComponentArtifact">
     <componentName>ZOOKEEPER</componentName>
-    <artifact>fr.jetoile.hadoop:hadoop-unit-zookeeper:${hadoop-unit.version}</artifact>
+    <artifactId>fr.jetoile.hadoop:hadoop-unit-zookeeper:${hadoop-unit.version}</artifactId>
     <properties>
       <zookeeper.temp.dir>C:/<path where you can write>/tmp/embedded_zk</zookeeper.temp.dir>
     </properties>
 </componentArtifact>
 <componentArtifact implementation="fr.jetoile.hadoopunit.ComponentArtifact">
     <componentName>HDFS</componentName>
-    <artifact>fr.jetoile.hadoop:hadoop-unit-hdfs:${hadoop-unit.version}</artifact>
+    <artifactId>fr.jetoile.hadoop:hadoop-unit-hdfs:${hadoop-unit.version}</artifactId>
     <properties>
       <hdfs.temp.dir>C:/<path where you can write>/tmp/embedded_hdfs</hdfs.temp.dir>
     </properties>

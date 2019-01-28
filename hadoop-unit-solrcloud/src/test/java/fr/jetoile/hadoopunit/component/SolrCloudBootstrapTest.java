@@ -15,9 +15,8 @@
 package fr.jetoile.hadoopunit.component;
 
 
-import fr.jetoile.hadoopunit.Component;
-import fr.jetoile.hadoopunit.HadoopUnitConfig;
 import fr.jetoile.hadoopunit.HadoopBootstrap;
+import fr.jetoile.hadoopunit.HadoopUnitConfig;
 import fr.jetoile.hadoopunit.exception.BootstrapException;
 import fr.jetoile.hadoopunit.exception.NotFoundServiceException;
 import org.apache.commons.configuration.Configuration;
@@ -65,11 +64,11 @@ public class SolrCloudBootstrapTest {
     @Test
     public void solrCloudShouldStart() throws IOException, SolrServerException, KeeperException, InterruptedException, NotFoundServiceException {
 
-        String collectionName = configuration.getString(HadoopUnitConfig.SOLR_COLLECTION_NAME);
+        String collectionName = configuration.getString(SolrCloudConfig.SOLR_COLLECTION_NAME);
 
 //        String zkHostString = configuration.getString(Config.ZOOKEEPER_HOST_KEY) + ":" + configuration.getInt(Config.ZOOKEEPER_PORT_KEY);
 //        CloudSolrClient client = new CloudSolrClient(zkHostString);
-        CloudSolrClient client = ((SolrCloudBootstrap) HadoopBootstrap.INSTANCE.getService(Component.SOLRCLOUD)).getClient();
+        CloudSolrClient client = ((SolrCloudBootstrap) HadoopBootstrap.INSTANCE.getService("SOLRCLOUD")).getClient();
 
         for (int i = 0; i < 1000; ++i) {
             SolrInputDocument doc = new SolrInputDocument();

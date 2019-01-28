@@ -14,10 +14,7 @@
 package fr.jetoile.hadoopunit.component;
 
 import com.github.sakserv.minicluster.impl.ZookeeperLocalCluster;
-import fr.jetoile.hadoopunit.Component;
-import fr.jetoile.hadoopunit.HadoopBootstrap;
-import fr.jetoile.hadoopunit.HadoopUnitConfig;
-import fr.jetoile.hadoopunit.HadoopUtils;
+import fr.jetoile.hadoopunit.*;
 import fr.jetoile.hadoopunit.exception.BootstrapException;
 import fr.jetoile.hadoopunit.exception.NotFoundServiceException;
 import org.apache.commons.configuration.Configuration;
@@ -35,8 +32,6 @@ import java.nio.file.Paths;
 import java.util.Map;
 
 public class ZookeeperBootstrap implements Bootstrap {
-    final public static String NAME = Component.ZOOKEEPER.name();
-
     final private static Logger LOGGER = LoggerFactory.getLogger(ZookeeperBootstrap.class);
 
     private ZookeeperLocalCluster zookeeperLocalCluster;
@@ -72,8 +67,8 @@ public class ZookeeperBootstrap implements Bootstrap {
     }
 
     @Override
-    public String getName() {
-        return NAME;
+    public ComponentMetadata getMetadata() {
+        return new ZookeeperMetadata();
     }
 
     @Override
@@ -83,22 +78,22 @@ public class ZookeeperBootstrap implements Bootstrap {
     }
 
     private void loadConfig() throws BootstrapException {
-        port = configuration.getInt(HadoopUnitConfig.ZOOKEEPER_PORT_KEY);
-        localDir = configuration.getString(HadoopUnitConfig.ZOOKEEPER_TEMP_DIR_KEY);
-        host = configuration.getString(HadoopUnitConfig.ZOOKEEPER_HOST_KEY);
+        port = configuration.getInt(ZookeeperConfig.ZOOKEEPER_PORT_KEY);
+        localDir = configuration.getString(ZookeeperConfig.ZOOKEEPER_TEMP_DIR_KEY);
+        host = configuration.getString(ZookeeperConfig.ZOOKEEPER_HOST_KEY);
 
     }
 
     @Override
     public void loadConfig(Map<String, String> configs) {
-        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.ZOOKEEPER_PORT_KEY))) {
-            port = Integer.parseInt(configs.get(HadoopUnitConfig.ZOOKEEPER_PORT_KEY));
+        if (StringUtils.isNotEmpty(configs.get(ZookeeperConfig.ZOOKEEPER_PORT_KEY))) {
+            port = Integer.parseInt(configs.get(ZookeeperConfig.ZOOKEEPER_PORT_KEY));
         }
-        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.ZOOKEEPER_TEMP_DIR_KEY))) {
-            localDir = configs.get(HadoopUnitConfig.ZOOKEEPER_TEMP_DIR_KEY);
+        if (StringUtils.isNotEmpty(configs.get(ZookeeperConfig.ZOOKEEPER_TEMP_DIR_KEY))) {
+            localDir = configs.get(ZookeeperConfig.ZOOKEEPER_TEMP_DIR_KEY);
         }
-        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.ZOOKEEPER_HOST_KEY))) {
-            host = configs.get(HadoopUnitConfig.ZOOKEEPER_HOST_KEY);
+        if (StringUtils.isNotEmpty(configs.get(ZookeeperConfig.ZOOKEEPER_HOST_KEY))) {
+            host = configs.get(ZookeeperConfig.ZOOKEEPER_HOST_KEY);
         }
     }
 

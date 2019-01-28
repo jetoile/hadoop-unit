@@ -129,7 +129,7 @@ public class AlluxioBootstrapTest {
     private FileSystemMasterClient buildFsMasterClient() {
         MasterClientConfig masterClientConfig = new MasterClientConfig()
                 .withMasterInquireClient(new SingleMasterInquireClient(
-                        new InetSocketAddress(configuration.getString(HadoopUnitConfig.ALLUXIO_HOSTNAME), configuration.getInt(HadoopUnitConfig.ALLUXIO_MASTER_RPC_PORT)))
+                        new InetSocketAddress(configuration.getString(AlluxioConfig.ALLUXIO_HOSTNAME), configuration.getInt(AlluxioConfig.ALLUXIO_MASTER_RPC_PORT)))
                 );
 
         FileSystemMasterClient fsMasterClient = FileSystemMasterClient.Factory.create(masterClientConfig);

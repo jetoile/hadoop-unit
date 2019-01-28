@@ -33,7 +33,6 @@ import java.sql.*;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 
-@Ignore
 public class HiveServer2BootstrapTest {
 
     static private Logger LOGGER = LoggerFactory.getLogger(HiveServer2Bootstrap.class);
@@ -71,9 +70,9 @@ public class HiveServer2BootstrapTest {
         //
         // Get the connection
         Connection con = DriverManager.getConnection("jdbc:hive2://" +
-                        configuration.getString(HadoopUnitConfig.HIVE_SERVER2_HOSTNAME_KEY) + ":" +
-                        configuration.getInt(HadoopUnitConfig.HIVE_SERVER2_PORT_KEY) + "/" +
-                        configuration.getString(HadoopUnitConfig.HIVE_TEST_DATABASE_NAME_KEY),
+                        configuration.getString(HiveConfig.HIVE_SERVER2_HOSTNAME_KEY) + ":" +
+                        configuration.getInt(HiveConfig.HIVE_SERVER2_PORT_KEY) + "/" +
+                        configuration.getString(HiveConfig.HIVE_TEST_DATABASE_NAME_KEY),
                 "user",
                 "pass");
 
@@ -81,7 +80,7 @@ public class HiveServer2BootstrapTest {
         Statement stmt;
         try {
             String createDbDdl = "CREATE DATABASE IF NOT EXISTS " +
-                    configuration.getString(HadoopUnitConfig.HIVE_TEST_DATABASE_NAME_KEY);
+                    configuration.getString(HiveConfig.HIVE_TEST_DATABASE_NAME_KEY);
             stmt = con.createStatement();
             LOGGER.info("HIVE: Running Create Database Statement: {}", createDbDdl);
             stmt.execute(createDbDdl);
@@ -90,16 +89,16 @@ public class HiveServer2BootstrapTest {
         }
 
         // Drop the table incase it still exists
-        String dropDdl = "DROP TABLE " + configuration.getString(HadoopUnitConfig.HIVE_TEST_DATABASE_NAME_KEY) + "." +
-                configuration.getString(HadoopUnitConfig.HIVE_TEST_TABLE_NAME_KEY);
+        String dropDdl = "DROP TABLE " + configuration.getString(HiveConfig.HIVE_TEST_DATABASE_NAME_KEY) + "." +
+                configuration.getString(HiveConfig.HIVE_TEST_TABLE_NAME_KEY);
         stmt = con.createStatement();
         LOGGER.info("HIVE: Running Drop Table Statement: {}", dropDdl);
         stmt.execute(dropDdl);
 
         // Create the ORC table
         String createDdl = "CREATE TABLE IF NOT EXISTS " +
-                configuration.getString(HadoopUnitConfig.HIVE_TEST_DATABASE_NAME_KEY) + "." +
-                configuration.getString(HadoopUnitConfig.HIVE_TEST_TABLE_NAME_KEY) + " (id INT, msg STRING) " +
+                configuration.getString(HiveConfig.HIVE_TEST_DATABASE_NAME_KEY) + "." +
+                configuration.getString(HiveConfig.HIVE_TEST_TABLE_NAME_KEY) + " (id INT, msg STRING) " +
                 "PARTITIONED BY (dt STRING) " +
                 "CLUSTERED BY (id) INTO 16 BUCKETS " +
                 "STORED AS ORC tblproperties(\"orc.compress\"=\"NONE\")";
@@ -110,7 +109,7 @@ public class HiveServer2BootstrapTest {
         // Issue a describe on the new table and display the output
         LOGGER.info("HIVE: Validating Table was Created: ");
         ResultSet resultSet = stmt.executeQuery("DESCRIBE FORMATTED " +
-                configuration.getString(HadoopUnitConfig.HIVE_TEST_TABLE_NAME_KEY));
+                configuration.getString(HiveConfig.HIVE_TEST_TABLE_NAME_KEY));
         int count = 0;
         while (resultSet.next()) {
             ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
@@ -123,8 +122,8 @@ public class HiveServer2BootstrapTest {
         assertEquals(33, count);
 
         // Drop the table
-        dropDdl = "DROP TABLE " + configuration.getString(HadoopUnitConfig.HIVE_TEST_DATABASE_NAME_KEY) + "." +
-                configuration.getString(HadoopUnitConfig.HIVE_TEST_TABLE_NAME_KEY);
+        dropDdl = "DROP TABLE " + configuration.getString(HiveConfig.HIVE_TEST_DATABASE_NAME_KEY) + "." +
+                configuration.getString(HiveConfig.HIVE_TEST_TABLE_NAME_KEY);
         stmt = con.createStatement();
         LOGGER.info("HIVE: Running Drop Table Statement: {}", dropDdl);
         stmt.execute(dropDdl);

@@ -16,10 +16,7 @@ package fr.jetoile.hadoopunit.component;
 import com.github.sakserv.minicluster.impl.HiveLocalServer2;
 import com.github.sakserv.minicluster.util.FileUtils;
 import com.github.sakserv.minicluster.util.WindowsLibsUtils;
-import fr.jetoile.hadoopunit.Component;
-import fr.jetoile.hadoopunit.HadoopBootstrap;
-import fr.jetoile.hadoopunit.HadoopUnitConfig;
-import fr.jetoile.hadoopunit.HadoopUtils;
+import fr.jetoile.hadoopunit.*;
 import fr.jetoile.hadoopunit.exception.BootstrapException;
 import fr.jetoile.hadoopunit.exception.NotFoundServiceException;
 import org.apache.commons.configuration.Configuration;
@@ -34,8 +31,6 @@ import java.net.URL;
 import java.util.Map;
 
 public class HiveServer2Bootstrap implements BootstrapHadoop {
-    final public static String NAME = Component.HIVESERVER2.name();
-
     static final private Logger LOGGER = LoggerFactory.getLogger(HiveServer2Bootstrap.class);
 
     private HiveLocalServer2 hiveLocalServer2;
@@ -77,8 +72,8 @@ public class HiveServer2Bootstrap implements BootstrapHadoop {
     }
 
     @Override
-    public String getName() {
-        return NAME;
+    public ComponentMetadata getMetadata() {
+        return new HiveServer2Metadata();
     }
 
     @Override
@@ -87,45 +82,45 @@ public class HiveServer2Bootstrap implements BootstrapHadoop {
     }
 
     private void loadConfig() throws BootstrapException {
-        host = configuration.getString(HadoopUnitConfig.HIVE_SERVER2_HOSTNAME_KEY);
-        port = configuration.getInt(HadoopUnitConfig.HIVE_SERVER2_PORT_KEY);
-        hostMetastore = configuration.getString(HadoopUnitConfig.HIVE_METASTORE_HOSTNAME_KEY);
-        portMetastore = configuration.getInt(HadoopUnitConfig.HIVE_METASTORE_PORT_KEY);
-        derbyDirectory = configuration.getString(HadoopUnitConfig.HIVE_METASTORE_DERBY_DB_DIR_KEY);
-        scratchDirectory = configuration.getString(HadoopUnitConfig.HIVE_SCRATCH_DIR_KEY);
-        warehouseDirectory = configuration.getString(HadoopUnitConfig.HIVE_WAREHOUSE_DIR_KEY);
-        zookeeperConnectionString = configuration.getString(HadoopUnitConfig.ZOOKEEPER_HOST_KEY) + ":" + configuration.getInt(HadoopUnitConfig.ZOOKEEPER_PORT_KEY);
-        hdfsUri = "hdfs://" + configuration.getString(HadoopUnitConfig.HDFS_NAMENODE_HOST_KEY) + ":" + configuration.getString(HadoopUnitConfig.HDFS_NAMENODE_PORT_KEY);
+        host = configuration.getString(HiveConfig.HIVE_SERVER2_HOSTNAME_KEY);
+        port = configuration.getInt(HiveConfig.HIVE_SERVER2_PORT_KEY);
+        hostMetastore = configuration.getString(HiveConfig.HIVE_METASTORE_HOSTNAME_KEY);
+        portMetastore = configuration.getInt(HiveConfig.HIVE_METASTORE_PORT_KEY);
+        derbyDirectory = configuration.getString(HiveConfig.HIVE_METASTORE_DERBY_DB_DIR_KEY);
+        scratchDirectory = configuration.getString(HiveConfig.HIVE_SCRATCH_DIR_KEY);
+        warehouseDirectory = configuration.getString(HiveConfig.HIVE_WAREHOUSE_DIR_KEY);
+        zookeeperConnectionString = configuration.getString(ZookeeperConfig.ZOOKEEPER_HOST_KEY) + ":" + configuration.getInt(ZookeeperConfig.ZOOKEEPER_PORT_KEY);
+        hdfsUri = "hdfs://" + configuration.getString(HdfsConfig.HDFS_NAMENODE_HOST_KEY) + ":" + configuration.getString(HdfsConfig.HDFS_NAMENODE_PORT_KEY);
     }
 
     @Override
     public void loadConfig(Map<String, String> configs) {
-        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.HIVE_SERVER2_HOSTNAME_KEY))) {
-            host = configs.get(HadoopUnitConfig.HIVE_SERVER2_HOSTNAME_KEY);
+        if (StringUtils.isNotEmpty(configs.get(HiveConfig.HIVE_SERVER2_HOSTNAME_KEY))) {
+            host = configs.get(HiveConfig.HIVE_SERVER2_HOSTNAME_KEY);
         }
-        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.HIVE_SERVER2_PORT_KEY))) {
-            port = Integer.parseInt(configs.get(HadoopUnitConfig.HIVE_SERVER2_PORT_KEY));
+        if (StringUtils.isNotEmpty(configs.get(HiveConfig.HIVE_SERVER2_PORT_KEY))) {
+            port = Integer.parseInt(configs.get(HiveConfig.HIVE_SERVER2_PORT_KEY));
         }
-        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.HIVE_METASTORE_HOSTNAME_KEY))) {
-            hostMetastore = configs.get(HadoopUnitConfig.HIVE_METASTORE_HOSTNAME_KEY);
+        if (StringUtils.isNotEmpty(configs.get(HiveConfig.HIVE_METASTORE_HOSTNAME_KEY))) {
+            hostMetastore = configs.get(HiveConfig.HIVE_METASTORE_HOSTNAME_KEY);
         }
-        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.HIVE_METASTORE_PORT_KEY))) {
-            portMetastore = Integer.parseInt(configs.get(HadoopUnitConfig.HIVE_METASTORE_PORT_KEY));
+        if (StringUtils.isNotEmpty(configs.get(HiveConfig.HIVE_METASTORE_PORT_KEY))) {
+            portMetastore = Integer.parseInt(configs.get(HiveConfig.HIVE_METASTORE_PORT_KEY));
         }
-        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.HIVE_METASTORE_DERBY_DB_DIR_KEY))) {
-            derbyDirectory = configs.get(HadoopUnitConfig.HIVE_METASTORE_DERBY_DB_DIR_KEY);
+        if (StringUtils.isNotEmpty(configs.get(HiveConfig.HIVE_METASTORE_DERBY_DB_DIR_KEY))) {
+            derbyDirectory = configs.get(HiveConfig.HIVE_METASTORE_DERBY_DB_DIR_KEY);
         }
-        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.HIVE_SCRATCH_DIR_KEY))) {
-            scratchDirectory = configs.get(HadoopUnitConfig.HIVE_SCRATCH_DIR_KEY);
+        if (StringUtils.isNotEmpty(configs.get(HiveConfig.HIVE_SCRATCH_DIR_KEY))) {
+            scratchDirectory = configs.get(HiveConfig.HIVE_SCRATCH_DIR_KEY);
         }
-        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.HIVE_WAREHOUSE_DIR_KEY))) {
-            warehouseDirectory = configs.get(HadoopUnitConfig.HIVE_WAREHOUSE_DIR_KEY);
+        if (StringUtils.isNotEmpty(configs.get(HiveConfig.HIVE_WAREHOUSE_DIR_KEY))) {
+            warehouseDirectory = configs.get(HiveConfig.HIVE_WAREHOUSE_DIR_KEY);
         }
-        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.ZOOKEEPER_HOST_KEY)) && StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.ZOOKEEPER_PORT_KEY))) {
-            zookeeperConnectionString = configs.get(HadoopUnitConfig.ZOOKEEPER_HOST_KEY) + ":" + configs.get(HadoopUnitConfig.ZOOKEEPER_PORT_KEY);
+        if (StringUtils.isNotEmpty(configs.get(ZookeeperConfig.ZOOKEEPER_HOST_KEY)) && StringUtils.isNotEmpty(configs.get(ZookeeperConfig.ZOOKEEPER_PORT_KEY))) {
+            zookeeperConnectionString = configs.get(ZookeeperConfig.ZOOKEEPER_HOST_KEY) + ":" + configs.get(ZookeeperConfig.ZOOKEEPER_PORT_KEY);
         }
-        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.HDFS_NAMENODE_HOST_KEY)) && StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.HDFS_NAMENODE_PORT_KEY))) {
-            hdfsUri = "hdfs://" + configs.get(HadoopUnitConfig.HDFS_NAMENODE_HOST_KEY) + ":" + Integer.parseInt(configs.get(HadoopUnitConfig.HDFS_NAMENODE_PORT_KEY));
+        if (StringUtils.isNotEmpty(configs.get(HdfsConfig.HDFS_NAMENODE_HOST_KEY)) && StringUtils.isNotEmpty(configs.get(HdfsConfig.HDFS_NAMENODE_PORT_KEY))) {
+            hdfsUri = "hdfs://" + configs.get(HdfsConfig.HDFS_NAMENODE_HOST_KEY) + ":" + Integer.parseInt(configs.get(HdfsConfig.HDFS_NAMENODE_PORT_KEY));
         }
     }
 

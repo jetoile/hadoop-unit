@@ -2,6 +2,7 @@ package fr.jetoile.hadoopunit.redis;
 
 import fr.jetoile.hadoopunit.HadoopBootstrap;
 import fr.jetoile.hadoopunit.HadoopUnitConfig;
+import fr.jetoile.hadoopunit.component.RedisConfig;
 import fr.jetoile.hadoopunit.exception.BootstrapException;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
@@ -29,9 +30,9 @@ public class EmbeddedRedisTest {
 
     @Test
     public void redis_installation_should_succeed() throws IOException, InterruptedException {
-        String version = configuration.getString(HadoopUnitConfig.REDIS_VERSION_KEY);
-        String downloadUrl = configuration.getString(HadoopUnitConfig.REDIS_DOWNLOAD_URL_KEY);
-        String tmpDir = configuration.getString(HadoopUnitConfig.REDIS_TMP_DIR_KEY);
+        String version = configuration.getString(RedisConfig.REDIS_VERSION_KEY);
+        String downloadUrl = configuration.getString(RedisConfig.REDIS_DOWNLOAD_URL_KEY);
+        String tmpDir = configuration.getString(RedisConfig.REDIS_TMP_DIR_KEY);
 
         EmbeddedRedisInstaller.builder()
                 .version(version)

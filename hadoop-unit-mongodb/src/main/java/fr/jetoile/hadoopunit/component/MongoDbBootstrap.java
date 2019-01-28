@@ -15,13 +15,11 @@
 package fr.jetoile.hadoopunit.component;
 
 import com.github.sakserv.minicluster.impl.MongodbLocalServer;
-import fr.jetoile.hadoopunit.Component;
+import fr.jetoile.hadoopunit.ComponentMetadata;
 import fr.jetoile.hadoopunit.HadoopUnitConfig;
 import fr.jetoile.hadoopunit.HadoopUtils;
 import fr.jetoile.hadoopunit.exception.BootstrapException;
 import org.apache.commons.configuration.Configuration;
-import org.apache.commons.configuration.ConfigurationException;
-import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,8 +28,6 @@ import java.net.URL;
 import java.util.Map;
 
 public class MongoDbBootstrap implements Bootstrap {
-    final public static String NAME = Component.MONGODB.name();
-
     static final private Logger LOGGER = LoggerFactory.getLogger(MongoDbBootstrap.class);
 
     private State state = State.STOPPED;
@@ -67,8 +63,8 @@ public class MongoDbBootstrap implements Bootstrap {
 
 
     @Override
-    public String getName() {
-        return NAME;
+    public ComponentMetadata getMetadata() {
+        return new MongoDbMetadata();
     }
 
     @Override
@@ -77,18 +73,18 @@ public class MongoDbBootstrap implements Bootstrap {
                 "\n \t\t\t port:" + port;
     }
 
-    private void loadConfig() throws BootstrapException {
-        port = configuration.getInt(HadoopUnitConfig.MONGO_PORT_KEY);
-        ip = configuration.getString(HadoopUnitConfig.MONGO_IP_KEY);
+    private void loadConfig() {
+        port = configuration.getInt(MongoDbConfig.MONGO_PORT_KEY);
+        ip = configuration.getString(MongoDbConfig.MONGO_IP_KEY);
     }
 
     @Override
     public void loadConfig(Map<String, String> configs) {
-        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.MONGO_PORT_KEY))) {
-            port = Integer.parseInt(configs.get(HadoopUnitConfig.MONGO_PORT_KEY));
+        if (StringUtils.isNotEmpty(configs.get(MongoDbConfig.MONGO_PORT_KEY))) {
+            port = Integer.parseInt(configs.get(MongoDbConfig.MONGO_PORT_KEY));
         }
-        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.MONGO_IP_KEY))) {
-            ip = configs.get(HadoopUnitConfig.MONGO_IP_KEY);
+        if (StringUtils.isNotEmpty(configs.get(MongoDbConfig.MONGO_IP_KEY))) {
+            ip = configs.get(MongoDbConfig.MONGO_IP_KEY);
         }
     }
 

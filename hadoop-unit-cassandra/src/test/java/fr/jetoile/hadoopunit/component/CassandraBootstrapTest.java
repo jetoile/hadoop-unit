@@ -18,9 +18,8 @@ import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
-import fr.jetoile.hadoopunit.Component;
-import fr.jetoile.hadoopunit.HadoopUnitConfig;
 import fr.jetoile.hadoopunit.HadoopBootstrap;
+import fr.jetoile.hadoopunit.HadoopUnitConfig;
 import fr.jetoile.hadoopunit.exception.BootstrapException;
 import fr.jetoile.hadoopunit.exception.NotFoundServiceException;
 import org.apache.commons.configuration.Configuration;
@@ -33,7 +32,6 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 public class CassandraBootstrapTest {
 
@@ -61,7 +59,7 @@ public class CassandraBootstrapTest {
 
     @Before
     public void setUp() throws NotFoundServiceException {
-        Bootstrap cassandra = HadoopBootstrap.INSTANCE.getService(Component.CASSANDRA);
+        Bootstrap cassandra = HadoopBootstrap.INSTANCE.getService("CASSANDRA");
         Session session = ((CassandraBootstrap) cassandra).getCassandraSession();
 
         session.execute("create KEYSPACE test WITH replication = {'class': 'SimpleStrategy' , 'replication_factor': '1' }");
@@ -71,7 +69,7 @@ public class CassandraBootstrapTest {
 
     @After
     public void teardown() throws NotFoundServiceException {
-        Bootstrap cassandra = HadoopBootstrap.INSTANCE.getService(Component.CASSANDRA);
+        Bootstrap cassandra = HadoopBootstrap.INSTANCE.getService("CASSANDRA");
         Session session = ((CassandraBootstrap) cassandra).getCassandraSession();
 
         session.execute("drop table test.test");
@@ -80,7 +78,7 @@ public class CassandraBootstrapTest {
 
     @Test
     public void cassandraShouldStart() throws NotFoundServiceException {
-        Bootstrap cassandra = HadoopBootstrap.INSTANCE.getService(Component.CASSANDRA);
+        Bootstrap cassandra = HadoopBootstrap.INSTANCE.getService("CASSANDRA");
         Session session = ((CassandraBootstrap) cassandra).getCassandraSession();
 
         ResultSet execute = session.execute("select * from test.test");
@@ -94,7 +92,7 @@ public class CassandraBootstrapTest {
     @Test
     public void cassandraShouldStartWithRealDriver() throws NotFoundServiceException {
         Cluster cluster = Cluster.builder()
-                .addContactPoints(configuration.getString(HadoopUnitConfig.CASSANDRA_IP_KEY)).withPort(configuration.getInt(HadoopUnitConfig.CASSANDRA_PORT_KEY)).build();
+                .addContactPoints(configuration.getString(CassandraConfig.CASSANDRA_IP_KEY)).withPort(configuration.getInt(CassandraConfig.CASSANDRA_PORT_KEY)).build();
         Session session = cluster.connect();
 
         session.execute("insert into test.test(user, value) values('user2', 'value2')");

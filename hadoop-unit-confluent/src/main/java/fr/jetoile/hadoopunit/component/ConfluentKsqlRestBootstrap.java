@@ -14,7 +14,7 @@
 
 package fr.jetoile.hadoopunit.component;
 
-import fr.jetoile.hadoopunit.Component;
+import fr.jetoile.hadoopunit.ComponentMetadata;
 import fr.jetoile.hadoopunit.HadoopUtils;
 import fr.jetoile.hadoopunit.exception.BootstrapException;
 import io.confluent.ksql.rest.server.KsqlRestApplication;
@@ -33,12 +33,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
-import static fr.jetoile.hadoopunit.HadoopUnitConfig.*;
 import static io.confluent.support.metrics.BaseSupportConfig.CONFLUENT_SUPPORT_METRICS_ENDPOINT_SECURE_ENABLE_CONFIG;
 
 public class ConfluentKsqlRestBootstrap implements Bootstrap {
-    final public static String NAME = Component.CONFLUENT_KSQL_REST.name();
-
     static final private Logger LOGGER = LoggerFactory.getLogger(ConfluentKsqlRestBootstrap.class);
 
     private State state = State.STOPPED;
@@ -69,31 +66,31 @@ public class ConfluentKsqlRestBootstrap implements Bootstrap {
     }
 
     @Override
-    public String getName() {
-        return NAME;
+    public ComponentMetadata getMetadata() {
+        return new ConfluentKsqlRestMetadata();
     }
 
     @Override
     public String getProperties() {
-        return "\n \t\t\t ksql rest host:" + configuration.getString(CONFLUENT_KSQL_HOST_KEY) +
-                "\n \t\t\t ksql rest port:" + configuration.getString(CONFLUENT_KSQL_PORT_KEY);
+        return "\n \t\t\t ksql rest host:" + configuration.getString(ConfluentConfig.CONFLUENT_KSQL_HOST_KEY) +
+                "\n \t\t\t ksql rest port:" + configuration.getString(ConfluentConfig.CONFLUENT_KSQL_PORT_KEY);
     }
 
     public void loadConfig() {
-        ksqlConfig.put(KsqlRestConfig.LISTENERS_CONFIG, "http://" + configuration.getString(CONFLUENT_KSQL_HOST_KEY) + ":" + configuration.getString(CONFLUENT_KSQL_PORT_KEY));
+        ksqlConfig.put(KsqlRestConfig.LISTENERS_CONFIG, "http://" + configuration.getString(ConfluentConfig.CONFLUENT_KSQL_HOST_KEY) + ":" + configuration.getString(ConfluentConfig.CONFLUENT_KSQL_PORT_KEY));
 //    props.put(KsqlRestConfig.PORT_CONFIG, String.valueOf(portNumber));
-        ksqlConfig.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, configuration.getString(CONFLUENT_KAFKA_HOST_KEY) + ":" + configuration.getString(CONFLUENT_KAFKA_PORT_KEY));
+        ksqlConfig.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, configuration.getString(ConfluentConfig.CONFLUENT_KAFKA_HOST_KEY) + ":" + configuration.getString(ConfluentConfig.CONFLUENT_KAFKA_PORT_KEY));
         ksqlConfig.put(StreamsConfig.APPLICATION_ID_CONFIG, "ksql_config_test");
 //        ksqlConfig.put(KsqlRestConfig.COMMAND_TOPIC_SUFFIX, "commands");
     }
 
     @Override
     public void loadConfig(Map<String, String> configs) {
-        if (StringUtils.isNotEmpty(configs.get(CONFLUENT_KSQL_HOST_KEY)) && StringUtils.isNotEmpty(configs.get(CONFLUENT_KSQL_PORT_KEY))) {
-            ksqlConfig.put(KsqlRestConfig.LISTENERS_CONFIG, "http://" + configs.get(CONFLUENT_KSQL_HOST_KEY) + ":" + configs.get(CONFLUENT_KSQL_PORT_KEY));
+        if (StringUtils.isNotEmpty(configs.get(ConfluentConfig.CONFLUENT_KSQL_HOST_KEY)) && StringUtils.isNotEmpty(configs.get(ConfluentConfig.CONFLUENT_KSQL_PORT_KEY))) {
+            ksqlConfig.put(KsqlRestConfig.LISTENERS_CONFIG, "http://" + configs.get(ConfluentConfig.CONFLUENT_KSQL_HOST_KEY) + ":" + configs.get(ConfluentConfig.CONFLUENT_KSQL_PORT_KEY));
         }
-        if (StringUtils.isNotEmpty(configs.get(CONFLUENT_KAFKA_HOST_KEY)) && StringUtils.isNotEmpty(configs.get(CONFLUENT_KAFKA_PORT_KEY))) {
-            ksqlConfig.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, configs.get(CONFLUENT_KAFKA_HOST_KEY) + ":" + configs.get(CONFLUENT_KAFKA_PORT_KEY));
+        if (StringUtils.isNotEmpty(configs.get(ConfluentConfig.CONFLUENT_KAFKA_HOST_KEY)) && StringUtils.isNotEmpty(configs.get(ConfluentConfig.CONFLUENT_KAFKA_PORT_KEY))) {
+            ksqlConfig.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, configs.get(ConfluentConfig.CONFLUENT_KAFKA_HOST_KEY) + ":" + configs.get(ConfluentConfig.CONFLUENT_KAFKA_PORT_KEY));
         }
     }
 

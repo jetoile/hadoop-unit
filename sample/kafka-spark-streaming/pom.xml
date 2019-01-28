@@ -5,7 +5,7 @@
     <parent>
         <artifactId>sample</artifactId>
         <groupId>fr.jetoile.hadoop</groupId>
-        <version>2.11-SNAPSHOT</version>
+        <version>3.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -71,6 +71,11 @@
             <version>${spark_2.11.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>fr.jetoile.hadoop</groupId>
+            <artifactId>hadoop-unit-client-commons</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
 
@@ -110,11 +115,17 @@
                             <components>
                                 <componentArtifact implementation="fr.jetoile.hadoopunit.ComponentArtifact">
                                     <componentName>ZOOKEEPER</componentName>
-                                    <artifact>fr.jetoile.hadoop:hadoop-unit-zookeeper:${hadoop-unit.version}</artifact>
+                                    <artifactId>hadoop-unit-zookeeper</artifactId>
+                                    <groupId>fr.jetoile.hadoop</groupId>
+                                    <version>${hadoop-unit.version}</version>
+                                    <mainClass>fr.jetoile.hadoopunit.component.ZookeeperBootstrap</mainClass>
                                 </componentArtifact>
                                 <componentArtifact implementation="fr.jetoile.hadoopunit.ComponentArtifact">
                                     <componentName>KAFKA</componentName>
-                                    <artifact>fr.jetoile.hadoop:hadoop-unit-kafka:${hadoop-unit.version}</artifact>
+                                    <artifactId>hadoop-unit-kafka</artifactId>
+                                    <groupId>fr.jetoile.hadoop</groupId>
+                                    <version>${hadoop-unit.version}</version>
+                                    <mainClass>fr.jetoile.hadoopunit.component.KafkaBootstrap</mainClass>
                                 </componentArtifact>
                             </components>
 

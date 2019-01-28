@@ -13,10 +13,7 @@
  */
 package fr.jetoile.hadoopunit.component;
 
-import fr.jetoile.hadoopunit.Component;
-import fr.jetoile.hadoopunit.HadoopBootstrap;
-import fr.jetoile.hadoopunit.HadoopUnitConfig;
-import fr.jetoile.hadoopunit.HadoopUtils;
+import fr.jetoile.hadoopunit.*;
 import fr.jetoile.hadoopunit.exception.BootstrapException;
 import fr.jetoile.hadoopunit.exception.NotFoundServiceException;
 import org.apache.commons.configuration.Configuration;
@@ -38,8 +35,6 @@ import java.nio.file.Paths;
 import java.util.Map;
 
 public class SolrBootstrap implements Bootstrap {
-    final public static String NAME = Component.SOLR.name();
-
     public static final String SOLR_DIR_KEY = "solr.dir";
     public static final String SOLR_COLLECTION_INTERNAL_NAME = "solr.collection.internal.name";
     final private Logger LOGGER = LoggerFactory.getLogger(SolrBootstrap.class);
@@ -75,8 +70,8 @@ public class SolrBootstrap implements Bootstrap {
     }
 
     @Override
-    public String getName() {
-        return NAME;
+    public ComponentMetadata getMetadata() {
+        return new SolrMetadata();
     }
 
     @Override
@@ -91,8 +86,8 @@ public class SolrBootstrap implements Bootstrap {
 
     @Override
     public void loadConfig(Map<String, String> configs) {
-        if (StringUtils.isNotEmpty(configs.get(HadoopUnitConfig.SOLR_DIR_KEY))) {
-            solrDirectory = configs.get(HadoopUnitConfig.SOLR_DIR_KEY);
+        if (StringUtils.isNotEmpty(configs.get(SolrConfig.SOLR_DIR_KEY))) {
+            solrDirectory = configs.get(SolrConfig.SOLR_DIR_KEY);
         }
         if (StringUtils.isNotEmpty(configs.get(SOLR_COLLECTION_INTERNAL_NAME))) {
             solrCollectionInternalName = configs.get(SOLR_COLLECTION_INTERNAL_NAME);

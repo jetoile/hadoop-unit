@@ -15,11 +15,10 @@
 package fr.jetoile.hadoopunit.component;
 
 
-import fr.jetoile.hadoopunit.Component;
-import fr.jetoile.hadoopunit.HadoopUnitConfig;
 import fr.jetoile.hadoopunit.HadoopBootstrap;
-import fr.jetoile.hadoopunit.exception.BootstrapException;
+import fr.jetoile.hadoopunit.HadoopUnitConfig;
 import fr.jetoile.hadoopunit.Utils;
+import fr.jetoile.hadoopunit.exception.BootstrapException;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
@@ -28,7 +27,9 @@ import org.apache.hadoop.fs.FSDataOutputStream;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.fest.assertions.Assertions;
-import org.junit.*;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -67,25 +68,25 @@ public class HdfsBootstrapTest {
         Assertions.assertThat(Utils.available("127.0.0.1", 20112)).isFalse();
 
         // Write a file to HDFS containing the test string
-        FileSystem hdfsFsHandle = ((HdfsBootstrap)HadoopBootstrap.INSTANCE.getService(Component.HDFS)).getHdfsFileSystemHandle();
+        FileSystem hdfsFsHandle = ((HdfsBootstrap) HadoopBootstrap.INSTANCE.getService("HDFS")).getHdfsFileSystemHandle();
         FSDataOutputStream writer = hdfsFsHandle.create(
-                new Path(configuration.getString(HadoopUnitConfig.HDFS_TEST_FILE_KEY)));
-        writer.writeUTF(configuration.getString(HadoopUnitConfig.HDFS_TEST_STRING_KEY));
+                new Path(configuration.getString(HdfsConfig.HDFS_TEST_FILE_KEY)));
+        writer.writeUTF(configuration.getString(HdfsConfig.HDFS_TEST_STRING_KEY));
         writer.close();
 
         // Read the file and compare to test string
         FSDataInputStream reader = hdfsFsHandle.open(
-                new Path(configuration.getString(HadoopUnitConfig.HDFS_TEST_FILE_KEY)));
-        assertEquals(reader.readUTF(), configuration.getString(HadoopUnitConfig.HDFS_TEST_STRING_KEY));
+                new Path(configuration.getString(HdfsConfig.HDFS_TEST_FILE_KEY)));
+        assertEquals(reader.readUTF(), configuration.getString(HdfsConfig.HDFS_TEST_STRING_KEY));
         reader.close();
         hdfsFsHandle.close();
 
         URL url = new URL(
-                String.format( "http://localhost:%s/webhdfs/v1?op=GETHOMEDIRECTORY&user.name=guest",
-                        configuration.getInt( HadoopUnitConfig.HDFS_NAMENODE_HTTP_PORT_KEY ) ) );
+                String.format("http://localhost:%s/webhdfs/v1?op=GETHOMEDIRECTORY&user.name=guest",
+                        configuration.getInt(HdfsConfig.HDFS_NAMENODE_HTTP_PORT_KEY)));
         URLConnection connection = url.openConnection();
-        connection.setRequestProperty( "Accept-Charset", "UTF-8" );
-        BufferedReader response = new BufferedReader( new InputStreamReader( connection.getInputStream() ) );
+        connection.setRequestProperty("Accept-Charset", "UTF-8");
+        BufferedReader response = new BufferedReader(new InputStreamReader(connection.getInputStream()));
         String line = response.readLine();
         response.close();
         assertThat("{\"Path\":\"/user/guest\"}").isEqualTo(line);
