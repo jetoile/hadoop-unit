@@ -168,7 +168,7 @@
         <embedded-elasticsearch.version>2.5.0</embedded-elasticsearch.version>
 
         <metrics.version>3.1.2</metrics.version>
-        <achilles.version>5.3.1</achilles.version>
+        <achilles.version>6.0.1</achilles.version>
         <jackson-module-scala_2.11.version>2.6.5</jackson-module-scala_2.11.version>
 
         <neo4j.version>3.2.2</neo4j.version>
