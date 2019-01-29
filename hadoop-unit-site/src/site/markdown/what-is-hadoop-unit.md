@@ -18,12 +18,14 @@ Indeed, it is common to need the hadoop's ecosystem to make integration test lik
 It offers different kinds of utilization:
 
 * [a standalone mode](install-hadoop-unit-standalone.html)
-* [an integration with integration tests launched with maven](maven-usage.html)
+* [an integration with integration tests launched with maven - version 2.x](maven-usage_2.x.html)
+* [an integration with integration tests launched with maven - version 3.x](maven-usage_3.x.html)
 
 # Compatibility matrix
 
 | Hadoop Unit version  | Hadoop mini cluster version | HDP version |
 | ------------- | ------------- | ------------- |
+| 3.0 | 0.1.16 | HDP 2.6.5.0 |
 | 2.10 | 0.1.16 | HDP 2.6.5.0 |
 | 2.9 | 0.1.15 | HDP 2.6.3.0 |
 | 2.8 | 0.1.14 | HDP 2.6.2.0 |
@@ -40,6 +42,8 @@ It offers different kinds of utilization:
 | 1.3 | 0.1.6 | HDP 2.4.0.0 |
 | 1.2 | 0.1.5 | HDP 2.4.0.0 |
 
+
+__Warning__: Major releases are breaking compatibility
 
 # Available components
 

@@ -10,6 +10,7 @@ Welcome to the Hadoop Unit wiki!
 - HDFS
 		 host:localhost
 		 port:20112
+		 httpPort:50070
 - ZOOKEEPER
 		 host:127.0.0.1
 		 port:22010
@@ -57,14 +58,20 @@ Welcome to the Hadoop Unit wiki!
 * Installation
 
   * [Install the standalone Hadoop Unit mode](install-hadoop-unit-standalone.html)
-  * [Integrate Hadoop Unit in your maven project](maven-usage.html)
+  * [Integrate Hadoop Unit 2.x in your maven project](maven-usage_2.x.html)
+  * [Integrate Hadoop Unit 3.x in your maven project](maven-usage_3.x.html)
 
 * [Use CLI to operate Hadoop Unit Standalone](cli.html)
 
 * [How to write integration test with Hadoop Unit](howto-integrationtest.html)
+
+* [Why Hadoop Unit v3](why-hadoopunit-v3.html)
+
+* [Develop your own plugin](plugin-development.html)
 
 * [Build](howto-build.html)
 
 * [Focus](focus.html)
 
 * [Licence](licence.html)
+

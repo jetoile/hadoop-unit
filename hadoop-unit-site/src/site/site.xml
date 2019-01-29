@@ -40,10 +40,13 @@
             <item name="Why Hadoop Unit" href="why-hadoop-unit.html"/>
             <item name="Installation">
                 <item name="Install the standalone Hadoop Unit mode" href="install-hadoop-unit-standalone.html"/>
-                <item name="Integrate Hadoop Unit in your maven project" href="maven-usage.html"/>
+                <item name="Integrate Hadoop Unit 2.x in your maven project" href="maven-usage_2.x.html"/>
+                <item name="Integrate Hadoop Unit 3.x in your maven project" href="maven-usage_3.x.html"/>
             </item>
             <item name="Use CLI to operate Hadoop Unit Standalone" href="cli.html"/>
             <item name="How to write integration test with Hadoop Unit" href="howto-integrationtest.html"/>
+            <item name="Why Hadoop Unit v3" href="why-hadoopunit-v3.html"/>
+            <item name="Develop your own plugin" href="plugin-development.html"/>
             <item name="Howto build" href="howto-build.html"/>
             <item name="Focus" href="focus.html"/>
             <item name="Licence" href="licence.html"/>

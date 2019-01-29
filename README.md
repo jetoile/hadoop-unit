@@ -17,6 +17,7 @@ hadoop-unit-standalone:
 
 | Hadoop Unit version  | Hadoop mini cluster version | HDP version |
 | ------------- | ------------- | ------------- |
+| 3.0 | 0.1.16 | HDP 2.6.5.0 |
 | 2.10 | 0.1.16 | HDP 2.6.5.0 |
 | 2.9 | 0.1.15 | HDP 2.6.3.0 |
 | 2.8 | 0.1.14 | HDP 2.6.2.0 |
@@ -45,6 +46,10 @@ hadoop-unit-standalone:
 # [Use CLI to operate Hadoop Unit Standalone](http://blog.jetoile.fr/hadoop-unit/cli.html)
 
 # [How to write integration test with Hadoop Unit](http://blog.jetoile.fr/hadoop-unit/howto-integrationtest.html)
+
+# [Why Hadoop Unit v3](http://blog.jetoile.fr/hadoop-unit/why-hadoopunit-v3.html)
+
+# [Develop your own plugin](http://blog.jetoile.fr/hadoop-unit/plugin-development.html)
 
 # [Build](http://blog.jetoile.fr/hadoop-unit/howto-build.html)
 
