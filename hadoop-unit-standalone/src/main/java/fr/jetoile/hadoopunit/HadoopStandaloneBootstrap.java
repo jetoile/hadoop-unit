@@ -321,6 +321,10 @@ public class HadoopStandaloneBootstrap {
             return newRepositories();
         } else {
             List<Mirror> mirrors = getLocalSettings(mavenHome).getMirrors();
+            if (mirrors.isEmpty()) {
+                LOGGER.info("no mirror have been defined into maven's configuration. Is going to use {} from maven.central.repo", hadoopUnitConfiguration.getString("maven.central.repo"));
+                return newRepositories();
+            }
             List<RemoteRepository> remoteRepositories = mirrors.stream().map(mirror -> new RemoteRepository.Builder(mirror.getId(), "default", mirror.getUrl()).build()).collect(Collectors.toList());
             return remoteRepositories;
         }
