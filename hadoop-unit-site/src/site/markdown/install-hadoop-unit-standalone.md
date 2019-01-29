@@ -1,11 +1,12 @@
 # Install Hadoop Unit Standalone
 
-* Download it on [search.maven.org](http://search.maven.org/remotecontent?filepath=fr/jetoile/hadoop/hadoop-unit-standalone/2.10/hadoop-unit-standalone-2.10.tar.gz)
+* Download it on [search.maven.org - v2](http://search.maven.org/remotecontent?filepath=fr/jetoile/hadoop/hadoop-unit-standalone/2.10/hadoop-unit-standalone-2.10.tar.gz)
+* Download it on [search.maven.org - v3](http://search.maven.org/remotecontent?filepath=fr/jetoile/hadoop/hadoop-unit-standalone/3.1/hadoop-unit-standalone-3.1.tar.gz)
 * Unzip it
 * Edit file:
   * ```conf/hadoop.properties``` to activate the components you want
   
-  If maven is already installed and configured, you have no more file to modify
+  If maven is already installed and configured (M2_HOME or MAVEN_HOME), you have no more file to modify
   
   If maven is not installed, edit file:   
   * ```conf/hadoop-unit-default.properties``` to set your variables:

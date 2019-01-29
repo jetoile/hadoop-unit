@@ -51,6 +51,7 @@ Note : the plugin's jar has to be in your repository manager (or on maven centra
 
 
 Sample of `hadoop-unit-default.properties`:
+
 ```bash
 hdfs.artifactId=fr.jetoile.hadoop:hadoop-unit-hdfs:3.1
 hdfs.mainClass=fr.jetoile.hadoopunit.component.HdfsBootstrap
@@ -60,6 +61,7 @@ hdfs.metadataClass=fr.jetoile.hadoopunit.component.HdfsMetadata
 Add your plugin's name into the file `hadoop.properties`.
 
 Sample of `hadoop.properties`:
+
 ```bash
 <pluginName>=true
 ```
