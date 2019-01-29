@@ -26,16 +26,6 @@ public class ElasticSearchMetadata extends ComponentMetadata {
     }
 
     @Override
-    public String getBootstrapClass() {
-        return "fr.jetoile.hadoopunit.component.ElasticSearchBootstrap";
-    }
-
-    @Override
-    public String getArtifactKey() {
-        return "elasticsearch.artifact";
-    }
-
-    @Override
     public List<String> getDependencies() {
         return Collections.EMPTY_LIST;
     }

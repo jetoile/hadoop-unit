@@ -27,16 +27,6 @@ public class KnoxMetadata extends ComponentMetadata {
     }
 
     @Override
-    public String getBootstrapClass() {
-        return "fr.jetoile.hadoopunit.component.KnoxBootstrap";
-    }
-
-    @Override
-    public String getArtifactKey() {
-        return "knox.artifact";
-    }
-
-    @Override
     public List<String> getDependencies() {
         return Arrays.asList("HDFS", "HBASE");
     }

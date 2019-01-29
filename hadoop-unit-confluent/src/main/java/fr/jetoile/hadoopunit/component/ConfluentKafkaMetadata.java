@@ -27,16 +27,6 @@ public class ConfluentKafkaMetadata extends ComponentMetadata {
     }
 
     @Override
-    public String getBootstrapClass() {
-        return "fr.jetoile.hadoopunit.component.ConfluentKafkaBootstrap";
-    }
-
-    @Override
-    public String getArtifactKey() {
-        return "confluent.kafka.artifact";
-    }
-
-    @Override
     public List<String> getDependencies() {
         return Arrays.asList("ZOOKEEPER");
     }

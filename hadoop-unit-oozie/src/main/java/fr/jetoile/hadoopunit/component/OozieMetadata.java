@@ -27,16 +27,6 @@ public class OozieMetadata extends ComponentMetadata {
     }
 
     @Override
-    public String getBootstrapClass() {
-        return "fr.jetoile.hadoopunit.component.OozieBootstrap";
-    }
-
-    @Override
-    public String getArtifactKey() {
-        return "oozie.artifact";
-    }
-
-    @Override
     public List<String> getDependencies() {
         return Arrays.asList("HDFS", "YARN");
     }

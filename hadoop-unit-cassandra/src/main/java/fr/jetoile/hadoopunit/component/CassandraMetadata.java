@@ -26,16 +26,6 @@ public class CassandraMetadata extends ComponentMetadata {
     }
 
     @Override
-    public String getBootstrapClass() {
-        return "fr.jetoile.hadoopunit.component.CassandraBootstrap";
-    }
-
-    @Override
-    public String getArtifactKey() {
-        return "cassandra.artifact";
-    }
-
-    @Override
     public List<String> getDependencies() {
         return Collections.EMPTY_LIST;
     }

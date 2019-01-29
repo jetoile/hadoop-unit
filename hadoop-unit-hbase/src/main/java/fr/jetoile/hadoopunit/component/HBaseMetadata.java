@@ -28,16 +28,6 @@ public class HBaseMetadata extends ComponentMetadata {
     }
 
     @Override
-    public String getBootstrapClass() {
-        return "fr.jetoile.hadoopunit.component.HBaseBootstrap";
-    }
-
-    @Override
-    public String getArtifactKey() {
-        return "hbase.artifact";
-    }
-
-    @Override
     public List<String> getDependencies() {
         return Arrays.asList("HDFS", "ZOOKEEPER");
     }

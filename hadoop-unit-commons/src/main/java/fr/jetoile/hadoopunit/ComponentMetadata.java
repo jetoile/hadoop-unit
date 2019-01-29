@@ -17,15 +17,9 @@ import java.util.List;
 
 public abstract class ComponentMetadata {
     final String name = getName();
-    final String bootstrapClass = getBootstrapClass();
-    final String artifactKey = getArtifactKey();
     final List<String> dependencies = getDependencies();
 
     abstract public String getName();
-
-    abstract public String getBootstrapClass();
-
-    abstract public String getArtifactKey();
 
     abstract public List<String> getDependencies();
 }

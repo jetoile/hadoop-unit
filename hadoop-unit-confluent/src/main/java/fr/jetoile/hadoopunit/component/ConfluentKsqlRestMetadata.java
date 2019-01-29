@@ -27,16 +27,6 @@ public class ConfluentKsqlRestMetadata extends ComponentMetadata {
     }
 
     @Override
-    public String getBootstrapClass() {
-        return "fr.jetoile.hadoopunit.component.ConfluentKsqlRestBootstrap";
-    }
-
-    @Override
-    public String getArtifactKey() {
-        return "confluent.ksql_rest.artifact";
-    }
-
-    @Override
     public List<String> getDependencies() {
         return Arrays.asList("CONFLUENT_KAFKA");
     }

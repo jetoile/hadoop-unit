@@ -26,16 +26,6 @@ public class HdfsMetadata extends ComponentMetadata {
     }
 
     @Override
-    public String getBootstrapClass() {
-        return "fr.jetoile.hadoopunit.component.HdfsBootstrap";
-    }
-
-    @Override
-    public String getArtifactKey() {
-        return "hdfs.artifact";
-    }
-
-    @Override
     public List<String> getDependencies() {
         return Collections.EMPTY_LIST;
     }

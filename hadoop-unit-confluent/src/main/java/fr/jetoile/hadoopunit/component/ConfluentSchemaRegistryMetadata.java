@@ -27,16 +27,6 @@ public class ConfluentSchemaRegistryMetadata extends ComponentMetadata {
     }
 
     @Override
-    public String getBootstrapClass() {
-        return "fr.jetoile.hadoopunit.component.ConfluentSchemaRegistryBootstrap";
-    }
-
-    @Override
-    public String getArtifactKey() {
-        return "confluent.schemaregistry.artifact";
-    }
-
-    @Override
     public List<String> getDependencies() {
         return Arrays.asList("CONFLUENT_KAFKA");
     }

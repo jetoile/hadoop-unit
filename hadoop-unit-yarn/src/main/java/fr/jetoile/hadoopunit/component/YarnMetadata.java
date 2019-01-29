@@ -26,16 +26,6 @@ public class YarnMetadata extends ComponentMetadata {
     }
 
     @Override
-    public String getBootstrapClass() {
-        return "fr.jetoile.hadoopunit.component.YarnBootstrap";
-    }
-
-    @Override
-    public String getArtifactKey() {
-        return "yarn.artifact";
-    }
-
-    @Override
     public List<String> getDependencies() {
         return Collections.EMPTY_LIST;
     }

@@ -26,16 +26,6 @@ public class SolrMetadata extends ComponentMetadata {
     }
 
     @Override
-    public String getBootstrapClass() {
-        return "fr.jetoile.hadoopunit.component.SolrBootstrap";
-    }
-
-    @Override
-    public String getArtifactKey() {
-        return "solr.artifact";
-    }
-
-    @Override
     public List<String> getDependencies() {
         return Collections.EMPTY_LIST;
     }

@@ -27,16 +27,6 @@ public class AlluxioMetadata extends ComponentMetadata {
     }
 
     @Override
-    public String getBootstrapClass() {
-        return "fr.jetoile.hadoopunit.component.AlluxioBootstrap";
-    }
-
-    @Override
-    public String getArtifactKey() {
-        return "alluxio.artifact";
-    }
-
-    @Override
     public List<String> getDependencies() {
         return Arrays.asList("HDFS");
     }

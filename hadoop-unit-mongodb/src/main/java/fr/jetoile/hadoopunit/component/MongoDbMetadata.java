@@ -26,16 +26,6 @@ public class MongoDbMetadata extends ComponentMetadata {
     }
 
     @Override
-    public String getBootstrapClass() {
-        return "fr.jetoile.hadoopunit.component.MongoDbBootstrap";
-    }
-
-    @Override
-    public String getArtifactKey() {
-        return "mongodb.artifact";
-    }
-
-    @Override
     public List<String> getDependencies() {
         return Collections.EMPTY_LIST;
     }

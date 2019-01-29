@@ -26,16 +26,6 @@ public class Neo4jMetadata extends ComponentMetadata {
     }
 
     @Override
-    public String getBootstrapClass() {
-        return "fr.jetoile.hadoopunit.component.Neo4jBootstrap";
-    }
-
-    @Override
-    public String getArtifactKey() {
-        return "neo4j.artifact";
-    }
-
-    @Override
     public List<String> getDependencies() {
         return Collections.EMPTY_LIST;
     }

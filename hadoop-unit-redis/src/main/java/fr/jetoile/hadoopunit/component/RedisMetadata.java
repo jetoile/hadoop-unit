@@ -26,16 +26,6 @@ public class RedisMetadata extends ComponentMetadata {
     }
 
     @Override
-    public String getBootstrapClass() {
-        return "fr.jetoile.hadoopunit.component.RedisBootstrap";
-    }
-
-    @Override
-    public String getArtifactKey() {
-        return "redis.artifact";
-    }
-
-    @Override
     public List<String> getDependencies() {
         return Collections.EMPTY_LIST;
     }

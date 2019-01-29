@@ -27,16 +27,6 @@ public class HiveServer2Metadata extends ComponentMetadata {
     }
 
     @Override
-    public String getBootstrapClass() {
-        return "fr.jetoile.hadoopunit.component.HiveServer2Bootstrap";
-    }
-
-    @Override
-    public String getArtifactKey() {
-        return "hiveserver2.artifact";
-    }
-
-    @Override
     public List<String> getDependencies() {
         return Arrays.asList("ZOOKEEPER", "HDFS", "HIVEMETA");
     }

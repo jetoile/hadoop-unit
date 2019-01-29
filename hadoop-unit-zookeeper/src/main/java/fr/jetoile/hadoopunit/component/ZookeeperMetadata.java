@@ -27,16 +27,6 @@ public class ZookeeperMetadata extends ComponentMetadata {
     }
 
     @Override
-    public String getBootstrapClass() {
-        return "fr.jetoile.hadoopunit.component.ZookeeperBootstrap";
-    }
-
-    @Override
-    public String getArtifactKey() {
-        return "zookeeper.artifact";
-    }
-
-    @Override
     public List<String> getDependencies() {
         return Collections.emptyList();
     }
