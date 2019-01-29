@@ -6,7 +6,7 @@
     <groupId>fr.jetoile.hadoop</groupId>
     <artifactId>hadoop-unit</artifactId>
     <packaging>pom</packaging>
-    <version>3.0</version>
+    <version>3.1-SNAPSHOT</version>
     <name>hadoop-unit</name>
     <url>https://github.com/jetoile/hadoop-unit</url>
 
