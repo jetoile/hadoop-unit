@@ -140,15 +140,19 @@
 <li><tt>&lt;pluginName&gt;.metadataClass</tt> which must indicate the implementation of <tt>ComponentMetadata</tt></li>
 </ul>
 <p>Note : the plugin&#x2019;s jar has to be in your repository manager (or on maven central) as it will be searched and downloaded.</p>
-<p>Sample of <tt>hadoop-unit-default.properties</tt>: <tt>bash
-hdfs.artifactId=fr.jetoile.hadoop:hadoop-unit-hdfs:3.1
+<p>Sample of <tt>hadoop-unit-default.properties</tt>:</p>
+
+<div class="source">
+<div class="source"><pre class="prettyprint linenums">hdfs.artifactId=fr.jetoile.hadoop:hadoop-unit-hdfs:3.1
 hdfs.mainClass=fr.jetoile.hadoopunit.component.HdfsBootstrap
 hdfs.metadataClass=fr.jetoile.hadoopunit.component.HdfsMetadata
-</tt></p>
+</pre></div></div>
 <p>Add your plugin&#x2019;s name into the file <tt>hadoop.properties</tt>.</p>
-<p>Sample of <tt>hadoop.properties</tt>: <tt>bash
-&lt;pluginName&gt;=true
-</tt></p>
+<p>Sample of <tt>hadoop.properties</tt>:</p>
+
+<div class="source">
+<div class="source"><pre class="prettyprint linenums">&lt;pluginName&gt;=true
+</pre></div></div>
 <p>Note that your plugin name has to be in lowercase and that his name declared into the ComponentMetadata&#x2019;s class has to be in uppercase. </p>
 <h1>Add a plugin to Hadoop Unit&#x2019;s maven plugin</h1>
 <p>To add a plugin to Hadoop Unit&#x2019;s maven plugin, add your plugin into the <tt>configuration</tt> element as shown below:</p>
