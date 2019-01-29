@@ -35,24 +35,25 @@ hadoop-unit-standalone:
 | 1.2 | 0.1.5 | HDP 2.4.0.0 |
 
 
-# [What is Hadoop Unit](http://blog.jetoile.fr/hadoop-unit/what-is-hadoop-unit.html)
+# [What is Hadoop Unit](https://blog.jetoile.fr/hadoop-unit/what-is-hadoop-unit.html)
 
-# [Why Hadoop Unit](http://blog.jetoile.fr/hadoop-unit/why-hadoop-unit.html)
+# [Why Hadoop Unit](https://blog.jetoile.fr/hadoop-unit/why-hadoop-unit.html)
 
 # Installation
-## [Install the standalone Hadoop Unit mode](http://blog.jetoile.fr/hadoop-unit/install-hadoop-unit-standalone.html)
-## [Integrate Hadoop Unit in your maven project](http://blog.jetoile.fr/hadoop-unit/maven-usage.html)
+## [Install the standalone Hadoop Unit mode](https://blog.jetoile.fr/hadoop-unit/install-hadoop-unit-standalone.html)
+## [Integrate Hadoop Unit 2.x in your maven project](https://blog.jetoile.fr/hadoop-unit/maven-usage_2.x.html)
+## [Integrate Hadoop Unit 3.x in your maven project](https://blog.jetoile.fr/hadoop-unit/maven-usage_3.x.html)
 
-# [Use CLI to operate Hadoop Unit Standalone](http://blog.jetoile.fr/hadoop-unit/cli.html)
+# [Use CLI to operate Hadoop Unit Standalone](https://blog.jetoile.fr/hadoop-unit/cli.html)
 
-# [How to write integration test with Hadoop Unit](http://blog.jetoile.fr/hadoop-unit/howto-integrationtest.html)
+# [How to write integration test with Hadoop Unit](https://blog.jetoile.fr/hadoop-unit/howto-integrationtest.html)
 
-# [Why Hadoop Unit v3](http://blog.jetoile.fr/hadoop-unit/why-hadoopunit-v3.html)
+# [Why Hadoop Unit v3](https://blog.jetoile.fr/hadoop-unit/why-hadoopunit-v3.html)
 
-# [Develop your own plugin](http://blog.jetoile.fr/hadoop-unit/plugin-development.html)
+# [Develop your own plugin](https://blog.jetoile.fr/hadoop-unit/plugin-development.html)
 
-# [Build](http://blog.jetoile.fr/hadoop-unit/howto-build.html)
+# [Build](https://blog.jetoile.fr/hadoop-unit/howto-build.html)
 
-# [Focus](http://blog.jetoile.fr/hadoop-unit/focus.html)
+# [Focus](https://blog.jetoile.fr/hadoop-unit/focus.html)
 
-# [Licence](http://blog.jetoile.fr/hadoop-unit/licence.html)
+# [Licence](https://blog.jetoile.fr/hadoop-unit/licence.html)
