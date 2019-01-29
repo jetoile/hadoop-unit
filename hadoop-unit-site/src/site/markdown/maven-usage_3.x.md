@@ -19,7 +19,7 @@ Sample:
 <dependency>
     <groupId>fr.jetoile.hadoop</groupId>
     <artifactId>hadoop-unit-hdfs</artifactId>
-    <version>3.0</version>
+    <version>3.1</version>
     <scope>test</scope>
 </dependency>
 ```

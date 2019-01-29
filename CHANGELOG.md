@@ -1,6 +1,12 @@
 ## Change Log
 
-### v3.0 (2019/01/29 15:20 +00:00)
+### v3.1 (2019/01/29 18:35 +00:00)
+- [#91](https://github.com/jetoile/hadoop-unit/pull/91) fix standalone startup if MAVEN_HOME or M2_HOME are set (#91) (@jetoile)
+- [ee646ef](https://github.com/jetoile/hadoop-unit/commit/ee646effe53fd1c07dcdf8170802a46ba588fdb2) update docs (@jetoile)
+- [6568546](https://github.com/jetoile/hadoop-unit/commit/6568546a2f71ef909ddf8507d07379adfa3dace9) prepare for next dev version (@jetoile)
+
+### v3.0 (2019/01/29 15:34 +00:00)
+- [43cdd16](https://github.com/jetoile/hadoop-unit/commit/43cdd1642d54613cc3ebd7a03fede6465fe1e4c8) v3.0 (@jetoile)
 - [e79f71e](https://github.com/jetoile/hadoop-unit/commit/e79f71e0e330aa3f33cc813b31d0c2be7da38f2d) update docs (@jetoile)
 - [274f184](https://github.com/jetoile/hadoop-unit/commit/274f18427c54b019216eea2f817e238b2bc93b02) cleanup ComponentMetadata (@jetoile)
 - [112d1c0](https://github.com/jetoile/hadoop-unit/commit/112d1c07d681b7c58f4d36b357229a2411bea033) upgrade to Achille 6.0.1 (@jetoile)
@@ -48,8 +54,8 @@
 - [73d7322](https://github.com/jetoile/hadoop-unit/commit/73d7322bb3f3b4728b1621a249a7d3e949736bb8) prepare for next dev version (@jetoile)
 
 ### v2.7 (2018/05/20 16:03 +00:00)
-- [8c624cc](https://github.com/jetoile/hadoop-unit/commit/8c624ccd832d3065a6aeae4afd36a89ca9023bcd) v2.7 (@jetoile)
 - [eca5775](https://github.com/jetoile/hadoop-unit/commit/eca5775dfad567d7e2a2fa5eb2b072024462a517) clean code (@jetoile)
+- [8c624cc](https://github.com/jetoile/hadoop-unit/commit/8c624ccd832d3065a6aeae4afd36a89ca9023bcd) v2.7 (@jetoile)
 - [4e1864c](https://github.com/jetoile/hadoop-unit/commit/4e1864c3d5adbb48c5488fb0a9eb9988da7860e0) fix redis download (@jetoile)
 - [1a769de](https://github.com/jetoile/hadoop-unit/commit/1a769dea9fa93ee22487e04782df5f3988c30887) update doc for ksql (@jetoile)
 - [2d9097e](https://github.com/jetoile/hadoop-unit/commit/2d9097eca9f1a8012840993913a96292119f3cc4) add support for ES 6.2.4 (@jetoile)
@@ -154,8 +160,8 @@
 - [20994c0](https://github.com/jetoile/hadoop-unit/commit/20994c02582033cbabe2c0c6cc19f0cf6a209520) update to hadoop-mini-cluster 0.1.9 (@jetoile)
 - [a2ffd37](https://github.com/jetoile/hadoop-unit/commit/a2ffd37b4ffaea9f052c175b6a8968f9d8c09ea3) manage travis (@jetoile)
 - [#58](https://github.com/jetoile/hadoop-unit/pull/58) update to achilles 5.1.5 (#58) (@jetoile)
-- [07bfc41](https://github.com/jetoile/hadoop-unit/commit/07bfc41db8583e3e4c7a403bd6a5fc6c2830e406) use aether to manage jar conflict (@jetoile)
 - [dd58553](https://github.com/jetoile/hadoop-unit/commit/dd58553115b4a0ac8b2f5e927cacbddbeca925c6) update README (@jetoile)
+- [07bfc41](https://github.com/jetoile/hadoop-unit/commit/07bfc41db8583e3e4c7a403bd6a5fc6c2830e406) use aether to manage jar conflict (@jetoile)
 - [a371998](https://github.com/jetoile/hadoop-unit/commit/a37199897fd113c2d5bafc8d10da37715cbf0866) Update README.md (@jetoile)
 - [b6b2acc](https://github.com/jetoile/hadoop-unit/commit/b6b2accef4d1310a840b71d0f30abc4b74b6e0ec) prepare for next dev version (@jetoile)
 
@@ -217,8 +223,8 @@
 - [3c037b6](https://github.com/jetoile/hadoop-unit/commit/3c037b63ac157e16cd76ffee449e7f7be19946f3) Update README.md (@jetoile)
 - [300edc2](https://github.com/jetoile/hadoop-unit/commit/300edc2bc34618212a6c13822817964e58dc6aba) Cosmetics (@framiere)
 - [034680b](https://github.com/jetoile/hadoop-unit/commit/034680bfa6b4e9bc89a0158d64af0529f5f78c9e) update docs (@jetoile)
-- [9e85192](https://github.com/jetoile/hadoop-unit/commit/9e8519274e4751d01e8d3775b4b06f5b5207c2f8) use Config var instead default.properties (@jetoile)
 - [0b06a16](https://github.com/jetoile/hadoop-unit/commit/0b06a16276c1f00c70ba8a85c14df59089448814) add cassandra support (@jetoile)
+- [9e85192](https://github.com/jetoile/hadoop-unit/commit/9e8519274e4751d01e8d3775b4b06f5b5207c2f8) use Config var instead default.properties (@jetoile)
 - [6034598](https://github.com/jetoile/hadoop-unit/commit/6034598fca16b3f6192185407af0232a35762c0c) add mongodb support (@jetoile)
 - [379726a](https://github.com/jetoile/hadoop-unit/commit/379726ac32827b31a9204545eb2826bfa32f6f07) update docs (@jetoile)
 - [60ae8b9](https://github.com/jetoile/hadoop-unit/commit/60ae8b9bf1e499667df85c4ff0ff36cce59cc5d5) update to mini cluster 1.5.0 (@jetoile)
