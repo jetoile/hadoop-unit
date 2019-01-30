@@ -1,6 +1,12 @@
 ## Change Log
 
-### v3.1 (2019/01/29 18:35 +00:00)
+### v2.10.1 (2019/01/30 10:43 +00:00)
+- [116ef64](https://github.com/jetoile/hadoop-unit/commit/116ef64649bc15a796a62e6e1967b968a01000eb) update docs (@jetoile)
+- [53ebd80](https://github.com/jetoile/hadoop-unit/commit/53ebd8089a476fa6c7dc5ed21ff0f61ead3aeb5a) prepare for next dev version (@jetoile)
+- [#91](https://github.com/jetoile/hadoop-unit/pull/91) fix standalone startup if MAVEN_HOME or M2_HOME are set (#91) (@jetoile)
+
+### v3.1 (2019/01/29 18:49 +00:00)
+- [15c2b08](https://github.com/jetoile/hadoop-unit/commit/15c2b08b6594b8b453b2a4b874c2c2f89c27086e) v3.1 (@jetoile)
 - [#91](https://github.com/jetoile/hadoop-unit/pull/91) fix standalone startup if MAVEN_HOME or M2_HOME are set (#91) (@jetoile)
 - [ee646ef](https://github.com/jetoile/hadoop-unit/commit/ee646effe53fd1c07dcdf8170802a46ba588fdb2) update docs (@jetoile)
 - [6568546](https://github.com/jetoile/hadoop-unit/commit/6568546a2f71ef909ddf8507d07379adfa3dace9) prepare for next dev version (@jetoile)
@@ -54,8 +60,8 @@
 - [73d7322](https://github.com/jetoile/hadoop-unit/commit/73d7322bb3f3b4728b1621a249a7d3e949736bb8) prepare for next dev version (@jetoile)
 
 ### v2.7 (2018/05/20 16:03 +00:00)
-- [eca5775](https://github.com/jetoile/hadoop-unit/commit/eca5775dfad567d7e2a2fa5eb2b072024462a517) clean code (@jetoile)
 - [8c624cc](https://github.com/jetoile/hadoop-unit/commit/8c624ccd832d3065a6aeae4afd36a89ca9023bcd) v2.7 (@jetoile)
+- [eca5775](https://github.com/jetoile/hadoop-unit/commit/eca5775dfad567d7e2a2fa5eb2b072024462a517) clean code (@jetoile)
 - [4e1864c](https://github.com/jetoile/hadoop-unit/commit/4e1864c3d5adbb48c5488fb0a9eb9988da7860e0) fix redis download (@jetoile)
 - [1a769de](https://github.com/jetoile/hadoop-unit/commit/1a769dea9fa93ee22487e04782df5f3988c30887) update doc for ksql (@jetoile)
 - [2d9097e](https://github.com/jetoile/hadoop-unit/commit/2d9097eca9f1a8012840993913a96292119f3cc4) add support for ES 6.2.4 (@jetoile)

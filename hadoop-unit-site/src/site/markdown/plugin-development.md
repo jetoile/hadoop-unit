@@ -30,10 +30,10 @@ This interface extends the interface `Bootstrap` but declare the method `getConf
 
 #Interface ComponentMetadata
 
-This interface define 2 methods:
+This interface defines 2 methods:
 
-* `getName()` which give the plugin's name
-* `getDependencies()` which list the plugins the current plugin is dependent
+* `getName()` which gives the plugin's name
+* `getDependencies()` which lists the plugins the current plugin is dependent
 
 
 ![componentMetadata_class](https://blog.jetoile.fr/hadoop-unit/images/componentMetadata_class.png)
