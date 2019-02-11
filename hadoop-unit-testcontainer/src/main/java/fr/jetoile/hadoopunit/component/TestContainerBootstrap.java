@@ -24,7 +24,9 @@ import org.slf4j.LoggerFactory;
 import org.testcontainers.containers.BindMode;
 import org.testcontainers.containers.FixedHostPortGenericContainer;
 import org.testcontainers.containers.GenericContainer;
+import org.testcontainers.containers.output.OutputFrame;
 import org.testcontainers.containers.output.Slf4jLogConsumer;
+import org.testcontainers.containers.output.ToStringConsumer;
 
 import java.net.URL;
 import java.util.Arrays;
@@ -176,6 +178,7 @@ public class TestContainerBootstrap implements Bootstrap {
                 container.withClasspathResourceMapping(local, remote, BindMode.valueOf(bindMode));
             });
         }
+
     }
 
     @Override
@@ -187,7 +190,7 @@ public class TestContainerBootstrap implements Bootstrap {
                 build();
                 container.start();
                 container.followOutput(new Slf4jLogConsumer(LOGGER));
-            } catch (Exception e) {
+            } catch (Throwable e) {
                 LOGGER.error("unable to add testcontainer", e);
             }
             state = State.STARTED;

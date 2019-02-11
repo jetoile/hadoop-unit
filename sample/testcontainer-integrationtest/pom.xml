@@ -9,71 +9,25 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>solr-parquet-spark</artifactId>
+    <artifactId>testcontainer-integrationtest</artifactId>
+
+    <properties>
+        <jedis.version>2.9.0</jedis.version>
+    </properties>
 
     <dependencies>
         <dependency>
-            <groupId>org.apache.spark</groupId>
-            <artifactId>spark-core_2.11</artifactId>
-            <exclusions>
-                <exclusion>
-                    <artifactId>jackson-databind</artifactId>
-                    <groupId>com.fasterxml.jackson.core</groupId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.apache.httpcomponents</groupId>
-                    <artifactId>httpcore</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-
-        <dependency>
-            <groupId>com.fasterxml.jackson.module</groupId>
-            <artifactId>jackson-module-scala_2.11</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.lucidworks.spark</groupId>
-            <artifactId>spark-solr</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.databricks</groupId>
-            <artifactId>spark-csv_2.11</artifactId>
-            <version>1.5.0</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.univocity</groupId>
-            <artifactId>univocity-parsers</artifactId>
-            <version>2.4.1</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-        </dependency>
-
-        <dependency>
             <groupId>fr.jetoile.hadoop</groupId>
             <artifactId>hadoop-unit-commons</artifactId>
-            <scope>test</scope>
         </dependency>
 
         <dependency>
-            <groupId>fr.jetoile.hadoop</groupId>
-            <artifactId>hadoop-unit-client-hdfs</artifactId>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
+            <version>${jedis.version}</version>
             <scope>test</scope>
         </dependency>
-
-        <dependency>
-            <groupId>fr.jetoile.hadoop</groupId>
-            <artifactId>hadoop-unit-client-commons</artifactId>
-            <scope>test</scope>
-        </dependency>
-
     </dependencies>
-
 
     <profiles>
         <profile>
@@ -84,6 +38,7 @@
                     <name>!travis</name>
                 </property>
             </activation>
+
             <build>
                 <plugins>
                     <plugin>
@@ -109,37 +64,26 @@
                         <configuration>
                             <components>
                                 <componentArtifact implementation="fr.jetoile.hadoopunit.ComponentArtifact">
-                                    <componentName>ZOOKEEPER</componentName>
-                                    <artifactId>hadoop-unit-zookeeper</artifactId>
+                                    <componentName>TESTCONTAINER</componentName>
+                                    <artifactId>hadoop-unit-testcontainer</artifactId>
                                     <groupId>fr.jetoile.hadoop</groupId>
                                     <version>${hadoop-unit.version}</version>
-                                    <mainClass>fr.jetoile.hadoopunit.component.ZookeeperBootstrap</mainClass>
-                                </componentArtifact>
-                                <componentArtifact implementation="fr.jetoile.hadoopunit.ComponentArtifact">
-                                    <componentName>HDFS</componentName>
-                                    <artifactId>hadoop-unit-hdfs</artifactId>
-                                    <groupId>fr.jetoile.hadoop</groupId>
-                                    <version>${hadoop-unit.version}</version>
-                                    <mainClass>fr.jetoile.hadoopunit.component.HdfsBootstrap</mainClass>
-                                </componentArtifact>
-                                <componentArtifact implementation="fr.jetoile.hadoopunit.ComponentArtifact">
-                                    <componentName>SOLRCLOUD</componentName>
-                                    <artifactId>hadoop-unit-solrcloud</artifactId>
-                                    <groupId>fr.jetoile.hadoop</groupId>
-                                    <version>${hadoop-unit.version}</version>
-                                    <mainClass>fr.jetoile.hadoopunit.component.SolrCloudBootstrap</mainClass>
+                                    <mainClass>fr.jetoile.hadoopunit.component.TestContainerBootstrap</mainClass>
                                     <properties>
-                                        <solr.dir>file://${project.basedir}/src/test/resources/solr</solr.dir>
+                                        <testcontainer.imagename>redis:5.0.3</testcontainer.imagename>
+                                        <testcontainer.exposedports>6379</testcontainer.exposedports>
+                                        <testcontainer.fixed.exposedports>21300:6379</testcontainer.fixed.exposedports>
                                     </properties>
                                 </componentArtifact>
                             </components>
 
                         </configuration>
+
                     </plugin>
                 </plugins>
             </build>
-        </profile>
 
+        </profile>
         <profile>
             <id>travis</id>
             <activation>
@@ -160,4 +104,5 @@
             </build>
         </profile>
     </profiles>
+
 </project>
