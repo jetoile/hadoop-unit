@@ -70,7 +70,7 @@
         <module>hadoop-unit-redis</module>
         <module>hadoop-unit-confluent</module>
         <module>hadoop-unit-confluent-rest</module>
-        <module>hadoop-unit-testcontainer</module>
+        <module>hadoop-unit-docker</module>
         <module>sample</module>
         <module>hadoop-unit-site</module>
     </modules>

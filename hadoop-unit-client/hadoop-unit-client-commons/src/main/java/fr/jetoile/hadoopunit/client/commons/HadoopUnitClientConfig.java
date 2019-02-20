@@ -203,14 +203,14 @@ public class HadoopUnitClientConfig {
     public static final String CONFLUENT_KSQL_PORT_KEY = "confluent.ksql.port";
 
 
-    //testcontainer
-    public static final String TESTCONTAINER_IMAGENAME_KEY = "testcontainer.imagename";
-    public static final String TESTCONTAINER_EXPOSEDPORTS_KEY = "testcontainer.exposedports";
-    public static final String TESTCONTAINER_ENVS_KEY = "testcontainer.envs";
-    public static final String TESTCONTAINER_LABELS_KEY = "testcontainer.labels";
-    public static final String TESTCONTAINER_COMMAND_KEY = "testcontainer.command";
-    public static final String TESTCONTAINER_FIXED_EXPOSEDPORTS_KEY = "testcontainer.fixed.exposedports";
-    public static final String TESTCONTAINER_CLASSPATH_RESOURCES_MAPPING_KEY = "testcontainer.classpath.resources.mapping";
+    //docker
+    public static final String DOCKER_IMAGENAME_KEY = "docker.imagename";
+    public static final String DOCKER_EXPOSEDPORTS_KEY = "docker.exposedports";
+    public static final String DOCKER_ENVS_KEY = "docker.envs";
+    public static final String DOCKER_LABELS_KEY = "docker.labels";
+    public static final String DOCKER_COMMAND_KEY = "docker.command";
+    public static final String DOCKER_FIXED_EXPOSEDPORTS_KEY = "docker.fixed.exposedports";
+    public static final String DOCKER_CLASSPATH_RESOURCES_MAPPING_KEY = "docker.classpath.resources.mapping";
 
     private HadoopUnitClientConfig() {}
 }
