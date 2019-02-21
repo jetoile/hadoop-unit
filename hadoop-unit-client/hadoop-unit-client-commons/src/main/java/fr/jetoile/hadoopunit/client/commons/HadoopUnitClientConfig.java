@@ -212,5 +212,11 @@ public class HadoopUnitClientConfig {
     public static final String DOCKER_FIXED_EXPOSEDPORTS_KEY = "docker.fixed.exposedports";
     public static final String DOCKER_CLASSPATH_RESOURCES_MAPPING_KEY = "docker.classpath.resources.mapping";
 
+
+    //docker-compose
+    public static final String DOCKERCOMPOSE_FILENAME_KEY = "dockercompose.filename";
+    public static final String DOCKERCOMPOSE_EXPOSEDPORTS_KEY = "dockercompose.exposedports";
+    public static final String DOCKERCOMPOSE_LOCAL_KEY = "dockercompose.local";
+    
     private HadoopUnitClientConfig() {}
 }

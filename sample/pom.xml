@@ -21,6 +21,7 @@
         <module>redis</module>
         <module>confluent-integrationtest</module>
         <module>docker-integrationtest</module>
+        <module>dockercompose-integrationtest</module>
     </modules>
 
     <artifactId>sample</artifactId>
