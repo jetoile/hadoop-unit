@@ -78,21 +78,32 @@ public class DockerComposeBootstrap implements Bootstrap {
 
     private void loadConfig() {
         try {
-            dockerComposeFile = Paths.get(DockerComposeBootstrap.class.getClassLoader().getResource(configuration.getString(DockerComposeConfig.DOCKERCOMPOSE_FILENAME_KEY)).getFile()).toFile();
-
-            String[] exposedPortsString = configuration.getStringArray(DockerComposeConfig.DOCKERCOMPOSE_EXPOSEDPORTS_KEY);
-            exposedPorts = Arrays.asList(exposedPortsString).stream().collect(Collectors.toMap(c -> c.split(":")[0], c -> Integer.valueOf(c.split(":")[1])));
-            local = configuration.getBoolean(DockerComposeConfig.DOCKERCOMPOSE_LOCAL_KEY, false);
+            URL dockerComposeFileURL = DockerComposeBootstrap.class.getClassLoader().getResource(configuration.getString(DockerComposeConfig.DOCKERCOMPOSE_FILENAME_KEY));
+            if (dockerComposeFileURL != null) {
+                dockerComposeFile = Paths.get(dockerComposeFileURL.getFile()).toFile();
+            } else {
+                dockerComposeFile = new File(configuration.getString(DockerComposeConfig.DOCKERCOMPOSE_FILENAME_KEY));
+            }
         } catch (Exception e) {
             //NOTHING TO DO
         }
+
+        String[] exposedPortsString = configuration.getStringArray(DockerComposeConfig.DOCKERCOMPOSE_EXPOSEDPORTS_KEY);
+        exposedPorts = Arrays.asList(exposedPortsString).stream().collect(Collectors.toMap(c -> c.split(":")[0], c -> Integer.valueOf(c.split(":")[1])));
+        local = configuration.getBoolean(DockerComposeConfig.DOCKERCOMPOSE_LOCAL_KEY, false);
+
     }
 
 
     @Override
     public void loadConfig(Map<String, String> configs) {
         if (StringUtils.isNotEmpty(configs.get(DockerComposeConfig.DOCKERCOMPOSE_FILENAME_KEY))) {
-            dockerComposeFile = new File(configs.get(DockerComposeConfig.DOCKERCOMPOSE_FILENAME_KEY));
+            URL dockerComposeFileURL = DockerComposeBootstrap.class.getClassLoader().getResource(configs.get(DockerComposeConfig.DOCKERCOMPOSE_FILENAME_KEY));
+            if (dockerComposeFileURL != null) {
+                dockerComposeFile = Paths.get(dockerComposeFileURL.getFile()).toFile();
+            } else {
+                dockerComposeFile = new File(configs.get(DockerComposeConfig.DOCKERCOMPOSE_FILENAME_KEY));
+            }
         }
         if (StringUtils.isNotEmpty(configs.get(DockerComposeConfig.DOCKERCOMPOSE_EXPOSEDPORTS_KEY))) {
             String exposedPortsList = configs.get(DockerComposeConfig.DOCKERCOMPOSE_EXPOSEDPORTS_KEY);
