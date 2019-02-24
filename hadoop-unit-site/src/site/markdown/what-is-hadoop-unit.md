@@ -15,6 +15,8 @@ Indeed, it is common to need the hadoop's ecosystem to make integration test lik
 * kafka confluent
 * and so on...
 
+Since v3.2, Hadoop Unit supports docker and docker-compose to allow to run anything.
+
 It offers different kinds of utilization:
 
 * [a standalone mode](install-hadoop-unit-standalone.html)
@@ -25,6 +27,7 @@ It offers different kinds of utilization:
 
 | Hadoop Unit version  | Hadoop mini cluster version | HDP version |
 | ------------- | ------------- | ------------- |
+| 3.2 | 0.1.16 | HDP 2.6.5.0 |
 | 3.1 | 0.1.16 | HDP 2.6.5.0 |
 | 2.10.1 | 0.1.16 | HDP 2.6.5.0 |
 | 2.9 | 0.1.15 | HDP 2.6.3.0 |

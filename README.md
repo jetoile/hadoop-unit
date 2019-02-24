@@ -17,6 +17,7 @@ hadoop-unit-standalone:
 
 | Hadoop Unit version  | Hadoop mini cluster version | HDP version |
 | ------------- | ------------- | ------------- |
+| 3.2 | 0.1.16 | HDP 2.6.5.0 |
 | 3.1 | 0.1.16 | HDP 2.6.5.0 |
 | 2.10.1 | 0.1.16 | HDP 2.6.5.0 |
 | 2.9 | 0.1.15 | HDP 2.6.3.0 |
