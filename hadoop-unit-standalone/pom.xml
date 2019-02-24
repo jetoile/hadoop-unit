@@ -5,7 +5,7 @@
     <parent>
         <artifactId>hadoop-unit</artifactId>
         <groupId>fr.jetoile.hadoop</groupId>
-        <version>3.2</version>
+        <version>3.3-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -330,11 +330,6 @@
                     <forceCreation>true</forceCreation>
                     <imageName>${artifactId}</imageName>
                     <tag>${project.version}</tag>
-                    <!--<tag>latest</tag>-->
-                    <!--<imageTags>-->
-                        <!--<imageTag>${project.version}</imageTag>-->
-                        <!--<imageTag>latest</imageTag>-->
-                    <!--</imageTags>-->
                     <repository>jetoile/hadoop-unit-standalone</repository>
                 </configuration>
                 <executions>
