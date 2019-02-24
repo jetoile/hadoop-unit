@@ -1,9 +1,19 @@
 ## Change Log
 
+### v3.2 (2019/02/24 16:12 +00:00)
+- [8a42b42](https://github.com/jetoile/hadoop-unit/commit/8a42b42946f2b82ea7713dcc43bee1cd15526d89) add docker compose support for standalone mode (@jetoile)
+- [bd3eed9](https://github.com/jetoile/hadoop-unit/commit/bd3eed9e8327fa138cee7f860a69ed15b3f6a1b6) add docker compose support (@jetoile)
+- [9cf47f7](https://github.com/jetoile/hadoop-unit/commit/9cf47f76dff0521c08ff1cf674cdfcab33791b4c) rename testcontainer into docker (@jetoile)
+- [09efcc1](https://github.com/jetoile/hadoop-unit/commit/09efcc192866f91752dda00fe8adde77ca45f8bd) update .gitignore (@jetoile)
+- [32f32bc](https://github.com/jetoile/hadoop-unit/commit/32f32bc7f7f4baa4e1081bd536613e5341201f68) add integration test for testcontainer (@jetoile)
+- [304f8d7](https://github.com/jetoile/hadoop-unit/commit/304f8d75def03bd80ba489635c7845bdc03701b8) add docker support for standalone mode (@jetoile)
+- [6196df7](https://github.com/jetoile/hadoop-unit/commit/6196df70e9397c0b73f745ebb2ca46be6fa8f0b4) add support for testcontainer (@jetoile)
+- [17df602](https://github.com/jetoile/hadoop-unit/commit/17df60299d535d0af6c7b35b2406e87a5fbd927d) update docs (@jetoile)
+
 ### v2.10.1 (2019/01/30 10:43 +00:00)
+- [#91](https://github.com/jetoile/hadoop-unit/pull/91) fix standalone startup if MAVEN_HOME or M2_HOME are set (#91) (@jetoile)
 - [116ef64](https://github.com/jetoile/hadoop-unit/commit/116ef64649bc15a796a62e6e1967b968a01000eb) update docs (@jetoile)
 - [53ebd80](https://github.com/jetoile/hadoop-unit/commit/53ebd8089a476fa6c7dc5ed21ff0f61ead3aeb5a) prepare for next dev version (@jetoile)
-- [#91](https://github.com/jetoile/hadoop-unit/pull/91) fix standalone startup if MAVEN_HOME or M2_HOME are set (#91) (@jetoile)
 
 ### v3.1 (2019/01/29 18:49 +00:00)
 - [15c2b08](https://github.com/jetoile/hadoop-unit/commit/15c2b08b6594b8b453b2a4b874c2c2f89c27086e) v3.1 (@jetoile)
@@ -60,8 +70,8 @@
 - [73d7322](https://github.com/jetoile/hadoop-unit/commit/73d7322bb3f3b4728b1621a249a7d3e949736bb8) prepare for next dev version (@jetoile)
 
 ### v2.7 (2018/05/20 16:03 +00:00)
-- [8c624cc](https://github.com/jetoile/hadoop-unit/commit/8c624ccd832d3065a6aeae4afd36a89ca9023bcd) v2.7 (@jetoile)
 - [eca5775](https://github.com/jetoile/hadoop-unit/commit/eca5775dfad567d7e2a2fa5eb2b072024462a517) clean code (@jetoile)
+- [8c624cc](https://github.com/jetoile/hadoop-unit/commit/8c624ccd832d3065a6aeae4afd36a89ca9023bcd) v2.7 (@jetoile)
 - [4e1864c](https://github.com/jetoile/hadoop-unit/commit/4e1864c3d5adbb48c5488fb0a9eb9988da7860e0) fix redis download (@jetoile)
 - [1a769de](https://github.com/jetoile/hadoop-unit/commit/1a769dea9fa93ee22487e04782df5f3988c30887) update doc for ksql (@jetoile)
 - [2d9097e](https://github.com/jetoile/hadoop-unit/commit/2d9097eca9f1a8012840993913a96292119f3cc4) add support for ES 6.2.4 (@jetoile)

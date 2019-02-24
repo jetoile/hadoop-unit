@@ -5,7 +5,7 @@
     <parent>
         <artifactId>hadoop-unit</artifactId>
         <groupId>fr.jetoile.hadoop</groupId>
-        <version>3.2-SNAPSHOT</version>
+        <version>3.2</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -298,22 +298,44 @@
             </plugin>
 
             <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy-resources</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${basedir}/target</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>src/main/docker</directory>
+                                    <includes>
+                                        <include>Dockerfile</include>
+                                    </includes>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
                 <groupId>com.spotify</groupId>
-                <artifactId>docker-maven-plugin</artifactId>
+                <artifactId>dockerfile-maven-plugin</artifactId>
                 <configuration>
+                    <contextDirectory>${project.build.directory}</contextDirectory>
+                    <useMavenSettingsForAuth>true</useMavenSettingsForAuth>
+                    <forceCreation>true</forceCreation>
                     <imageName>${artifactId}</imageName>
-                    <dockerDirectory>${basedir}/src/main/docker</dockerDirectory>
-                    <resources>
-                        <resource>
-                            <targetPath>/</targetPath>
-                            <directory>${project.build.directory}</directory>
-                        </resource>
-                    </resources>
-                    <forceTags>true</forceTags>
-                    <imageTags>
-                        <imageTag>${project.version}</imageTag>
-                        <imageTag>latest</imageTag>
-                    </imageTags>
+                    <tag>${project.version}</tag>
+                    <!--<tag>latest</tag>-->
+                    <!--<imageTags>-->
+                        <!--<imageTag>${project.version}</imageTag>-->
+                        <!--<imageTag>latest</imageTag>-->
+                    <!--</imageTags>-->
+                    <repository>jetoile/hadoop-unit-standalone</repository>
                 </configuration>
                 <executions>
                     <execution>
@@ -329,9 +351,6 @@
                         <goals>
                             <goal>push</goal>
                         </goals>
-                        <configuration>
-                            <imageName>jetoile/hadoop-unit-standalone:${project.version}</imageName>
-                        </configuration>
                     </execution>
                 </executions>
             </plugin>
