@@ -6,7 +6,7 @@
     <groupId>fr.jetoile.hadoop</groupId>
     <artifactId>hadoop-unit</artifactId>
     <packaging>pom</packaging>
-    <version>3.3-SNAPSHOT</version>
+    <version>3.3</version>
     <name>hadoop-unit</name>
     <url>https://github.com/jetoile/hadoop-unit</url>
 
@@ -129,8 +129,6 @@
 
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-
-        <maven.javadoc.skip>true</maven.javadoc.skip>
 
         <dependency.locations.enabled>false</dependency.locations.enabled>
 
@@ -985,6 +983,20 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <additionalparam>-Xdoclint:none</additionalparam>
+                </configuration>
             </plugin>
         </plugins>
     </build>

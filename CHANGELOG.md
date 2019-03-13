@@ -1,6 +1,13 @@
 ## Change Log
 
-### v3.2 (2019/02/24 16:12 +00:00)
+### v3.3 (2019/03/13 21:43 +00:00)
+- [72e3e61](https://github.com/jetoile/hadoop-unit/commit/72e3e6154ffe03765171fe82aee1a7a8a8218b0e) use filtering to manage version into hadoop-unit-default.properties (@jetoile)
+- [ea3453d](https://github.com/jetoile/hadoop-unit/commit/ea3453dc672445cee79a91817c17c82f5a18f449) allow to set datanode address (@jetoile)
+- [63493b9](https://github.com/jetoile/hadoop-unit/commit/63493b9676d3a253221e8a187afa882cdf74b8f2) update docs (@jetoile)
+- [558bd67](https://github.com/jetoile/hadoop-unit/commit/558bd6732a1058c05b30c7e0bcd4a8e3aaed1bbb) prepare for next dev version (@jetoile)
+
+### v3.2 (2019/02/24 18:16 +00:00)
+- [57d6482](https://github.com/jetoile/hadoop-unit/commit/57d64827fe83d49377b8880029b24c712d0ac279) v3.2 (@jetoile)
 - [8a42b42](https://github.com/jetoile/hadoop-unit/commit/8a42b42946f2b82ea7713dcc43bee1cd15526d89) add docker compose support for standalone mode (@jetoile)
 - [bd3eed9](https://github.com/jetoile/hadoop-unit/commit/bd3eed9e8327fa138cee7f860a69ed15b3f6a1b6) add docker compose support (@jetoile)
 - [9cf47f7](https://github.com/jetoile/hadoop-unit/commit/9cf47f76dff0521c08ff1cf674cdfcab33791b4c) rename testcontainer into docker (@jetoile)
@@ -70,8 +77,8 @@
 - [73d7322](https://github.com/jetoile/hadoop-unit/commit/73d7322bb3f3b4728b1621a249a7d3e949736bb8) prepare for next dev version (@jetoile)
 
 ### v2.7 (2018/05/20 16:03 +00:00)
-- [eca5775](https://github.com/jetoile/hadoop-unit/commit/eca5775dfad567d7e2a2fa5eb2b072024462a517) clean code (@jetoile)
 - [8c624cc](https://github.com/jetoile/hadoop-unit/commit/8c624ccd832d3065a6aeae4afd36a89ca9023bcd) v2.7 (@jetoile)
+- [eca5775](https://github.com/jetoile/hadoop-unit/commit/eca5775dfad567d7e2a2fa5eb2b072024462a517) clean code (@jetoile)
 - [4e1864c](https://github.com/jetoile/hadoop-unit/commit/4e1864c3d5adbb48c5488fb0a9eb9988da7860e0) fix redis download (@jetoile)
 - [1a769de](https://github.com/jetoile/hadoop-unit/commit/1a769dea9fa93ee22487e04782df5f3988c30887) update doc for ksql (@jetoile)
 - [2d9097e](https://github.com/jetoile/hadoop-unit/commit/2d9097eca9f1a8012840993913a96292119f3cc4) add support for ES 6.2.4 (@jetoile)
@@ -239,8 +246,8 @@
 - [3c037b6](https://github.com/jetoile/hadoop-unit/commit/3c037b63ac157e16cd76ffee449e7f7be19946f3) Update README.md (@jetoile)
 - [300edc2](https://github.com/jetoile/hadoop-unit/commit/300edc2bc34618212a6c13822817964e58dc6aba) Cosmetics (@framiere)
 - [034680b](https://github.com/jetoile/hadoop-unit/commit/034680bfa6b4e9bc89a0158d64af0529f5f78c9e) update docs (@jetoile)
-- [0b06a16](https://github.com/jetoile/hadoop-unit/commit/0b06a16276c1f00c70ba8a85c14df59089448814) add cassandra support (@jetoile)
 - [9e85192](https://github.com/jetoile/hadoop-unit/commit/9e8519274e4751d01e8d3775b4b06f5b5207c2f8) use Config var instead default.properties (@jetoile)
+- [0b06a16](https://github.com/jetoile/hadoop-unit/commit/0b06a16276c1f00c70ba8a85c14df59089448814) add cassandra support (@jetoile)
 - [6034598](https://github.com/jetoile/hadoop-unit/commit/6034598fca16b3f6192185407af0232a35762c0c) add mongodb support (@jetoile)
 - [379726a](https://github.com/jetoile/hadoop-unit/commit/379726ac32827b31a9204545eb2826bfa32f6f07) update docs (@jetoile)
 - [60ae8b9](https://github.com/jetoile/hadoop-unit/commit/60ae8b9bf1e499667df85c4ff0ff36cce59cc5d5) update to mini cluster 1.5.0 (@jetoile)
