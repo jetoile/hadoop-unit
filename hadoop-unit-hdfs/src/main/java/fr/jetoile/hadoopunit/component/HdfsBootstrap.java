@@ -46,6 +46,10 @@ public class HdfsBootstrap implements BootstrapHadoop {
     private String host;
     private Integer replication = 1;
 
+    private String datanodeAddress = "127.0.0.1:50010";
+    private String datanodeHttpAddress = "127.0.0.1:50075";
+    private String datanodeIpcAddress = "127.0.0.1:50020";
+
     public HdfsBootstrap() {
         if (hdfsLocalCluster == null) {
             try {
@@ -73,6 +77,9 @@ public class HdfsBootstrap implements BootstrapHadoop {
     public String getProperties() {
         return "\n \t\t\t host:" + host +
                 "\n \t\t\t port:" + port +
+                "\n \t\t\t datanodeAddress:" + datanodeAddress +
+                "\n \t\t\t datanodeHttpAddress:" + datanodeHttpAddress +
+                "\n \t\t\t datanodeIpcAddress:" + datanodeIpcAddress +
                 "\n \t\t\t httpPort:" + httpPort;
     }
 
@@ -84,6 +91,14 @@ public class HdfsBootstrap implements BootstrapHadoop {
     private void build() {
         HdfsConfiguration hdfsConfiguration = new HdfsConfiguration();
         hdfsConfiguration.set("dfs.replication", replication.toString());
+
+        hdfsConfiguration.set("dfs.replication", replication.toString());
+        hdfsConfiguration.set("dfs.replication", replication.toString());
+        hdfsConfiguration.set("dfs.replication", replication.toString());
+
+        hdfsConfiguration.set("dfs.datanode.address", datanodeAddress);
+        hdfsConfiguration.set("dfs.datanode.http.address", datanodeHttpAddress);
+        hdfsConfiguration.set("dfs.datanode.ipc.address", datanodeIpcAddress);
 
         hdfsLocalCluster = new HdfsLocalCluster.Builder()
                 .setHdfsNamenodePort(port)
@@ -108,7 +123,11 @@ public class HdfsBootstrap implements BootstrapHadoop {
         enablePermission = configuration.getBoolean(HdfsConfig.HDFS_ENABLE_PERMISSIONS_KEY);
         format = configuration.getBoolean(HdfsConfig.HDFS_FORMAT_KEY);
         enableRunningUserAsProxy = configuration.getBoolean(HdfsConfig.HDFS_ENABLE_RUNNING_USER_AS_PROXY_USER);
-        replication = configuration.getInt(HdfsConfig.HDFS_REPLICATION_KEY, 1);
+        replication = configuration.getInt(HdfsConfig.HDFS_REPLICATION_KEY, replication);
+
+        datanodeAddress = configuration.getString(HdfsConfig.HDFS_DATANODE_ADDRESS_KEY, datanodeAddress);
+        datanodeHttpAddress = configuration.getString(HdfsConfig.HDFS_DATANODE_HTTP_ADDRESS_KEY, datanodeHttpAddress);
+        datanodeIpcAddress = configuration.getString(HdfsConfig.HDFS_DATANODE_IPC_ADDRESS_KEY, datanodeIpcAddress);
     }
 
     @Override
@@ -139,6 +158,16 @@ public class HdfsBootstrap implements BootstrapHadoop {
         }
         if (StringUtils.isNotEmpty(configs.get(HdfsConfig.HDFS_REPLICATION_KEY))) {
             replication = Integer.parseInt(configs.get(HdfsConfig.HDFS_REPLICATION_KEY));
+        }
+
+        if (StringUtils.isNotEmpty(configs.get(HdfsConfig.HDFS_DATANODE_ADDRESS_KEY))) {
+            datanodeAddress = configs.get(HdfsConfig.HDFS_DATANODE_ADDRESS_KEY);
+        }
+        if (StringUtils.isNotEmpty(configs.get(HdfsConfig.HDFS_DATANODE_HTTP_ADDRESS_KEY))) {
+            datanodeHttpAddress = configs.get(HdfsConfig.HDFS_DATANODE_HTTP_ADDRESS_KEY);
+        }
+        if (StringUtils.isNotEmpty(configs.get(HdfsConfig.HDFS_DATANODE_IPC_ADDRESS_KEY))) {
+            datanodeIpcAddress = configs.get(HdfsConfig.HDFS_DATANODE_IPC_ADDRESS_KEY);
         }
     }
 

@@ -92,6 +92,9 @@ public class HadoopUnitClientConfig {
     public static final String HDFS_FORMAT_KEY = "hdfs.format";
     public static final String HDFS_ENABLE_RUNNING_USER_AS_PROXY_USER = "hdfs.enable.running.user.as.proxy.user";
     public static final String HDFS_REPLICATION_KEY = "hdfs.replication";
+    public static final String HDFS_DATANODE_ADDRESS_KEY = "hdfs.datanode.address";
+    public static final String HDFS_DATANODE_HTTP_ADDRESS_KEY = "hdfs.datanode.http.address";
+    public static final String HDFS_DATANODE_IPC_ADDRESS_KEY = "hdfs.datanode.ipc.address";
 
     // HDFS Test
     public static final String HDFS_TEST_FILE_KEY = "hdfs.test.file";
