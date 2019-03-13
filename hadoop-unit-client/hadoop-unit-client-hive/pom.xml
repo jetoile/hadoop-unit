@@ -4,7 +4,7 @@
     <parent>
         <artifactId>hadoop-unit-client</artifactId>
         <groupId>fr.jetoile.hadoop</groupId>
-        <version>3.3</version>
+        <version>3.4-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
