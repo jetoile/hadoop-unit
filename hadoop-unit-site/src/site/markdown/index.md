@@ -2,7 +2,7 @@ Welcome to the Hadoop Unit wiki!
 
 ```bash
    ______  __      _________                         _____  __      __________
-   ___  / / /_____ ______  /___________________      __  / / /_________(_)_  /_ 3.2
+   ___  / / /_____ ______  /___________________      __  / / /_________(_)_  /_ 3.3
    __  /_/ /_  __ `/  __  /_  __ \  __ \__  __ \     _  / / /__  __ \_  /_  __/
    _  __  / / /_/ // /_/ / / /_/ / /_/ /_  /_/ /     / /_/ / _  / / /  / / /_
    /_/ /_/  \__,_/ \__,_/  \____/\____/_  .___/      \____/  /_/ /_//_/  \__/
@@ -48,7 +48,7 @@ Welcome to the Hadoop Unit wiki!
 		 rest host:127.0.0.1
 		 rest port:8082
 - DOCKER_COMPOSE 
-		 dockerComposeFile:/home/khanh/tmp/hadoop-unit-standalone-3.2-SNAPSHOT/conf/docker-compose.yml
+		 dockerComposeFile:/home/khanh/tmp/hadoop-unit-standalone-3.3/conf/docker-compose.yml
 		 exposedPorts:{}
 - DOCKER 
 		 imageName:alpine:3.2
