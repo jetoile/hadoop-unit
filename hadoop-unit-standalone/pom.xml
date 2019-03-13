@@ -188,6 +188,15 @@
     </dependencies>
 
     <build>
+
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <targetPath>${project.build.directory}/filtered-resources</targetPath>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+
         <plugins>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
@@ -205,7 +214,7 @@
 
                             <repositoryLayout>flat</repositoryLayout>
 
-                            <configurationSourceDirectory>src/main/resources</configurationSourceDirectory>
+                            <configurationSourceDirectory>${project.build.directory}/filtered-resources</configurationSourceDirectory>
                             <copyConfigurationDirectory>true</copyConfigurationDirectory>
                             <configurationDirectory>conf</configurationDirectory>
                             <logsDirectory>logs</logsDirectory>
