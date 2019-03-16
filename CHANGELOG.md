@@ -1,6 +1,12 @@
 ## Change Log
 
-### v3.3 (2019/03/13 21:43 +00:00)
+### upcoming (2019/03/16 19:00 +00:00)
+- [585a3c0](https://github.com/jetoile/hadoop-unit/commit/585a3c03aab814a4ceb13adf6d7e47915799269e) allow to override host on miniDfs (@jetoile)
+- [8db0e79](https://github.com/jetoile/hadoop-unit/commit/8db0e790a7083d2bd9389a1021fde1381e3d5db2) update docs (@jetoile)
+- [db212e3](https://github.com/jetoile/hadoop-unit/commit/db212e3a3ab2a6a085e0cbf8c92cd729efb15480) prepare for next dev version (@jetoile)
+
+### v3.3 (2019/03/13 22:47 +00:00)
+- [aeef1c3](https://github.com/jetoile/hadoop-unit/commit/aeef1c3c115024d0c2df4437e5e284d11efbc7ee) v3.3 (@jetoile)
 - [72e3e61](https://github.com/jetoile/hadoop-unit/commit/72e3e6154ffe03765171fe82aee1a7a8a8218b0e) use filtering to manage version into hadoop-unit-default.properties (@jetoile)
 - [ea3453d](https://github.com/jetoile/hadoop-unit/commit/ea3453dc672445cee79a91817c17c82f5a18f449) allow to set datanode address (@jetoile)
 - [63493b9](https://github.com/jetoile/hadoop-unit/commit/63493b9676d3a253221e8a187afa882cdf74b8f2) update docs (@jetoile)
@@ -18,8 +24,8 @@
 - [17df602](https://github.com/jetoile/hadoop-unit/commit/17df60299d535d0af6c7b35b2406e87a5fbd927d) update docs (@jetoile)
 
 ### v2.10.1 (2019/01/30 10:43 +00:00)
-- [#91](https://github.com/jetoile/hadoop-unit/pull/91) fix standalone startup if MAVEN_HOME or M2_HOME are set (#91) (@jetoile)
 - [116ef64](https://github.com/jetoile/hadoop-unit/commit/116ef64649bc15a796a62e6e1967b968a01000eb) update docs (@jetoile)
+- [#91](https://github.com/jetoile/hadoop-unit/pull/91) fix standalone startup if MAVEN_HOME or M2_HOME are set (#91) (@jetoile)
 - [53ebd80](https://github.com/jetoile/hadoop-unit/commit/53ebd8089a476fa6c7dc5ed21ff0f61ead3aeb5a) prepare for next dev version (@jetoile)
 
 ### v3.1 (2019/01/29 18:49 +00:00)

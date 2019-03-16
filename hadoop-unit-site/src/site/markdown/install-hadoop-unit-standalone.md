@@ -1,7 +1,7 @@
 # Install Hadoop Unit Standalone
 
 * Download it on [search.maven.org - v2](http://search.maven.org/remotecontent?filepath=fr/jetoile/hadoop/hadoop-unit-standalone/2.10.1/hadoop-unit-standalone-2.10.1.tar.gz)
-* Download it on [search.maven.org - v3](http://search.maven.org/remotecontent?filepath=fr/jetoile/hadoop/hadoop-unit-standalone/3.3/hadoop-unit-standalone-3.3.tar.gz)
+* Download it on [search.maven.org - v3](http://search.maven.org/remotecontent?filepath=fr/jetoile/hadoop/hadoop-unit-standalone/3.4/hadoop-unit-standalone-3.4.tar.gz)
 * Unzip it
 * Edit file:
   * ```conf/hadoop.properties``` to activate the components you want
@@ -13,7 +13,10 @@
     * ```maven.local.repo```: set the location to your maven local repository (ex: `~/<user>/.m2/repository` for linux user or `C:/Users/<user>/.m2/repository`
     * ```maven.central.repo```: if you have a maven repository manager, set your repository
 
-Or just do `docker run -ti jetoile/hadoop-unit-standalone /bin/bash`.
+Or just do:
+```bash
+docker run -ti -p 20112:20112 -p 50010:50010 -p 50075:50075 -p 50020:50020 jetoile/hadoop-unit-standalone
+```
 
 ## For linux/macOS users, run:
 ```bash
