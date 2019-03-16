@@ -884,7 +884,7 @@ public class MiniDFSCluster implements AutoCloseable {
       // specified initially, the port will be 0 to make NN bind to any
       // available port. It will be set to the right address after
       // NN is started.
-      conf.set(FS_DEFAULT_NAME_KEY, "hdfs://127.0.0.1:" + onlyNN.getIpcPort());
+      // conf.set(FS_DEFAULT_NAME_KEY, "hdfs://127.0.0.1:" + onlyNN.getIpcPort());
     }
     
     List<String> allNsIds = Lists.newArrayList();
@@ -914,7 +914,7 @@ public class MiniDFSCluster implements AutoCloseable {
       for (NNConf nn : nameservice.getNNs()) {
         nnIds.add(nn.getNnId());
 
-        initNameNodeAddress(conf, nameservice.getId(), nn);
+//        initNameNodeAddress(conf, nameservice.getId(), nn);
       }
 
       // If HA is enabled on this nameservice, enumerate all the namenodes
@@ -1345,11 +1345,11 @@ public class MiniDFSCluster implements AutoCloseable {
     if (operation == StartupOption.RECOVER) {
       return;
     }
-    if (checkDataNodeHostConfig) {
-      conf.setIfUnset(DFS_DATANODE_HOST_NAME_KEY, "127.0.0.1");
-    } else {
-      conf.set(DFS_DATANODE_HOST_NAME_KEY, "127.0.0.1");
-    }
+//    if (checkDataNodeHostConfig) {
+//      conf.setIfUnset(DFS_DATANODE_HOST_NAME_KEY, "127.0.0.1");
+//    } else {
+//      conf.set(DFS_DATANODE_HOST_NAME_KEY, "127.0.0.1");
+//    }
 
     int curDatanodesNum = dataNodes.size();
     final int curDatanodesNumSaved = curDatanodesNum;
@@ -2853,8 +2853,7 @@ public class MiniDFSCluster implements AutoCloseable {
     conf.set(DFS_NAMESERVICES, nameserviceIds);
   
     String nnId = null;
-    initNameNodeAddress(conf, nameserviceId,
-        new NNConf(nnId).setIpcPort(namenodePort));
+//    initNameNodeAddress(conf, nameserviceId, new NNConf(nnId).setIpcPort(namenodePort));
     initNameNodeConf(conf, nameserviceId, nnId, true, true, nnIndex);
     createNameNode(nnIndex, conf, numDataNodes, true, null, null,
         nameserviceId, nnId);

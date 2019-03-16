@@ -92,13 +92,14 @@ public class HdfsBootstrap implements BootstrapHadoop {
         HdfsConfiguration hdfsConfiguration = new HdfsConfiguration();
         hdfsConfiguration.set("dfs.replication", replication.toString());
 
-        hdfsConfiguration.set("dfs.replication", replication.toString());
-        hdfsConfiguration.set("dfs.replication", replication.toString());
-        hdfsConfiguration.set("dfs.replication", replication.toString());
-
         hdfsConfiguration.set("dfs.datanode.address", datanodeAddress);
         hdfsConfiguration.set("dfs.datanode.http.address", datanodeHttpAddress);
         hdfsConfiguration.set("dfs.datanode.ipc.address", datanodeIpcAddress);
+
+        hdfsConfiguration.set("dfs.datanode.hostname", host);
+        hdfsConfiguration.set("fs.defaultFS", "hdfs://" + host + ":" + port);
+        hdfsConfiguration.set("dfs.namenode.http-address", host + ":" + httpPort);
+        hdfsConfiguration.set("dfs.namenode.rpc-address", host + ":" + port);
 
         hdfsLocalCluster = new HdfsLocalCluster.Builder()
                 .setHdfsNamenodePort(port)
