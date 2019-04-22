@@ -167,7 +167,7 @@
         <embedded-mongo.version>2.0.0</embedded-mongo.version>
 
         <elasticsearch.version>6.2.4</elasticsearch.version>
-        <embedded-elasticsearch.version>2.5.0</embedded-elasticsearch.version>
+        <embedded-elasticsearch.version>2.7.0</embedded-elasticsearch.version>
 
         <metrics.version>3.1.2</metrics.version>
         <achilles.version>6.0.1</achilles.version>
