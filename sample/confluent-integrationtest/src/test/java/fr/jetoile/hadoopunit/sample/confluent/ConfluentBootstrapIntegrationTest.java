@@ -51,11 +51,6 @@ public class ConfluentBootstrapIntegrationTest {
         }
     }
 
-    @AfterClass
-    public static void tearDown() {
-        HadoopBootstrap.INSTANCE.stopAll();
-    }
-
     @Test
     public void schemaRegistry_should_be_ok() {
         Client client = ClientBuilder.newClient();

@@ -14,6 +14,7 @@
 
 package fr.jetoile.hadoopunit.component;
 
+import com.google.common.collect.ImmutableMap;
 import fr.jetoile.hadoopunit.ComponentMetadata;
 import fr.jetoile.hadoopunit.HadoopUtils;
 import fr.jetoile.hadoopunit.exception.BootstrapException;
@@ -97,15 +98,7 @@ public class ConfluentKsqlRestBootstrap implements Bootstrap {
     private void build() {
         try {
             KsqlRestConfig config = new KsqlRestConfig(ksqlConfig);
-
-            Properties versionCheckProps = new Properties();
-            versionCheckProps.setProperty(CONFLUENT_SUPPORT_METRICS_ENDPOINT_SECURE_ENABLE_CONFIG, "false");
-//            versionCheckProps.setProperty(BaseSupportConfig.CONFLUENT_SUPPORT_PROXY_CONFIG,"http://localhost:" + proxyPort);
-
-            KsqlVersionCheckerAgent versionCheckerAgent = new KsqlVersionCheckerAgent();
-            versionCheckerAgent.start(KsqlModuleType.CLI, versionCheckProps);
-
-            restServer = KsqlRestApplication.buildApplication(config, versionCheckerAgent);
+            restServer = KsqlRestApplication.buildApplication(config, KsqlVersionCheckerAgent::new, Integer.MAX_VALUE);
             restServer.createServer();
         } catch (RestConfigException e) {
             LOGGER.error("Server configuration failed: ", e);
