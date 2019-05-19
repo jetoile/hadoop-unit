@@ -35,5 +35,5 @@ To know which version of Redis has to be downloaded, the variable ```redis.versi
 
 To use oozie, you need:
 
-* to download the [oozie's share libs](2.6.3.0.url=http://s3.amazonaws.com/public-repo-1.hortonworks.com/HDP/centos6/2.x/updates/2.6.3.0/tars/oozie/oozie-4.2.0.2.6.3.0-235-distro.tar.gz)
+* to download the [oozie's share libs](http://s3.amazonaws.com/public-repo-1.hortonworks.com/HDP/centos6/2.x/updates/2.6.3.0/tars/oozie/oozie-4.2.0.2.6.3.0-235-distro.tar.gz)
 * to edit the configuration file ```conf/hadoop-unit-default.properties``` and to set the variable ```oozie.sharelib.path``` to where you downloaded the oozie's share libs
