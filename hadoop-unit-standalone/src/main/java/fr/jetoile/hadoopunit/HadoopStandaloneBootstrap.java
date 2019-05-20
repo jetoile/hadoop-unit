@@ -448,7 +448,7 @@ public class HadoopStandaloneBootstrap {
             }
         });
 
-        ClassLoader classloader = new URLClassLoader(
+        ClassLoader classloader = new ReverseOrderClassLoader(
                 (URL[]) urls.toArray(new URL[0]),
                 ClassLoader.getSystemClassLoader().getParent());
 
