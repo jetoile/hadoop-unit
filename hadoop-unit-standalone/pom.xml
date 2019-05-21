@@ -14,13 +14,6 @@
     <properties>
         <mavenVersion>3.5.0</mavenVersion>
         <aetherVersion>1.1.0</aetherVersion>
-        <mongo-java-driver.version>2.11.3</mongo-java-driver.version>
-        <neo4j-java-driver.version>1.0.4</neo4j-java-driver.version>
-        <cassandra-driver-core.version>3.3.0</cassandra-driver-core.version>
-        <oozie-client.version>4.2.0.2.5.3.0-37</oozie-client.version>
-        <hbase-client.version>1.2.3</hbase-client.version>
-        <alluxio-core-client.version>1.4.0</alluxio-core-client.version>
-        <jedis.version>2.9.0</jedis.version>
     </properties>
 
     <dependencies>
@@ -75,115 +68,6 @@
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>fr.jetoile.hadoop</groupId>
-            <artifactId>hadoop-unit-client-kafka</artifactId>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>fr.jetoile.hadoop</groupId>
-            <artifactId>hadoop-unit-client-solrcloud</artifactId>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>fr.jetoile.hadoop</groupId>
-            <artifactId>hadoop-unit-client-hdfs</artifactId>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.codehaus.jackson</groupId>
-            <artifactId>jackson-core-asl</artifactId>
-            <version>1.9.11</version>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>fr.jetoile.hadoop</groupId>
-            <artifactId>hadoop-unit-client-hive</artifactId>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>fr.jetoile.hadoop</groupId>
-            <artifactId>hadoop-unit-client-alluxio</artifactId>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.neo4j.driver</groupId>
-            <artifactId>neo4j-java-driver</artifactId>
-            <version>${neo4j-java-driver.version}</version>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.mongodb</groupId>
-            <artifactId>mongo-java-driver</artifactId>
-            <version>${mongo-java-driver.version}</version>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.hbase</groupId>
-            <artifactId>hbase-client</artifactId>
-            <version>${hbase-client.version}</version>
-            <scope>test</scope>
-            <exclusions>
-                <exclusion>
-                    <artifactId>hadoop-auth</artifactId>
-                    <groupId>org.apache.hadoop</groupId>
-                </exclusion>
-                <exclusion>
-                    <artifactId>hadoop-yarn-api</artifactId>
-                    <groupId>org.apache.hadoop</groupId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.oozie</groupId>
-            <artifactId>oozie-client</artifactId>
-            <version>${oozie-client.version}</version>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>com.datastax.cassandra</groupId>
-            <artifactId>cassandra-driver-core</artifactId>
-            <version>${cassandra-driver-core.version}</version>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.elasticsearch.client</groupId>
-            <artifactId>rest</artifactId>
-            <version>5.4.3</version>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>redis.clients</groupId>
-            <artifactId>jedis</artifactId>
-            <version>${jedis.version}</version>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.hadoop</groupId>
-            <artifactId>hadoop-yarn-api</artifactId>
-            <version>${hadoop.version}</version>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>fr.jetoile.hadoop</groupId>
-            <artifactId>hadoop-unit-client-commons</artifactId>
-            <scope>test</scope>
         </dependency>
     </dependencies>
 
