@@ -59,7 +59,7 @@ public enum HadoopBootstrap {
                             graph.addEdge(key, dependency);
                         } catch (IllegalArgumentException e) {
                             //ignore it : if a dependency is declared in metadata but is not present on runtime
-                            LOGGER.warn("{} is not declared into the component's dependencies {}", key, dependency);
+                            LOGGER.warn("{} is not declared into the component's dependencies {}", dependency, key);
                         }
                     });
                 }
