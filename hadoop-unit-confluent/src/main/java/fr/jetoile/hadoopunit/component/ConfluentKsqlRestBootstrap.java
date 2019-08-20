@@ -100,8 +100,6 @@ public class ConfluentKsqlRestBootstrap implements Bootstrap {
             KsqlRestConfig config = new KsqlRestConfig(ksqlConfig);
             restServer = KsqlRestApplication.buildApplication(config, KsqlVersionCheckerAgent::new, Integer.MAX_VALUE);
             restServer.createServer();
-        } catch (RestConfigException e) {
-            LOGGER.error("Server configuration failed: ", e);
         } catch (Exception e) {
             LOGGER.error("Server died unexpectedly: ", e);
         }
