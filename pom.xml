@@ -49,15 +49,20 @@
         <module>hadoop-unit-kafka</module>
         <module>hadoop-unit-oozie</module>
         <module>hadoop-unit-hive</module>
+        <module>hadoop-unit-hiveserver23</module>
+        <module>hadoop-unit-hivemeta3</module>
         <module>hadoop-unit-zookeeper</module>
         <module>hadoop-unit-solr</module>
         <module>hadoop-unit-solrcloud</module>
         <module>hadoop-unit-hdfs</module>
+        <module>hadoop-unit-hdfs3</module>
         <module>hadoop-unit-hbase</module>
         <module>hadoop-unit-yarn</module>
+        <module>hadoop-unit-yarn3</module>
         <module>hadoop-unit-standalone</module>
         <module>hadoop-unit-commons</module>
         <module>hadoop-unit-commons-hadoop</module>
+        <module>hadoop-unit-commons-hadoop3</module>
         <module>hadoop-unit-client</module>
         <module>hadoop-unit-maven-plugin</module>
         <module>hadoop-unit-cassandra</module>
@@ -291,6 +296,12 @@
 
             <dependency>
                 <groupId>fr.jetoile.hadoop</groupId>
+                <artifactId>hadoop-unit-commons-hadoop3</artifactId>
+                <version>${hadoop-unit.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>fr.jetoile.hadoop</groupId>
                 <artifactId>hadoop-unit-windowslibs</artifactId>
                 <version>${hadoop-unit.version}</version>
             </dependency>
@@ -321,6 +332,12 @@
 
             <dependency>
                 <groupId>fr.jetoile.hadoop</groupId>
+                <artifactId>hadoop-unit-hdfs3</artifactId>
+                <version>${hadoop-unit.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>fr.jetoile.hadoop</groupId>
                 <artifactId>hadoop-unit-alluxio</artifactId>
                 <version>${hadoop-unit.version}</version>
             </dependency>
@@ -333,6 +350,18 @@
 
             <dependency>
                 <groupId>fr.jetoile.hadoop</groupId>
+                <artifactId>hadoop-unit-hiveserver23</artifactId>
+                <version>${hadoop-unit.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>fr.jetoile.hadoop</groupId>
+                <artifactId>hadoop-unit-hivesmeta3</artifactId>
+                <version>${hadoop-unit.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>fr.jetoile.hadoop</groupId>
                 <artifactId>hadoop-unit-hbase</artifactId>
                 <version>${hadoop-unit.version}</version>
             </dependency>
@@ -340,6 +369,12 @@
             <dependency>
                 <groupId>fr.jetoile.hadoop</groupId>
                 <artifactId>hadoop-unit-yarn</artifactId>
+                <version>${hadoop-unit.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>fr.jetoile.hadoop</groupId>
+                <artifactId>hadoop-unit-yarn3</artifactId>
                 <version>${hadoop-unit.version}</version>
             </dependency>
 
