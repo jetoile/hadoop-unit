@@ -17,4 +17,5 @@ package fr.jetoile.hadoopunit;
 public class HadoopUnitConfig {
     // Props file
     public static final String DEFAULT_PROPS_FILE = "hadoop-unit-default.properties";
+    public static final String TMP_DIR_PATH_KEY = "tmp.dir.path";
 }

@@ -79,7 +79,7 @@ public class ConfluentKafkaBootstrap implements Bootstrap {
 
     public void loadConfig() {
         kafkaConfig.put("zookeeper.connect", configuration.getString(ZookeeperConfig.ZOOKEEPER_HOST_KEY) + ":" + configuration.getString(ZookeeperConfig.ZOOKEEPER_PORT_KEY));
-        kafkaConfig.put("log.dirs", configuration.getString(ConfluentConfig.CONFLUENT_KAFKA_LOG_DIR_KEY));
+        kafkaConfig.put("log.dirs", getTmpDirPath(configuration, ConfluentConfig.CONFLUENT_KAFKA_LOG_DIR_KEY));
         kafkaConfig.put("broker.id", configuration.getString(ConfluentConfig.CONFLUENT_KAFKA_BROKER_ID_KEY));
 //        kafkaConfig.put("advertised.listeners", "PLAINTEXT://localhost:22222");
         kafkaConfig.put("advertised.host.name", configuration.getString(ConfluentConfig.CONFLUENT_KAFKA_HOST_KEY));
@@ -95,7 +95,7 @@ public class ConfluentKafkaBootstrap implements Bootstrap {
             kafkaConfig.put("zookeeper.connect", configs.get(ZookeeperConfig.ZOOKEEPER_HOST_KEY) + ":" + configs.get(ZookeeperConfig.ZOOKEEPER_PORT_KEY));
         }
         if (StringUtils.isNotEmpty(configs.get(ConfluentConfig.CONFLUENT_KAFKA_LOG_DIR_KEY))) {
-            kafkaConfig.put("log.dirs", configs.get(ConfluentConfig.CONFLUENT_KAFKA_LOG_DIR_KEY));
+            kafkaConfig.put("log.dirs", getTmpDirPath(configs, ConfluentConfig.CONFLUENT_KAFKA_LOG_DIR_KEY));
         }
         if (StringUtils.isNotEmpty(configs.get(ConfluentConfig.CONFLUENT_KAFKA_BROKER_ID_KEY))) {
             kafkaConfig.put("broker.id", configs.get(ConfluentConfig.CONFLUENT_KAFKA_BROKER_ID_KEY));
@@ -152,7 +152,7 @@ public class ConfluentKafkaBootstrap implements Bootstrap {
 
     private void cleanup() {
         try {
-            FileUtils.deleteDirectory(Paths.get(configuration.getString(ConfluentConfig.CONFLUENT_KAFKA_LOG_DIR_KEY)).toFile());
+            FileUtils.deleteDirectory(Paths.get(getTmpDirPath(configuration, ConfluentConfig.CONFLUENT_KAFKA_LOG_DIR_KEY)).toFile());
         } catch (IOException e) {
             LOGGER.error("unable to delete {}", configuration.getString(ConfluentConfig.CONFLUENT_KAFKA_LOG_DIR_KEY), e);
         }

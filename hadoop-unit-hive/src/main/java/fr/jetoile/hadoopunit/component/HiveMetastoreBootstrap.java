@@ -77,8 +77,8 @@ public class HiveMetastoreBootstrap implements BootstrapHadoop {
     private void loadConfig() throws BootstrapException {
         host = configuration.getString(HiveConfig.HIVE_METASTORE_HOSTNAME_KEY);
         port = configuration.getInt(HiveConfig.HIVE_METASTORE_PORT_KEY);
-        derbyDirectory = configuration.getString(HiveConfig.HIVE_METASTORE_DERBY_DB_DIR_KEY);
-        scratchDirectory = configuration.getString(HiveConfig.HIVE_SCRATCH_DIR_KEY);
+        derbyDirectory = getTmpDirPath(configuration, HiveConfig.HIVE_METASTORE_DERBY_DB_DIR_KEY);
+        scratchDirectory = getTmpDirPath(configuration, HiveConfig.HIVE_SCRATCH_DIR_KEY);
         warehouseDirectory = configuration.getString(HiveConfig.HIVE_WAREHOUSE_DIR_KEY);
     }
 
@@ -91,10 +91,10 @@ public class HiveMetastoreBootstrap implements BootstrapHadoop {
             port = Integer.parseInt(configs.get(HiveConfig.HIVE_METASTORE_PORT_KEY));
         }
         if (StringUtils.isNotEmpty(configs.get(HiveConfig.HIVE_METASTORE_DERBY_DB_DIR_KEY))) {
-            derbyDirectory = configs.get(HiveConfig.HIVE_METASTORE_DERBY_DB_DIR_KEY);
+            derbyDirectory = getTmpDirPath(configs, HiveConfig.HIVE_METASTORE_DERBY_DB_DIR_KEY);
         }
         if (StringUtils.isNotEmpty(configs.get(HiveConfig.HIVE_SCRATCH_DIR_KEY))) {
-            scratchDirectory = configs.get(HiveConfig.HIVE_SCRATCH_DIR_KEY);
+            scratchDirectory = getTmpDirPath(configs, HiveConfig.HIVE_SCRATCH_DIR_KEY);
         }
         if (StringUtils.isNotEmpty(configs.get(HiveConfig.HIVE_WAREHOUSE_DIR_KEY))) {
             warehouseDirectory = configs.get(HiveConfig.HIVE_WAREHOUSE_DIR_KEY);

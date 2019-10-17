@@ -111,7 +111,7 @@ public class RedisBootstrap implements Bootstrap {
         downloadUrl = configuration.getString(RedisConfig.REDIS_DOWNLOAD_URL_KEY);
         cleanupInstallation = configuration.getBoolean(RedisConfig.REDIS_CLEANUP_INSTALLATION_KEY);
         type = RedisType.valueOf(configuration.getString(RedisConfig.REDIS_TYPE_KEY, RedisType.SERVER.name()));
-        tmpDir = configuration.getString(RedisConfig.REDIS_TMP_DIR_KEY);
+        tmpDir = getTmpDirPath(configuration, RedisConfig.REDIS_TMP_DIR_KEY);
 
         if (configuration.containsKey(RedisConfig.REDIS_SLAVE_PORT_KEY)) {
             slavePorts = configuration.getList(RedisConfig.REDIS_SLAVE_PORT_KEY).stream().map(s -> Integer.valueOf(((String) s).trim())).collect(Collectors.toList());
@@ -142,7 +142,7 @@ public class RedisBootstrap implements Bootstrap {
             type = RedisType.valueOf(configs.get(RedisConfig.REDIS_TYPE_KEY));
         }
         if (StringUtils.isNotEmpty(configs.get(RedisConfig.REDIS_TMP_DIR_KEY))) {
-            tmpDir = configs.get(RedisConfig.REDIS_TMP_DIR_KEY);
+            tmpDir = getTmpDirPath(configs, RedisConfig.REDIS_TMP_DIR_KEY);
         }
         if (StringUtils.isNotEmpty(configs.get(RedisConfig.REDIS_SLAVE_PORT_KEY))) {
             List<String> ports = Arrays.asList(configs.get(RedisConfig.REDIS_SLAVE_PORT_KEY).split(","));

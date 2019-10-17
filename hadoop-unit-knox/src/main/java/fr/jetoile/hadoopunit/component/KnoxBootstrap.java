@@ -159,7 +159,7 @@ public class KnoxBootstrap implements Bootstrap {
         host = configuration.getString(KnoxConfig.KNOX_HOST_KEY);
         path = configuration.getString(KnoxConfig.KNOX_PATH_KEY);
         clusterName = configuration.getString(KnoxConfig.KNOX_CLUSTER_KEY);
-        tempDirectory = configuration.getString(KnoxConfig.KNOX_HOME_DIR_KEY);
+        tempDirectory = getTmpDirPath(configuration, KnoxConfig.KNOX_HOME_DIR_KEY);
 
         List<String> servicesList = Arrays.asList(configuration.getStringArray(KnoxConfig.KNOX_SERVICE_KEY));
         services = Arrays.asList(KnoxService.values()).stream().filter(s -> servicesList.contains(s.getName())).collect(Collectors.toList());
@@ -186,7 +186,7 @@ public class KnoxBootstrap implements Bootstrap {
             clusterName = configs.get(KnoxConfig.KNOX_CLUSTER_KEY);
         }
         if (StringUtils.isNotEmpty(configs.get(KnoxConfig.KNOX_HOME_DIR_KEY))) {
-            tempDirectory = configs.get(KnoxConfig.KNOX_HOME_DIR_KEY);
+            tempDirectory = getTmpDirPath(configs, KnoxConfig.KNOX_HOME_DIR_KEY);
         }
         if (StringUtils.isNotEmpty(configs.get(KnoxConfig.KNOX_SERVICE_KEY))) {
             List<String> servicesList = Arrays.asList(configuration.getStringArray(KnoxConfig.KNOX_SERVICE_KEY));

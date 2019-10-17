@@ -101,7 +101,7 @@ public class KafkaBootstrap implements Bootstrap {
         host = configuration.getString(KafkaConfig.KAFKA_HOSTNAME_KEY);
         port = configuration.getInt(KafkaConfig.KAFKA_PORT_KEY);
         brokerId = configuration.getInt(KafkaConfig.KAFKA_TEST_BROKER_ID_KEY);
-        tmpDirectory = configuration.getString(KafkaConfig.KAFKA_TEST_TEMP_DIR_KEY);
+        tmpDirectory = getTmpDirPath(configuration, KafkaConfig.KAFKA_TEST_TEMP_DIR_KEY);
         zookeeperConnectionString = configuration.getString(ZookeeperConfig.ZOOKEEPER_HOST_KEY) + ":" + configuration.getInt(ZookeeperConfig.ZOOKEEPER_PORT_KEY);
     }
 
@@ -117,7 +117,7 @@ public class KafkaBootstrap implements Bootstrap {
             brokerId = Integer.parseInt(configs.get(KafkaConfig.KAFKA_TEST_BROKER_ID_KEY));
         }
         if (StringUtils.isNotEmpty(configs.get(KafkaConfig.KAFKA_TEST_TEMP_DIR_KEY))) {
-            tmpDirectory = configs.get(KafkaConfig.KAFKA_TEST_TEMP_DIR_KEY);
+            tmpDirectory = getTmpDirPath(configs, KafkaConfig.KAFKA_TEST_TEMP_DIR_KEY);
         }
         if (StringUtils.isNotEmpty(configs.get(ZookeeperConfig.ZOOKEEPER_HOST_KEY)) && StringUtils.isNotEmpty(configs.get(ZookeeperConfig.ZOOKEEPER_PORT_KEY))) {
             zookeeperConnectionString = configs.get(ZookeeperConfig.ZOOKEEPER_HOST_KEY) + ":" + configs.get(ZookeeperConfig.ZOOKEEPER_PORT_KEY);

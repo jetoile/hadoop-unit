@@ -163,7 +163,7 @@ public class OozieBootstrap implements BootstrapHadoop {
     }
 
     private void loadConfig() throws BootstrapException, NotFoundServiceException {
-        oozieTestDir = configuration.getString(OozieConfig.OOZIE_TEST_DIR_KEY);
+        oozieTestDir = getTmpDirPath(configuration, OozieConfig.OOZIE_TEST_DIR_KEY);
         oozieHomeDir = configuration.getString(OozieConfig.OOZIE_HOME_DIR_KEY);
         oozieUsername = System.getProperty("user.name");
         oozieGroupname = configuration.getString(OozieConfig.OOZIE_GROUPNAME_KEY);
@@ -174,7 +174,7 @@ public class OozieBootstrap implements BootstrapHadoop {
         oozieLocalShareLibCacheDir = configuration.getString(OozieConfig.OOZIE_LOCAL_SHARE_LIB_CACHE_DIR_KEY);
         ooziePurgeLocalShareLibCache = configuration.getBoolean(OozieConfig.OOZIE_PURGE_LOCAL_SHARE_LIB_CACHE_KEY);
 
-        oozieTmpDir = configuration.getString(OozieConfig.OOZIE_TMP_DIR_KEY);
+        oozieTmpDir = getTmpDirPath(configuration, OozieConfig.OOZIE_TMP_DIR_KEY);
 
         numNodeManagers = Integer.parseInt(configuration.getString(YarnConfig.YARN_NUM_NODE_MANAGERS_KEY));
         jobHistoryAddress = configuration.getString(YarnConfig.MR_JOB_HISTORY_ADDRESS_KEY);
@@ -198,7 +198,7 @@ public class OozieBootstrap implements BootstrapHadoop {
     @Override
     public void loadConfig(Map<String, String> configs) {
         if (StringUtils.isNotEmpty(configs.get(OozieConfig.OOZIE_TEST_DIR_KEY))) {
-            oozieTestDir = configs.get(OozieConfig.OOZIE_TEST_DIR_KEY);
+            oozieTestDir = getTmpDirPath(configs, OozieConfig.OOZIE_TEST_DIR_KEY);
         }
         if (StringUtils.isNotEmpty(configs.get(OozieConfig.OOZIE_HOME_DIR_KEY))) {
             oozieHomeDir = configs.get(OozieConfig.OOZIE_HOME_DIR_KEY);
@@ -223,7 +223,7 @@ public class OozieBootstrap implements BootstrapHadoop {
         }
 
         if (StringUtils.isNotEmpty(configs.get(OozieConfig.OOZIE_TMP_DIR_KEY))) {
-            oozieTmpDir = configs.get(OozieConfig.OOZIE_TMP_DIR_KEY);
+            oozieTmpDir = getTmpDirPath(configs, OozieConfig.OOZIE_TMP_DIR_KEY);
         }
 
         if (StringUtils.isNotEmpty(configs.get(YarnConfig.YARN_NUM_NODE_MANAGERS_KEY))) {

@@ -119,7 +119,7 @@ public class HdfsBootstrap implements BootstrapHadoop {
         host = configuration.getString(HdfsConfig.HDFS_NAMENODE_HOST_KEY);
         port = configuration.getInt(HdfsConfig.HDFS_NAMENODE_PORT_KEY);
         httpPort = configuration.getInt(HdfsConfig.HDFS_NAMENODE_HTTP_PORT_KEY);
-        tempDirectory = configuration.getString(HdfsConfig.HDFS_TEMP_DIR_KEY);
+        tempDirectory = getTmpDirPath(configuration, HdfsConfig.HDFS_TEMP_DIR_KEY);
         numDatanodes = configuration.getInt(HdfsConfig.HDFS_NUM_DATANODES_KEY);
         enablePermission = configuration.getBoolean(HdfsConfig.HDFS_ENABLE_PERMISSIONS_KEY);
         format = configuration.getBoolean(HdfsConfig.HDFS_FORMAT_KEY);
@@ -143,7 +143,7 @@ public class HdfsBootstrap implements BootstrapHadoop {
             httpPort = Integer.parseInt(configs.get(HdfsConfig.HDFS_NAMENODE_HTTP_PORT_KEY));
         }
         if (StringUtils.isNotEmpty(configs.get(HdfsConfig.HDFS_TEMP_DIR_KEY))) {
-            tempDirectory = configs.get(HdfsConfig.HDFS_TEMP_DIR_KEY);
+            tempDirectory = getTmpDirPath(configs, HdfsConfig.HDFS_TEMP_DIR_KEY);
         }
         if (StringUtils.isNotEmpty(configs.get(HdfsConfig.HDFS_NUM_DATANODES_KEY))) {
             numDatanodes = Integer.parseInt(configs.get(HdfsConfig.HDFS_NUM_DATANODES_KEY));

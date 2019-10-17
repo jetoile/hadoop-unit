@@ -77,7 +77,7 @@ public class Neo4jBootstrap implements Bootstrap {
     private void loadConfig() {
         port = configuration.getInt(Neo4jConfig.NEO4J_PORT_KEY);
         ip = configuration.getString(Neo4jConfig.NEO4J_IP_KEY);
-        tmp = configuration.getString(Neo4jConfig.NEO4J_TEMP_DIR_KEY);
+        tmp = getTmpDirPath(configuration, Neo4jConfig.NEO4J_TEMP_DIR_KEY);
     }
 
     @Override
@@ -89,7 +89,7 @@ public class Neo4jBootstrap implements Bootstrap {
             ip = configs.get(Neo4jConfig.NEO4J_IP_KEY);
         }
         if (StringUtils.isNotEmpty(configs.get(Neo4jConfig.NEO4J_TEMP_DIR_KEY))) {
-            tmp = configs.get(Neo4jConfig.NEO4J_TEMP_DIR_KEY);
+            tmp = getTmpDirPath(configs, Neo4jConfig.NEO4J_TEMP_DIR_KEY);
         }
     }
 
@@ -143,9 +143,9 @@ public class Neo4jBootstrap implements Bootstrap {
 
     private void cleanup() {
         try {
-            FileUtils.deleteDirectory(Paths.get(configuration.getString(Neo4jConfig.NEO4J_TEMP_DIR_KEY)).toFile());
+            FileUtils.deleteDirectory(Paths.get(tmp).toFile());
         } catch (IOException e) {
-            LOGGER.error("unable to delete {}", configuration.getString(Neo4jConfig.NEO4J_TEMP_DIR_KEY), e);
+            LOGGER.error("unable to delete {}", tmp, e);
         }
     }
 

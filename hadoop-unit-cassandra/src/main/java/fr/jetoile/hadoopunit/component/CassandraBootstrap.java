@@ -40,6 +40,7 @@ public class CassandraBootstrap implements Bootstrap {
     private CassandraShutDownHook shutdownHook;
     private int port;
     private String ip;
+    private String tmpDirPath;
 
     public CassandraBootstrap() {
         try {
@@ -73,6 +74,7 @@ public class CassandraBootstrap implements Bootstrap {
     private void loadConfig() {
         port = configuration.getInt(CassandraConfig.CASSANDRA_PORT_KEY);
         ip = configuration.getString(CassandraConfig.CASSANDRA_IP_KEY);
+        tmpDirPath = getTmpDirPath(configuration, CassandraConfig.CASSANDRA_TEMP_DIR_KEY);
     }
 
     @Override
@@ -83,14 +85,17 @@ public class CassandraBootstrap implements Bootstrap {
         if (StringUtils.isNotEmpty(configs.get(CassandraConfig.CASSANDRA_IP_KEY))) {
             ip = configs.get(CassandraConfig.CASSANDRA_IP_KEY);
         }
+        if (StringUtils.isNotEmpty(configs.get(CassandraConfig.CASSANDRA_TEMP_DIR_KEY))) {
+            tmpDirPath = getTmpDirPath(configs, CassandraConfig.CASSANDRA_TEMP_DIR_KEY);
+        }
     }
 
     private void build() throws IOException {
-        Files.createDirectory(Paths.get(configuration.getString(CassandraConfig.CASSANDRA_TEMP_DIR_KEY)));
-        Files.createDirectory(Paths.get(configuration.getString(CassandraConfig.CASSANDRA_TEMP_DIR_KEY) + "/data"));
-        Files.createDirectory(Paths.get(configuration.getString(CassandraConfig.CASSANDRA_TEMP_DIR_KEY) + "/commitlog"));
-        Files.createDirectory(Paths.get(configuration.getString(CassandraConfig.CASSANDRA_TEMP_DIR_KEY) + "/saved_caches"));
-        Files.createDirectory(Paths.get(configuration.getString(CassandraConfig.CASSANDRA_TEMP_DIR_KEY) + "/hints"));
+        Files.createDirectory(Paths.get(tmpDirPath));
+        Files.createDirectory(Paths.get(tmpDirPath + "/data"));
+        Files.createDirectory(Paths.get(tmpDirPath + "/commitlog"));
+        Files.createDirectory(Paths.get(tmpDirPath + "/saved_caches"));
+        Files.createDirectory(Paths.get(tmpDirPath + "/hints"));
 
         shutdownHook = new CassandraShutDownHook();
 
@@ -100,10 +105,10 @@ public class CassandraBootstrap implements Bootstrap {
                 .withBroadcastAddress(ip)
                 .withBroadcastRpcAddress(ip)
                 .withCQLPort(port)
-                .withDataFolder(configuration.getString(CassandraConfig.CASSANDRA_TEMP_DIR_KEY) + "/data")
-                .withCommitLogFolder(configuration.getString(CassandraConfig.CASSANDRA_TEMP_DIR_KEY) + "/commitlog")
-                .withSavedCachesFolder(configuration.getString(CassandraConfig.CASSANDRA_TEMP_DIR_KEY) + "/saved_caches")
-                .withHintsFolder(configuration.getString(CassandraConfig.CASSANDRA_TEMP_DIR_KEY) + "/hints")
+                .withDataFolder(tmpDirPath + "/data")
+                .withCommitLogFolder(tmpDirPath + "/commitlog")
+                .withSavedCachesFolder(tmpDirPath + "/saved_caches")
+                .withHintsFolder(tmpDirPath + "/hints")
                 .cleanDataFilesAtStartup(true)
                 .withShutdownHook(shutdownHook)
                 .cleanDataFilesAtStartup(true)
@@ -147,9 +152,9 @@ public class CassandraBootstrap implements Bootstrap {
 
     private void cleanup() {
         try {
-            FileUtils.deleteDirectory(Paths.get(configuration.getString(CassandraConfig.CASSANDRA_TEMP_DIR_KEY)).toFile());
+            FileUtils.deleteDirectory(Paths.get(tmpDirPath).toFile());
         } catch (IOException e) {
-            LOGGER.error("unable to delete {}", configuration.getString(CassandraConfig.CASSANDRA_TEMP_DIR_KEY), e);
+            LOGGER.error("unable to delete {}", tmpDirPath, e);
         }
     }
 

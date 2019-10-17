@@ -87,8 +87,8 @@ public class HiveServer2Bootstrap implements BootstrapHadoop {
         hostMetastore = configuration.getString(HiveConfig.HIVE_METASTORE_HOSTNAME_KEY);
         portMetastore = configuration.getInt(HiveConfig.HIVE_METASTORE_PORT_KEY);
         derbyDirectory = configuration.getString(HiveConfig.HIVE_METASTORE_DERBY_DB_DIR_KEY);
-        scratchDirectory = configuration.getString(HiveConfig.HIVE_SCRATCH_DIR_KEY);
-        warehouseDirectory = configuration.getString(HiveConfig.HIVE_WAREHOUSE_DIR_KEY);
+        scratchDirectory = getTmpDirPath(configuration, HiveConfig.HIVE_SCRATCH_DIR_KEY);
+        warehouseDirectory = getTmpDirPath(configuration, HiveConfig.HIVE_WAREHOUSE_DIR_KEY);
         zookeeperConnectionString = configuration.getString(ZookeeperConfig.ZOOKEEPER_HOST_KEY) + ":" + configuration.getInt(ZookeeperConfig.ZOOKEEPER_PORT_KEY);
         hdfsUri = "hdfs://" + configuration.getString(HdfsConfig.HDFS_NAMENODE_HOST_KEY) + ":" + configuration.getString(HdfsConfig.HDFS_NAMENODE_PORT_KEY);
     }
@@ -108,10 +108,10 @@ public class HiveServer2Bootstrap implements BootstrapHadoop {
             portMetastore = Integer.parseInt(configs.get(HiveConfig.HIVE_METASTORE_PORT_KEY));
         }
         if (StringUtils.isNotEmpty(configs.get(HiveConfig.HIVE_METASTORE_DERBY_DB_DIR_KEY))) {
-            derbyDirectory = configs.get(HiveConfig.HIVE_METASTORE_DERBY_DB_DIR_KEY);
+            derbyDirectory = getTmpDirPath(configs, HiveConfig.HIVE_METASTORE_DERBY_DB_DIR_KEY);
         }
         if (StringUtils.isNotEmpty(configs.get(HiveConfig.HIVE_SCRATCH_DIR_KEY))) {
-            scratchDirectory = configs.get(HiveConfig.HIVE_SCRATCH_DIR_KEY);
+            scratchDirectory = getTmpDirPath(configs, HiveConfig.HIVE_SCRATCH_DIR_KEY);
         }
         if (StringUtils.isNotEmpty(configs.get(HiveConfig.HIVE_WAREHOUSE_DIR_KEY))) {
             warehouseDirectory = configs.get(HiveConfig.HIVE_WAREHOUSE_DIR_KEY);

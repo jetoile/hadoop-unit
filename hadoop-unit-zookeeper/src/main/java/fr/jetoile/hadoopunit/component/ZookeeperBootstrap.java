@@ -79,7 +79,7 @@ public class ZookeeperBootstrap implements Bootstrap {
 
     private void loadConfig() throws BootstrapException {
         port = configuration.getInt(ZookeeperConfig.ZOOKEEPER_PORT_KEY);
-        localDir = configuration.getString(ZookeeperConfig.ZOOKEEPER_TEMP_DIR_KEY);
+        localDir = getTmpDirPath(configuration, ZookeeperConfig.ZOOKEEPER_TEMP_DIR_KEY);
         host = configuration.getString(ZookeeperConfig.ZOOKEEPER_HOST_KEY);
 
     }
@@ -90,7 +90,7 @@ public class ZookeeperBootstrap implements Bootstrap {
             port = Integer.parseInt(configs.get(ZookeeperConfig.ZOOKEEPER_PORT_KEY));
         }
         if (StringUtils.isNotEmpty(configs.get(ZookeeperConfig.ZOOKEEPER_TEMP_DIR_KEY))) {
-            localDir = configs.get(ZookeeperConfig.ZOOKEEPER_TEMP_DIR_KEY);
+            localDir = getTmpDirPath(configs, ZookeeperConfig.ZOOKEEPER_TEMP_DIR_KEY);
         }
         if (StringUtils.isNotEmpty(configs.get(ZookeeperConfig.ZOOKEEPER_HOST_KEY))) {
             host = configs.get(ZookeeperConfig.ZOOKEEPER_HOST_KEY);

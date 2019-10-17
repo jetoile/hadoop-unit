@@ -16,6 +16,8 @@ package fr.jetoile.hadoopunit.component;
 
 
 import fr.jetoile.hadoopunit.ComponentMetadata;
+import fr.jetoile.hadoopunit.HadoopUnitConfig;
+import org.apache.commons.configuration.Configuration;
 
 import java.util.Map;
 
@@ -25,6 +27,14 @@ public interface Bootstrap {
     Bootstrap stop();
 
     String getProperties();
+
+    default String getTmpDirPath(Configuration configuration, String componentTmpPathKey) {
+        return configuration.getString(HadoopUnitConfig.TMP_DIR_PATH_KEY, "/tmp") + configuration.getString(componentTmpPathKey);
+    }
+
+    default String getTmpDirPath(Map<String, String> configs, String componentTmpPathKey) {
+        return configs.getOrDefault(HadoopUnitConfig.TMP_DIR_PATH_KEY, "/tmp") + configs.get(componentTmpPathKey);
+    }
 
     /**
      * Allow to override configurations when using maven plugin
