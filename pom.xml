@@ -60,7 +60,8 @@
         <module>hadoop-unit-commons-hadoop</module>
         <module>hadoop-unit-client</module>
         <module>hadoop-unit-maven-plugin</module>
-        <module>hadoop-unit-cassandra</module>
+	<module>hadoop-unit-cassandra</module>
+        <module>hadoop-unit-pulsar-standalone</module>
         <module>hadoop-unit-mongodb</module>
         <module>hadoop-unit-elasticsearch</module>
         <module>hadoop-unit-neo4j</module>

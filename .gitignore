@@ -3,6 +3,7 @@
 *.iml
 *.ipr
 target
+data
 *.project
 *.classpath
 *.iws

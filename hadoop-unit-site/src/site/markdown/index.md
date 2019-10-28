@@ -58,8 +58,10 @@ Welcome to the Hadoop Unit wiki!
 		 labels:{MAGIC_NUMBER=42}
 		 command:[/bin/sh, -c, while true; do echo "$MAGIC_NUMBER" | nc -l -p 80; done]
 		 classpathResourceMappings:{}
-		 
-		 
+- PULSAR 
+         ip:127.0.0.1
+         port:22022
+         zookeeper port:22020		 
 ...
 ```
 

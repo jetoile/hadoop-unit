@@ -36,16 +36,7 @@ hadoop-unit-standalone.bat console
 If you get errors which tell you that you can not write in the directory `C:\tmp` or `D:\tmp`, it is because you are not admin of you laptop. If you can create this directory and give access to it. If not possible, edit the configuration file `conf/hadoop-unit-default.properties` and set:
 
 ```bash
-zookeeper.temp.dir=C:/<path where you can write>/tmp/embedded_zk
-hdfs.temp.dir=C:/<path where you can write>/tmp/embedded_hdfs
-hbase.root.dir=C:/<path where you can write>/tmp/embedded_hbase
-oozie.tmp.dir=C:/<path where you can write>/tmp/oozie_tmp
-oozie.test.dir=C:/<path where you can write>/tmp/embedded_oozie
-oozie.home.dir=C:/<path where you can write>/tmp/oozie_home
-cassandra.temp.dir=C:/<path where you can write>/tmp/embedded_cassandra
-neo4j.temp.dir=C:/<path where you can write>/tmp/embedded_neo4j
-knox.home.dir=C:/<path where you can write>/tmp/embedded_knox
-alluxio.work.dir=C:/<path where you can write>/tmp/alluxio
+tmp.dir.path=C:/<path where you can write>
 ```
 
 

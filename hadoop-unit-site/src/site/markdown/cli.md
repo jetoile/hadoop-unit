@@ -10,6 +10,7 @@ Hadoop-unit can be used with common tools such as:
 * [hive beeline](#hive-beeline)
 * [cassandra shell](#cassandra-shell)
 * [alluxio shell](#alluxio-shell)
+* [pulsar shell](#pulsar-shell)
 
 <div id="hdfs-command"/>
 # HDFS command
@@ -135,4 +136,15 @@ alluxio.master.port=14001
 
 ```bash
 ./alluxio fs ls <path>
+```
+
+<div id="pulsar-shell"/>
+# Pulsar Shell
+
+* Download and unzip pulsar
+* From directory `PULSAR_HOME/bin`, execute command:
+
+```bash
+./pulsar-client --url pulsar://localhost:22022/ consume -s subscriptionName topic
+./pulsar-client --url pulsar://localhost:22022/ produce -m message topic
 ```
