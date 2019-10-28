@@ -27,6 +27,7 @@ It offers different kinds of utilization:
 
 | Hadoop Unit version  | Hadoop mini cluster version | HDP version |
 | ------------- | ------------- | ------------- |
+| 3.5 | 0.1.16 | HDP 2.6.5.0 |
 | 3.4 | 0.1.16 | HDP 2.6.5.0 |
 | 3.3 | 0.1.16 | HDP 2.6.5.0 |
 | 3.2 | 0.1.16 | HDP 2.6.5.0 |
@@ -74,5 +75,6 @@ The available components are:
 * NEO4J
 * KNOX
 * ALLUXIO
+* PULSAR
 * REDIS (for linux and macOS only)
 
