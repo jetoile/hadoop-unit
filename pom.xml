@@ -149,7 +149,7 @@
 
         <hadoop-mini-clusters.version>0.1.16</hadoop-mini-clusters.version>
 
-        <hive.version>1.2.1000.2.6.5.0-292</hive.version>
+        <hive.version>3.1.2</hive.version>
         <solr.version>6.6.1</solr.version>
         <oozie.version>4.2.0.2.6.5.0-292</oozie.version>
         <hadoop.version>2.7.3.2.6.5.0-292</hadoop.version>
