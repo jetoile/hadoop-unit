@@ -56,9 +56,14 @@ __Warning__: Major releases are breaking compatibility
 The available components are:
 
 * HDFS
+* HDFS 3
 * ZOOKEEPER
 * HIVEMETA
 * HIVESERVER2
+* HIVEMETASTORE 3
+* HIVESERVER2 3
+* YARN
+* YARN 3
 * SOLR
 * SOLRCLOUD
 * OOZIE
@@ -71,7 +76,6 @@ The available components are:
 * MONGODB
 * CASSANDRA
 * ELASTICSEARCH
-* CONFLUENT (ie. schema registry, rest gateway, kafka)
 * NEO4J
 * KNOX
 * ALLUXIO
