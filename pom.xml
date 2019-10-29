@@ -52,6 +52,7 @@
         <module>hadoop-unit-hiveserver23</module>
         <module>hadoop-unit-hivemeta3</module>
         <module>hadoop-unit-zookeeper</module>
+        <module>hadoop-unit-bookkeeper</module>
         <module>hadoop-unit-solr</module>
         <module>hadoop-unit-solrcloud</module>
         <module>hadoop-unit-hdfs</module>
@@ -65,7 +66,7 @@
         <module>hadoop-unit-commons-hadoop3</module>
         <module>hadoop-unit-client</module>
         <module>hadoop-unit-maven-plugin</module>
-	<module>hadoop-unit-cassandra</module>
+        <module>hadoop-unit-cassandra</module>
         <module>hadoop-unit-pulsar-standalone</module>
         <module>hadoop-unit-mongodb</module>
         <module>hadoop-unit-elasticsearch</module>

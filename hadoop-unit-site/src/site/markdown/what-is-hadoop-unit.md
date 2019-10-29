@@ -80,5 +80,6 @@ The available components are:
 * KNOX
 * ALLUXIO
 * PULSAR
+* BOOKKEEPER
 * REDIS (for linux and macOS only)
 
