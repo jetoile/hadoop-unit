@@ -123,7 +123,7 @@ public class HiveMetastore3Bootstrap implements BootstrapHadoop3 {
         WindowsLibsUtils.setHadoopHome();
 
         HiveConf hiveConf = new HiveConf();
-        hiveConf.set("fs.defaultFS", "hdfs://" + configuration.getString(Hdfs3Config.HDFS3_NAMENODE_HOST_KEY) + ":" + configuration.getInt(Hdfs3Config.HDFS3_NAMENODE_PORT_KEY));
+        hiveConf.set("fs.defaultFS", "hdfs://" + configuration.getString(Hdfs3Config.HDFS3_NAMENODE_HOST_CLIENT_KEY) + ":" + configuration.getInt(Hdfs3Config.HDFS3_NAMENODE_PORT_KEY));
 //        hiveConf.set(HiveConf.ConfVars.HIVE_TXN_MANAGER.varname, "org.apache.hadoop.hive.ql.lockmgr.DbTxnManager");
 //        hiveConf.set(HiveConf.ConfVars.HIVE_COMPACTOR_INITIATOR_ON.varname, "true");
 //        hiveConf.set(HiveConf.ConfVars.HIVE_COMPACTOR_WORKER_THREADS.varname, "5");

@@ -82,7 +82,7 @@ public class SolrCloudBootstrap implements Bootstrap {
 
     @Override
     public String getProperties() {
-        return "\n \t\t\t zh:" + zkHostString +
+        return "\n \t\t\t zk:" + zkHostString +
                 "\n \t\t\t port:" + solrPort +
                 "\n \t\t\t collection:" + solrCollectionName;
     }
@@ -115,7 +115,7 @@ public class SolrCloudBootstrap implements Bootstrap {
         solrDirectory = configuration.getString(SolrCloudConfig.SOLR_DIR_KEY);
         solrCollectionName = configuration.getString(SolrCloudConfig.SOLR_COLLECTION_NAME);
         solrPort = configuration.getInt(SolrCloudConfig.SOLR_PORT);
-        zkHostString = configuration.getString(ZookeeperConfig.ZOOKEEPER_HOST_KEY) + ":" + configuration.getInt(ZookeeperConfig.ZOOKEEPER_PORT_KEY);
+        zkHostString = configuration.getString(ZookeeperConfig.ZOOKEEPER_HOST_CLIENT_KEY) + ":" + configuration.getInt(ZookeeperConfig.ZOOKEEPER_PORT_KEY);
     }
 
     @Override
@@ -129,8 +129,8 @@ public class SolrCloudBootstrap implements Bootstrap {
         if (StringUtils.isNotEmpty(configs.get(SolrCloudConfig.SOLR_PORT))) {
             solrPort = Integer.parseInt(configs.get(SolrCloudConfig.SOLR_PORT));
         }
-        if (StringUtils.isNotEmpty(configs.get(ZookeeperConfig.ZOOKEEPER_HOST_KEY)) && StringUtils.isNotEmpty(configs.get(ZookeeperConfig.ZOOKEEPER_PORT_KEY))) {
-            zkHostString = configs.get(ZookeeperConfig.ZOOKEEPER_HOST_KEY) + ":" + configs.get(ZookeeperConfig.ZOOKEEPER_PORT_KEY);
+        if (StringUtils.isNotEmpty(configs.get(ZookeeperConfig.ZOOKEEPER_HOST_CLIENT_KEY)) && StringUtils.isNotEmpty(configs.get(ZookeeperConfig.ZOOKEEPER_PORT_KEY))) {
+            zkHostString = configs.get(ZookeeperConfig.ZOOKEEPER_HOST_CLIENT_KEY) + ":" + configs.get(ZookeeperConfig.ZOOKEEPER_PORT_KEY);
         }
     }
 

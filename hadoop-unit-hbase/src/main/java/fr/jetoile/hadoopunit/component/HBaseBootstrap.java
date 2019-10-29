@@ -121,7 +121,7 @@ public class HBaseBootstrap implements BootstrapHadoop {
         infoPort = configuration.getInt(HBaseConfig.HBASE_MASTER_INFO_PORT_KEY);
         nbRegionServer = configuration.getInt(HBaseConfig.HBASE_NUM_REGION_SERVERS_KEY);
         rootDirectory = configuration.getString(HBaseConfig.HBASE_ROOT_DIR_KEY);
-        zookeeperConnectionString = configuration.getString(ZookeeperConfig.ZOOKEEPER_HOST_KEY) + ":" + configuration.getInt(ZookeeperConfig.ZOOKEEPER_PORT_KEY);
+        zookeeperConnectionString = configuration.getString(ZookeeperConfig.ZOOKEEPER_HOST_CLIENT_KEY) + ":" + configuration.getInt(ZookeeperConfig.ZOOKEEPER_PORT_KEY);
         zookeeperPort = configuration.getInt(ZookeeperConfig.ZOOKEEPER_PORT_KEY);
         zookeeperZnodeParent = configuration.getString(HBaseConfig.HBASE_ZNODE_PARENT_KEY);
         enableWalReplication = configuration.getBoolean(HBaseConfig.HBASE_WAL_REPLICATION_ENABLED_KEY);
@@ -132,7 +132,7 @@ public class HBaseBootstrap implements BootstrapHadoop {
         restReadOnly = configuration.getBoolean(HBaseConfig.HBASE_REST_READONLY_KEY);
         restMaxThread = configuration.getInt(HBaseConfig.HBASE_REST_THREADMAX_KEY);
         restMinThread = configuration.getInt(HBaseConfig.HBASE_REST_THREADMIN_KEY);
-        hdfsUri = "hdfs://" + configuration.getString(HdfsConfig.HDFS_NAMENODE_HOST_KEY) + ":" + configuration.getString(HdfsConfig.HDFS_NAMENODE_PORT_KEY);
+        hdfsUri = "hdfs://" + configuration.getString(HdfsConfig.HDFS_NAMENODE_HOST_CLIENT_KEY) + ":" + configuration.getString(HdfsConfig.HDFS_NAMENODE_PORT_KEY);
     }
 
     @Override
@@ -149,8 +149,8 @@ public class HBaseBootstrap implements BootstrapHadoop {
         if (StringUtils.isNotEmpty(configs.get(HBaseConfig.HBASE_ROOT_DIR_KEY))) {
             rootDirectory = configs.get(HBaseConfig.HBASE_ROOT_DIR_KEY);
         }
-        if (StringUtils.isNotEmpty(configs.get(ZookeeperConfig.ZOOKEEPER_HOST_KEY)) && StringUtils.isNotEmpty(configs.get(ZookeeperConfig.ZOOKEEPER_PORT_KEY))) {
-            zookeeperConnectionString = configs.get(ZookeeperConfig.ZOOKEEPER_HOST_KEY) + ":" + configs.get(ZookeeperConfig.ZOOKEEPER_PORT_KEY);
+        if (StringUtils.isNotEmpty(configs.get(ZookeeperConfig.ZOOKEEPER_HOST_CLIENT_KEY)) && StringUtils.isNotEmpty(configs.get(ZookeeperConfig.ZOOKEEPER_PORT_KEY))) {
+            zookeeperConnectionString = configs.get(ZookeeperConfig.ZOOKEEPER_HOST_CLIENT_KEY) + ":" + configs.get(ZookeeperConfig.ZOOKEEPER_PORT_KEY);
         }
         if (StringUtils.isNotEmpty(configs.get(ZookeeperConfig.ZOOKEEPER_PORT_KEY))) {
             zookeeperPort = Integer.parseInt(configs.get(ZookeeperConfig.ZOOKEEPER_PORT_KEY));
@@ -180,8 +180,8 @@ public class HBaseBootstrap implements BootstrapHadoop {
         if (StringUtils.isNotEmpty(configs.get(HBaseConfig.HBASE_REST_THREADMIN_KEY))) {
             restMinThread = Integer.parseInt(configs.get(HBaseConfig.HBASE_REST_THREADMIN_KEY));
         }
-        if (StringUtils.isNotEmpty(configs.get(HdfsConfig.HDFS_NAMENODE_HOST_KEY)) && StringUtils.isNotEmpty(configs.get(HdfsConfig.HDFS_NAMENODE_PORT_KEY))) {
-            hdfsUri = "hdfs://" + configs.get(HdfsConfig.HDFS_NAMENODE_HOST_KEY) + ":" + Integer.parseInt(configs.get(HdfsConfig.HDFS_NAMENODE_PORT_KEY));
+        if (StringUtils.isNotEmpty(configs.get(HdfsConfig.HDFS_NAMENODE_HOST_CLIENT_KEY)) && StringUtils.isNotEmpty(configs.get(HdfsConfig.HDFS_NAMENODE_PORT_KEY))) {
+            hdfsUri = "hdfs://" + configs.get(HdfsConfig.HDFS_NAMENODE_HOST_CLIENT_KEY) + ":" + Integer.parseInt(configs.get(HdfsConfig.HDFS_NAMENODE_PORT_KEY));
         }
     }
 

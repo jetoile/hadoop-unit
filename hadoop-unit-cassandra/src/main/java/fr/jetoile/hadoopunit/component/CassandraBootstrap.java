@@ -39,8 +39,11 @@ public class CassandraBootstrap implements Bootstrap {
     private Configuration configuration;
     private CassandraShutDownHook shutdownHook;
     private int port;
-    private String ip;
+    private String listenAddressIp;
     private String tmpDirPath;
+    private String rpcAddressIp;
+    private String broadcastAddressIp;
+    private String broadcastRpcAddressIp;
 
     public CassandraBootstrap() {
         try {
@@ -67,13 +70,19 @@ public class CassandraBootstrap implements Bootstrap {
 
     @Override
     public String getProperties() {
-        return "\n \t\t\t ip:" + ip +
+        return "\n \t\t\t listenAddressIp:" + listenAddressIp +
+                "\n \t\t\t rpcAddressIp:" + rpcAddressIp +
+                "\n \t\t\t broadcastAddressIp:" + broadcastAddressIp +
+                "\n \t\t\t broadcastRpcAddressIp:" + broadcastRpcAddressIp +
                 "\n \t\t\t port:" + port;
     }
 
     private void loadConfig() {
         port = configuration.getInt(CassandraConfig.CASSANDRA_PORT_KEY);
-        ip = configuration.getString(CassandraConfig.CASSANDRA_IP_KEY);
+        listenAddressIp = configuration.getString(CassandraConfig.CASSANDRA_LISTEN_ADDRESS_IP_KEY);
+        rpcAddressIp = configuration.getString(CassandraConfig.CASSANDRA_RPC_ADDRESS_IP_KEY);
+        broadcastAddressIp = configuration.getString(CassandraConfig.CASSANDRA_BROADCAST_ADDRESS_IP_KEY);
+        broadcastRpcAddressIp = configuration.getString(CassandraConfig.CASSANDRA_BROADCAST_RPC_ADDRESS_IP_KEY);
         tmpDirPath = getTmpDirPath(configuration, CassandraConfig.CASSANDRA_TEMP_DIR_KEY);
     }
 
@@ -82,8 +91,17 @@ public class CassandraBootstrap implements Bootstrap {
         if (StringUtils.isNotEmpty(configs.get(CassandraConfig.CASSANDRA_PORT_KEY))) {
             port = Integer.parseInt(configs.get(CassandraConfig.CASSANDRA_PORT_KEY));
         }
-        if (StringUtils.isNotEmpty(configs.get(CassandraConfig.CASSANDRA_IP_KEY))) {
-            ip = configs.get(CassandraConfig.CASSANDRA_IP_KEY);
+        if (StringUtils.isNotEmpty(configs.get(CassandraConfig.CASSANDRA_LISTEN_ADDRESS_IP_KEY))) {
+            listenAddressIp = configs.get(CassandraConfig.CASSANDRA_LISTEN_ADDRESS_IP_KEY);
+        }
+        if (StringUtils.isNotEmpty(configs.get(CassandraConfig.CASSANDRA_RPC_ADDRESS_IP_KEY))) {
+            rpcAddressIp = configs.get(CassandraConfig.CASSANDRA_RPC_ADDRESS_IP_KEY);
+        }
+        if (StringUtils.isNotEmpty(configs.get(CassandraConfig.CASSANDRA_BROADCAST_ADDRESS_IP_KEY))) {
+            broadcastAddressIp = configs.get(CassandraConfig.CASSANDRA_BROADCAST_ADDRESS_IP_KEY);
+        }
+        if (StringUtils.isNotEmpty(configs.get(CassandraConfig.CASSANDRA_BROADCAST_RPC_ADDRESS_IP_KEY))) {
+            broadcastRpcAddressIp = configs.get(CassandraConfig.CASSANDRA_BROADCAST_RPC_ADDRESS_IP_KEY);
         }
         if (StringUtils.isNotEmpty(configs.get(CassandraConfig.CASSANDRA_TEMP_DIR_KEY))) {
             tmpDirPath = getTmpDirPath(configs, CassandraConfig.CASSANDRA_TEMP_DIR_KEY);
@@ -100,10 +118,10 @@ public class CassandraBootstrap implements Bootstrap {
         shutdownHook = new CassandraShutDownHook();
 
         session = CassandraEmbeddedServerBuilder.builder()
-                .withListenAddress(ip)
-                .withRpcAddress(ip)
-                .withBroadcastAddress(ip)
-                .withBroadcastRpcAddress(ip)
+                .withListenAddress(listenAddressIp)
+                .withRpcAddress(rpcAddressIp)
+                .withBroadcastAddress(broadcastAddressIp)
+                .withBroadcastRpcAddress(broadcastRpcAddressIp)
                 .withCQLPort(port)
                 .withDataFolder(tmpDirPath + "/data")
                 .withCommitLogFolder(tmpDirPath + "/commitlog")

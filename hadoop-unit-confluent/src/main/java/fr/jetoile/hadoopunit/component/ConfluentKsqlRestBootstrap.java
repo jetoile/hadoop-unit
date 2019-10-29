@@ -80,7 +80,7 @@ public class ConfluentKsqlRestBootstrap implements Bootstrap {
     public void loadConfig() {
         ksqlConfig.put(KsqlRestConfig.LISTENERS_CONFIG, "http://" + configuration.getString(ConfluentConfig.CONFLUENT_KSQL_HOST_KEY) + ":" + configuration.getString(ConfluentConfig.CONFLUENT_KSQL_PORT_KEY));
 //    props.put(KsqlRestConfig.PORT_CONFIG, String.valueOf(portNumber));
-        ksqlConfig.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, configuration.getString(ConfluentConfig.CONFLUENT_KAFKA_HOST_KEY) + ":" + configuration.getString(ConfluentConfig.CONFLUENT_KAFKA_PORT_KEY));
+        ksqlConfig.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, configuration.getString(ConfluentConfig.CONFLUENT_KAFKA_HOST_CLIENT_KEY) + ":" + configuration.getString(ConfluentConfig.CONFLUENT_KAFKA_PORT_KEY));
         ksqlConfig.put(StreamsConfig.APPLICATION_ID_CONFIG, "ksql_config_test");
 //        ksqlConfig.put(KsqlRestConfig.COMMAND_TOPIC_SUFFIX, "commands");
     }
@@ -91,7 +91,7 @@ public class ConfluentKsqlRestBootstrap implements Bootstrap {
             ksqlConfig.put(KsqlRestConfig.LISTENERS_CONFIG, "http://" + configs.get(ConfluentConfig.CONFLUENT_KSQL_HOST_KEY) + ":" + configs.get(ConfluentConfig.CONFLUENT_KSQL_PORT_KEY));
         }
         if (StringUtils.isNotEmpty(configs.get(ConfluentConfig.CONFLUENT_KAFKA_HOST_KEY)) && StringUtils.isNotEmpty(configs.get(ConfluentConfig.CONFLUENT_KAFKA_PORT_KEY))) {
-            ksqlConfig.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, configs.get(ConfluentConfig.CONFLUENT_KAFKA_HOST_KEY) + ":" + configs.get(ConfluentConfig.CONFLUENT_KAFKA_PORT_KEY));
+            ksqlConfig.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, configs.get(ConfluentConfig.CONFLUENT_KAFKA_HOST_CLIENT_KEY) + ":" + configs.get(ConfluentConfig.CONFLUENT_KAFKA_PORT_KEY));
         }
     }
 

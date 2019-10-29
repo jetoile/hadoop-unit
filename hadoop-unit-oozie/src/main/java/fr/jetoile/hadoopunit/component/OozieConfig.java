@@ -33,5 +33,7 @@ public class OozieConfig {
     public static final String SHARE_LIB_PREFIX = "lib_";
     public static final String OOZIE_SHARE_LIB_COMPONENT_KEY = "oozie.sharelib.component";
 
+    public static final String OOZIE_CLIENT_HOST = "oozie.client.host";
+
     private OozieConfig() {}
 }

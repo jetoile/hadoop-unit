@@ -18,10 +18,7 @@ import com.github.sakserv.minicluster.util.FileUtils;
 import com.github.sakserv.minicluster.util.WindowsLibsUtils;
 import fr.jetoile.hadoopunit.*;
 import fr.jetoile.hadoopunit.exception.BootstrapException;
-import fr.jetoile.hadoopunit.exception.NotFoundServiceException;
 import org.apache.commons.configuration.Configuration;
-import org.apache.commons.configuration.ConfigurationException;
-import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.lang.StringUtils;
 import org.apache.hadoop.hive.conf.HiveConf;
 import org.slf4j.Logger;
@@ -84,13 +81,13 @@ public class HiveServer2Bootstrap implements BootstrapHadoop {
     private void loadConfig() throws BootstrapException {
         host = configuration.getString(HiveConfig.HIVE_SERVER2_HOSTNAME_KEY);
         port = configuration.getInt(HiveConfig.HIVE_SERVER2_PORT_KEY);
-        hostMetastore = configuration.getString(HiveConfig.HIVE_METASTORE_HOSTNAME_KEY);
+        hostMetastore = configuration.getString(HiveConfig.HIVE_METASTORE_HOSTNAME_CLIENT_KEY);
         portMetastore = configuration.getInt(HiveConfig.HIVE_METASTORE_PORT_KEY);
         derbyDirectory = configuration.getString(HiveConfig.HIVE_METASTORE_DERBY_DB_DIR_KEY);
         scratchDirectory = getTmpDirPath(configuration, HiveConfig.HIVE_SCRATCH_DIR_KEY);
         warehouseDirectory = getTmpDirPath(configuration, HiveConfig.HIVE_WAREHOUSE_DIR_KEY);
-        zookeeperConnectionString = configuration.getString(ZookeeperConfig.ZOOKEEPER_HOST_KEY) + ":" + configuration.getInt(ZookeeperConfig.ZOOKEEPER_PORT_KEY);
-        hdfsUri = "hdfs://" + configuration.getString(HdfsConfig.HDFS_NAMENODE_HOST_KEY) + ":" + configuration.getString(HdfsConfig.HDFS_NAMENODE_PORT_KEY);
+        zookeeperConnectionString = configuration.getString(ZookeeperConfig.ZOOKEEPER_HOST_CLIENT_KEY) + ":" + configuration.getInt(ZookeeperConfig.ZOOKEEPER_PORT_KEY);
+        hdfsUri = "hdfs://" + configuration.getString(HdfsConfig.HDFS_NAMENODE_HOST_CLIENT_KEY) + ":" + configuration.getString(HdfsConfig.HDFS_NAMENODE_PORT_KEY);
     }
 
     @Override
@@ -101,8 +98,8 @@ public class HiveServer2Bootstrap implements BootstrapHadoop {
         if (StringUtils.isNotEmpty(configs.get(HiveConfig.HIVE_SERVER2_PORT_KEY))) {
             port = Integer.parseInt(configs.get(HiveConfig.HIVE_SERVER2_PORT_KEY));
         }
-        if (StringUtils.isNotEmpty(configs.get(HiveConfig.HIVE_METASTORE_HOSTNAME_KEY))) {
-            hostMetastore = configs.get(HiveConfig.HIVE_METASTORE_HOSTNAME_KEY);
+        if (StringUtils.isNotEmpty(configs.get(HiveConfig.HIVE_METASTORE_HOSTNAME_CLIENT_KEY))) {
+            hostMetastore = configs.get(HiveConfig.HIVE_METASTORE_HOSTNAME_CLIENT_KEY);
         }
         if (StringUtils.isNotEmpty(configs.get(HiveConfig.HIVE_METASTORE_PORT_KEY))) {
             portMetastore = Integer.parseInt(configs.get(HiveConfig.HIVE_METASTORE_PORT_KEY));
@@ -116,11 +113,11 @@ public class HiveServer2Bootstrap implements BootstrapHadoop {
         if (StringUtils.isNotEmpty(configs.get(HiveConfig.HIVE_WAREHOUSE_DIR_KEY))) {
             warehouseDirectory = configs.get(HiveConfig.HIVE_WAREHOUSE_DIR_KEY);
         }
-        if (StringUtils.isNotEmpty(configs.get(ZookeeperConfig.ZOOKEEPER_HOST_KEY)) && StringUtils.isNotEmpty(configs.get(ZookeeperConfig.ZOOKEEPER_PORT_KEY))) {
-            zookeeperConnectionString = configs.get(ZookeeperConfig.ZOOKEEPER_HOST_KEY) + ":" + configs.get(ZookeeperConfig.ZOOKEEPER_PORT_KEY);
+        if (StringUtils.isNotEmpty(configs.get(ZookeeperConfig.ZOOKEEPER_HOST_CLIENT_KEY)) && StringUtils.isNotEmpty(configs.get(ZookeeperConfig.ZOOKEEPER_PORT_KEY))) {
+            zookeeperConnectionString = configs.get(ZookeeperConfig.ZOOKEEPER_HOST_CLIENT_KEY) + ":" + configs.get(ZookeeperConfig.ZOOKEEPER_PORT_KEY);
         }
-        if (StringUtils.isNotEmpty(configs.get(HdfsConfig.HDFS_NAMENODE_HOST_KEY)) && StringUtils.isNotEmpty(configs.get(HdfsConfig.HDFS_NAMENODE_PORT_KEY))) {
-            hdfsUri = "hdfs://" + configs.get(HdfsConfig.HDFS_NAMENODE_HOST_KEY) + ":" + Integer.parseInt(configs.get(HdfsConfig.HDFS_NAMENODE_PORT_KEY));
+        if (StringUtils.isNotEmpty(configs.get(HdfsConfig.HDFS_NAMENODE_HOST_CLIENT_KEY)) && StringUtils.isNotEmpty(configs.get(HdfsConfig.HDFS_NAMENODE_PORT_KEY))) {
+            hdfsUri = "hdfs://" + configs.get(HdfsConfig.HDFS_NAMENODE_HOST_CLIENT_KEY) + ":" + Integer.parseInt(configs.get(HdfsConfig.HDFS_NAMENODE_PORT_KEY));
         }
     }
 

@@ -47,10 +47,10 @@ public class YarnBootstrap3Test {
         args[0] = "whoami";
         args[1] = "1";
         args[2] = getClass().getClassLoader().getResource("simple-yarn-app-1.1.0.jar").toString();
-        args[3] = configuration.getString(Yarn3Config.YARN3_RESOURCE_MANAGER_ADDRESS_KEY);
-        args[4] = configuration.getString(Yarn3Config.YARN3_RESOURCE_MANAGER_HOSTNAME_KEY);
-        args[5] = configuration.getString(Yarn3Config.YARN3_RESOURCE_MANAGER_SCHEDULER_ADDRESS_KEY);
-        args[6] = configuration.getString(Yarn3Config.YARN3_RESOURCE_MANAGER_RESOURCE_TRACKER_ADDRESS_KEY);
+        args[3] = configuration.getString(Yarn3Config.YARN3_RESOURCE_MANAGER_ADDRESS_CLIENT_KEY);
+        args[4] = configuration.getString(Yarn3Config.YARN3_RESOURCE_MANAGER_HOSTNAME_CLIENT_KEY);
+        args[5] = configuration.getString(Yarn3Config.YARN3_RESOURCE_MANAGER_SCHEDULER_ADDRESS_CLIENT_KEY);
+        args[6] = configuration.getString(Yarn3Config.YARN3_RESOURCE_MANAGER_RESOURCE_TRACKER_ADDRESS_CLIENT_KEY);
 
 
         try {

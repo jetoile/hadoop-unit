@@ -24,7 +24,7 @@ public class KnoxConfig {
     public static final String KNOX_SERVICE_KEY = "knox.service";
 
     //HDFS
-    public static final String HDFS_NAMENODE_HOST_KEY = "hdfs.namenode.host";
+    public static final String HDFS_NAMENODE_HOST_CLIENT_KEY = "hdfs.namenode.client.host";
     public static final String HDFS_NAMENODE_PORT_KEY = "hdfs.namenode.port";
     public static final String HDFS_NAMENODE_HTTP_PORT_KEY = "hdfs.namenode.http.port";
 
@@ -34,7 +34,7 @@ public class KnoxConfig {
 
     // HBase Rest
     public static final String HBASE_REST_PORT_KEY = "hbase.rest.port";
-    public static final String HBASE_REST_HOST_KEY="hbase.rest.host";
+    public static final String HBASE_REST_HOST_CLIENT_KEY="hbase.rest.client.host";
 
     // HBase Test
     public static final String HBASE_TEST_TABLE_NAME_KEY = "hbase.test.table.name";
@@ -44,7 +44,7 @@ public class KnoxConfig {
 
     //Oozie
     public static final String OOZIE_PORT = "oozie.port";
-    public static final String OOZIE_HOST = "oozie.host";
+    public static final String OOZIE_CLIENT_HOST = "oozie.client.host";
 
     private KnoxConfig() {}
 }

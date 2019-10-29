@@ -92,7 +92,7 @@ public class CassandraBootstrapTest {
     @Test
     public void cassandraShouldStartWithRealDriver() throws NotFoundServiceException {
         Cluster cluster = Cluster.builder()
-                .addContactPoints(configuration.getString(CassandraConfig.CASSANDRA_IP_KEY)).withPort(configuration.getInt(CassandraConfig.CASSANDRA_PORT_KEY)).build();
+                .addContactPoints(configuration.getString(CassandraConfig.CASSANDRA_LISTEN_ADDRESS_IP_CLIENT_KEY)).withPort(configuration.getInt(CassandraConfig.CASSANDRA_PORT_KEY)).build();
         Session session = cluster.connect();
 
         session.execute("insert into test.test(user, value) values('user2', 'value2')");

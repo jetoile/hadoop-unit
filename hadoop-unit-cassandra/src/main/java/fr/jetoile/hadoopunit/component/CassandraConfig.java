@@ -16,9 +16,14 @@ package fr.jetoile.hadoopunit.component;
 public class CassandraConfig {
 
     // Cassandra
-    public static final String CASSANDRA_IP_KEY = "cassandra.ip";
+    public static final String CASSANDRA_LISTEN_ADDRESS_IP_KEY = "cassandra.listen.address.ip";
+    public static final String CASSANDRA_RPC_ADDRESS_IP_KEY = "cassandra.rpc.address.ip";
+    public static final String CASSANDRA_BROADCAST_ADDRESS_IP_KEY = "cassandra.broadcast.address.ip";
+    public static final String CASSANDRA_BROADCAST_RPC_ADDRESS_IP_KEY = "cassandra.broadcast.rpc.address.ip";
     public static final String CASSANDRA_PORT_KEY = "cassandra.port";
     public static final String CASSANDRA_TEMP_DIR_KEY = "cassandra.temp.dir";
+
+    public static final String CASSANDRA_LISTEN_ADDRESS_IP_CLIENT_KEY = "cassandra.listen.address.client.ip";
 
     private CassandraConfig() {}
 }

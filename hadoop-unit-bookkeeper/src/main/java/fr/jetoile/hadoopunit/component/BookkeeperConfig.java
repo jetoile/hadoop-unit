@@ -21,5 +21,7 @@ public class BookkeeperConfig {
     public static final String BOOKKEEPER_HTTP_PORT_KEY = "bookkeeper.http.port";
     public static final String BOOKKEEPER_TEMP_DIR_KEY = "bookkeeper.temp.dir";
 
+    public static final String BOOKKEEPER_IP_CLIENT_KEY = "bookkeeper.client.ip";
+
     private BookkeeperConfig() {}
 }

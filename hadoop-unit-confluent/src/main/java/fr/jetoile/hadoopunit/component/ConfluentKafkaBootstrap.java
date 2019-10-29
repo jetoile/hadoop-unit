@@ -15,7 +15,6 @@
 package fr.jetoile.hadoopunit.component;
 
 import fr.jetoile.hadoopunit.ComponentMetadata;
-import fr.jetoile.hadoopunit.HadoopUnitConfig;
 import fr.jetoile.hadoopunit.HadoopUtils;
 import fr.jetoile.hadoopunit.exception.BootstrapException;
 import kafka.server.KafkaConfig;
@@ -78,10 +77,10 @@ public class ConfluentKafkaBootstrap implements Bootstrap {
     }
 
     public void loadConfig() {
-        kafkaConfig.put("zookeeper.connect", configuration.getString(ZookeeperConfig.ZOOKEEPER_HOST_KEY) + ":" + configuration.getString(ZookeeperConfig.ZOOKEEPER_PORT_KEY));
+        kafkaConfig.put("zookeeper.connect", configuration.getString(ZookeeperConfig.ZOOKEEPER_HOST_CLIENT_KEY) + ":" + configuration.getString(ZookeeperConfig.ZOOKEEPER_PORT_KEY));
         kafkaConfig.put("log.dirs", getTmpDirPath(configuration, ConfluentConfig.CONFLUENT_KAFKA_LOG_DIR_KEY));
         kafkaConfig.put("broker.id", configuration.getString(ConfluentConfig.CONFLUENT_KAFKA_BROKER_ID_KEY));
-//        kafkaConfig.put("advertised.listeners", "PLAINTEXT://localhost:22222");
+        kafkaConfig.put("advertised.listeners", "PLAINTEXT://" + ":" + configuration.getString(ConfluentConfig.CONFLUENT_KAFKA_PORT_KEY));
         kafkaConfig.put("advertised.host.name", configuration.getString(ConfluentConfig.CONFLUENT_KAFKA_HOST_KEY));
         kafkaConfig.put("port", configuration.getString(ConfluentConfig.CONFLUENT_KAFKA_PORT_KEY));
         kafkaConfig.put("confluent.support.metrics.enable", "false");
@@ -91,8 +90,8 @@ public class ConfluentKafkaBootstrap implements Bootstrap {
 
     @Override
     public void loadConfig(Map<String, String> configs) {
-        if (StringUtils.isNotEmpty(configs.get(ZookeeperConfig.ZOOKEEPER_HOST_KEY)) && StringUtils.isNotEmpty(configs.get(ZookeeperConfig.ZOOKEEPER_PORT_KEY))) {
-            kafkaConfig.put("zookeeper.connect", configs.get(ZookeeperConfig.ZOOKEEPER_HOST_KEY) + ":" + configs.get(ZookeeperConfig.ZOOKEEPER_PORT_KEY));
+        if (StringUtils.isNotEmpty(configs.get(ZookeeperConfig.ZOOKEEPER_HOST_CLIENT_KEY)) && StringUtils.isNotEmpty(configs.get(ZookeeperConfig.ZOOKEEPER_PORT_KEY))) {
+            kafkaConfig.put("zookeeper.connect", configs.get(ZookeeperConfig.ZOOKEEPER_HOST_CLIENT_KEY) + ":" + configs.get(ZookeeperConfig.ZOOKEEPER_PORT_KEY));
         }
         if (StringUtils.isNotEmpty(configs.get(ConfluentConfig.CONFLUENT_KAFKA_LOG_DIR_KEY))) {
             kafkaConfig.put("log.dirs", getTmpDirPath(configs, ConfluentConfig.CONFLUENT_KAFKA_LOG_DIR_KEY));

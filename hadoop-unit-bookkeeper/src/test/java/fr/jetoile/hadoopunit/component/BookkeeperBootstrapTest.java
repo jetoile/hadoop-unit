@@ -61,7 +61,7 @@ public class BookkeeperBootstrapTest {
     public void bookkeeperShouldStart() throws NotFoundServiceException {
 
         Client client = ClientBuilder.newClient();
-        String uri = "http://localhost:" + configuration.getInt(BookkeeperConfig.BOOKKEEPER_HTTP_PORT_KEY);
+        String uri = "http://" + configuration.getString(BookkeeperConfig.BOOKKEEPER_IP_CLIENT_KEY) + ":" + configuration.getInt(BookkeeperConfig.BOOKKEEPER_HTTP_PORT_KEY);
 
         Response hearbeatResponse = client.target(uri + "/heartbeat").request().get();
         assertThat(hearbeatResponse.getStatus()).isEqualTo(200);

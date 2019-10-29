@@ -22,6 +22,7 @@ import fr.jetoile.hadoopunit.exception.BootstrapException;
 import fr.jetoile.hadoopunit.exception.NotFoundServiceException;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.lang.StringUtils;
+import org.apache.hadoop.mapreduce.v2.jobhistory.JHAdminConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,6 +48,7 @@ public class Yarn3Bootstrap implements BootstrapHadoop3 {
     private String yarnRMResourceTrackerAddress;
     private String yarnRMWebappAddress;
     private boolean inJvmContainer;
+    private String jobHistoryAddress;
 
     public Yarn3Bootstrap() {
         if (yarnLocalCluster == null) {
@@ -85,10 +87,18 @@ public class Yarn3Bootstrap implements BootstrapHadoop3 {
                 "\n \t\t\t RM Scheduler address:" + yarnRMSchedulerAddress +
                 "\n \t\t\t RM Resource Tracker address:" + yarnRMResourceTrackerAddress +
                 "\n \t\t\t RM Webapp address:" + yarnRMWebappAddress +
+                "\n \t\t\t jobHistoryAddress" + jobHistoryAddress +
                 "\n \t\t\t InJvmContainer:" + inJvmContainer;
     }
 
     private void build() throws NotFoundServiceException {
+        org.apache.hadoop.conf.Configuration configuration = new org.apache.hadoop.conf.Configuration();
+
+        configuration.set(JHAdminConfig.MR_HISTORY_ADDRESS, jobHistoryAddress);
+        configuration.set(JHAdminConfig.MR_HISTORY_MINICLUSTER_FIXED_PORTS, "true");
+        configuration.set("hadoop.proxyuser." + System.getProperty("user.name") + ".hosts", "*");
+        configuration.set("hadoop.proxyuser." + System.getProperty("user.name") + ".groups", "*");
+
         yarnLocalCluster = new YarnLocalCluster.Builder()
                 .setNumNodeManagers(yarnNumNodeManagers)
                 .setNumLocalDirs(yarnNumLocalDirs)
@@ -99,7 +109,7 @@ public class Yarn3Bootstrap implements BootstrapHadoop3 {
                 .setResourceManagerResourceTrackerAddress(yarnRMResourceTrackerAddress)
                 .setResourceManagerWebappAddress(yarnRMWebappAddress)
                 .setUseInJvmContainerExecutor(inJvmContainer)
-                .setConfig(new org.apache.hadoop.conf.Configuration())
+                .setConfig(configuration)
                 .build();
 
     }
@@ -114,6 +124,8 @@ public class Yarn3Bootstrap implements BootstrapHadoop3 {
         yarnRMResourceTrackerAddress = configuration.getString(Yarn3Config.YARN3_RESOURCE_MANAGER_RESOURCE_TRACKER_ADDRESS_KEY);
         yarnRMWebappAddress = configuration.getString(Yarn3Config.YARN3_RESOURCE_MANAGER_WEBAPP_ADDRESS_KEY);
         inJvmContainer = configuration.getBoolean(Yarn3Config.YARN3_USE_IN_JVM_CONTAINER_EXECUTOR_KEY);
+
+        jobHistoryAddress = configuration.getString(Yarn3Config.MR_JOB_HISTORY_ADDRESS_KEY);
     }
 
     @Override
@@ -144,6 +156,9 @@ public class Yarn3Bootstrap implements BootstrapHadoop3 {
         }
         if (StringUtils.isNotEmpty(configs.get(Yarn3Config.YARN3_USE_IN_JVM_CONTAINER_EXECUTOR_KEY))) {
             inJvmContainer = Boolean.parseBoolean(configs.get(Yarn3Config.YARN3_USE_IN_JVM_CONTAINER_EXECUTOR_KEY));
+        }
+        if (StringUtils.isNotEmpty(configs.get(Yarn3Config.MR_JOB_HISTORY_ADDRESS_KEY))) {
+            jobHistoryAddress = configs.get(Yarn3Config.MR_JOB_HISTORY_ADDRESS_KEY);
         }
     }
 

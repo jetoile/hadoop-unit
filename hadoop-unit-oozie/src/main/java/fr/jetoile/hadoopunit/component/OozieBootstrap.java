@@ -46,7 +46,6 @@ public class OozieBootstrap implements BootstrapHadoop {
     private static final String SHARE_LIB_PREFIX = "lib_";
 
     private OozieLocalServer oozieLocalCluster;
-    private MRLocalCluster mrLocalCluster;
 
     private State state = State.STOPPED;
 
@@ -57,20 +56,12 @@ public class OozieBootstrap implements BootstrapHadoop {
     private String oozieUsername;
     private String oozieGroupname;
     private String oozieYarnResourceManagerAddress;
-    private org.apache.hadoop.conf.Configuration hadoopConf;
     private String hdfsDefaultFs;
     private String oozieHdfsShareLibDir;
     private boolean oozieShareLibCreate;
     private String oozieLocalShareLibCacheDir;
     private boolean ooziePurgeLocalShareLibCache;
-    private int numNodeManagers;
-    private String jobHistoryAddress;
-    private String resourceManagerAddress;
-    private String resourceManagerHostname;
-    private String resourceManagerSchedulerAddress;
-    private String resourceManagerResourceTrackerAddress;
     private String resourceManagerWebappAddress;
-    private boolean useInJvmContainerExecutor;
     private String oozieShareLibPath;
     private String oozieShareLibName;
     private int ooziePort;
@@ -117,6 +108,7 @@ public class OozieBootstrap implements BootstrapHadoop {
     }
 
     private void build() throws NotFoundServiceException {
+        hdfsDefaultFs = "hdfs://" + configuration.getString(HdfsConfig.HDFS_NAMENODE_HOST_CLIENT_KEY) + ":" + configuration.getString(HdfsConfig.HDFS_NAMENODE_PORT_KEY);
 
         org.apache.hadoop.conf.Configuration hadoopConf = new org.apache.hadoop.conf.Configuration();
         hadoopConf.set("hadoop.proxyuser." + System.getProperty("user.name") + ".hosts", "*");
@@ -124,22 +116,7 @@ public class OozieBootstrap implements BootstrapHadoop {
         hadoopConf.set("oozie.service.WorkflowAppService.system.libpath", hdfsDefaultFs + "/" + oozieHdfsShareLibDir);
         hadoopConf.set("oozie.use.system.libpath", "true");
 
-        hadoopConf.set("fs.defaultFS", "hdfs://" + configuration.getString(HdfsConfig.HDFS_NAMENODE_HOST_KEY) + ":" + configuration.getString(HdfsConfig.HDFS_NAMENODE_PORT_KEY));
-        hdfsDefaultFs = "hdfs://" + configuration.getString(HdfsConfig.HDFS_NAMENODE_HOST_KEY) + ":" + configuration.getString(HdfsConfig.HDFS_NAMENODE_PORT_KEY);
-
-        mrLocalCluster = new MRLocalCluster.Builder()
-                .setNumNodeManagers(numNodeManagers)
-                .setJobHistoryAddress(jobHistoryAddress)
-                .setResourceManagerAddress(resourceManagerAddress)
-                .setResourceManagerHostname(resourceManagerHostname)
-                .setResourceManagerSchedulerAddress(resourceManagerSchedulerAddress)
-                .setResourceManagerResourceTrackerAddress(resourceManagerResourceTrackerAddress)
-                .setResourceManagerWebappAddress(resourceManagerWebappAddress)
-                .setUseInJvmContainerExecutor(useInJvmContainerExecutor)
-                .setHdfsDefaultFs(hdfsDefaultFs)
-                .setConfig(hadoopConf)
-                .build();
-
+        hadoopConf.set("fs.defaultFS", hdfsDefaultFs);
 
         oozieLocalCluster = new OozieLocalServer.Builder()
                 .setOozieTestDir(oozieTestDir)
@@ -167,7 +144,7 @@ public class OozieBootstrap implements BootstrapHadoop {
         oozieHomeDir = configuration.getString(OozieConfig.OOZIE_HOME_DIR_KEY);
         oozieUsername = System.getProperty("user.name");
         oozieGroupname = configuration.getString(OozieConfig.OOZIE_GROUPNAME_KEY);
-        oozieYarnResourceManagerAddress = configuration.getString(YarnConfig.YARN_RESOURCE_MANAGER_ADDRESS_KEY);
+        oozieYarnResourceManagerAddress = configuration.getString(YarnConfig.YARN_RESOURCE_MANAGER_ADDRESS_CLIENT_KEY);
 
         oozieHdfsShareLibDir = configuration.getString(OozieConfig.OOZIE_HDFS_SHARE_LIB_DIR_KEY);
         oozieShareLibCreate = configuration.getBoolean(OozieConfig.OOZIE_SHARE_LIB_CREATE_KEY);
@@ -176,14 +153,7 @@ public class OozieBootstrap implements BootstrapHadoop {
 
         oozieTmpDir = getTmpDirPath(configuration, OozieConfig.OOZIE_TMP_DIR_KEY);
 
-        numNodeManagers = Integer.parseInt(configuration.getString(YarnConfig.YARN_NUM_NODE_MANAGERS_KEY));
-        jobHistoryAddress = configuration.getString(YarnConfig.MR_JOB_HISTORY_ADDRESS_KEY);
-        resourceManagerAddress = configuration.getString(YarnConfig.YARN_RESOURCE_MANAGER_ADDRESS_KEY);
-        resourceManagerHostname = configuration.getString(YarnConfig.YARN_RESOURCE_MANAGER_HOSTNAME_KEY);
-        resourceManagerSchedulerAddress = configuration.getString(YarnConfig.YARN_RESOURCE_MANAGER_SCHEDULER_ADDRESS_KEY);
-        resourceManagerResourceTrackerAddress = configuration.getString(YarnConfig.YARN_RESOURCE_MANAGER_RESOURCE_TRACKER_ADDRESS_KEY);
-        resourceManagerWebappAddress = configuration.getString(YarnConfig.YARN_RESOURCE_MANAGER_WEBAPP_ADDRESS_KEY);
-        useInJvmContainerExecutor = configuration.getBoolean(YarnConfig.YARN_USE_IN_JVM_CONTAINER_EXECUTOR_KEY);
+        resourceManagerWebappAddress = configuration.getString(YarnConfig.YARN_RESOURCE_MANAGER_WEBAPP_ADDRESS_CLIENT_KEY);
 
         ooziePort = configuration.getInt(OozieConfig.OOZIE_PORT);
         oozieHost = configuration.getString(OozieConfig.OOZIE_HOST);
@@ -206,8 +176,8 @@ public class OozieBootstrap implements BootstrapHadoop {
         if (StringUtils.isNotEmpty(configs.get(OozieConfig.OOZIE_GROUPNAME_KEY))) {
             oozieGroupname = configs.get(OozieConfig.OOZIE_GROUPNAME_KEY);
         }
-        if (StringUtils.isNotEmpty(configs.get(YarnConfig.YARN_RESOURCE_MANAGER_ADDRESS_KEY))) {
-            oozieYarnResourceManagerAddress = configs.get(YarnConfig.YARN_RESOURCE_MANAGER_ADDRESS_KEY);
+        if (StringUtils.isNotEmpty(configs.get(YarnConfig.YARN_RESOURCE_MANAGER_ADDRESS_CLIENT_KEY))) {
+            oozieYarnResourceManagerAddress = configs.get(YarnConfig.YARN_RESOURCE_MANAGER_ADDRESS_CLIENT_KEY);
         }
         if (StringUtils.isNotEmpty(configs.get(OozieConfig.OOZIE_HDFS_SHARE_LIB_DIR_KEY))) {
             oozieHdfsShareLibDir = configs.get(OozieConfig.OOZIE_HDFS_SHARE_LIB_DIR_KEY);
@@ -226,29 +196,8 @@ public class OozieBootstrap implements BootstrapHadoop {
             oozieTmpDir = getTmpDirPath(configs, OozieConfig.OOZIE_TMP_DIR_KEY);
         }
 
-        if (StringUtils.isNotEmpty(configs.get(YarnConfig.YARN_NUM_NODE_MANAGERS_KEY))) {
-            numNodeManagers = Integer.parseInt(configs.get(YarnConfig.YARN_NUM_NODE_MANAGERS_KEY));
-        }
-        if (StringUtils.isNotEmpty(configs.get(YarnConfig.MR_JOB_HISTORY_ADDRESS_KEY))) {
-            jobHistoryAddress = configs.get(YarnConfig.MR_JOB_HISTORY_ADDRESS_KEY);
-        }
-        if (StringUtils.isNotEmpty(configs.get(YarnConfig.YARN_RESOURCE_MANAGER_ADDRESS_KEY))) {
-            resourceManagerAddress = configs.get(YarnConfig.YARN_RESOURCE_MANAGER_ADDRESS_KEY);
-        }
-        if (StringUtils.isNotEmpty(configs.get(YarnConfig.YARN_RESOURCE_MANAGER_HOSTNAME_KEY))) {
-            resourceManagerHostname = configs.get(YarnConfig.YARN_RESOURCE_MANAGER_HOSTNAME_KEY);
-        }
-        if (StringUtils.isNotEmpty(configs.get(YarnConfig.YARN_RESOURCE_MANAGER_SCHEDULER_ADDRESS_KEY))) {
-            resourceManagerSchedulerAddress = configs.get(YarnConfig.YARN_RESOURCE_MANAGER_SCHEDULER_ADDRESS_KEY);
-        }
-        if (StringUtils.isNotEmpty(configs.get(YarnConfig.YARN_RESOURCE_MANAGER_RESOURCE_TRACKER_ADDRESS_KEY))) {
-            resourceManagerResourceTrackerAddress = configs.get(YarnConfig.YARN_RESOURCE_MANAGER_RESOURCE_TRACKER_ADDRESS_KEY);
-        }
-        if (StringUtils.isNotEmpty(configs.get(YarnConfig.YARN_RESOURCE_MANAGER_WEBAPP_ADDRESS_KEY))) {
-            resourceManagerWebappAddress = configs.get(YarnConfig.YARN_RESOURCE_MANAGER_WEBAPP_ADDRESS_KEY);
-        }
-        if (StringUtils.isNotEmpty(configs.get(YarnConfig.YARN_USE_IN_JVM_CONTAINER_EXECUTOR_KEY))) {
-            useInJvmContainerExecutor = Boolean.parseBoolean(configs.get(YarnConfig.YARN_USE_IN_JVM_CONTAINER_EXECUTOR_KEY));
+        if (StringUtils.isNotEmpty(configs.get(YarnConfig.YARN_RESOURCE_MANAGER_WEBAPP_ADDRESS_CLIENT_KEY))) {
+            resourceManagerWebappAddress = configs.get(YarnConfig.YARN_RESOURCE_MANAGER_WEBAPP_ADDRESS_CLIENT_KEY);
         }
 
         if (StringUtils.isNotEmpty(configs.get(OozieConfig.OOZIE_PORT))) {
@@ -282,7 +231,6 @@ public class OozieBootstrap implements BootstrapHadoop {
                 LOGGER.error("unable to add oozie", e);
             }
             try {
-                mrLocalCluster.start();
                 oozieLocalCluster.start();
             } catch (Exception e) {
                 LOGGER.error("unable to add oozie", e);
@@ -301,7 +249,6 @@ public class OozieBootstrap implements BootstrapHadoop {
             LOGGER.info("{} is stopping", this.getClass().getName());
             try {
                 oozieLocalCluster.stop(true);
-                mrLocalCluster.stop(true);
                 cleanup();
             } catch (Exception e) {
                 LOGGER.error("unable to stop oozie", e);
@@ -352,8 +299,12 @@ public class OozieBootstrap implements BootstrapHadoop {
 
                 FileSystem hdfsFileSystem = null;
                 org.apache.hadoop.conf.Configuration conf = new org.apache.hadoop.conf.Configuration();
-                conf.set("fs.default.name", "hdfs://" + configuration.getString(HdfsConfig.HDFS_NAMENODE_HOST_KEY) + ":" + configuration.getInt(HdfsConfig.HDFS_NAMENODE_PORT_KEY));
-                URI uri = URI.create("hdfs://" + configuration.getString(HdfsConfig.HDFS_NAMENODE_HOST_KEY) + ":" + configuration.getInt(HdfsConfig.HDFS_NAMENODE_PORT_KEY));
+                conf.set("fs.default.name", hdfsDefaultFs);
+                conf.set("oozie.service.WorkflowAppService.system.libpath", hdfsDefaultFs + "/" + oozieHdfsShareLibDir);
+                conf.set("hadoop.proxyuser." + System.getProperty("user.name") + ".hosts", "*");
+                conf.set("hadoop.proxyuser." + System.getProperty("user.name") + ".groups", "*");
+
+                URI uri = URI.create(hdfsDefaultFs);
                 try {
                     hdfsFileSystem = FileSystem.get(uri, conf);
                 } catch (IOException e) {

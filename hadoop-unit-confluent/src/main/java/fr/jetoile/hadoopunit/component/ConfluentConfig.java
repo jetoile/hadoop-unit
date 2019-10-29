@@ -29,5 +29,9 @@ public class ConfluentConfig {
     public static final String CONFLUENT_KSQL_HOST_KEY = "confluent.ksql.host";
     public static final String CONFLUENT_KSQL_PORT_KEY = "confluent.ksql.port";
 
+    public static final String CONFLUENT_SCHEMAREGISTRY_HOST_CLIENT_KEY = "confluent.schemaregistry.client.host";
+    public static final String CONFLUENT_KAFKA_HOST_CLIENT_KEY = "confluent.kafka.client.host";
+    public static final String CONFLUENT_KSQL_HOST_CLIENT_KEY = "confluent.ksql.client.host";
+
     private ConfluentConfig() {}
 }

@@ -32,5 +32,9 @@ public class HiveConfig {
     public static final String HIVE_TEST_DATABASE_NAME_KEY = "hive.test.database.name";
     public static final String HIVE_TEST_TABLE_NAME_KEY = "hive.test.table.name";
 
+
+    public static final String HIVE_METASTORE_HOSTNAME_CLIENT_KEY = "hive.metastore.client.hostname";
+    public static final String HIVE_SERVER2_HOSTNAME_CLIENT_KEY = "hive.server2.client.hostname";
+
     private HiveConfig() {}
 }

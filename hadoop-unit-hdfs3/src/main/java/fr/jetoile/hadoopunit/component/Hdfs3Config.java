@@ -34,5 +34,10 @@ public class Hdfs3Config {
     public static final String HDFS3_TEST_FILE_KEY = "hdfs3.test.file";
     public static final String HDFS3_TEST_STRING_KEY = "hdfs3.test.string";
 
+    public static final String HDFS3_NAMENODE_HOST_CLIENT_KEY = "hdfs3.namenode.client.host";
+    public static final String HDFS3_DATANODE_ADDRESS_CLIENT_KEY = "hdfs3.datanode.client.address";
+    public static final String HDFS3_DATANODE_HTTP_ADDRESS__CLIENT_KEY = "hdfs3.datanode.http.client.address";
+    public static final String HDFS3_DATANODE_IPC_ADDRESS_CLIENT_KEY = "hdfs3.datanode.ipc.client.address";
+
     private Hdfs3Config() {}
 }

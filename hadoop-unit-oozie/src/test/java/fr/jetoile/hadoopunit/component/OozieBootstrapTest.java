@@ -141,6 +141,7 @@ public class OozieBootstrapTest {
         oozieConf.setProperty(OozieClient.USER_NAME, UserGroupInformation.getCurrentUser().getUserName());
         oozieConf.setProperty("jobTracker", "localhost:37001");
         oozieConf.setProperty("nameNode", "hdfs://localhost:20112");
+        oozieConf.setProperty("user.name", System.getProperty("user.name"));
         oozieConf.setProperty("doOption", "true");
 
         //submit and check

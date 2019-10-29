@@ -164,10 +164,10 @@ public class KnoxBootstrap implements Bootstrap {
         List<String> servicesList = Arrays.asList(configuration.getStringArray(KnoxConfig.KNOX_SERVICE_KEY));
         services = Arrays.asList(KnoxService.values()).stream().filter(s -> servicesList.contains(s.getName())).collect(Collectors.toList());
 
-        namenodeUri = "hdfs://" + configuration.getString(KnoxConfig.HDFS_NAMENODE_HOST_KEY) + ":" + configuration.getString(KnoxConfig.HDFS_NAMENODE_PORT_KEY);
-        webHdfsUri = "http://" + configuration.getString(KnoxConfig.HDFS_NAMENODE_HOST_KEY) + ":" + configuration.getString(KnoxConfig.HDFS_NAMENODE_HTTP_PORT_KEY) + "/webhdfs";
-        webHBaseUri = "http://" + configuration.getString(KnoxConfig.HBASE_REST_HOST_KEY) + ":" + configuration.getString(KnoxConfig.HBASE_REST_PORT_KEY);
-        oozieUri = "http://" + configuration.getString(KnoxConfig.OOZIE_HOST) + ":" + configuration.getString(KnoxConfig.OOZIE_PORT) + "/oozie";
+        namenodeUri = "hdfs://" + configuration.getString(KnoxConfig.HDFS_NAMENODE_HOST_CLIENT_KEY) + ":" + configuration.getString(KnoxConfig.HDFS_NAMENODE_PORT_KEY);
+        webHdfsUri = "http://" + configuration.getString(KnoxConfig.HDFS_NAMENODE_HOST_CLIENT_KEY) + ":" + configuration.getString(KnoxConfig.HDFS_NAMENODE_HTTP_PORT_KEY) + "/webhdfs";
+        webHBaseUri = "http://" + configuration.getString(KnoxConfig.HBASE_REST_HOST_CLIENT_KEY) + ":" + configuration.getString(KnoxConfig.HBASE_REST_PORT_KEY);
+        oozieUri = "http://" + configuration.getString(KnoxConfig.OOZIE_CLIENT_HOST) + ":" + configuration.getString(KnoxConfig.OOZIE_PORT) + "/oozie";
 
     }
 
@@ -192,17 +192,17 @@ public class KnoxBootstrap implements Bootstrap {
             List<String> servicesList = Arrays.asList(configuration.getStringArray(KnoxConfig.KNOX_SERVICE_KEY));
             services = Arrays.asList(KnoxService.values()).stream().filter(s -> servicesList.contains(s.getName())).collect(Collectors.toList());
         }
-        if (StringUtils.isNotEmpty(configs.get(KnoxConfig.HDFS_NAMENODE_HOST_KEY)) && StringUtils.isNotEmpty(KnoxConfig.HDFS_NAMENODE_PORT_KEY)) {
-            namenodeUri = "hdfs://" + configs.get(KnoxConfig.HDFS_NAMENODE_HOST_KEY) + ":" + configs.get(KnoxConfig.HDFS_NAMENODE_PORT_KEY);
+        if (StringUtils.isNotEmpty(configs.get(KnoxConfig.HDFS_NAMENODE_HOST_CLIENT_KEY)) && StringUtils.isNotEmpty(KnoxConfig.HDFS_NAMENODE_PORT_KEY)) {
+            namenodeUri = "hdfs://" + configs.get(KnoxConfig.HDFS_NAMENODE_HOST_CLIENT_KEY) + ":" + configs.get(KnoxConfig.HDFS_NAMENODE_PORT_KEY);
         }
-        if (StringUtils.isNotEmpty(configs.get(KnoxConfig.HDFS_NAMENODE_HOST_KEY)) && StringUtils.isNotEmpty(KnoxConfig.HDFS_NAMENODE_HTTP_PORT_KEY)) {
-            webHdfsUri = "http://" + configs.get(KnoxConfig.HDFS_NAMENODE_HOST_KEY) + ":" + configs.get(KnoxConfig.HDFS_NAMENODE_HTTP_PORT_KEY) + "/webhdfs";
+        if (StringUtils.isNotEmpty(configs.get(KnoxConfig.HDFS_NAMENODE_HOST_CLIENT_KEY)) && StringUtils.isNotEmpty(KnoxConfig.HDFS_NAMENODE_HTTP_PORT_KEY)) {
+            webHdfsUri = "http://" + configs.get(KnoxConfig.HDFS_NAMENODE_HOST_CLIENT_KEY) + ":" + configs.get(KnoxConfig.HDFS_NAMENODE_HTTP_PORT_KEY) + "/webhdfs";
         }
-        if (StringUtils.isNotEmpty(configs.get(KnoxConfig.HBASE_REST_HOST_KEY)) && StringUtils.isNotEmpty(KnoxConfig.HBASE_REST_PORT_KEY)) {
-            webHBaseUri = "http://" + configs.get(KnoxConfig.HBASE_REST_HOST_KEY) + ":" + configs.get(KnoxConfig.HBASE_REST_PORT_KEY);
+        if (StringUtils.isNotEmpty(configs.get(KnoxConfig.HBASE_REST_HOST_CLIENT_KEY)) && StringUtils.isNotEmpty(KnoxConfig.HBASE_REST_PORT_KEY)) {
+            webHBaseUri = "http://" + configs.get(KnoxConfig.HBASE_REST_HOST_CLIENT_KEY) + ":" + configs.get(KnoxConfig.HBASE_REST_PORT_KEY);
         }
-        if (StringUtils.isNotEmpty(configs.get(KnoxConfig.OOZIE_HOST)) && StringUtils.isNotEmpty(KnoxConfig.OOZIE_PORT)) {
-            webHBaseUri = "http://" + configs.get(KnoxConfig.OOZIE_HOST) + ":" + configs.get(KnoxConfig.OOZIE_PORT);
+        if (StringUtils.isNotEmpty(configs.get(KnoxConfig.OOZIE_CLIENT_HOST)) && StringUtils.isNotEmpty(KnoxConfig.OOZIE_PORT)) {
+            webHBaseUri = "http://" + configs.get(KnoxConfig.OOZIE_CLIENT_HOST) + ":" + configs.get(KnoxConfig.OOZIE_PORT);
         }
     }
 

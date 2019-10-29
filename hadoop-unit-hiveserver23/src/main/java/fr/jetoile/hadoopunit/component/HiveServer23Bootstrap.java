@@ -80,12 +80,12 @@ public class HiveServer23Bootstrap implements BootstrapHadoop3 {
     private void loadConfig() throws BootstrapException {
         host = configuration.getString(Hive3Config.HIVE3_SERVER2_HOSTNAME_KEY);
         port = configuration.getInt(Hive3Config.HIVE3_SERVER2_PORT_KEY);
-        hostMetastore = configuration.getString(Hive3Config.HIVE3_METASTORE_HOSTNAME_KEY);
+        hostMetastore = configuration.getString(Hive3Config.HIVE3_METASTORE_HOSTNAME_CLIENT_KEY);
         portMetastore = configuration.getInt(Hive3Config.HIVE3_METASTORE_PORT_KEY);
         scratchDirectory = getTmpDirPath(configuration, Hive3Config.HIVE3_SCRATCH_DIR_KEY);
         warehouseDirectory = configuration.getString(Hive3Config.HIVE3_WAREHOUSE_DIR_KEY);
-        zookeeperConnectionString = configuration.getString(ZookeeperConfig.ZOOKEEPER_HOST_KEY) + ":" + configuration.getInt(ZookeeperConfig.ZOOKEEPER_PORT_KEY);
-        hdfsUri = "hdfs://" + configuration.getString(Hdfs3Config.HDFS3_NAMENODE_HOST_KEY) + ":" + configuration.getString(Hdfs3Config.HDFS3_NAMENODE_PORT_KEY);
+        zookeeperConnectionString = configuration.getString(ZookeeperConfig.ZOOKEEPER_HOST_CLIENT_KEY) + ":" + configuration.getInt(ZookeeperConfig.ZOOKEEPER_PORT_KEY);
+        hdfsUri = "hdfs://" + configuration.getString(Hdfs3Config.HDFS3_NAMENODE_HOST_CLIENT_KEY) + ":" + configuration.getString(Hdfs3Config.HDFS3_NAMENODE_PORT_KEY);
     }
 
     @Override
@@ -96,8 +96,8 @@ public class HiveServer23Bootstrap implements BootstrapHadoop3 {
         if (StringUtils.isNotEmpty(configs.get(Hive3Config.HIVE3_SERVER2_PORT_KEY))) {
             port = Integer.parseInt(configs.get(Hive3Config.HIVE3_SERVER2_PORT_KEY));
         }
-        if (StringUtils.isNotEmpty(configs.get(Hive3Config.HIVE3_METASTORE_HOSTNAME_KEY))) {
-            hostMetastore = configs.get(Hive3Config.HIVE3_METASTORE_HOSTNAME_KEY);
+        if (StringUtils.isNotEmpty(configs.get(Hive3Config.HIVE3_METASTORE_HOSTNAME_CLIENT_KEY))) {
+            hostMetastore = configs.get(Hive3Config.HIVE3_METASTORE_HOSTNAME_CLIENT_KEY);
         }
         if (StringUtils.isNotEmpty(configs.get(Hive3Config.HIVE3_METASTORE_PORT_KEY))) {
             portMetastore = Integer.parseInt(configs.get(Hive3Config.HIVE3_METASTORE_PORT_KEY));
@@ -108,11 +108,11 @@ public class HiveServer23Bootstrap implements BootstrapHadoop3 {
         if (StringUtils.isNotEmpty(configs.get(Hive3Config.HIVE3_WAREHOUSE_DIR_KEY))) {
             warehouseDirectory = configs.get(Hive3Config.HIVE3_WAREHOUSE_DIR_KEY);
         }
-        if (StringUtils.isNotEmpty(configs.get(ZookeeperConfig.ZOOKEEPER_HOST_KEY)) && StringUtils.isNotEmpty(configs.get(ZookeeperConfig.ZOOKEEPER_PORT_KEY))) {
-            zookeeperConnectionString = configs.get(ZookeeperConfig.ZOOKEEPER_HOST_KEY) + ":" + configs.get(ZookeeperConfig.ZOOKEEPER_PORT_KEY);
+        if (StringUtils.isNotEmpty(configs.get(ZookeeperConfig.ZOOKEEPER_HOST_CLIENT_KEY)) && StringUtils.isNotEmpty(configs.get(ZookeeperConfig.ZOOKEEPER_PORT_KEY))) {
+            zookeeperConnectionString = configs.get(ZookeeperConfig.ZOOKEEPER_HOST_CLIENT_KEY) + ":" + configs.get(ZookeeperConfig.ZOOKEEPER_PORT_KEY);
         }
-        if (StringUtils.isNotEmpty(configs.get(Hdfs3Config.HDFS3_NAMENODE_HOST_KEY)) && StringUtils.isNotEmpty(configs.get(Hdfs3Config.HDFS3_NAMENODE_PORT_KEY))) {
-            hdfsUri = "hdfs://" + configs.get(Hdfs3Config.HDFS3_NAMENODE_HOST_KEY) + ":" + Integer.parseInt(configs.get(Hdfs3Config.HDFS3_NAMENODE_PORT_KEY));
+        if (StringUtils.isNotEmpty(configs.get(Hdfs3Config.HDFS3_NAMENODE_HOST_CLIENT_KEY)) && StringUtils.isNotEmpty(configs.get(Hdfs3Config.HDFS3_NAMENODE_PORT_KEY))) {
+            hdfsUri = "hdfs://" + configs.get(Hdfs3Config.HDFS3_NAMENODE_HOST_CLIENT_KEY) + ":" + Integer.parseInt(configs.get(Hdfs3Config.HDFS3_NAMENODE_PORT_KEY));
         }
     }
 

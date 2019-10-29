@@ -32,5 +32,8 @@ public class Hive3Config {
     public static final String HIVE3_TEST_DATABASE_NAME_KEY = "hive3.test.database.name";
     public static final String HIVE3_TEST_TABLE_NAME_KEY = "hive3.test.table.name";
 
+    public static final String HIVE3_METASTORE_HOSTNAME_CLIENT_KEY = "hive3.metastore.client.hostname";
+
+
     private Hive3Config() {}
 }

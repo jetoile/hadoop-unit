@@ -27,5 +27,6 @@ public class ZookeeperConfig {
     public static final String ZOOKEEPER_MAX_CLIENT_CNXNS_KEY = "zookeeper.max.client.cnxns";
     public static final String ZOOKEEPER_CONNECTION_STRING_KEY = "zookeeper.connection.string";
 
+    public static final String ZOOKEEPER_HOST_CLIENT_KEY = "zookeeper.client.host";
     private ZookeeperConfig() {}
 }

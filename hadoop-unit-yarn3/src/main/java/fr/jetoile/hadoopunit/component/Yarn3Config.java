@@ -29,5 +29,12 @@ public class Yarn3Config {
     // MR
     public static final String MR_JOB_HISTORY_ADDRESS_KEY = "mr.job.history.address";
 
+    public static final String YARN3_RESOURCE_MANAGER_ADDRESS_CLIENT_KEY = "yarn3.resource.manager.client.address";
+    public static final String YARN3_RESOURCE_MANAGER_HOSTNAME_CLIENT_KEY = "yarn3.resource.manager.client.hostname";
+    public static final String YARN3_RESOURCE_MANAGER_SCHEDULER_ADDRESS_CLIENT_KEY = "yarn3.resource.manager.scheduler.client.address";
+    public static final String YARN3_RESOURCE_MANAGER_WEBAPP_ADDRESS_CLIENT_KEY = "yarn3.resource.manager.webapp.client.address";
+    public static final String YARN3_RESOURCE_MANAGER_RESOURCE_TRACKER_ADDRESS_CLIENT_KEY = "yarn3.resource.manager.resource.tracker.client.address";
+    public static final String MR_JOB_HISTORY_ADDRESS_CLIENT_KEY = "mr.job.history.client.address";
+
     private Yarn3Config() {}
 }

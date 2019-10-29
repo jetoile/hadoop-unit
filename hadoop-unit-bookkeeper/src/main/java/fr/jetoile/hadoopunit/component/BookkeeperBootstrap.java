@@ -88,7 +88,7 @@ public class BookkeeperBootstrap implements Bootstrap {
         tmpDirPath = getTmpDirPath(configuration, BookkeeperConfig.BOOKKEEPER_TEMP_DIR_KEY);
 
         zookeeperPort = configuration.getInt(ZookeeperConfig.ZOOKEEPER_PORT_KEY);
-        zookeeperHost = configuration.getString(ZookeeperConfig.ZOOKEEPER_HOST_KEY);
+        zookeeperHost = configuration.getString(ZookeeperConfig.ZOOKEEPER_HOST_CLIENT_KEY);
     }
 
     @Override
@@ -96,11 +96,21 @@ public class BookkeeperBootstrap implements Bootstrap {
         if (StringUtils.isNotEmpty(configs.get(BookkeeperConfig.BOOKKEEPER_PORT_KEY))) {
             port = Integer.parseInt(configs.get(BookkeeperConfig.BOOKKEEPER_PORT_KEY));
         }
+        if (StringUtils.isNotEmpty(configs.get(BookkeeperConfig.BOOKKEEPER_HTTP_PORT_KEY))) {
+            httpPort = Integer.parseInt(configs.get(BookkeeperConfig.BOOKKEEPER_HTTP_PORT_KEY));
+        }
         if (StringUtils.isNotEmpty(configs.get(BookkeeperConfig.BOOKKEEPER_IP_KEY))) {
             ip = configs.get(BookkeeperConfig.BOOKKEEPER_IP_KEY);
         }
         if (StringUtils.isNotEmpty(configs.get(BookkeeperConfig.BOOKKEEPER_TEMP_DIR_KEY))) {
             tmpDirPath = getTmpDirPath(configs, BookkeeperConfig.BOOKKEEPER_TEMP_DIR_KEY);
+        }
+
+        if (StringUtils.isNotEmpty(configs.get(ZookeeperConfig.ZOOKEEPER_PORT_KEY))) {
+            zookeeperHost = configs.get(ZookeeperConfig.ZOOKEEPER_PORT_KEY);
+        }
+        if (StringUtils.isNotEmpty(configs.get(ZookeeperConfig.ZOOKEEPER_PORT_KEY))) {
+            zookeeperPort = Integer.valueOf(configs.get(ZookeeperConfig.ZOOKEEPER_PORT_KEY));
         }
     }
 
