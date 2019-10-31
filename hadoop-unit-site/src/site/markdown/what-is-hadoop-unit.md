@@ -79,7 +79,8 @@ The available components are:
 * NEO4J
 * KNOX
 * ALLUXIO
-* PULSAR
 * BOOKKEEPER
+* PULSAR
+* PULSAR_STANDALONE
 * REDIS (for linux and macOS only)
 

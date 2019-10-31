@@ -2,6 +2,7 @@
 
 Hadoop-unit can be used with common tools such as:
 
+* [zookeeper command](#zk-command)
 * [hdfs command](#hdfs-command)
 * [kafka-console command](#kafka-console-command)
 * [ksql-console command](#ksql-command)
@@ -11,6 +12,18 @@ Hadoop-unit can be used with common tools such as:
 * [cassandra shell](#cassandra-shell)
 * [alluxio shell](#alluxio-shell)
 * [pulsar shell](#pulsar-shell)
+
+<div id="zk-command"/>
+# Zookeeper command
+
+* Download and unzip zookeeper
+* From directory `ZK_HOME/bin`, execute command:
+
+```bash
+./zkCli.sh -server localhost:22010
+```
+
+
 
 <div id="hdfs-command"/>
 # HDFS command

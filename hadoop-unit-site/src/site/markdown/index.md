@@ -2,7 +2,7 @@ Welcome to the Hadoop Unit wiki!
 
 ```bash
    ______  __      _________                         _____  __      __________
-   ___  / / /_____ ______  /___________________      __  / / /_________(_)_  /_ 3.3
+   ___  / / /_____ ______  /___________________      __  / / /_________(_)_  /_ 3.6
    __  /_/ /_  __ `/  __  /_  __ \  __ \__  __ \     _  / / /__  __ \_  /_  __/
    _  __  / / /_/ // /_/ / / /_/ / /_/ /_  /_/ /     / /_/ / _  / / /  / / /_
    /_/ /_/  \__,_/ \__,_/  \____/\____/_  .___/      \____/  /_/ /_//_/  \__/
@@ -29,7 +29,10 @@ Welcome to the Hadoop Unit wiki!
 		 port:8983
 		 collection:collection1
 - CASSANDRA
-		 ip:127.0.0.1
+		 listenAddressIp:127.0.0.1
+		 rpcAddressIp:0.0.0.0
+		 broadcastAddressIp:127.0.0.1
+		 broadcastRpcAddressIp:127.0.0.1
 		 port:13433
 - ELASTICSEARCH
 		 clusterName:elasticsearch
@@ -58,10 +61,17 @@ Welcome to the Hadoop Unit wiki!
 		 labels:{MAGIC_NUMBER=42}
 		 command:[/bin/sh, -c, while true; do echo "$MAGIC_NUMBER" | nc -l -p 80; done]
 		 classpathResourceMappings:{}
+- BOOKKEEPER 
+		 ip:0.0.0.0
+		 port:31810
+		 http port:31900
 - PULSAR 
-         ip:127.0.0.1
-         port:22022
-         zookeeper port:22020		 
+		 name:pulsar-cluster-1
+		 ip:0.0.0.0
+		 port:22022
+		 httpPort:22023
+		 zookeeper port:22010
+	 
 ...
 ```
 
