@@ -68,6 +68,7 @@
         <module>hadoop-unit-maven-plugin</module>
         <module>hadoop-unit-cassandra</module>
         <module>hadoop-unit-pulsar-standalone</module>
+        <module>hadoop-unit-pulsar</module>
         <module>hadoop-unit-mongodb</module>
         <module>hadoop-unit-elasticsearch</module>
         <module>hadoop-unit-neo4j</module>
@@ -311,6 +312,24 @@
             <dependency>
                 <groupId>fr.jetoile.hadoop</groupId>
                 <artifactId>hadoop-unit-zookeeper</artifactId>
+                <version>${hadoop-unit.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>fr.jetoile.hadoop</groupId>
+                <artifactId>hadoop-unit-bookkeeper</artifactId>
+                <version>${hadoop-unit.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>fr.jetoile.hadoop</groupId>
+                <artifactId>hadoop-unit-pulsar</artifactId>
+                <version>${hadoop-unit.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>fr.jetoile.hadoop</groupId>
+                <artifactId>hadoop-unit-pulsar-standalone</artifactId>
                 <version>${hadoop-unit.version}</version>
             </dependency>
 
