@@ -1,6 +1,8 @@
 ## Change Log
 
-### v3.6 (2019/10/31 18:58 +00:00)
+### v3.6 (2019/11/01 16:03 +00:00)
+- [8d52534](https://github.com/jetoile/hadoop-unit/commit/8d52534f608eec861a2e0ce6f5d50353c0eddaca) add TI for pulsar (@jetoile)
+- [462bfb7](https://github.com/jetoile/hadoop-unit/commit/462bfb7251faa2d78dc421bc099f568296940e9f) update changelog (@jetoile)
 - [3a1287a](https://github.com/jetoile/hadoop-unit/commit/3a1287a7555bc74e75b418d0870d971c3e242873) update doc (@jetoile)
 - [e88a2c5](https://github.com/jetoile/hadoop-unit/commit/e88a2c58dc948218bfcecb95da552e97d61e92ac) add pulsar on bookkeeper (@jetoile)
 - [d38c2ac](https://github.com/jetoile/hadoop-unit/commit/d38c2acd95b1d226776c7be775406e9805ea774a) add client host enviroment variable for all services (@jetoile)
@@ -18,8 +20,8 @@
 
 ### v3.5 (2019/05/21 14:04 +00:00)
 - [10b9d5d](https://github.com/jetoile/hadoop-unit/commit/10b9d5d0623a3f976f7a35e0507002612a2bce11) v3.5 (@jetoile)
-- [c6fee16](https://github.com/jetoile/hadoop-unit/commit/c6fee16097b1eddd83b8edbefe425ccfcdb2490f) fix guava conflict (@jetoile)
 - [14eb939](https://github.com/jetoile/hadoop-unit/commit/14eb9396d061588f9eaae53295d6741084c421ff) update changelog (@jetoile)
+- [c6fee16](https://github.com/jetoile/hadoop-unit/commit/c6fee16097b1eddd83b8edbefe425ccfcdb2490f) fix guava conflict (@jetoile)
 - [22bad70](https://github.com/jetoile/hadoop-unit/commit/22bad70e3c664862103bd0e6c981a589da61bd97) update oozie's sharelib to oozie-4.2.0.2.6.5.0-292-distro.tar.gz (@jetoile)
 - [3537482](https://github.com/jetoile/hadoop-unit/commit/35374829570c8343102960ce6f84705994043727) update docs (@jetoile)
 - [160569d](https://github.com/jetoile/hadoop-unit/commit/160569d8ded4288dea3ef1a57cc158bcddfeb281) set default redis version to 5.0.4 (@jetoile)
@@ -111,8 +113,8 @@
 - [73d7322](https://github.com/jetoile/hadoop-unit/commit/73d7322bb3f3b4728b1621a249a7d3e949736bb8) prepare for next dev version (@jetoile)
 
 ### v2.7 (2018/05/20 16:03 +00:00)
-- [eca5775](https://github.com/jetoile/hadoop-unit/commit/eca5775dfad567d7e2a2fa5eb2b072024462a517) clean code (@jetoile)
 - [8c624cc](https://github.com/jetoile/hadoop-unit/commit/8c624ccd832d3065a6aeae4afd36a89ca9023bcd) v2.7 (@jetoile)
+- [eca5775](https://github.com/jetoile/hadoop-unit/commit/eca5775dfad567d7e2a2fa5eb2b072024462a517) clean code (@jetoile)
 - [4e1864c](https://github.com/jetoile/hadoop-unit/commit/4e1864c3d5adbb48c5488fb0a9eb9988da7860e0) fix redis download (@jetoile)
 - [1a769de](https://github.com/jetoile/hadoop-unit/commit/1a769dea9fa93ee22487e04782df5f3988c30887) update doc for ksql (@jetoile)
 - [2d9097e](https://github.com/jetoile/hadoop-unit/commit/2d9097eca9f1a8012840993913a96292119f3cc4) add support for ES 6.2.4 (@jetoile)
