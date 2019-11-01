@@ -20,6 +20,7 @@
         <module>knox-hbase-webhdfs</module>
         <module>redis</module>
         <module>confluent-integrationtest</module>
+        <module>pulsar-integrationtest</module>
         <module>docker-integrationtest</module>
         <module>dockercompose-integrationtest</module>
     </modules>

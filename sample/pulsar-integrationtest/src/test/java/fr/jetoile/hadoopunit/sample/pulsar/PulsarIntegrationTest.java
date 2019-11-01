@@ -1,51 +1,36 @@
-/*
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+package fr.jetoile.hadoopunit.sample.pulsar;
 
-package fr.jetoile.hadoopunit.component;
-
-import fr.jetoile.hadoopunit.HadoopBootstrap;
 import fr.jetoile.hadoopunit.HadoopUnitConfig;
 import fr.jetoile.hadoopunit.exception.BootstrapException;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
-import org.apache.pulsar.client.admin.PulsarAdminException;
 import org.apache.pulsar.client.api.*;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.net.MalformedURLException;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.core.Response;
 import java.util.concurrent.TimeUnit;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@Ignore
-public class PulsarBootstrapTest {
+public class PulsarIntegrationTest {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(PulsarBootstrapTest.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(PulsarIntegrationTest.class);
     private static final String TOPIC = "hello";
     private static final int NUM_OF_MESSAGES = 100;
+    private static final String PULSAR_IP_CLIENT_KEY = "pulsar.client.ip";
+    private static final String PULSAR_PORT_KEY = "pulsar.port";
+    private static final String PULSAR_HTTP_PORT_KEY = "pulsar.http.port";
     static private Configuration configuration;
 
     @BeforeClass
     public static void setup() throws BootstrapException {
-//        HadoopBootstrap.INSTANCE.startAll();
-
         try {
             configuration = new PropertiesConfiguration(HadoopUnitConfig.DEFAULT_PROPS_FILE);
         } catch (ConfigurationException e) {
@@ -56,13 +41,12 @@ public class PulsarBootstrapTest {
 
     @AfterClass
     public static void tearDown() throws BootstrapException {
-//        HadoopBootstrap.INSTANCE.stopAll();
     }
 
     @Test
-    public void pulsarShouldStart() throws PulsarClientException, MalformedURLException, PulsarAdminException {
+    public void pulsarShouldStart() throws PulsarClientException {
         final PulsarClient client = PulsarClient.builder()
-                .serviceUrl("pulsar://" + configuration.getString(PulsarConfig.PULSAR_IP_CLIENT_KEY) + ":" + configuration.getInt(PulsarConfig.PULSAR_PORT_KEY))
+                .serviceUrl("pulsar://" + configuration.getString(PULSAR_IP_CLIENT_KEY) + ":" + configuration.getInt(PULSAR_PORT_KEY))
                 .build();
 
         final Producer<String> producer = client.newProducer(Schema.STRING)
@@ -92,4 +76,12 @@ public class PulsarBootstrapTest {
         client.close();
     }
 
+    @Test
+    public void functionWorker_should_response() {
+        Client client = ClientBuilder.newClient();
+
+        String response = client.target("http://" + configuration.getString(PULSAR_IP_CLIENT_KEY) + ":" + configuration.getInt(PULSAR_HTTP_PORT_KEY) + "/admin/v2/worker/cluster").request().get(String.class);
+
+        assertThat(response).isEqualTo("[{\"workerId\":\"c-pulsar-cluster-1-fw-127.0.0.1-22023\",\"workerHostname\":\"127.0.0.1\",\"port\":22023}]");
+    }
 }
