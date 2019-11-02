@@ -23,6 +23,7 @@
         <module>pulsar-integrationtest</module>
         <module>docker-integrationtest</module>
         <module>dockercompose-integrationtest</module>
+        <module>testcontainer-integrationtest</module>
     </modules>
 
     <artifactId>sample</artifactId>
