@@ -98,13 +98,29 @@
   
 <li>Edit file:</li>
   
-<li><tt>conf/hadoop.properties</tt> to activate the components you want</li>
+<li>
+<p><tt>conf/hadoop.properties</tt> to activate the components you want</p></li>
 </ul>
 <p>If maven is already installed and configured (M2_HOME or MAVEN_HOME), you have no more file to modify</p>
-<p>If maven is not installed, edit file:<br /> * <tt>conf/hadoop-unit-default.properties</tt> to set your variables:  * <tt>maven.local.repo</tt>: set the location to your maven local repository (ex: <tt>~/&lt;user&gt;/.m2/repository</tt> for linux user or <tt>C:/Users/&lt;user&gt;/.m2/repository</tt>  * <tt>maven.central.repo</tt>: if you have a maven repository manager, set your repository</p>
-<p>Or just do: <tt>bash
-docker run -ti -p 20112:20112 -p 50010:50010 -p 50075:50075 -p 50020:50020 jetoile/hadoop-unit-standalone
-</tt></p>
+<p>If maven is not installed, edit file: </p>
+
+<ul>
+  
+<li>
+<p><tt>conf/hadoop-unit-default.properties</tt> to set your variables:</p>
+  
+<ul>
+    
+<li><tt>maven.local.repo</tt>: set the location to your maven local repository (ex: <tt>~/&lt;user&gt;/.m2/repository</tt> for linux user or <tt>C:/Users/&lt;user&gt;/.m2/repository</tt></li>
+    
+<li><tt>maven.central.repo</tt>: if you have a maven repository manager, set your repository</li>
+  </ul></li>
+</ul>
+<p>Or just do:</p>
+
+<div class="source">
+<div class="source"><pre class="prettyprint linenums">docker run -ti -p 20112:20112 -p 50010:50010 -p 50075:50075 -p 50020:50020 jetoile/hadoop-unit-standalone
+</pre></div></div>
 <div class="section">
 <h2><a name="For_linuxmacOS_users_run:"></a>For linux/macOS users, run:</h2>
 
