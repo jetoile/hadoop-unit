@@ -27,6 +27,7 @@ It offers different kinds of utilization:
 
 | Hadoop Unit version  | Hadoop mini cluster version | HDP version | Hadoop Version |
 | ------------- | ------------- | ------------- | ------------- |
+| 3.7 | 0.1.16 | HDP 2.6.5.0 | Hadoop 2.6.5 + Hadoop 3.2.1 |
 | 3.6 | 0.1.16 | HDP 2.6.5.0 | Hadoop 2.6.5 + Hadoop 3.2.1 |
 | 3.5 | 0.1.16 | HDP 2.6.5.0 | Hadoop 2.6.5 |
 | 3.4 | 0.1.16 | HDP 2.6.5.0 | Hadoop 2.6.5 |
