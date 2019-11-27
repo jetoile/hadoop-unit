@@ -48,6 +48,9 @@ public class PulsarBootstrap implements Bootstrap {
     private String ip;
     private String tmpDirPath;
     private int streamerStoragePort;
+    private boolean workerEnabled;
+    private String workerClientAuthenticationParameters;
+    private String workerClientAuthenticationPlugin;
 
     private boolean authenticationEnabled;
     private String authenticationProviders;
@@ -116,6 +119,10 @@ public class PulsarBootstrap implements Bootstrap {
         String[] extraConfsAsList = configuration.getStringArray(PulsarConfig.PULSAR_EXTRA_CONF_KEY);
         extraConf = Arrays.asList(extraConfsAsList).stream().collect(Collectors.toMap(c -> c.split("=")[0], c -> c.split("=")[1]));
 
+        workerEnabled = configuration.getBoolean(PulsarConfig.PULSAR_WORKER_ENABLED_KEY, true);
+        workerClientAuthenticationParameters = configuration.getString(PulsarConfig.PULSAR_WORKER_CLIENT_AUTHENTICATION_PARAMETERS_KEY);
+        workerClientAuthenticationPlugin = configuration.getString(PulsarConfig.PULSAR_WORKER_CLIENT_AUTHENTICATION_PLUGIN_KEY);
+
         zookeeperHost = configuration.getString(ZOOKEEPER_HOST_CLIENT_KEY);
         zookeeperPort = configuration.getInt(ZOOKEEPER_PORT_KEY);
     }
@@ -156,6 +163,15 @@ public class PulsarBootstrap implements Bootstrap {
             String extraConfList = configs.get(PulsarConfig.PULSAR_EXTRA_CONF_KEY);
             String[] extraConfsString = extraConfList.split(",");
             extraConf = Arrays.asList(extraConfsString).stream().collect(Collectors.toMap(c -> c.split("=")[0], c -> c.split("=")[1]));
+        }
+        if (StringUtils.isNotEmpty(configs.get(PulsarConfig.PULSAR_WORKER_ENABLED_KEY))) {
+            workerEnabled = Boolean.parseBoolean(configs.get(PulsarConfig.PULSAR_WORKER_ENABLED_KEY));
+        }
+        if (StringUtils.isNotEmpty(configs.get(PulsarConfig.PULSAR_WORKER_CLIENT_AUTHENTICATION_PLUGIN_KEY))) {
+            workerClientAuthenticationPlugin = configs.get(PulsarConfig.PULSAR_WORKER_CLIENT_AUTHENTICATION_PLUGIN_KEY);
+        }
+        if (StringUtils.isNotEmpty(configs.get(PulsarConfig.PULSAR_WORKER_CLIENT_AUTHENTICATION_PARAMETERS_KEY))) {
+            workerClientAuthenticationParameters = configs.get(PulsarConfig.PULSAR_WORKER_CLIENT_AUTHENTICATION_PARAMETERS_KEY);
         }
 
         if (StringUtils.isNotEmpty(configs.get(ZOOKEEPER_PORT_KEY))) {
@@ -200,43 +216,50 @@ public class PulsarBootstrap implements Bootstrap {
             serviceConfiguration.setProperties(properties);
         }
 
-        workerConfig = new WorkerConfig();
+        if (workerEnabled) {
+            workerConfig = new WorkerConfig();
 
-        workerConfig.setPulsarServiceUrl("pulsar://127.0.0.1:" + port);
-        workerConfig.setPulsarWebServiceUrl("http://127.0.0.1:" + httpPort);
-        workerConfig.setWorkerHostname(ip);
-        workerConfig.setWorkerPort(httpPort);
-        workerConfig.setWorkerId("c-" + name + "-fw-" + serviceConfiguration.getAdvertisedAddress() + "-" + workerConfig.getWorkerPort());
-        workerConfig.setConfigurationStoreServers(zookeeperServers);
-        workerConfig.setZooKeeperSessionTimeoutMillis(10000);
-        workerConfig.setZooKeeperOperationTimeoutSeconds(10000);
-        workerConfig.setDownloadDirectory(tmpDirPath + "/pulsar_functions");
-        workerConfig.setPulsarFunctionsNamespace("public/functions");
-        workerConfig.setPulsarFunctionsCluster(name);
-        workerConfig.setSchedulerClassName("org.apache.pulsar.functions.worker.scheduler.RoundRobinScheduler");
-        workerConfig.setRescheduleTimeoutMs(60000);
-        workerConfig.setFailureCheckFreqMs(30000);
-        workerConfig.setInitialBrokerReconnectMaxRetries(60);
-        workerConfig.setAssignmentWriteMaxRetries(60);
-        workerConfig.setInstanceLivenessCheckFreqMs(30000);
-        workerConfig.setTopicCompactionFrequencySec(1800);
-        workerConfig.setFunctionAssignmentTopicName("assignments");
-        workerConfig.setFunctionMetadataTopicName("metadata");
-        workerConfig.setClusterCoordinationTopicName("coordinate");
-        workerConfig.setProcessContainerFactory(new WorkerConfig.ProcessContainerFactory()
-                .setExtraFunctionDependenciesDir(tmpDirPath + "/extraFunctionDependencies")
-                .setJavaInstanceJarLocation(tmpDirPath + "/javaInstanceJar")
-                .setLogDirectory(tmpDirPath + "/log"));
-        workerConfig.setThreadContainerFactory(new WorkerConfig.ThreadContainerFactory().setThreadGroupName("functions-thread"));
-        workerConfig.setStateStorageServiceUrl("bk://127.0.0.1:" + streamerStoragePort);
+            workerConfig.setPulsarServiceUrl("pulsar://127.0.0.1:" + port);
+            workerConfig.setPulsarWebServiceUrl("http://127.0.0.1:" + httpPort);
+            workerConfig.setWorkerHostname(ip);
+            workerConfig.setWorkerPort(httpPort);
+            workerConfig.setWorkerId("c-" + name + "-fw-" + serviceConfiguration.getAdvertisedAddress() + "-" + workerConfig.getWorkerPort());
+            workerConfig.setConfigurationStoreServers(zookeeperServers);
+            workerConfig.setZooKeeperSessionTimeoutMillis(10000);
+            workerConfig.setZooKeeperOperationTimeoutSeconds(10000);
+            workerConfig.setDownloadDirectory(tmpDirPath + "/pulsar_functions");
+            workerConfig.setPulsarFunctionsNamespace("public/functions");
+            workerConfig.setPulsarFunctionsCluster(name);
+            workerConfig.setSchedulerClassName("org.apache.pulsar.functions.worker.scheduler.RoundRobinScheduler");
+            workerConfig.setRescheduleTimeoutMs(60000);
+            workerConfig.setFailureCheckFreqMs(30000);
+            workerConfig.setInitialBrokerReconnectMaxRetries(60);
+            workerConfig.setAssignmentWriteMaxRetries(60);
+            workerConfig.setInstanceLivenessCheckFreqMs(30000);
+            workerConfig.setTopicCompactionFrequencySec(1800);
+            workerConfig.setFunctionAssignmentTopicName("assignments");
+            workerConfig.setFunctionMetadataTopicName("metadata");
+            workerConfig.setClusterCoordinationTopicName("coordinate");
+            workerConfig.setProcessContainerFactory(new WorkerConfig.ProcessContainerFactory()
+                    .setExtraFunctionDependenciesDir(tmpDirPath + "/extraFunctionDependencies")
+                    .setJavaInstanceJarLocation(tmpDirPath + "/javaInstanceJar")
+                    .setLogDirectory(tmpDirPath + "/log"));
+            workerConfig.setThreadContainerFactory(new WorkerConfig.ThreadContainerFactory().setThreadGroupName("functions-thread"));
+            workerConfig.setStateStorageServiceUrl("bk://127.0.0.1:" + streamerStoragePort);
 
+            if (StringUtils.isNotEmpty(workerClientAuthenticationPlugin)) {
+                workerConfig.setClientAuthenticationPlugin(workerClientAuthenticationPlugin);
+            }
+            if (StringUtils.isNotEmpty(workerClientAuthenticationParameters)) {
+                workerConfig.setClientAuthenticationParameters(workerClientAuthenticationParameters);
+            }
 
-        functionsWorkerService = new WorkerService(workerConfig);
+            functionsWorkerService = new WorkerService(workerConfig);
 
-        // init pulsar service
-//        pulsarService = new PulsarService(serviceConfiguration, Optional.empty());
-        pulsarService = new PulsarService(serviceConfiguration, Optional.ofNullable(functionsWorkerService));
-
+            pulsarService = new PulsarService(serviceConfiguration, Optional.ofNullable(functionsWorkerService));
+        } else {
+            pulsarService = new PulsarService(serviceConfiguration, Optional.empty());
+        }
 
     }
 

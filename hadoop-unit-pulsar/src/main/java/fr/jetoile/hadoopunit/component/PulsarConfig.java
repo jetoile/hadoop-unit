@@ -23,6 +23,10 @@ public class PulsarConfig {
     public static final String PULSAR_TEMP_DIR_KEY = "pulsar.temp.dir";
     public static final String PULSAR_STREAMER_STORAGE_PORT_KEY = "pulsar.streamer.storage.port";
 
+    public static final String PULSAR_WORKER_ENABLED_KEY = "pulsar.worker.enabled";
+    public static final String PULSAR_WORKER_CLIENT_AUTHENTICATION_PARAMETERS_KEY = "pulsar.worker.clientAuthenticationParameters";
+    public static final String PULSAR_WORKER_CLIENT_AUTHENTICATION_PLUGIN_KEY = "pulsar.worker.clientAuthenticationPlugin";
+
     public static final String PULSAR_AUTHENTICATION_ENABLED_KEY = "pulsar.authentication.enabled";
     public static final String PULSAR_AUTHENTICATION_PROVIDERS_KEY = "pulsar.authentication.provider";
     public static final String PULSAR_AUTHORIZATION_ENABLED_KEY = "pulsar.authorization.enabled";
