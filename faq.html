@@ -102,16 +102,31 @@
   
 <li>For the standalone mode, add <tt>&lt;component name&gt;.extraClasspath=&lt;groupId&gt;:&lt;artifactId&gt;:&lt;version&gt;[,&lt;groupId&gt;:&lt;artifactId&gt;:&lt;version&gt;]</tt> into file <tt>hadoop-unit-default.properties</tt></li>
 </ul>
-<p>ex: <tt>text
-pulsar.extraClasspath=com.clevercloud:biscuit-pulsar:1.0-SNAPSHOT,org.apache.logging.log4j:log4j-api:2.10.0 
-</tt></p>
+<p>ex: </p>
+
+<div class="source">
+<div class="source"><pre class="prettyprint linenums">pulsar.extraClasspath=com.clevercloud:biscuit-pulsar:1.0-SNAPSHOT,org.apache.logging.log4j:log4j-api:2.10.0 
+</pre></div></div>
 
 <ul>
   
 <li>For maven plugin mode, add the property <tt>&lt;&lt;component name&gt;&gt;.extraClasspath&gt;&lt;groupId&gt;:&lt;artifactId&gt;:&lt;version&gt;[,&lt;groupId&gt;:&lt;artifactId&gt;:&lt;version&gt;]&lt;/&lt;component name&gt;.extraClasspath&gt;</tt> into the component&#x2019;s declaration</li>
 </ul>
-<p>ex: ```xml   PULSAR  hadoop-unit-pulsar  fr.jetoile.hadoop  ${hadoop-unit.version}  fr.jetoile.hadoopunit.component.PulsarBootstrap    &lt;pulsar.extraClasspath&gt;com.clevercloud:biscuit-pulsar:1.0-SNAPSHOT&lt;/pulsar.extraClasspath&gt;   </p>
-<p>```</p>
+<p>ex:</p>
+
+<div class="source">
+<div class="source"><pre class="prettyprint linenums">&lt;componentArtifact implementation=&quot;fr.jetoile.hadoopunit.ComponentArtifact&quot;&gt;
+    &lt;componentName&gt;PULSAR&lt;/componentName&gt;
+    &lt;artifactId&gt;hadoop-unit-pulsar&lt;/artifactId&gt;
+    &lt;groupId&gt;fr.jetoile.hadoop&lt;/groupId&gt;
+    &lt;version&gt;${hadoop-unit.version}&lt;/version&gt;
+    &lt;mainClass&gt;fr.jetoile.hadoopunit.component.PulsarBootstrap&lt;/mainClass&gt;
+    &lt;properties&gt;
+        &lt;pulsar.extraClasspath&gt;com.clevercloud:biscuit-pulsar:1.0-SNAPSHOT&lt;/pulsar.extraClasspath&gt;
+    &lt;/properties&gt;
+&lt;/componentArtifact&gt;
+
+</pre></div></div>
         </div>
     </div>
     <hr/>
