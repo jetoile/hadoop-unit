@@ -36,8 +36,8 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class PulsarBootstrap implements Bootstrap {
     static final private Logger LOGGER = LoggerFactory.getLogger(PulsarBootstrap.class);
@@ -48,6 +48,12 @@ public class PulsarBootstrap implements Bootstrap {
     private String ip;
     private String tmpDirPath;
     private int streamerStoragePort;
+
+    private boolean authenticationEnabled;
+    private String authenticationProviders;
+    private boolean authorizationEnabled;
+    private String authorizationProviders;
+    private Map<String, String> extraConf = new HashMap<>();
 
     private int zookeeperPort;
     private String zookeeperHost;
@@ -102,6 +108,14 @@ public class PulsarBootstrap implements Bootstrap {
         tmpDirPath = getTmpDirPath(configuration, PulsarConfig.PULSAR_TEMP_DIR_KEY);
         streamerStoragePort = configuration.getInt(PulsarConfig.PULSAR_STREAMER_STORAGE_PORT_KEY);
 
+        authenticationEnabled = configuration.getBoolean(PulsarConfig.PULSAR_AUTHENTICATION_ENABLED_KEY, false);
+        authenticationProviders = configuration.getString(PulsarConfig.PULSAR_AUTHENTICATION_PROVIDERS_KEY,"");
+        authorizationEnabled = configuration.getBoolean(PulsarConfig.PULSAR_AUTHORIZATION_ENABLED_KEY, false);
+        authorizationProviders = configuration.getString(PulsarConfig.PULSAR_AUTHORIZATION_PROVIDER_KEY, "");
+
+        String[] extraConfsAsList = configuration.getStringArray(PulsarConfig.PULSAR_EXTRA_CONF_KEY);
+        extraConf = Arrays.asList(extraConfsAsList).stream().collect(Collectors.toMap(c -> c.split("=")[0], c -> c.split("=")[1]));
+
         zookeeperHost = configuration.getString(ZOOKEEPER_HOST_CLIENT_KEY);
         zookeeperPort = configuration.getInt(ZOOKEEPER_PORT_KEY);
     }
@@ -125,6 +139,18 @@ public class PulsarBootstrap implements Bootstrap {
         }
         if (StringUtils.isNotEmpty(configs.get(PulsarConfig.PULSAR_STREAMER_STORAGE_PORT_KEY))) {
             streamerStoragePort = Integer.parseInt(configs.get(PulsarConfig.PULSAR_STREAMER_STORAGE_PORT_KEY));
+        }
+        if (StringUtils.isNotEmpty(configs.get(PulsarConfig.PULSAR_AUTHENTICATION_ENABLED_KEY))) {
+            authenticationEnabled = Boolean.parseBoolean(configs.get(PulsarConfig.PULSAR_AUTHENTICATION_ENABLED_KEY));
+        }
+        if (StringUtils.isNotEmpty(configs.get(PulsarConfig.PULSAR_AUTHENTICATION_PROVIDERS_KEY))) {
+            authenticationProviders = configs.get(PulsarConfig.PULSAR_AUTHENTICATION_PROVIDERS_KEY);
+        }
+        if (StringUtils.isNotEmpty(configs.get(PulsarConfig.PULSAR_AUTHORIZATION_ENABLED_KEY))) {
+            authorizationEnabled = Boolean.parseBoolean(configs.get(PulsarConfig.PULSAR_AUTHORIZATION_ENABLED_KEY));
+        }
+        if (StringUtils.isNotEmpty(configs.get(PulsarConfig.PULSAR_AUTHORIZATION_PROVIDER_KEY))) {
+            authorizationProviders = configs.get(PulsarConfig.PULSAR_AUTHORIZATION_PROVIDER_KEY);
         }
         if (StringUtils.isNotEmpty(configs.get(ZOOKEEPER_PORT_KEY))) {
             zookeeperPort = Integer.parseInt(configs.get(ZOOKEEPER_PORT_KEY));
@@ -150,6 +176,23 @@ public class PulsarBootstrap implements Bootstrap {
         serviceConfiguration.setManagedLedgerDefaultWriteQuorum(1);
         serviceConfiguration.setManagedLedgerDefaultAckQuorum(1);
         serviceConfiguration.setAllowAutoTopicCreation(true);
+
+        if (authenticationEnabled) {
+            serviceConfiguration.setAuthenticationEnabled(authenticationEnabled);
+            serviceConfiguration.setAuthenticationProviders(Collections.singleton(authenticationProviders));
+        }
+        if (authorizationEnabled) {
+            serviceConfiguration.setAuthorizationEnabled(authorizationEnabled);
+            serviceConfiguration.setAuthorizationProvider(authorizationProviders);
+        }
+
+        if (!extraConf.isEmpty()) {
+            Properties properties = new Properties();
+            extraConf.entrySet().forEach(e -> {
+                properties.setProperty(e.getKey(), e.getValue());
+            });
+            serviceConfiguration.setProperties(properties);
+        }
 
         workerConfig = new WorkerConfig();
 
