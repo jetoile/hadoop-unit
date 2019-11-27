@@ -152,6 +152,12 @@ public class PulsarBootstrap implements Bootstrap {
         if (StringUtils.isNotEmpty(configs.get(PulsarConfig.PULSAR_AUTHORIZATION_PROVIDER_KEY))) {
             authorizationProviders = configs.get(PulsarConfig.PULSAR_AUTHORIZATION_PROVIDER_KEY);
         }
+        if (StringUtils.isNotEmpty(configs.get(PulsarConfig.PULSAR_EXTRA_CONF_KEY))) {
+            String extraConfList = configs.get(PulsarConfig.PULSAR_EXTRA_CONF_KEY);
+            String[] extraConfsString = extraConfList.split(",");
+            extraConf = Arrays.asList(extraConfsString).stream().collect(Collectors.toMap(c -> c.split("=")[0], c -> c.split("=")[1]));
+        }
+
         if (StringUtils.isNotEmpty(configs.get(ZOOKEEPER_PORT_KEY))) {
             zookeeperPort = Integer.parseInt(configs.get(ZOOKEEPER_PORT_KEY));
         }
