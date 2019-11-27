@@ -42,10 +42,7 @@ import java.io.*;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.stream.Collectors;
@@ -87,6 +84,44 @@ public class HadoopUnitRunnable implements Runnable {
         return locator.getService(RepositorySystem.class);
     }
 
+    private List<ArtifactResult> loadExtraClasspath(ComponentArtifact currentArtifact, RepositorySystem system, DefaultRepositorySystemSession session, DependencyFilter classpathFilter) {
+        Map<String, String> properties = currentArtifact.getProperties();
+        if (properties == null) {
+            return Collections.EMPTY_LIST;
+        }
+        String extraClasspathProperty = properties.get(currentArtifact.getComponentName().toLowerCase() + ".extraClasspath");
+        if (extraClasspathProperty != null) {
+            log.info("Found extraClasspath for component " + currentArtifact.getComponentName() + " configuration. Is going to add them to classpath");
+            String[] artifacts = extraClasspathProperty.split(",");
+            return Arrays.asList(artifacts).stream()
+                    .map(a -> {
+                        DefaultArtifact artifact = new DefaultArtifact(a.trim());
+
+                        CollectRequest collectRequest = new CollectRequest();
+                        collectRequest.setRoot(new Dependency(artifact, JavaScopes.RUNTIME));
+                        collectRequest.setRepositories(remoteRepos);
+
+                        log.info("Resolving artifact for extra Classpath" + artifact + " from " + remoteRepos.stream().map(r -> r.getId() + "-" + r.getUrl()).collect(Collectors.joining(", ")));
+
+                        DependencyRequest dependencyRequest = new DependencyRequest(collectRequest, classpathFilter);
+
+                        List<ArtifactResult> artifactResults = null;
+                        try {
+                            artifactResults = system.resolveDependencies(session, dependencyRequest).getArtifactResults();
+                        } catch (DependencyResolutionException e) {
+                            log.error("an error occured during the dependencies phase: " + e.getMessage());
+                            e.printStackTrace();
+                        }
+
+                        return artifactResults;
+                    })
+                    .flatMap(x -> x.stream())
+                    .collect(Collectors.toList());
+        } else {
+            return Collections.EMPTY_LIST;
+        }
+    }
+
     @Override
     public void run() {
         log.info("is going to start hadoop unit");
@@ -116,6 +151,8 @@ public class HadoopUnitRunnable implements Runnable {
                     }
 
                     List<File> artifacts = new ArrayList<>();
+                    artifactResults.addAll(loadExtraClasspath(c, system, session, classpathFilter));
+
                     artifactResults.stream().forEach(a ->
                             artifacts.add(a.getArtifact().getFile())
                     );

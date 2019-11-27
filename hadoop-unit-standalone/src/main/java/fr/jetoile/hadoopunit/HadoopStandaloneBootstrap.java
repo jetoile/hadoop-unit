@@ -330,6 +330,39 @@ public class HadoopStandaloneBootstrap {
         });
     }
 
+    private static List<ArtifactResult> loadExtraClasspath(String currentArtifact, RepositorySystem system, DefaultRepositorySystemSession session, DependencyFilter classpathFilter) {
+        String extraClasspathProperty = hadoopUnitConfiguration.getString(currentArtifact.toLowerCase() + ".extraClasspath");
+        if (extraClasspathProperty != null) {
+            LOGGER.info("Found extraClasspath for component {} configuration. Is going to add them to classpath", currentArtifact);
+            String[] artifacts = extraClasspathProperty.split(",");
+            return Arrays.asList(artifacts).stream()
+                    .map(a -> {
+                        DefaultArtifact artifact = new DefaultArtifact(a.trim());
+
+                        CollectRequest collectRequest = new CollectRequest();
+                        collectRequest.setRoot(new Dependency(artifact, JavaScopes.RUNTIME));
+                        collectRequest.setRepositories(getRemoteRepositories());
+
+                        LOGGER.info("Resolving artifact for extra Classpath {} from {}", artifact, getRemoteRepositories().stream().map(r -> r.getId() + "-" + r.getUrl()).collect(Collectors.joining(", ")));
+
+                        DependencyRequest dependencyRequest = new DependencyRequest(collectRequest, classpathFilter);
+
+                        List<ArtifactResult> artifactResults = null;
+                        try {
+                            artifactResults = system.resolveDependencies(session, dependencyRequest).getArtifactResults();
+                        } catch (DependencyResolutionException e) {
+                            LOGGER.error("an error occured during the dependencies phase: " + e.getMessage());
+                        }
+
+                        return artifactResults;
+                    })
+                    .flatMap(x -> x.stream())
+                    .collect(Collectors.toList());
+        } else {
+            return Collections.EMPTY_LIST;
+        }
+    }
+
     private static Map<String, ComponentDependencies> loadMavenDependencies(List<String> componentsToStart) throws BootstrapException {
         Map<String, ComponentDependencies> componentsToStartWithDependencies = new HashMap<>();
 
@@ -357,8 +390,9 @@ public class HadoopStandaloneBootstrap {
                 throw new BootstrapException("failed to resolve dependency artifact " + artifact, e);
             }
 
-
             List<File> artifacts = new ArrayList<>();
+            artifactResults.addAll(loadExtraClasspath(c, repositorySystem, session, classpathFilter));
+
             artifactResults.stream().forEach(a ->
                     artifacts.add(a.getArtifact().getFile())
             );
