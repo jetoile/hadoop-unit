@@ -14,7 +14,7 @@
     <properties>
         <hadoop.version>3.2.1</hadoop.version>
         <jetty.version>9.3.24.v20180605</jetty.version>
-        <junit.version>4.12</junit.version>
+        <junit.version>4.13.1</junit.version>
     </properties>
 
     <dependencies>
