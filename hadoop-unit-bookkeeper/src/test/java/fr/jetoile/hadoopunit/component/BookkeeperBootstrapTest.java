@@ -58,16 +58,18 @@ public class BookkeeperBootstrapTest {
     }
 
     @Test
-    public void bookkeeperShouldStart() throws NotFoundServiceException {
+    public void bookkeeperShouldStart() throws NotFoundServiceException, InterruptedException {
 
         Client client = ClientBuilder.newClient();
         String uri = "http://" + configuration.getString(BookkeeperConfig.BOOKKEEPER_IP_CLIENT_KEY) + ":" + configuration.getInt(BookkeeperConfig.BOOKKEEPER_HTTP_PORT_KEY);
+
+        Thread.sleep(1000);
 
         Response hearbeatResponse = client.target(uri + "/heartbeat").request().get();
         assertThat(hearbeatResponse.getStatus()).isEqualTo(200);
 
         Response bookieStateResponse = client.target(uri + "/api/v1/bookie/state").request().get();
-        assertThat(hearbeatResponse.getStatus()).isEqualTo(200);
+        assertThat(bookieStateResponse.getStatus()).isEqualTo(200);
 
     }
 }

@@ -13,7 +13,7 @@
     <artifactId>hadoop-unit-bookkeeper</artifactId>
 
     <properties>
-        <bookkeeper.version>4.9.2</bookkeeper.version>
+        <bookkeeper.version>4.10.0</bookkeeper.version>
         <netty.version>4.1.32.Final</netty.version>
     </properties>
 

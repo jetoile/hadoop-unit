@@ -22,12 +22,16 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.pulsar.PulsarStandalone;
 import org.apache.pulsar.PulsarStandaloneBuilder;
+import org.apache.pulsar.broker.ServiceConfiguration;
+import org.apache.pulsar.common.configuration.PulsarConfigurationLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Map;
 import java.util.Optional;
@@ -107,22 +111,33 @@ public class PulsarStandaloneBootstrap implements Bootstrap {
         File tmpDirectory = new File(tmpDirPath);
         tmpDirectory.mkdirs();
 
+        File tempFile = File.createTempFile("standalone-", "-embedded.conf", tmpDirectory);
+
+        ServiceConfiguration config = PulsarConfigurationLoader.create((new FileInputStream(tempFile)), ServiceConfiguration.class);
+        config.setAdvertisedAddress("0.0.0.0");
+        config.setZookeeperServers(ip + ":" + zookeeperPort);
+        config.setConfigurationStoreServers(ip + ":" + zookeeperPort);
+        config.setRunningStandalone(true);
+        config.setBrokerServicePort(Optional.of(port));
+
+        config.setManagedLedgerDefaultEnsembleSize(1);
+        config.setManagedLedgerDefaultWriteQuorum(1);
+        config.setManagedLedgerDefaultAckQuorum(1);
+        config.setAllowAutoTopicCreation(true);
+
         pulsarStandalone = PulsarStandaloneBuilder.instance()
                 .withAdvertisedAddress(ip)
                 .withZkDir(zookeeperDir)
                 .withZkPort(zookeeperPort)
+                .withConfig(config)
+                .withNumOfBk(2)
                 .withBkDir(tmpDirPath + "/data/standalone/bookkeeper")
+                .withWipeData(true)
                 .build();
-        File tempFile = File.createTempFile("standalone-", "-embedded.conf", tmpDirectory);
 
-//        FileWriter writer = new FileWriter(tempFile);
-//        writer.write("journalDirectory=" + tmpDirPath + "/data/bookkeeper/journal\n");
-//        writer.write("ledgerDirectories=" + tmpDirPath + "/data/bookkeeper/ledger\n");
-//        writer.write("indexDirectories=" + tmpDirPath + "/data/bookkeeper/index\n");
-//        writer.close();
-
-        pulsarStandalone.getConfig().setBrokerServicePort(Optional.of(Integer.valueOf(port)));
         pulsarStandalone.setConfigFile(tempFile.getAbsolutePath());
+        pulsarStandalone.setNoStreamStorage(true);
+        pulsarStandalone.getConfig().setBrokerServicePort(Optional.of(port));
     }
 
     @Override
