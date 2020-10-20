@@ -14,9 +14,9 @@
     <name>hadoop-unit-pulsar</name>
 
     <properties>
-        <pulsar.version>2.4.1</pulsar.version>
+        <pulsar.version>2.6.1</pulsar.version>
         <grpc.version>1.18.0</grpc.version>
-        <jetty.version>9.4.12.v20180830</jetty.version>
+        <jetty.version>9.4.31.v20200723</jetty.version>
     </properties>
 
     <dependencies>
@@ -24,22 +24,6 @@
             <groupId>fr.jetoile.hadoop</groupId>
             <artifactId>hadoop-unit-commons</artifactId>
         </dependency>
-
-<!--        <dependency>-->
-<!--            <groupId>fr.jetoile.hadoop</groupId>-->
-<!--            <artifactId>hadoop-unit-zookeeper</artifactId>-->
-<!--            <exclusions>-->
-<!--                <exclusion>-->
-<!--                    <groupId>org.apache.hadoop</groupId>-->
-<!--                    <artifactId>hadoop-client</artifactId>-->
-<!--                </exclusion>-->
-<!--            </exclusions>-->
-<!--        </dependency>-->
-
-<!--        <dependency>-->
-<!--            <groupId>fr.jetoile.hadoop</groupId>-->
-<!--            <artifactId>hadoop-unit-bookkeeper</artifactId>-->
-<!--        </dependency>-->
 
         <dependency>
             <groupId>org.apache.pulsar</groupId>

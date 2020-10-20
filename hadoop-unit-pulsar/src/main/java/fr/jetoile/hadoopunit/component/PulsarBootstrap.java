@@ -41,6 +41,8 @@ import java.util.stream.Collectors;
 
 public class PulsarBootstrap implements Bootstrap {
     static final private Logger LOGGER = LoggerFactory.getLogger(PulsarBootstrap.class);
+    private final String ZOOKEEPER_PORT_KEY = "zookeeper.port";
+    private final String ZOOKEEPER_HOST_CLIENT_KEY = "zookeeper.client.host";
     private State state = State.STOPPED;
     private Configuration configuration;
     private int port;
@@ -51,21 +53,14 @@ public class PulsarBootstrap implements Bootstrap {
     private boolean workerEnabled;
     private String workerClientAuthenticationParameters;
     private String workerClientAuthenticationPlugin;
-
     private boolean authenticationEnabled;
     private String authenticationProviders;
     private boolean authorizationEnabled;
     private String authorizationProviders;
     private Map<String, String> extraConf = new HashMap<>();
-
     private int zookeeperPort;
     private String zookeeperHost;
-
     private String name;
-
-    private String ZOOKEEPER_PORT_KEY = "zookeeper.port";
-    private String ZOOKEEPER_HOST_CLIENT_KEY = "zookeeper.client.host";
-
     private PulsarService pulsarService;
     private ServiceConfiguration serviceConfiguration;
     private WorkerService functionsWorkerService;
@@ -112,7 +107,7 @@ public class PulsarBootstrap implements Bootstrap {
         streamerStoragePort = configuration.getInt(PulsarConfig.PULSAR_STREAMER_STORAGE_PORT_KEY);
 
         authenticationEnabled = configuration.getBoolean(PulsarConfig.PULSAR_AUTHENTICATION_ENABLED_KEY, false);
-        authenticationProviders = configuration.getString(PulsarConfig.PULSAR_AUTHENTICATION_PROVIDERS_KEY,"");
+        authenticationProviders = configuration.getString(PulsarConfig.PULSAR_AUTHENTICATION_PROVIDERS_KEY, "");
         authorizationEnabled = configuration.getBoolean(PulsarConfig.PULSAR_AUTHORIZATION_ENABLED_KEY, false);
         authorizationProviders = configuration.getString(PulsarConfig.PULSAR_AUTHORIZATION_PROVIDER_KEY, "");
 
@@ -240,11 +235,18 @@ public class PulsarBootstrap implements Bootstrap {
             workerConfig.setFunctionAssignmentTopicName("assignments");
             workerConfig.setFunctionMetadataTopicName("metadata");
             workerConfig.setClusterCoordinationTopicName("coordinate");
-            workerConfig.setProcessContainerFactory(new WorkerConfig.ProcessContainerFactory()
-                    .setExtraFunctionDependenciesDir(tmpDirPath + "/extraFunctionDependencies")
-                    .setJavaInstanceJarLocation(tmpDirPath + "/javaInstanceJar")
-                    .setLogDirectory(tmpDirPath + "/log"));
-            workerConfig.setThreadContainerFactory(new WorkerConfig.ThreadContainerFactory().setThreadGroupName("functions-thread"));
+
+            workerConfig.setFunctionRuntimeFactoryClassName("org.apache.pulsar.functions.runtime.process.ProcessRuntimeFactory");
+
+            Map<String, Object> functionRuntimeFactoryConfigs = new HashMap<>();
+            functionRuntimeFactoryConfigs.put("logDirectory", tmpDirPath + "/log");
+            functionRuntimeFactoryConfigs.put("javaInstanceJarLocation", tmpDirPath + "/javaInstanceJar");
+            functionRuntimeFactoryConfigs.put("pythonInstanceLocation", tmpDirPath + "/pythonInstanceJLocation");
+            functionRuntimeFactoryConfigs.put("extraFunctionDependenciesDir", tmpDirPath + "/extraFunctionDependencies");
+            functionRuntimeFactoryConfigs.put("extraFunctionDependenciesDir", tmpDirPath + "/extraFunctionDependencies");
+
+            workerConfig.setFunctionRuntimeFactoryConfigs(functionRuntimeFactoryConfigs);
+
             workerConfig.setStateStorageServiceUrl("bk://127.0.0.1:" + streamerStoragePort);
 
             if (StringUtils.isNotEmpty(workerClientAuthenticationPlugin)) {
@@ -256,9 +258,14 @@ public class PulsarBootstrap implements Bootstrap {
 
             functionsWorkerService = new WorkerService(workerConfig);
 
-            pulsarService = new PulsarService(serviceConfiguration, Optional.ofNullable(functionsWorkerService));
+            pulsarService = new PulsarService(serviceConfiguration,
+                    Optional.ofNullable(functionsWorkerService),
+                    (exitCode) -> {
+                        LOGGER.info("Halting standalone process with code {}", exitCode);
+                        Runtime.getRuntime().halt(exitCode);
+                    });
         } else {
-            pulsarService = new PulsarService(serviceConfiguration, Optional.empty());
+            pulsarService = new PulsarService(serviceConfiguration);
         }
 
     }
@@ -281,7 +288,6 @@ public class PulsarBootstrap implements Bootstrap {
 
         return this;
     }
-
 
 
     @Override
@@ -312,7 +318,7 @@ public class PulsarBootstrap implements Bootstrap {
         final String cluster = serviceConfiguration.getClusterName();
 
         createSampleNameSpace(webServiceUrl, brokerServiceUrl, cluster, admin);
-        createDefaultNameSpace(cluster, admin);;
+        createDefaultNameSpace(cluster, admin);
     }
 
     private void createDefaultNameSpace(String cluster, PulsarAdmin admin) {

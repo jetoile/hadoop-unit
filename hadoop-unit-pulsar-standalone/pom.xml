@@ -14,9 +14,9 @@
     <name>hadoop-unit-pulsar-standalone</name>
 
     <properties>
-        <pulsar.version>2.4.1</pulsar.version>
+        <pulsar.version>2.6.1</pulsar.version>
         <grpc.version>1.18.0</grpc.version>
-        <jetty.version>9.4.12.v20180830</jetty.version>
+        <jetty.version>9.4.31.v20200723</jetty.version>
     </properties>
 
     <dependencies>
