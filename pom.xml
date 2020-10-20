@@ -94,6 +94,10 @@
             <id>confluent</id>
             <url>http://packages.confluent.io/maven/</url>
         </repository>
+        <repository>
+            <id>cloudera</id>
+            <url>https://repository.cloudera.com/artifactory/cloudera-repos/</url>
+        </repository>
     </repositories>
 
     <profiles>
