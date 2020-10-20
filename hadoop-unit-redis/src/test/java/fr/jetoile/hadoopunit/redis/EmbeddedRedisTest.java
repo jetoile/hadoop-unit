@@ -32,7 +32,7 @@ public class EmbeddedRedisTest {
     public void redis_installation_should_succeed() throws IOException, InterruptedException {
         String version = configuration.getString(RedisConfig.REDIS_VERSION_KEY);
         String downloadUrl = configuration.getString(RedisConfig.REDIS_DOWNLOAD_URL_KEY);
-        String tmpDir = configuration.getString(RedisConfig.REDIS_TMP_DIR_KEY);
+        String tmpDir = getTmpDirPath(configuration, RedisConfig.REDIS_TMP_DIR_KEY);
 
         EmbeddedRedisInstaller.builder()
                 .version(version)
@@ -45,4 +45,7 @@ public class EmbeddedRedisTest {
         assertThat(new File(System.getProperty("user.home") + "/.redis/redis-" + version + "/src/redis-server")).exists();
     }
 
+    private String getTmpDirPath(Configuration configuration, String componentTmpPathKey) {
+        return configuration.getString(HadoopUnitConfig.TMP_DIR_PATH_KEY, "/tmp") + configuration.getString(componentTmpPathKey);
+    }
 }
