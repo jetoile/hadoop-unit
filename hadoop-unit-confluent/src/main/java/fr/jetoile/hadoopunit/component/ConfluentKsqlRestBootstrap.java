@@ -98,8 +98,7 @@ public class ConfluentKsqlRestBootstrap implements Bootstrap {
     private void build() {
         try {
             KsqlRestConfig config = new KsqlRestConfig(ksqlConfig);
-            restServer = KsqlRestApplication.buildApplication(config, KsqlVersionCheckerAgent::new, Integer.MAX_VALUE);
-            restServer.createServer();
+            restServer = KsqlRestApplication.buildApplication(config);
         } catch (Exception e) {
             LOGGER.error("Server died unexpectedly: ", e);
         }
@@ -114,7 +113,7 @@ public class ConfluentKsqlRestBootstrap implements Bootstrap {
             LOGGER.info("{} is starting", this.getClass().getName());
             try {
                 build();
-                restServer.start();
+                restServer.startAsync();
 
             } catch (Exception e) {
                 LOGGER.error("unable to add confluent kafka rest", e);
@@ -132,7 +131,7 @@ public class ConfluentKsqlRestBootstrap implements Bootstrap {
             state = State.STOPPING;
             LOGGER.info("{} is stopping", this.getClass().getName());
             try {
-                restServer.stop();
+                restServer.shutdown();
             } catch (Exception e) {
                 LOGGER.error("unable to stop confluent kafka rest", e);
             }

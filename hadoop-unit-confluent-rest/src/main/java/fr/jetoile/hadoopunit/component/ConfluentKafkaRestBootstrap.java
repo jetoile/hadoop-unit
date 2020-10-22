@@ -71,6 +71,7 @@ public class ConfluentKafkaRestBootstrap implements Bootstrap {
     }
 
     public void loadConfig() {
+        restConfig.put("bootstrap.servers", configuration.getString(ConfluentConfig.CONFLUENT_KAFKA_HOST_KEY) + ":" + configuration.getString(ConfluentConfig.CONFLUENT_KAFKA_PORT_KEY));
         restConfig.put("schema.registry.url", configuration.getString(ConfluentConfig.CONFLUENT_SCHEMAREGISTRY_HOST_CLIENT_KEY) + ":" + configuration.getString(ConfluentConfig.CONFLUENT_SCHEMAREGISTRY_PORT_KEY));
         restConfig.put("zookeeper.connect", configuration.getString(ZookeeperConfig.ZOOKEEPER_HOST_CLIENT_KEY) + ":" + configuration.getString(ZookeeperConfig.ZOOKEEPER_PORT_KEY));
         restConfig.put("listeners", "http://" + configuration.getString(ConfluentConfig.CONFLUENT_REST_HOST_KEY) + ":" + configuration.getString(ConfluentConfig.CONFLUENT_REST_PORT_KEY));
@@ -78,6 +79,9 @@ public class ConfluentKafkaRestBootstrap implements Bootstrap {
 
     @Override
     public void loadConfig(Map<String, String> configs) {
+        if (StringUtils.isNotEmpty(configs.get(ConfluentConfig.CONFLUENT_KAFKA_HOST_KEY)) && StringUtils.isNotEmpty(configs.get(ConfluentConfig.CONFLUENT_KAFKA_PORT_KEY))) {
+            restConfig.put("bootstrap.servers", configs.get(ConfluentConfig.CONFLUENT_KAFKA_HOST_KEY) + ":" + configs.get(ConfluentConfig.CONFLUENT_KAFKA_PORT_KEY));
+        }
         if (StringUtils.isNotEmpty(configs.get(ConfluentConfig.CONFLUENT_SCHEMAREGISTRY_HOST_CLIENT_KEY)) && StringUtils.isNotEmpty(configs.get(ConfluentConfig.CONFLUENT_SCHEMAREGISTRY_PORT_KEY))) {
             restConfig.put("schema.registry.url", configs.get(ConfluentConfig.CONFLUENT_SCHEMAREGISTRY_HOST_CLIENT_KEY) + ":" + configs.get(ConfluentConfig.CONFLUENT_SCHEMAREGISTRY_PORT_KEY));
         }
@@ -94,8 +98,6 @@ public class ConfluentKafkaRestBootstrap implements Bootstrap {
             KafkaRestConfig config = new KafkaRestConfig(restConfig);
 
             restServer = new KafkaRestApplication(config);
-        } catch (RestConfigException e) {
-            LOGGER.error("Server configuration failed: ", e);
         } catch (Exception e) {
             LOGGER.error("Server died unexpectedly: ", e);
         }

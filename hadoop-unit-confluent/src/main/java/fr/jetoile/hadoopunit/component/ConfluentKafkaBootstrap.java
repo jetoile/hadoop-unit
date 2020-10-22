@@ -26,7 +26,9 @@ import org.apache.kafka.common.utils.Time;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import scala.Option;
-import scala.collection.JavaConversions;
+import scala.collection.JavaConverters;
+import scala.collection.convert.AsJavaConverters;
+import scala.collection.convert.AsScalaConverters;
 
 import java.io.IOException;
 import java.net.URL;
@@ -86,6 +88,8 @@ public class ConfluentKafkaBootstrap implements Bootstrap {
         kafkaConfig.put("confluent.support.metrics.enable", "false");
         kafkaConfig.put("offsets.topic.replication.factor", "1");
         kafkaConfig.put("num.network.threads", "3");
+        kafkaConfig.put("transaction.state.log.replication.factor", "1");
+        kafkaConfig.put("transaction.state.log.min.isr", "1");
     }
 
     @Override
@@ -105,12 +109,17 @@ public class ConfluentKafkaBootstrap implements Bootstrap {
         if (StringUtils.isNotEmpty(configs.get(ConfluentConfig.CONFLUENT_KAFKA_PORT_KEY))) {
             kafkaConfig.put("port", configs.get(ConfluentConfig.CONFLUENT_KAFKA_PORT_KEY));
         }
+        kafkaConfig.put("confluent.support.metrics.enable", "false");
+        kafkaConfig.put("offsets.topic.replication.factor", "1");
+        kafkaConfig.put("num.network.threads", "3");
+        kafkaConfig.put("transaction.state.log.replication.factor", "1");
+        kafkaConfig.put("transaction.state.log.min.isr", "1");
     }
 
     private void build() {
         KafkaConfig kf = new KafkaConfig(kafkaConfig);
         Option<String> threadPrefixName = Option.apply("kafka-mini-cluster");
-        kafkaServer = new KafkaServer(kf, Time.SYSTEM, threadPrefixName, JavaConversions.asScalaBuffer(Collections.EMPTY_LIST).toSeq());
+        kafkaServer = new KafkaServer(kf, Time.SYSTEM, threadPrefixName, JavaConverters.asScala(Collections.EMPTY_LIST));
     }
 
     @Override

@@ -11,6 +11,12 @@
 
     <artifactId>hadoop-unit-confluent</artifactId>
 
+    <properties>
+        <jersey.version>2.30</jersey.version>
+        <jetty.version>9.4.24.v20191120</jetty.version>
+        <httpcore.version>4.4.4</httpcore.version>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>fr.jetoile.hadoop</groupId>
@@ -40,52 +46,35 @@
 
         <dependency>
             <groupId>io.confluent.ksql</groupId>
-            <artifactId>ksql-rest-app</artifactId>
+            <artifactId>ksqldb-rest-app</artifactId>
         </dependency>
-
-        <dependency>
-            <groupId>org.apache.kafka</groupId>
-            <artifactId>kafka_2.12</artifactId>
-            <version>${confluent_kafka.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.kafka</groupId>
-            <artifactId>kafka-clients</artifactId>
-            <version>${confluent_kafka.version}</version>
-        </dependency>
-
 
         <dependency>
             <groupId>org.glassfish.jersey.containers</groupId>
             <artifactId>jersey-container-servlet</artifactId>
-            <version>2.27</version>
+            <version>${jersey.version}</version>
         </dependency>
         <dependency>
             <groupId>org.glassfish.jersey.inject</groupId>
             <artifactId>jersey-hk2</artifactId>
-            <version>2.27</version>
+            <version>${jersey.version}</version>
         </dependency>
         <dependency>
             <groupId>org.glassfish.jersey.ext</groupId>
             <artifactId>jersey-bean-validation</artifactId>
-            <version>2.27</version>
+            <version>${jersey.version}</version>
         </dependency>
-
-
 
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-util</artifactId>
-            <version>9.4.18.v20190429</version>
+            <version>${jetty.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpcore</artifactId>
-            <version>4.4.4</version>
+            <version>${httpcore.version}</version>
         </dependency>
     </dependencies>
-
-
 </project>

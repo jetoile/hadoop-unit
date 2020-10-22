@@ -14,6 +14,7 @@
 
 package fr.jetoile.hadoopunit.sample.confluent;
 
+import com.google.common.collect.ImmutableMap;
 import fr.jetoile.hadoopunit.HadoopBootstrap;
 import fr.jetoile.hadoopunit.exception.BootstrapException;
 import io.confluent.ksql.rest.client.KsqlRestClient;
@@ -22,16 +23,15 @@ import io.confluent.ksql.rest.entity.KsqlEntityList;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
-import org.junit.AfterClass;
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
+
+import java.util.Optional;
 
 import static fr.jetoile.hadoopunit.client.commons.HadoopUnitClientConfig.*;
 import static org.fest.assertions.Assertions.assertThat;
@@ -195,7 +195,7 @@ public class ConfluentBootstrapIntegrationTest {
         assertThat(response).isEqualToIgnoringCase("{\"offsets\":[{\"partition\":0,\"offset\":0,\"error_code\":null,\"error\":null}],\"key_schema_id\":null,\"value_schema_id\":null}");
 
 
-        KsqlRestClient ksqlRestClient = new KsqlRestClient("http://localhost:" + 8083);
+        KsqlRestClient ksqlRestClient = KsqlRestClient.create("http://localhost:" + 8083, ImmutableMap.of(), ImmutableMap.of(), Optional.empty());
 
 //        RestResponse<KsqlEntityList> results = ksqlRestClient.makeKsqlRequest("CREATE STREAM vip_actions AS SELECT userid, page, action FROM clickstream c LEFT JOIN users u ON c.userid = u.user_id WHERE u.level = 'Platinum';");
         RestResponse<KsqlEntityList> results = ksqlRestClient.makeKsqlRequest("CREATE STREAM pageviews_original (viewtime bigint, userid varchar, pageid varchar) WITH (kafka_topic='pageviews', value_format='DELIMITED');");
