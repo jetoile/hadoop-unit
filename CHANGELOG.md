@@ -1,6 +1,18 @@
 ## Change Log
 
-### v3.7 (2019/11/27 14:36 +00:00)
+### v3.8 (2020/10/22 12:25 +00:00)
+- [650f575](https://github.com/jetoile/hadoop-unit/commit/650f575df35df131a3f32229215cc21ff41d222a) update docs (@jetoile)
+- [8b5d6d1](https://github.com/jetoile/hadoop-unit/commit/8b5d6d10a9393559923e9f097df835a73bd48826) upgrade to confluent 6.0.0 (@jetoile)
+- [4f7749c](https://github.com/jetoile/hadoop-unit/commit/4f7749c59a07b50b1f06dd3f0ae7b00fe351ecc1) add cloudera repository (@jetoile)
+- [81c3fd3](https://github.com/jetoile/hadoop-unit/commit/81c3fd30fc5fe4023636aca103f22774127750f5) upgrade redis default to 6.0.8 (@jetoile)
+- [a8dbdc7](https://github.com/jetoile/hadoop-unit/commit/a8dbdc7e36c6b6358f0aaf76be00e9f5a077b9a8) upgrade to pulsar 2.6.1 (@jetoile)
+- [0215bba](https://github.com/jetoile/hadoop-unit/commit/0215bbaa5d371b6c9e690cc92e326ea1d320be7c) Create LICENSE (@jetoile)
+- [22f6e18](https://github.com/jetoile/hadoop-unit/commit/22f6e18f50bc4498346e9fe076ef68653af41a58) update docs (@jetoile)
+- [4804250](https://github.com/jetoile/hadoop-unit/commit/48042504472cf60f18b9e29831ed2824ca5e4aab) prepare for next dev version (@jetoile)
+
+### v3.7 (2019/11/27 14:38 +00:00)
+- [2013a21](https://github.com/jetoile/hadoop-unit/commit/2013a2166f04cbc7e6d5fdaaaa9abcb1f74881ce) v3.7 (@jetoile)
+- [ce297ec](https://github.com/jetoile/hadoop-unit/commit/ce297ec4f9c2a2553fd544aeff0dc68593f02250) update changelog (@jetoile)
 - [a381ee0](https://github.com/jetoile/hadoop-unit/commit/a381ee054c16d59c072b84cb2eb691330a6b6315) allow to deactivate pulsar worker and set clientAuthenticationParameters (@jetoile)
 - [cad7abf](https://github.com/jetoile/hadoop-unit/commit/cad7abfeda9c4eed8dad24fcb9bd80542375d048) fix extra.conf for pulsar (@jetoile)
 - [b7c1680](https://github.com/jetoile/hadoop-unit/commit/b7c1680b5459c77c0a1a2d9e0eec1fd69c788758) allow pulsar to manage custom authentication/authorization (@jetoile)
@@ -32,8 +44,8 @@
 
 ### v3.5 (2019/05/21 14:04 +00:00)
 - [10b9d5d](https://github.com/jetoile/hadoop-unit/commit/10b9d5d0623a3f976f7a35e0507002612a2bce11) v3.5 (@jetoile)
-- [c6fee16](https://github.com/jetoile/hadoop-unit/commit/c6fee16097b1eddd83b8edbefe425ccfcdb2490f) fix guava conflict (@jetoile)
 - [14eb939](https://github.com/jetoile/hadoop-unit/commit/14eb9396d061588f9eaae53295d6741084c421ff) update changelog (@jetoile)
+- [c6fee16](https://github.com/jetoile/hadoop-unit/commit/c6fee16097b1eddd83b8edbefe425ccfcdb2490f) fix guava conflict (@jetoile)
 - [22bad70](https://github.com/jetoile/hadoop-unit/commit/22bad70e3c664862103bd0e6c981a589da61bd97) update oozie's sharelib to oozie-4.2.0.2.6.5.0-292-distro.tar.gz (@jetoile)
 - [3537482](https://github.com/jetoile/hadoop-unit/commit/35374829570c8343102960ce6f84705994043727) update docs (@jetoile)
 - [160569d](https://github.com/jetoile/hadoop-unit/commit/160569d8ded4288dea3ef1a57cc158bcddfeb281) set default redis version to 5.0.4 (@jetoile)
