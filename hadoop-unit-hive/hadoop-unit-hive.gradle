@@ -1,0 +1,16 @@
+description = 'hadoop-unit-hive'
+
+dependencies {
+    implementation project(':hadoop-unit-commons')
+    implementation project(':hadoop-unit-commons-hadoop')
+    implementation project(':hadoop-unit-zookeeper')
+    implementation project(':hadoop-unit-hdfs')
+
+    implementation libraries.miniClusterMetastore
+    implementation libraries.miniClusterHiveServer
+    implementation libraries.hiveCatalog
+
+    testImplementation libraries.hiveJdbc
+}
+
+

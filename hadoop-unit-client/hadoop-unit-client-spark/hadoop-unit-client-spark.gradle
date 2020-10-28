@@ -1,0 +1,10 @@
+description = 'hadoop-unit-client-spark'
+
+
+dependencies {
+    implementation libraries.sparkCore
+    implementation libraries.sparkSql
+    implementation libraries.sparkHive
+    implementation libraries.jaksonScala
+}
+

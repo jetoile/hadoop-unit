@@ -1,0 +1,34 @@
+description = 'hadoop-unit-alluxio'
+
+dependencies {
+    implementation(project(':hadoop-unit-commons')) {
+        exclude group:'org.mortbay.jetty', module: 'jetty'
+        exclude group:'org.mortbay.jetty', module: 'jetty-util'
+        exclude group:'com.sun.jersey', module: 'jersey-core'
+        exclude group:'com.sun.jersey', module: 'jersey-json'
+        exclude group:'com.sun.jersey', module: 'jersey-server'
+
+    }
+    implementation project(':hadoop-unit-hdfs')
+
+    implementation(libraries.miniClusterAlluxio) {
+        exclude group:'org.glassfish', module: 'javax.el'
+    }
+    implementation(libraries.alluxioHdfs) {
+        exclude group:'org.apache.hadoop', module: 'hadoop-hdfs'
+    }
+    implementation(libraries.alluxioClient) {
+        exclude group:'org.apache.hadoop', module: 'hadoop-yarn-common'
+    }
+
+    implementation 'org.eclipse.jetty:jetty-util:9.2.19.v20160908'
+    implementation 'org.eclipse.jetty:jetty-server:9.2.19.v20160908'
+    implementation 'org.eclipse.jetty:jetty-servlet:9.2.19.v20160908'
+
+    implementation 'org.apache.httpcomponents:httpclient:4.4.1'
+
+    testImplementation project(':hadoop-unit-client-hdfs')
+    testImplementation project(':hadoop-unit-client-alluxio')
+}
+
+

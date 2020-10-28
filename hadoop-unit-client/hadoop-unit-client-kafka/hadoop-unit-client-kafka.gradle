@@ -1,0 +1,9 @@
+description = 'hadoop-unit-client-kafka'
+
+dependencies {
+    implementation project(':hadoop-unit-commons')
+
+    implementation libraries.kafka2_11
+    implementation libraries.commonsConfiguration
+}
+

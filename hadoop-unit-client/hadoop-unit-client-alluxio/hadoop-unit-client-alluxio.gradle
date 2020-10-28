@@ -1,0 +1,13 @@
+description = 'hadoop-unit-client-alluxio'
+
+
+dependencies {
+    implementation project(':hadoop-unit-commons')
+
+    implementation 'org.alluxio:alluxio-core-client-fs:1.8.1'
+
+    testImplementation 'org.eclipse.jetty:jetty-util:9.2.19.v20160908'
+    testImplementation 'org.glassfish:javax.el:3.0.1-b10'
+    testImplementation 'org.alluxio:alluxio-minicluster:1.8.1'
+}
+

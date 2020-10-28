@@ -1,0 +1,36 @@
+description = 'hadoop-unit-hivemeta3'
+
+ext {
+    hive_version = '3.1.2'
+    hadoop_version = '3.2.1'
+}
+
+dependencies {
+    implementation project(':hadoop-unit-commons')
+    implementation project(':hadoop-unit-commons-hadoop3')
+    implementation project(':hadoop-unit-zookeeper')
+    implementation project(':hadoop-unit-hdfs3')
+
+    implementation(libraries.miniClusterMetastore) {
+        exclude group: 'org.apache.hive', module: 'hive-exec'
+        exclude group: 'org.apache.hadoop', module: 'hadoop-client'
+        exclude group: 'org.apache.hive', module: 'hive-service'
+    }
+    implementation(libraries.miniClusterHiveServer) {
+        exclude group: 'org.apache.hive', module: 'hive-exec'
+        exclude group: 'org.apache.hadoop', module: 'hadoop-client'
+        exclude group: 'org.apache.hive', module: 'hive-service'
+    }
+
+    implementation "org.apache.hive.hcatalog:hive-hcatalog-core:${hive_version}"
+    implementation("org.apache.hive:hive-standalone-metastore:${hive_version}:tests") {
+        exclude group:'org.apache.derby', module: 'derby'
+    }
+
+    implementation "org.apache.hadoop:hadoop-client:${hadoop_version}"
+    implementation 'com.google.guava:guava:27.1-jre'
+    implementation 'org.apache.derby:derby:10.14.2.0'
+
+    testImplementation "org.apache.hive:hive-jdbc:${hive_version}"
+}
+

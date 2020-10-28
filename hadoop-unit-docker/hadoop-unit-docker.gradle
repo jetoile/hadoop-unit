@@ -1,0 +1,9 @@
+description = 'hadoop-unit-docker'
+
+dependencies {
+    implementation project(':hadoop-unit-commons')
+
+    implementation libraries.testContainer
+    implementation libraries.logback
+}
+

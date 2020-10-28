@@ -1,0 +1,14 @@
+description = 'hadoop-unit-elasticsearch'
+
+
+dependencies {
+    implementation project(':hadoop-unit-commons')
+
+    implementation libraries.elasticClient
+    implementation libraries.embeddedElastic
+
+    implementation libraries.commonsIo
+    implementation 'org.apache.logging.log4j:log4j-api:2.8.2'
+    implementation libraries.logback
+}
+

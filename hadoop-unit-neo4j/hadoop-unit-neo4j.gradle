@@ -1,0 +1,16 @@
+description = 'hadoop-unit-neo4j'
+
+ext {
+    neo4j_driver_version = '1.0.4'
+}
+
+dependencies {
+    implementation project(':hadoop-unit-commons')
+
+    implementation libraries.neo4j
+    implementation libraries.neo4jBolt
+    implementation libraries.logback
+
+    testImplementation "org.neo4j.driver:neo4j-java-driver:${neo4j_driver_version}"
+}
+

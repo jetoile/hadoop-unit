@@ -1,0 +1,14 @@
+description = 'hadoop-unit-hbase'
+
+dependencies {
+    implementation project(':hadoop-unit-commons')
+    implementation project(':hadoop-unit-commons-hadoop')
+    implementation project(':hadoop-unit-zookeeper')
+    implementation project(':hadoop-unit-hdfs')
+
+    implementation libraries.miniClusterHBase
+    implementation 'org.codehaus.jackson:jackson-xc:1.9.13'
+}
+
+
+

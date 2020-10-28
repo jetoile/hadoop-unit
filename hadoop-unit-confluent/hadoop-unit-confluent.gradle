@@ -1,0 +1,17 @@
+description = 'hadoop-unit-confluent'
+
+dependencies {
+    implementation project(':hadoop-unit-commons')
+    implementation project(':hadoop-unit-zookeeper')
+
+    implementation libraries.confluentSchema
+    implementation libraries.confluentRest
+    implementation libraries.confluentKsql
+
+    implementation 'org.glassfish.jersey.containers:jersey-container-servlet:2.30'
+    implementation 'org.glassfish.jersey.inject:jersey-hk2:2.30'
+    implementation 'org.glassfish.jersey.ext:jersey-bean-validation:2.30'
+    implementation 'org.eclipse.jetty:jetty-util:9.4.24.v20191120'
+    implementation 'org.apache.httpcomponents:httpcore:4.4.4'
+}
+

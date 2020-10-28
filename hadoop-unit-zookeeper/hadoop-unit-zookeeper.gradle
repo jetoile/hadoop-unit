@@ -1,0 +1,10 @@
+description = 'hadoop-unit-zookeeper'
+
+dependencies {
+    implementation project(':hadoop-unit-commons')
+
+    implementation(libraries.miniClusterZk) {
+        exclude group: 'javax.jms', module:'jms'
+    }
+}
+

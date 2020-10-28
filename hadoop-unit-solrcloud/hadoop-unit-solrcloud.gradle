@@ -1,0 +1,12 @@
+description = 'hadoop-unit-solrcloud'
+
+
+dependencies {
+    implementation project(':hadoop-unit-commons')
+    implementation project(':hadoop-unit-zookeeper')
+
+    implementation libraries.solrJ
+    implementation libraries.solrTest
+    implementation libraries.concurrentLinkHM
+}
+

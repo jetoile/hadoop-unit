@@ -1,0 +1,12 @@
+description = 'hadoop-unit-client-hdfs'
+
+
+dependencies {
+    implementation project(':hadoop-unit-commons')
+
+    implementation libraries.commonsConfiguration
+
+    implementation libraries.hadoopClient
+    implementation libraries.hadoopCommon
+}
+

@@ -1,0 +1,159 @@
+ext {
+    slf4j = '1.7.25'
+    logbackClassic = '1.2.3'
+    log4jToSlf4j = '2.7'
+
+    commonsIo = '2.5'
+    commonsConfiguration = '1.10'
+    commonsCollections = '3.2.1'
+    apacheCommonsIo = '1.3.2'
+    apacheCommonsLang3 = '3.6'
+
+    hadoopMiniClusters = '0.1.16'
+
+    hive = '1.2.1000.2.6.5.0-292'
+    solr = '6.6.1'
+    oozie = '4.2.0.2.6.5.0-292'
+    hadoop = '2.7.3.2.6.5.0-292'
+    knox = '0.12.0.2.6.5.0-292'
+    kafka_2_11 = '1.0.0.2.6.5.0-292'
+
+    confluent = '6.0.0'
+    confluent_kafka = '6.0.0-ccs'
+
+    spark_2_11 = '2.2.0'
+    sparkSolr = '3.2.1'
+    gatewayServiceOozie = '0.5.0.2.2.9.26-3'
+
+    dbSetup = '2.1.0'
+    httpclient = '4.4.1'
+    concurrentlinkedhashmapLru = '1.4'
+    jettyUtil = '9.3.21.v20170918'
+    javaxServletApi = '3.1.0'
+
+    embeddedMongo = '2.0.0'
+
+    elasticsearch = '6.2.4'
+    embeddedElasticsearch = '2.7.0'
+
+    metrics = '3.1.2'
+    achilles = '6.0.1'
+    jacksonModuleScala_2_11 = '2.6.5'
+
+    neo4j = '3.2.2'
+    alluxio = '1.8.1'
+
+    jettison = '1.3.8'
+
+    ant = '1.10.1'
+    redisUnit = '1.0.3'
+    plexus = '2.2'
+    jansi = '1.16'
+    jgrapht = '1.2.0'
+
+    testcontainers = '1.10.6'
+
+    mockito = '1.8.5'
+    junit = '4.12'
+    festAssert = '1.4'
+    assertJ = '3.11.1'
+
+
+
+    libraries = [
+            jansi:                  "org.fusesource.jansi:jansi:${jansi}",
+            logback:                "ch.qos.logback:logback-classic:${logbackClassic}",
+            log4jToSlf4j:           "org.apache.logging.log4j:log4j-to-slf4j:${log4jToSlf4j}",
+            slf4j:                  "org.slf4j:slf4j-api:${slf4j}",
+
+            commonsConfiguration:   "commons-configuration:commons-configuration:${commonsConfiguration}",
+            commonsCollections:     "commons-collections:commons-collections:${commonsCollections}",
+            ApachecommonsIo:        "org.apache.commons:commons-io:${apacheCommonsIo}",
+            commonsIo:              "commons-io:commons-io:${commonsIo}",
+            ApachecommonsLang3:     "org.apache.commons:commons-lang3:${apacheCommonsLang3}",
+
+            dbSetup:                "com.ninja-squad:DbSetup:${dbSetup}",
+
+            hiveJdbc:               "org.apache.hive:hive-jdbc:${hive}",
+            hiveCatalog:            "org.apache.hive.hcatalog:hive-hcatalog-core:${hive}",
+
+            neo4j:                  "org.neo4j:neo4j:${neo4j}",
+            neo4jBolt:              "org.neo4j:neo4j-bolt:${neo4j}",
+
+            embeddedElastic:        "pl.allegro.tech:embedded-elasticsearch:${embeddedElasticsearch}",
+            elasticClient:          "org.elasticsearch.client:transport:${elasticsearch}",
+
+            confluentSchema:        "io.confluent:kafka-schema-registry:${confluent}",
+            confluentRest:          "io.confluent:kafka-rest:${confluent}",
+            confluentKsql:          "io.confluent.ksql:ksqldb-rest-app:${confluent}",
+
+            kafka2_11:              "org.apache.kafka:kafka_2.11:${kafka_2_11}",
+
+            achille:                "info.archinnov:achilles-embedded:${achilles}",
+
+            testContainer:          "org.testcontainers:testcontainers:${testcontainers}",
+
+            miniClusterCommon:      "com.github.sakserv:hadoop-mini-clusters-common:${hadoopMiniClusters}",
+            miniClusterZk:          "com.github.sakserv:hadoop-mini-clusters-zookeeper:${hadoopMiniClusters}",
+            miniClusterMongo:       "com.github.sakserv:hadoop-mini-clusters-mongodb:${hadoopMiniClusters}",
+            miniClusterKnox:        "com.github.sakserv:hadoop-mini-clusters-knox:${hadoopMiniClusters}",
+            miniClusterMetastore:   "com.github.sakserv:hadoop-mini-clusters-hivemetastore:${hadoopMiniClusters}",
+            miniClusterHiveServer:  "com.github.sakserv:hadoop-mini-clusters-hiveserver2:${hadoopMiniClusters}",
+            miniClusterHdfs:        "com.github.sakserv:hadoop-mini-clusters-hdfs:${hadoopMiniClusters}",
+            miniClusterHBase:       "com.github.sakserv:hadoop-mini-clusters-hbase:${hadoopMiniClusters}",
+            miniClusterMR:          "com.github.sakserv:hadoop-mini-clusters-mapreduce:${hadoopMiniClusters}",
+            miniClusterYarn:        "com.github.sakserv:hadoop-mini-clusters-yarn:${hadoopMiniClusters}",
+            miniClusterKafka:       "com.github.sakserv:hadoop-mini-clusters-kafka:${hadoopMiniClusters}",
+            miniClusterOozie:       "com.github.sakserv:hadoop-mini-clusters-oozie:${hadoopMiniClusters}",
+
+            knoxShell:              "org.apache.knox:gateway-shell:${knox}",
+            knoxSecurity:           "org.apache.knox:gateway-provider-security-authc-anon:${knox}",
+            knoxIdentity:           "org.apache.knox:gateway-provider-identity-assertion-pseudo:${knox}",
+            knoxWebHdfs:            "org.apache.knox:gateway-service-webhdfs:${knox}",
+            knoxHBase:              "org.apache.knox:gateway-service-hbase:${knox}",
+            knoxOozie:              "org.apache.knox:gateway-service-oozie:${gatewayServiceOozie}",
+
+            solrJ:                  "org.apache.solr:solr-solrj:${solr}",
+            solrTest:               "org.apache.solr:solr-test-framework:${solr}",
+
+            hadoopCommon:           "org.apache.hadoop:hadoop-common:${hadoop}",
+            hadoopClient:           "org.apache.hadoop:hadoop-client:${hadoop}",
+
+            httpClient:             "org.apache.httpcomponents:httpclient:${httpclient}",
+
+            concurrentLinkHM:       "com.googlecode.concurrentlinkedhashmap:concurrentlinkedhashmap-lru:${concurrentlinkedhashmapLru}",
+
+            jgrapht:                "org.jgrapht:jgrapht-core:${jgrapht}",
+
+            miniClusterAlluxio:     "org.alluxio:alluxio-minicluster:${alluxio}",
+            alluxioClient:          "org.alluxio:alluxio-core-client-fs:${alluxio}",
+            alluxioHdfs:            "org.alluxio:alluxio-underfs-hdfs:${alluxio}",
+
+            metricsCore:            "io.dropwizard.metrics:metrics-core:${metrics}",
+            metricsJvm:             "io.dropwizard.metrics:metrics-jvm:${metrics}",
+            metricsJSon:            "io.dropwizard.metrics:metrics-json:${metrics}",
+            metricsGraphite:        "io.dropwizard.metrics:metrics-graphite:${metrics}",
+
+            redisUnit:              "net.ishiis.redis:redis-unit:${redisUnit}",
+
+            sparkSolr:              "com.lucidworks.spark:spark-solr:${sparkSolr}",
+            sparkCore:              "org.apache.spark:spark-core_2.11:${spark_2_11}",
+            jaksonScala:            "com.fasterxml.jackson.module:jackson-module-scala_2.11:${jacksonModuleScala_2_11}",
+            sparkSql:               "org.apache.spark:spark-sql_2.11:${spark_2_11}",
+            sparkHive:              "org.apache.spark:spark-hive_2.11:${spark_2_11}",
+
+            javaxServletApi:        "javax.servlet:javax.servlet-api:${javaxServletApi}",
+
+            jettyUtil:             "org.eclipse.jetty:jetty-util:${jettyUtil}",
+            jettison:               "org.codehaus.jettison:jettison:${jettison}",
+
+            ant:                    "org.apache.ant:ant:${ant}",
+
+            plexus:                 "org.codehaus.plexus:plexus-archiver:${plexus}",
+
+            junit:                  "junit:junit:${junit}",
+            mockito:                "org.mockito:mockito-all:${mockito}",
+            festAssert:             "org.easytesting:fest-assert:${festAssert}",
+            assertJ:                "org.assertj:assertj-core:${assertJ}"
+    ]
+}

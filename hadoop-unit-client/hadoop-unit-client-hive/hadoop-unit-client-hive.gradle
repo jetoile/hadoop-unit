@@ -1,0 +1,13 @@
+description = 'hadoop-unit-client-hive'
+
+
+dependencies {
+    implementation project(':hadoop-unit-commons')
+
+    implementation libraries.commonsConfiguration
+    implementation libraries.commonsCollections
+    implementation libraries.commonsIo
+    implementation libraries.dbSetup
+    implementation libraries.hiveJdbc
+}
+

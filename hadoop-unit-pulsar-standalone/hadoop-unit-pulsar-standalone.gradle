@@ -1,0 +1,17 @@
+description = 'hadoop-unit-pulsar-standalone'
+
+ext {
+    pulsar_version = '2.6.1'
+    grpc_version = '1.18.0'
+    jetty_util_version = '9.4.31.v20200723'
+}
+
+dependencies {
+    implementation project(':hadoop-unit-commons')
+
+    implementation "org.apache.pulsar:pulsar-broker:${pulsar_version}"
+    implementation "org.eclipse.jetty:jetty-util:${jetty_util_version}"
+    implementation "io.grpc:grpc-all:${grpc_version}"
+    implementation libraries.logback
+}
+

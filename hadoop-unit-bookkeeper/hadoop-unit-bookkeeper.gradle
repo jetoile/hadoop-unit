@@ -1,0 +1,17 @@
+
+description = 'hadoop-unit-bookkeeper'
+
+dependencies {
+    implementation project(':hadoop-unit-commons')
+    implementation project(':hadoop-unit-zookeeper')
+
+    implementation 'io.netty:netty-all:4.1.32.Final'
+    implementation 'org.apache.bookkeeper:bookkeeper-server:4.10.0'
+    implementation 'org.apache.bookkeeper.http:vertx-http-server:4.10.0'
+    implementation libraries.logback
+
+    testImplementation 'javax.ws.rs:javax.ws.rs-api:2.1.1'
+    testImplementation 'org.jboss.resteasy:resteasy-client:4.3.1.Final'
+}
+
+

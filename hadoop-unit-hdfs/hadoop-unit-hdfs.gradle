@@ -1,0 +1,9 @@
+description = 'hadoop-unit-hdfs'
+
+
+dependencies {
+    implementation project(':hadoop-unit-commons')
+    implementation project(':hadoop-unit-commons-hadoop')
+
+    implementation 'com.github.sakserv:hadoop-mini-clusters-hdfs:0.1.16'
+}

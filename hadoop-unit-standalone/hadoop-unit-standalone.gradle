@@ -1,0 +1,25 @@
+description = 'hadoop-unit-standalone'
+
+ext {
+    maven_version = '3.5.0'
+    aether_version = '1.1.0'
+}
+
+dependencies {
+    implementation project(':hadoop-unit-commons')
+
+    implementation libraries.logback
+    implementation libraries.ApachecommonsLang3
+    implementation "org.apache.maven:maven-embedder:${maven_version}"
+    implementation "org.eclipse.aether:aether-impl:${aether_version}"
+    implementation "org.eclipse.aether:aether-connector-basic:${aether_version}"
+    implementation "org.eclipse.aether:aether-transport-file:${aether_version}"
+    implementation "org.eclipse.aether:aether-transport-http:${aether_version}"
+    implementation "org.apache.maven:maven-resolver-provider:${maven_version}"
+    implementation libraries.httpClient
+
+    implementation libraries.jgrapht
+    implementation libraries.jansi
+}
+
+

@@ -1,0 +1,22 @@
+description = 'hadoop-unit-redis'
+
+ext {
+    redis_client_version = '3.3.0'
+}
+
+dependencies {
+    implementation project(':hadoop-unit-commons')
+
+    implementation libraries.slf4j
+
+    implementation libraries.commonsIo
+    implementation libraries.ApachecommonsLang3
+
+    implementation libraries.ant
+
+    implementation libraries.redisUnit
+    implementation libraries.plexus
+
+    testImplementation "redis.clients:jedis:${redis_client_version}"
+}
+

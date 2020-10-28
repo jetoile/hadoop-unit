@@ -1,0 +1,65 @@
+allprojects {
+    group = 'fr.jetoile.hadoop'
+    version = '3.9-SNAPSHOT'
+
+    repositories {
+        maven {
+            url 'https://repository.jboss.org/nexus/content/groups/public/'
+        }
+//        maven {
+//            url 'https://oss.sonatype.org/content/groups/public/'
+//        }
+        mavenCentral()
+        maven {
+            url 'https://packages.confluent.io/maven/'
+        }
+        maven {
+            url 'https://repository.cloudera.com/artifactory/cloudera-repos/'
+        }
+        maven {
+            url 'https://repo.hortonworks.com/content/groups/public/'
+        }
+        maven {
+            url "https://conjars.org/repo"
+        }
+        maven {
+            url "https://repository.mulesoft.org/nexus/content/repositories/public/"
+        }
+        maven {
+            url "http://nexus.qmino.com/content/repositories/miredot"
+        }
+
+    }
+
+    apply plugin: 'idea'
+    buildDir = "target"
+
+    apply from: rootProject.file( 'gradle/libraries.gradle' )
+
+    tasks.withType(Javadoc).all { enabled = false }
+}
+
+subprojects {
+    apply plugin: 'java'
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+
+    dependencies {
+        implementation libraries.commonsConfiguration
+        implementation libraries.ApachecommonsLang3
+        implementation libraries.commonsIo
+
+        testImplementation libraries.junit
+        testImplementation libraries.festAssert
+        testImplementation libraries.assertJ
+        testImplementation libraries.mockito
+    }
+
+    java {
+        withJavadocJar()
+    }
+}
+
+
+
+

@@ -1,0 +1,8 @@
+description = 'hadoop-unit-yarn'
+
+dependencies {
+    implementation project(':hadoop-unit-commons')
+    implementation project(':hadoop-unit-commons-hadoop')
+    implementation libraries.miniClusterYarn
+}
+

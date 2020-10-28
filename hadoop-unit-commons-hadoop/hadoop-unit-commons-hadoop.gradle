@@ -1,0 +1,8 @@
+description = 'hadoop-unit-commons-hadoop'
+
+dependencies {
+    implementation project(':hadoop-unit-commons')
+
+    implementation libraries.hadoopCommon
+}
+

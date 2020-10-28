@@ -1,0 +1,20 @@
+description = 'hadoop-unit-oozie'
+
+ext {
+    metrics_version = '3.1.2'
+}
+
+dependencies {
+    implementation project(':hadoop-unit-commons')
+    implementation project(':hadoop-unit-commons-hadoop')
+    implementation project(':hadoop-unit-hdfs')
+    implementation project(':hadoop-unit-yarn')
+
+    implementation libraries.miniClusterOozie
+    implementation libraries.miniClusterMR
+
+    implementation "io.dropwizard.metrics:metrics-core:${metrics_version}"
+    implementation "io.dropwizard.metrics:metrics-jvm:${metrics_version}"
+    implementation "io.dropwizard.metrics:metrics-json:${metrics_version}"
+}
+

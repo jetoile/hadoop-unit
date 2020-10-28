@@ -1,0 +1,13 @@
+description = 'hadoop-unit-cassandra'
+
+dependencies {
+    implementation project(':hadoop-unit-commons')
+
+    implementation libraries.achille
+    implementation libraries.logback
+
+}
+
+
+
+

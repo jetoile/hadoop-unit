@@ -1,0 +1,36 @@
+description = 'hadoop-unit-hiveserver23'
+
+ext {
+    hive_version = '3.1.2'
+    hadoop_version = '3.2.1'
+    tez_version = '0.9.2'
+}
+
+dependencies {
+    implementation project(':hadoop-unit-commons')
+    implementation project(':hadoop-unit-commons-hadoop3')
+    implementation project(':hadoop-unit-zookeeper')
+    implementation project(':hadoop-unit-hdfs3')
+
+    implementation "org.apache.hadoop:hadoop-client:${hadoop_version}"
+
+    implementation(libraries.miniClusterMetastore) {
+        exclude group: 'org.apache.hive', module: 'hive-exec'
+        exclude group: 'org.apache.hadoop', module: 'hadoop-client'
+        exclude group: 'org.apache.hive', module: 'hive-service'
+    }
+    implementation(libraries.miniClusterHiveServer) {
+        exclude group: 'org.apache.hive', module: 'hive-exec'
+        exclude group: 'org.apache.hadoop', module: 'hadoop-client'
+        exclude group: 'org.apache.hive', module: 'hive-service'
+    }
+
+    implementation "org.apache.hive:hive-common:${hive_version}"
+    implementation "org.apache.hive:hive-service:${hive_version}"
+
+    implementation "org.apache.tez:tez-api:${tez_version}"
+    implementation "org.apache.tez:tez-dag:${tez_version}"
+
+    testImplementation "org.apache.hive:hive-jdbc:${hive_version}"
+}
+

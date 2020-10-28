@@ -1,0 +1,14 @@
+description = 'hadoop-unit-commons'
+
+dependencies {
+    implementation project(':hadoop-unit-windowslibs')
+
+    implementation libraries.jgrapht
+    implementation libraries.httpClient
+    implementation libraries.slf4j
+    implementation libraries.javaxServletApi
+    implementation libraries.jansi
+
+}
+
+

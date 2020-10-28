@@ -1,0 +1,14 @@
+description = 'hadoop-unit-mongodb'
+
+ext {
+    mongo_driver_version = '2.11.3'
+}
+
+dependencies {
+    implementation project(':hadoop-unit-commons')
+
+    implementation libraries.logback
+    implementation libraries.miniClusterMongo
+
+    testImplementation "org.mongodb:mongo-java-driver:${mongo_driver_version}"
+}
