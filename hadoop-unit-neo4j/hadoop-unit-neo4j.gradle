@@ -7,9 +7,9 @@ ext {
 dependencies {
     implementation project(':hadoop-unit-commons')
 
-    implementation libraries.neo4j
-    implementation libraries.neo4jBolt
-    implementation libraries.logback
+    implementation "org.neo4j:neo4j"
+    implementation "org.neo4j:neo4j-bolt"
+    implementation "ch.qos.logback:logback-classic"
 
     testImplementation "org.neo4j.driver:neo4j-java-driver:${neo4j_driver_version}"
 }

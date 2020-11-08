@@ -4,7 +4,7 @@ description = 'hadoop-unit-dockercompose'
 dependencies {
     implementation project(':hadoop-unit-commons')
 
-    implementation libraries.testContainer
-    implementation libraries.logback
+    implementation "org.testcontainers:testcontainers"
+    implementation "ch.qos.logback:logback-classic"
 }
 

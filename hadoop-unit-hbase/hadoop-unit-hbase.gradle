@@ -6,7 +6,7 @@ dependencies {
     implementation project(':hadoop-unit-zookeeper')
     implementation project(':hadoop-unit-hdfs')
 
-    implementation libraries.miniClusterHBase
+    implementation "com.github.sakserv:hadoop-mini-clusters-hbase"
     implementation 'org.codehaus.jackson:jackson-xc:1.9.13'
 }
 

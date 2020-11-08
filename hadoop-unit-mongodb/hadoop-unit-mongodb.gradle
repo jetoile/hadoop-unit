@@ -7,8 +7,8 @@ ext {
 dependencies {
     implementation project(':hadoop-unit-commons')
 
-    implementation libraries.logback
-    implementation libraries.miniClusterMongo
+    implementation "ch.qos.logback:logback-classic"
+    implementation "com.github.sakserv:hadoop-mini-clusters-mongodb"
 
     testImplementation "org.mongodb:mongo-java-driver:${mongo_driver_version}"
 }

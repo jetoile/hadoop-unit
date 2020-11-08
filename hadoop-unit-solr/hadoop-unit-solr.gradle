@@ -3,8 +3,8 @@ description = 'hadoop-unit-solr'
 dependencies {
     implementation project(':hadoop-unit-commons')
 
-    implementation libraries.solrJ
-    implementation libraries.solrTest
-    implementation libraries.concurrentLinkHM
+    implementation "org.apache.solr:solr-solrj"
+    implementation "org.apache.solr:solr-test-framework"
+    implementation "com.googlecode.concurrentlinkedhashmap:concurrentlinkedhashmap-lru"
 }
 

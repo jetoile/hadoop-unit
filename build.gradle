@@ -1,3 +1,7 @@
+plugins {
+    id 'io.spring.dependency-management' version '1.0.9.RELEASE' apply false
+}
+
 allprojects {
     group = 'fr.jetoile.hadoop'
     version = '3.9-SNAPSHOT'
@@ -34,9 +38,189 @@ allprojects {
     apply plugin: 'idea'
     buildDir = "target"
 
-    apply from: rootProject.file( 'gradle/libraries.gradle' )
-
     tasks.withType(Javadoc).all { enabled = false }
+}
+
+
+
+ext {
+    slf4j = '1.7.25'
+    logbackClassic = '1.2.3'
+    log4jToSlf4j = '2.7'
+
+    commonsIo = '2.5'
+    commonsConfiguration = '1.10'
+    commonsCollections = '3.2.1'
+    apacheCommonsIo = '1.3.2'
+    apacheCommonsLang3 = '3.6'
+
+    hadoopMiniClusters = '0.1.16'
+
+    hive = '1.2.1000.2.6.5.0-292'
+    solr = '6.6.1'
+    oozie = '4.2.0.2.6.5.0-292'
+    hadoop = '2.7.3.2.6.5.0-292'
+    knox = '0.12.0.2.6.5.0-292'
+    kafka_2_11 = '1.0.0.2.6.5.0-292'
+
+    confluent = '6.0.0'
+    confluent_kafka = '6.0.0-ccs'
+
+    spark_2_11 = '2.2.0'
+    sparkSolr = '3.2.1'
+    gatewayServiceOozie = '0.5.0.2.2.9.26-3'
+
+    dbSetup = '2.1.0'
+    httpclient = '4.4.1'
+    concurrentlinkedhashmapLru = '1.4'
+    jettyUtil = '9.3.21.v20170918'
+    javaxServletApi = '3.1.0'
+
+    embeddedMongo = '2.0.0'
+
+    elasticsearch = '6.2.4'
+    embeddedElasticsearch = '2.7.0'
+
+    metrics = '3.1.2'
+    achilles = '6.0.1'
+    jacksonModuleScala_2_11 = '2.6.5'
+
+    neo4j = '3.2.2'
+    alluxio = '1.8.1'
+
+    jettison = '1.3.8'
+
+    ant = '1.10.1'
+    redisUnit = '1.0.3'
+    plexus = '2.2'
+    jansi = '1.16'
+    jgrapht = '1.2.0'
+
+    testcontainers = '1.10.6'
+
+    mockito = '1.8.5'
+    junit = '4.12'
+    festAssert = '1.4'
+    assertJ = '3.11.1'
+}
+
+configure(allprojects) { project ->
+    apply plugin: "io.spring.dependency-management"
+
+    dependencyManagement {
+        dependencies {
+            dependency "org.fusesource.jansi:jansi:${jansi}"
+            dependency "ch.qos.logback:logback-classic:${logbackClassic}"
+            dependency "org.apache.logging.log4j:log4j-to-slf4j:${log4jToSlf4j}"
+            dependency "org.slf4j:slf4j-api:${slf4j}"
+
+            dependency "commons-configuration:commons-configuration:${commonsConfiguration}"
+            dependency "commons-collections:commons-collections:${commonsCollections}"
+            dependency "org.apache.commons:commons-io:${apacheCommonsIo}"
+            dependency "commons-io:commons-io:${commonsIo}"
+            dependency "org.apache.commons:commons-lang3:${apacheCommonsLang3}"
+
+            dependency "com.ninja-squad:DbSetup:${dbSetup}"
+
+            dependency "org.apache.hive:hive-jdbc:${hive}"
+            dependency "org.apache.hive.hcatalog:hive-hcatalog-core:${hive}"
+
+            dependencySet(group: 'org.neo4j', version:"${neo4j}") {
+                entry 'neo4j'
+                entry 'neo4j-bolt'
+            }
+
+            dependency "pl.allegro.tech:embedded-elasticsearch:${embeddedElasticsearch}"
+            dependency "org.elasticsearch.client:transport:${elasticsearch}"
+
+            dependencySet(group: 'io.confluent', version: "${confluent}") {
+                entry 'kafka-schema-registry'
+                entry 'kafka-rest'
+            }
+            dependency "io.confluent.ksql:ksqldb-rest-app:${confluent}"
+
+            dependency "org.apache.kafka:kafka_2.11:${kafka_2_11}"
+
+            dependency "info.archinnov:achilles-embedded:${achilles}"
+
+            dependency "org.testcontainers:testcontainers:${testcontainers}"
+
+            dependencySet(group: 'com.github.sakserv', version: "${hadoopMiniClusters}") {
+                entry 'hadoop-mini-clusters-common'
+                entry 'hadoop-mini-clusters-zookeeper'
+                entry 'hadoop-mini-clusters-mongodb'
+                entry 'hadoop-mini-clusters-knox'
+                entry 'hadoop-mini-clusters-hivemetastore'
+                entry 'hadoop-mini-clusters-hiveserver2'
+                entry 'hadoop-mini-clusters-hdfs'
+                entry 'hadoop-mini-clusters-hbase'
+                entry 'hadoop-mini-clusters-mapreduce'
+                entry 'hadoop-mini-clusters-yarn'
+                entry 'hadoop-mini-clusters-kafka'
+                entry 'hadoop-mini-clusters-oozie'
+            }
+
+            dependencySet(group: 'org.apache.knox', version: "${knox}") {
+                entry 'gateway-shell'
+                entry 'gateway-provider-security-authc-anon'
+                entry 'gateway-provider-identity-assertion-pseudo'
+                entry 'gateway-service-webhdfs'
+                entry 'gateway-service-hbase'
+                entry 'gateway-service-oozie'
+            }
+
+            dependencySet(group: 'org.apache.solr', version: "${solr}") {
+                entry 'solr-solrj'
+                entry 'solr-test-framework'
+            }
+
+            dependencySet(group: 'org.apache.hadoop', version: "${hadoop}") {
+                entry 'hadoop-common'
+                entry 'hadoop-client'
+            }
+
+            dependency "org.apache.httpcomponents:httpclient:${httpclient}"
+
+            dependency "com.googlecode.concurrentlinkedhashmap:concurrentlinkedhashmap-lru:${concurrentlinkedhashmapLru}"
+
+            dependency "org.jgrapht:jgrapht-core:${jgrapht}"
+
+            dependencySet(group: 'org.alluxio', version: "${alluxio}") {
+                entry 'alluxio-minicluster'
+                entry 'alluxio-core-client-fs'
+                entry 'alluxio-underfs-hdfs'
+            }
+
+            dependencySet(group: 'io.dropwizard.metrics', version: "${metrics}") {
+                entry 'metrics-core'
+                entry 'metrics-jvm'
+                entry 'metrics-json'
+                entry 'metrics-graphite'
+            }
+
+            dependency "net.ishiis.redis:redis-unit:${redisUnit}"
+
+            dependency "com.lucidworks.spark:spark-solr:${sparkSolr}"
+            dependency "org.apache.spark:spark-core_2.11:${spark_2_11}"
+            dependency "com.fasterxml.jackson.module:jackson-module-scala_2.11:${jacksonModuleScala_2_11}"
+            dependency "org.apache.spark:spark-sql_2.11:${spark_2_11}"
+            dependency "org.apache.spark:spark-hive_2.11:${spark_2_11}"
+
+            dependency "javax.servlet:javax.servlet-api:${javaxServletApi}"
+            dependency "org.eclipse.jetty:jetty-util:${jettyUtil}"
+            dependency "org.codehaus.jettison:jettison:${jettison}"
+
+            dependency "org.apache.ant:ant:${ant}"
+
+            dependency "org.codehaus.plexus:plexus-archiver:${plexus}"
+
+            dependency "junit:junit:${junit}"
+            dependency "org.mockito:mockito-all:${mockito}"
+            dependency "org.easytesting:fest-assert:${festAssert}"
+            dependency "org.assertj:assertj-core:${assertJ}"
+        }
+    }
+
 }
 
 subprojects {
@@ -45,14 +229,14 @@ subprojects {
     targetCompatibility = 1.8
 
     dependencies {
-        implementation libraries.commonsConfiguration
-        implementation libraries.ApachecommonsLang3
-        implementation libraries.commonsIo
+//        implementation "commons-configuration:commons-configuration"
+//        implementation "org.apache.commons:commons-lang3"
+//        implementation "commons-io:commons-io"
 
-        testImplementation libraries.junit
-        testImplementation libraries.festAssert
-        testImplementation libraries.assertJ
-        testImplementation libraries.mockito
+        testImplementation "junit:junit"
+        testImplementation "org.assertj:assertj-core"
+        testImplementation "org.easytesting:fest-assert"
+        testImplementation "org.mockito:mockito-all"
     }
 
     java {

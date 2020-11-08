@@ -3,6 +3,6 @@ description = 'hadoop-unit-yarn'
 dependencies {
     implementation project(':hadoop-unit-commons')
     implementation project(':hadoop-unit-commons-hadoop')
-    implementation libraries.miniClusterYarn
+    implementation "com.github.sakserv:hadoop-mini-clusters-yarn"
 }
 

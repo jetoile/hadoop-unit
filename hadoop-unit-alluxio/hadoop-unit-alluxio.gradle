@@ -11,13 +11,13 @@ dependencies {
     }
     implementation project(':hadoop-unit-hdfs')
 
-    implementation(libraries.miniClusterAlluxio) {
+    implementation("org.alluxio:alluxio-minicluster") {
         exclude group:'org.glassfish', module: 'javax.el'
     }
-    implementation(libraries.alluxioHdfs) {
+    implementation("org.alluxio:alluxio-underfs-hdfs") {
         exclude group:'org.apache.hadoop', module: 'hadoop-hdfs'
     }
-    implementation(libraries.alluxioClient) {
+    implementation("org.alluxio:alluxio-core-client-fs") {
         exclude group:'org.apache.hadoop', module: 'hadoop-yarn-common'
     }
 

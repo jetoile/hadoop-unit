@@ -2,9 +2,9 @@ description = 'hadoop-unit-client-spark'
 
 
 dependencies {
-    implementation libraries.sparkCore
-    implementation libraries.sparkSql
-    implementation libraries.sparkHive
-    implementation libraries.jaksonScala
+    implementation "org.apache.spark:spark-core_2.11"
+    implementation "org.apache.spark:spark-sql_2.11"
+    implementation "org.apache.spark:spark-hive_2.11"
+    implementation "com.fasterxml.jackson.module:jackson-module-scala_2.11"
 }
 

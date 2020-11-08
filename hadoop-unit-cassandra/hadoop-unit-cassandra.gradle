@@ -3,8 +3,10 @@ description = 'hadoop-unit-cassandra'
 dependencies {
     implementation project(':hadoop-unit-commons')
 
-    implementation libraries.achille
-    implementation libraries.logback
+    implementation("info.archinnov:achilles-embedded") {
+        exclude group: 'de.jflex', module: 'jflex'
+    }
+    implementation "ch.qos.logback:logback-classic"
 
 }
 

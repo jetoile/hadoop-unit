@@ -1,15 +1,21 @@
 description = 'hadoop-unit-hdfs3'
 
+ext {
+    hadoop_version = '3.2.1'
+}
+
 dependencies {
     implementation project(':hadoop-unit-commons')
     implementation project(':hadoop-unit-commons-hadoop3')
 
-    implementation(libraries.miniClusterHdfs) {
+    implementation("com.github.sakserv:hadoop-mini-clusters-hdfs") {
         exclude group: 'org.apache.hadoop', module: 'hadoop-minicluster'
         exclude group: 'org.apache.hadoop', module: 'hadoop-client'
     }
 
-    implementation 'org.apache.hadoop:hadoop-minicluster:3.2.1'
+
+    implementation "org.apache.hadoop:hadoop-minicluster:${hadoop_version}"
+    implementation "org.apache.hadoop:hadoop-hdfs:${hadoop_version}:tests"
 
     implementation 'org.eclipse.jetty:jetty-util:9.3.24.v20180605'
 }

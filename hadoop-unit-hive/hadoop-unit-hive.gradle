@@ -6,11 +6,11 @@ dependencies {
     implementation project(':hadoop-unit-zookeeper')
     implementation project(':hadoop-unit-hdfs')
 
-    implementation libraries.miniClusterMetastore
-    implementation libraries.miniClusterHiveServer
-    implementation libraries.hiveCatalog
+    implementation "com.github.sakserv:hadoop-mini-clusters-hivemetastore"
+    implementation "com.github.sakserv:hadoop-mini-clusters-hiveserver2"
+    implementation "org.apache.hive.hcatalog:hive-hcatalog-core"
 
-    testImplementation libraries.hiveJdbc
+    testImplementation "org.apache.hive:hive-jdbc"
 }
 
 

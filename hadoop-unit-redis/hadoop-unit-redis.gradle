@@ -7,15 +7,15 @@ ext {
 dependencies {
     implementation project(':hadoop-unit-commons')
 
-    implementation libraries.slf4j
+    implementation "org.slf4j:slf4j-api"
 
-    implementation libraries.commonsIo
-    implementation libraries.ApachecommonsLang3
+    implementation "commons-io:commons-io"
+    implementation "org.apache.commons:commons-lang3"
 
-    implementation libraries.ant
+    implementation "org.apache.ant:ant"
 
-    implementation libraries.redisUnit
-    implementation libraries.plexus
+    implementation "net.ishiis.redis:redis-unit"
+    implementation "org.codehaus.plexus:plexus-archiver"
 
     testImplementation "redis.clients:jedis:${redis_client_version}"
 }

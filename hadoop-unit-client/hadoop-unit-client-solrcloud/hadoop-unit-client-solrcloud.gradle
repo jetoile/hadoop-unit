@@ -1,7 +1,7 @@
 description = 'hadoop-unit-client-solrcloud'
 
 dependencies {
-    implementation libraries.sparkSolr
+    implementation "com.lucidworks.spark:spark-solr"
 }
 
 

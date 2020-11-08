@@ -8,18 +8,18 @@ ext {
 dependencies {
     implementation project(':hadoop-unit-commons')
 
-    implementation libraries.logback
-    implementation libraries.ApachecommonsLang3
+    implementation "ch.qos.logback:logback-classic"
+    implementation "org.apache.commons:commons-lang3"
     implementation "org.apache.maven:maven-embedder:${maven_version}"
     implementation "org.eclipse.aether:aether-impl:${aether_version}"
     implementation "org.eclipse.aether:aether-connector-basic:${aether_version}"
     implementation "org.eclipse.aether:aether-transport-file:${aether_version}"
     implementation "org.eclipse.aether:aether-transport-http:${aether_version}"
     implementation "org.apache.maven:maven-resolver-provider:${maven_version}"
-    implementation libraries.httpClient
+    implementation "org.apache.httpcomponents:httpclient"
 
-    implementation libraries.jgrapht
-    implementation libraries.jansi
+    implementation "org.jgrapht:jgrapht-core"
+    implementation "org.fusesource.jansi:jansi"
 }
 
 

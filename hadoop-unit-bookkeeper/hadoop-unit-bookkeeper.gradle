@@ -8,7 +8,7 @@ dependencies {
     implementation 'io.netty:netty-all:4.1.32.Final'
     implementation 'org.apache.bookkeeper:bookkeeper-server:4.10.0'
     implementation 'org.apache.bookkeeper.http:vertx-http-server:4.10.0'
-    implementation libraries.logback
+    implementation "ch.qos.logback:logback-classic"
 
     testImplementation 'javax.ws.rs:javax.ws.rs-api:2.1.1'
     testImplementation 'org.jboss.resteasy:resteasy-client:4.3.1.Final'

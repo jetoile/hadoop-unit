@@ -8,7 +8,7 @@ dependencies {
     implementation project(':hadoop-unit-commons')
     implementation project(':hadoop-unit-commons-hadoop3')
 
-    implementation(libraries.miniClusterYarn) {
+    implementation("com.github.sakserv:hadoop-mini-clusters-yarn") {
         exclude group:'org.apache.hadoop', module: 'hadoop-minicluster'
         exclude group:'org.apache.hadoop', module: 'hadoop-client'
     }

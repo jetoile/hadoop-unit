@@ -4,8 +4,8 @@ dependencies {
     implementation project(':hadoop-unit-commons')
     implementation project(':hadoop-unit-zookeeper')
 
-    implementation libraries.miniClusterKafka
-    implementation libraries.kafka2_11
+    implementation "com.github.sakserv:hadoop-mini-clusters-kafka"
+    implementation "org.apache.kafka:kafka_2.11"
 
     testImplementation 'org.codehaus.jettison:jettison:1.3.8'
     testImplementation project(':hadoop-unit-client-kafka')

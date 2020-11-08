@@ -6,7 +6,7 @@ dependencies {
     implementation project(':hadoop-unit-zookeeper')
     implementation project(':hadoop-unit-confluent')
 
-    implementation libraries.confluentRest
+    implementation "io.confluent:kafka-rest"
 
     implementation 'org.glassfish.jersey.containers:jersey-container-servlet:2.30'
     implementation 'org.glassfish.jersey.inject:jersey-hk2:2.30'

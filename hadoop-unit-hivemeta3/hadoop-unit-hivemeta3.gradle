@@ -11,12 +11,12 @@ dependencies {
     implementation project(':hadoop-unit-zookeeper')
     implementation project(':hadoop-unit-hdfs3')
 
-    implementation(libraries.miniClusterMetastore) {
+    implementation("com.github.sakserv:hadoop-mini-clusters-hivemetastore") {
         exclude group: 'org.apache.hive', module: 'hive-exec'
         exclude group: 'org.apache.hadoop', module: 'hadoop-client'
         exclude group: 'org.apache.hive', module: 'hive-service'
     }
-    implementation(libraries.miniClusterHiveServer) {
+    implementation("com.github.sakserv:hadoop-mini-clusters-hiveserver2") {
         exclude group: 'org.apache.hive', module: 'hive-exec'
         exclude group: 'org.apache.hadoop', module: 'hadoop-client'
         exclude group: 'org.apache.hive', module: 'hive-service'

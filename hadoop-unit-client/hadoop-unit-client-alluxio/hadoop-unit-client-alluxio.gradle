@@ -2,12 +2,22 @@ description = 'hadoop-unit-client-alluxio'
 
 
 dependencies {
-    implementation project(':hadoop-unit-commons')
+    implementation(project(':hadoop-unit-commons')) {
+        exclude group: 'org.mortbay.jetty', module: 'jetty'
+        exclude group: 'org.mortbay.jetty', module: 'jetty-util'
+        exclude group: 'com.sun.jersey', module: 'jersey-core'
+        exclude group: 'com.sun.jersey', module: 'jersey-json'
+        exclude group: 'com.sun.jersey', module: 'jersey-server'
+    }
 
-    implementation 'org.alluxio:alluxio-core-client-fs:1.8.1'
+    implementation('org.alluxio:alluxio-core-client-fs') {
+        exclude group: 'org.apache.hadoop', module: 'hadoop-yarn-common'
+    }
 
     testImplementation 'org.eclipse.jetty:jetty-util:9.2.19.v20160908'
     testImplementation 'org.glassfish:javax.el:3.0.1-b10'
-    testImplementation 'org.alluxio:alluxio-minicluster:1.8.1'
+    testImplementation('org.alluxio:alluxio-minicluster') {
+        exclude group: 'org.glassfish', module: 'javax.el'
+    }
 }
 

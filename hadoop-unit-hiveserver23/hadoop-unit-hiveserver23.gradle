@@ -14,19 +14,24 @@ dependencies {
 
     implementation "org.apache.hadoop:hadoop-client:${hadoop_version}"
 
-    implementation(libraries.miniClusterMetastore) {
+    implementation("com.github.sakserv:hadoop-mini-clusters-hivemetastore") {
         exclude group: 'org.apache.hive', module: 'hive-exec'
         exclude group: 'org.apache.hadoop', module: 'hadoop-client'
         exclude group: 'org.apache.hive', module: 'hive-service'
     }
-    implementation(libraries.miniClusterHiveServer) {
+    implementation("com.github.sakserv:hadoop-mini-clusters-hiveserver2") {
         exclude group: 'org.apache.hive', module: 'hive-exec'
         exclude group: 'org.apache.hadoop', module: 'hadoop-client'
         exclude group: 'org.apache.hive', module: 'hive-service'
     }
 
     implementation "org.apache.hive:hive-common:${hive_version}"
-    implementation "org.apache.hive:hive-service:${hive_version}"
+    implementation("org.apache.hive:hive-exec:${hive_version}") {
+        exclude group: 'org.apache.hive', module: 'hive-vector-code-gen'
+    }
+    implementation("org.apache.hive:hive-service:${hive_version}") {
+        exclude group: 'org.apache.hive', module: 'hive-vector-code-gen'
+    }
 
     implementation "org.apache.tez:tez-api:${tez_version}"
     implementation "org.apache.tez:tez-dag:${tez_version}"

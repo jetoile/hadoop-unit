@@ -3,18 +3,18 @@ description = 'hadoop-unit-knox'
 dependencies {
     implementation project(':hadoop-unit-commons')
 
-    implementation libraries.miniClusterKnox
-    implementation libraries.knoxOozie
+    implementation "com.github.sakserv:hadoop-mini-clusters-knox"
 
     implementation 'org.eclipse.jetty:jetty-util:9.3.10.v20160621'
     implementation 'org.eclipse.jetty:jetty-server:9.3.10.v20160621'
     implementation 'org.eclipse.jetty:jetty-servlet:9.3.10.v20160621'
 
-    implementation libraries.knoxShell
-    implementation libraries.knoxSecurity
-    implementation libraries.knoxIdentity
-    implementation libraries.knoxWebHdfs
-    implementation libraries.knoxHBase
+    implementation "org.apache.knox:gateway-shell"
+    implementation "org.apache.knox:gateway-provider-security-authc-anon"
+    implementation "org.apache.knox:gateway-provider-identity-assertion-pseudo"
+    implementation "org.apache.knox:gateway-service-webhdfs"
+    implementation "org.apache.knox:gateway-service-hbase"
+    implementation "org.apache.knox:gateway-service-oozie"
 
     testImplementation project(':hadoop-unit-client-hdfs')
     testImplementation project(':hadoop-unit-zookeeper')

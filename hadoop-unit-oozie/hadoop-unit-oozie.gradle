@@ -10,8 +10,8 @@ dependencies {
     implementation project(':hadoop-unit-hdfs')
     implementation project(':hadoop-unit-yarn')
 
-    implementation libraries.miniClusterOozie
-    implementation libraries.miniClusterMR
+    implementation "com.github.sakserv:hadoop-mini-clusters-oozie"
+    implementation "com.github.sakserv:hadoop-mini-clusters-mapreduce"
 
     implementation "io.dropwizard.metrics:metrics-core:${metrics_version}"
     implementation "io.dropwizard.metrics:metrics-jvm:${metrics_version}"

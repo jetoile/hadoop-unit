@@ -4,9 +4,9 @@ dependencies {
     implementation project(':hadoop-unit-commons')
     implementation project(':hadoop-unit-zookeeper')
 
-    implementation libraries.confluentSchema
-    implementation libraries.confluentRest
-    implementation libraries.confluentKsql
+    implementation "io.confluent:kafka-schema-registry"
+    implementation "io.confluent:kafka-rest"
+    implementation "io.confluent.ksql:ksqldb-rest-app"
 
     implementation 'org.glassfish.jersey.containers:jersey-container-servlet:2.30'
     implementation 'org.glassfish.jersey.inject:jersey-hk2:2.30'
