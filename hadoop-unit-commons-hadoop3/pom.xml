@@ -13,7 +13,7 @@
     <name>hadoop-unit-commons-hadoop3</name>
 
     <properties>
-        <hadoop3.version>3.2.1</hadoop3.version>
+        <hadoop3.version>3.2.3</hadoop3.version>
     </properties>
 
     <dependencies>
