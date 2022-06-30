@@ -192,7 +192,7 @@
         <commons-lang3.version>3.6</commons-lang3.version>
         <ant.version>1.10.1</ant.version>
         <redis-unit.version>1.0.3</redis-unit.version>
-        <plexus.version>2.2</plexus.version>
+        <plexus.version>3.6.0</plexus.version>
         <jansi.version>1.16</jansi.version>
         <testcontainers.version>1.10.6</testcontainers.version>
     </properties>
