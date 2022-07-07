@@ -12,7 +12,7 @@
     <artifactId>hadoop-unit-alluxio</artifactId>
 
     <properties>
-        <jetty.version>9.2.19.v20160908</jetty.version>
+        <jetty.version>10.0.10</jetty.version>
     </properties>
 
     <dependencies>
