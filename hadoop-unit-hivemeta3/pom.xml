@@ -28,11 +28,6 @@
 
         <dependency>
             <groupId>fr.jetoile.hadoop</groupId>
-            <artifactId>hadoop-unit-zookeeper</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>fr.jetoile.hadoop</groupId>
             <artifactId>hadoop-unit-hdfs3</artifactId>
         </dependency>
 

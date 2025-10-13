@@ -16,10 +16,7 @@
         <module>hadoop-unit-client-commons</module>
         <module>hadoop-unit-client-hive</module>
         <module>hadoop-unit-client-hdfs</module>
-        <module>hadoop-unit-client-solrcloud</module>
         <module>hadoop-unit-client-spark</module>
-        <module>hadoop-unit-client-kafka</module>
-        <module>hadoop-unit-client-alluxio</module>
     </modules>
 
 
