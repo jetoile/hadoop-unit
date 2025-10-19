@@ -16,7 +16,6 @@
         <module>hadoop-unit-client-commons</module>
         <module>hadoop-unit-client-hive</module>
         <module>hadoop-unit-client-hdfs</module>
-        <module>hadoop-unit-client-spark</module>
     </modules>
 
 

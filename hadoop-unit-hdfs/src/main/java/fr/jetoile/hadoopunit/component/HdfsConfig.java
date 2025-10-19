@@ -36,7 +36,7 @@ public class HdfsConfig {
 
     public static final String HDFS_NAMENODE_HOST_CLIENT_KEY = "hdfs.namenode.client.host";
     public static final String HDFS_DATANODE_ADDRESS_CLIENT_KEY = "hdfs.datanode.client.address";
-    public static final String HDFS_DATANODE_HTTP_ADDRESS_CLIENT_KEY = "hdfs.datanode.http.client.address";
+    public static final String HDFS_DATANODE_HTTP_ADDRESS__CLIENT_KEY = "hdfs.datanode.http.client.address";
     public static final String HDFS_DATANODE_IPC_ADDRESS_CLIENT_KEY = "hdfs.datanode.ipc.client.address";
 
     private HdfsConfig() {}

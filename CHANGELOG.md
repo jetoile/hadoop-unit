@@ -32,7 +32,7 @@
 - [d38c2ac](https://github.com/jetoile/hadoop-unit/commit/d38c2acd95b1d226776c7be775406e9805ea774a) add client host enviroment variable for all services (@jetoile)
 - [2d324c3](https://github.com/jetoile/hadoop-unit/commit/2d324c3634825e1bd19946a0e180ccd2cf859d2a) add bookkeeper (@jetoile)
 - [7ea852f](https://github.com/jetoile/hadoop-unit/commit/7ea852feaba36bc6320414e4870a0c651b18b0b8) update docs (@jetoile)
-- [#94](https://github.com/jetoile/hadoop-unit/pull/94) add support hdfs3/yarn3/hive3 (#94) (@jetoile)
+- [#94](https://github.com/jetoile/hadoop-unit/pull/94) add support hdfs/yarn3/hive3 (#94) (@jetoile)
 - [b64eee5](https://github.com/jetoile/hadoop-unit/commit/b64eee56229ff1412ef5f82961704a8a847768ca) update doc (@jetoile)
 - [2ba19da](https://github.com/jetoile/hadoop-unit/commit/2ba19da6225cc7c2d6102759ac0ca4df15401666) add pulsar (@jetoile)
 - [55e7b9b](https://github.com/jetoile/hadoop-unit/commit/55e7b9b06c26578348d45d92ae044d5a1ce2dd0f) add property for tmp directory (@jetoile)

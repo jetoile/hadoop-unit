@@ -18,38 +18,6 @@ Welcome to the Hadoop Unit wiki!
 		 port:20102
 - HIVESERVER2
 		 port:20103
-- KAFKA
-		 host:127.0.0.1
-		 port:20111
-- HBASE
-		 port:25111
-		 restPort:28000
-- SOLRCLOUD
-		 zh:127.0.0.1:22010
-		 port:8983
-		 collection:collection1
-- CASSANDRA
-		 listenAddressIp:127.0.0.1
-		 rpcAddressIp:0.0.0.0
-		 broadcastAddressIp:127.0.0.1
-		 broadcastRpcAddressIp:127.0.0.1
-		 port:13433
-- ELASTICSEARCH
-		 clusterName:elasticsearch
-		 ip:127.0.0.1
-		 httpPort:14433
-		 tcpPort:14533
-		 indexName:test_index
-		 version:6.2.4
-- CONFLUENT_KAFKA 
-		 kafka host:127.0.0.1
-		 kafka port:22222
-- CONFLUENT_SCHEMAREGISTRY 
-		 schemaregistry host:127.0.0.1
-		 schemaregistry port:8081
-- CONFLUENT_KAFKA_REST 
-		 rest host:127.0.0.1
-		 rest port:8082
 - DOCKER_COMPOSE 
 		 dockerComposeFile:/home/khanh/tmp/hadoop-unit-standalone-3.3/conf/docker-compose.yml
 		 exposedPorts:{}
@@ -61,16 +29,6 @@ Welcome to the Hadoop Unit wiki!
 		 labels:{MAGIC_NUMBER=42}
 		 command:[/bin/sh, -c, while true; do echo "$MAGIC_NUMBER" | nc -l -p 80; done]
 		 classpathResourceMappings:{}
-- BOOKKEEPER 
-		 ip:0.0.0.0
-		 port:31810
-		 http port:31900
-- PULSAR 
-		 name:pulsar-cluster-1
-		 ip:0.0.0.0
-		 port:22022
-		 httpPort:22023
-		 zookeeper port:22010
 	 
 ...
 ```

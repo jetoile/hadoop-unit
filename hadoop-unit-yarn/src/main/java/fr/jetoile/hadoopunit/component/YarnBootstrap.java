@@ -93,6 +93,7 @@ public class YarnBootstrap implements BootstrapHadoop {
 
     private void build() throws NotFoundServiceException {
         org.apache.hadoop.conf.Configuration configuration = new org.apache.hadoop.conf.Configuration();
+
         configuration.set(JHAdminConfig.MR_HISTORY_ADDRESS, jobHistoryAddress);
         configuration.set(JHAdminConfig.MR_HISTORY_MINICLUSTER_FIXED_PORTS, "true");
         configuration.set("hadoop.proxyuser." + System.getProperty("user.name") + ".hosts", "*");

@@ -122,7 +122,7 @@ public class DockerComposeBootstrap implements Bootstrap {
                 container.withExposedService(entry.getKey(), entry.getValue(), Wait.forListeningPort());
             });
         }
-        container.withLocalCompose(local);
+//        container.withLocalCompose(local);
     }
 
     @Override
